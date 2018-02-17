@@ -6,14 +6,12 @@
  
  "Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory" 
 
- by
-
- Andrew F. Roberts (1), Elizabeth C. Hunke (2), Samy M. Kamal (1), William H. Lipscomb (3),
+ Andrew F. Roberts (1), Elizabeth C. Hunke (2), Samy M. Kamal (1), William H. Lipscomb (3), \
  Christopher Horvat (4) and Wieslaw Maslowski (1)
 
- (1) - Naval Postgraduate School, Monterey, CA
- (2) - Los Alamos National Laboratory, Los Alamos, NM
- (3) - National Center for Atmospheric Research, Boulder, CO
+ (1) - Naval Postgraduate School, Monterey, CA \
+ (2) - Los Alamos National Laboratory, Los Alamos, NM \
+ (3) - National Center for Atmospheric Research, Boulder, CO \
  (4) - Brown University, Providence, RI
 
  All equations solved within this package are currently subject to peer review. This
@@ -21,7 +19,7 @@
  Further information on the use of this code is available in the aforementioned paper,
  and will be released subject to the outcome of the peer review.
 
- Version: 1.0 
+ Version: 1.0 \
  Authors: Andrew Roberts and Samy Kamal
  
  Tested with MATLAB version R2017b 
@@ -40,5 +38,5 @@
 
  ----------------------------------------------------------------------------------------
 
- This file last edited by Andrew Roberts, March 1, 2018
+ This documentation last edited by Andrew Roberts, March 1, 2018
 
