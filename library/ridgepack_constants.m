@@ -1,4 +1,4 @@
-function [rhoi,rhos,rhow,delrho,g]=ridge_constants;
+function [rhoi,rhos,rhow,delrho,g,epres,maxthick]=ridge_constants;
 
 % This function declares the parameter space of variational ridging
 % Written by Andrew Roberts, March 2018
@@ -22,5 +22,5 @@ g = 9.8;
 epres = 0.001;
 
 % maximum thickness of zeta hat trajectory plane (m)
-maxthick = 50
+maxthick = 50;
 
