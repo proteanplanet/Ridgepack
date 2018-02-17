@@ -24,7 +24,7 @@
  and will be released subject to the outcome of peer review.
 
  Code version: 1.0 \
- Code authors: Andrew Roberts and Samy Kamal
+ Code authors: Andrew Roberts and Samy Kamal \
  Code tested with MATLAB version R2017b 
 
  ----------------------------------------------------------------------------------------
