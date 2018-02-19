@@ -1,6 +1,6 @@
-function [alphahat]=paper_ridge_alpha(epsilon,phi,hf,hd)
+function [ALPHAHAT]=ridgepack_ALPHAHAT(epsilon,phi,hf,hd)
 
-% function [alphahat]=paper_ridge_alpha(epsilon,phi,hf,hd)
+% function [ALPHAHAT]=paper_ridge_ALPHAHAT(epsilon,phi,hf,hd)
 %
 % This function is part of Ridgepack Version 1.0.
 % It calculates the angle of repose for which the gain is potential 
@@ -17,23 +17,28 @@ function [alphahat]=paper_ridge_alpha(epsilon,phi,hf,hd)
 %
 % OUTPUT:
 %
-% alphahat - angle of repose observing the Principle of Virtual Work (degrees)
+% ALPHAHAT - angle of repose observing the Principle of Virtual Work (degrees)
 %
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+
+% check there are sufficient inputs
+if nargin~=4
+ error('incorrect number of inputs')
+end
 
 % calculate angle of repose 
 if hd>hf
 
- gamma=(phi+phi*epsilon-epsilon);
+ gamma=(phi+phi.*epsilon-epsilon);
 
- alphahat=2*atan(sqrt(((5*(gamma.^2)+6*gamma+3)-...
-              sqrt(((5*(gamma.^2)+6*gamma+3)^2)-4*(gamma.^4)))/(2*(gamma.^2))));
+ ALPHAHAT=2*atan(sqrt(((5*(gamma.^2)+6*gamma+3)-...
+            sqrt(((5*(gamma.^2)+6*gamma+3).^2)-4*(gamma.^4)))./(2*(gamma.^2))));
  
- alphahat=180*alpha/pi;
+ ALPHAHAT=180*ALPHAHAT/pi;
 
 else
 
- alphahat=0;
+ ALPHAHAT=0;
 
 end
 
