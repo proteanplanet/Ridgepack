@@ -23,9 +23,6 @@ function [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask)
 %
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
-global debug;
-if debug; disp(['Entering ',mfilename,'...']); end
-
 % check for limited color bands
 if length(cont)<3
  warning('Only a single colorband has been specified')
@@ -33,7 +30,6 @@ end
 
 % sort cont in ascending numerical order
 cont=sort(cont);
-
 
 % turn shown array into indexed colors
 zindex=ones(size(z));
@@ -73,7 +69,6 @@ else
  truecol=zeros([length(zindex) 3]);
  for i=1:length(zindex)
   if isnan(zindex(i))
-   %truecol(i,:)=[1 1 1]; % NaNs in data are white
    truecol(i,:)=NaN; % NaNs in data are blank
   elseif zindex(i)<0
    truecol(i,:)=0.96*[1 1 1]; % masked areas are grey
@@ -85,7 +80,4 @@ else
  zindex=reshape(zindex,xsize(1:2));
  truecol=reshape(truecol,xsize(1:3));
 end
-
-
-if debug; disp(['...Leaving ',mfilename]); end
 

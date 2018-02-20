@@ -1,7 +1,10 @@
-function [rhoi,rhos,rhow,delrho,g,epres,maxthick]=ridge_constants;
+function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridge_constants;
 
 % This function declares the parameter space of variational ridging
-% Written by Andrew Roberts, March 2018
+
+%
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+
 
 % density of ice (kg/m^3)
 rhoi = 917.0;  
@@ -19,8 +22,14 @@ delrho = rhow - rhoi;
 g = 9.8;       
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-epres = 0.001;
+eincr = 0.005;
 
-% maximum thickness of zeta hat trajectory plane (m)
+% log thickness resolution on zeta-hat plane (m)
+hincr = (log10(10)-log10(0.01))/1000;
+
+% minimum thickness on zeta-hat plane trajectory plane (m)
+minthick = 0.01;
+
+% maximum thickness on zeta-hat plane trajectory plane (m)
 maxthick = 50;
 

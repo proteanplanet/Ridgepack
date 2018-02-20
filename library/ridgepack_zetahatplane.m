@@ -23,41 +23,30 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % retrieve constants
-[rhoi,rhos,rhow,delrho,g,epres,maxthick]=ridgepack_constants;
+[rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
 
 % set HF grid from 1cm to maxthick thick ice
-incr=(log10(10)-log10(0.01))/1000;
-HF=10.^[log10(0.01):incr:log10(maxthick)];
+HF=10.^[log10(0.01):hincr:log10(maxthick)];
 
 % assume there is no snow in v1 (although the library allows it)
 HFs=zeros(size(HF));
 
 % check resolution settings
-if epres>0.01
- error('epres too large for convergence')
+if eincr>0.01
+ error('eincr too large for convergence')
 end
 
 % create strain and porosity grid
-epsiloni=[-epres:-epres:-0.99];
-phii=[epres:epres:0.50];
+epsiloni=[-eincr:-eincr:-0.99];
+phii=[eincr:eincr:0.50];
 [epsilon,phi]=meshgrid(epsiloni,phii);
-size(phii)
-size(epsiloni)
-size(epsilon)
-size(phi)
 
-% step through initial ice thickness
+% step through initial ice thicknesses
 for i=1:length(HF) 
-
- % calculate potential energy field for a given strain
- [vr,alphahat,hk,hs,lk,ls]=ridgepack_energetics(HF(i),HFs(i),epsilon,phi);
-
- size(vr)
- size(alphahat)
 
  % calculate zeta-hat trajectory for ice and snow thickness HF and HFs
  [EPSILON,PHI(i,:),ALPHAHAT(i,:),VR(i,:),HK(i,:),HS(i,:),LK(i,:),LS(i,:)]=...
-       ridgepack_trajectory(epsilon,phi,alphahat,vr,hk,hs,lk,ls);
+      ridgepack_trajectory(HF(i),HFs(i),epsilon,phi);
 
 end
 

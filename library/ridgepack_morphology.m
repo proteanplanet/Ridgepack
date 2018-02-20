@@ -61,6 +61,8 @@ HFF=(hf+hfs)-HFD; % level freeboard
 % check that answers add up for floe ice
 if any((HFD+HFF)~=(hf+hfs))
  error('HFD+HFF is not equal fo hf+hfs')
+elseif HFF<hfs
+ error('snow is submerged on parent ice!')
 end
 
 % calculate freeboard and draft of deformed ice 
