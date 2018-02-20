@@ -29,6 +29,10 @@ function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 % check there are sufficient inputs
 if nargin~=4
  error('incorrect number of inputs')
+elseif any(size(epsilon)~=size(phi))
+ error('size of epsilon not the same as phi')
+elseif length(hf)>1 | length(hfs)>1
+ error('length of hf or hfs is greater than 1')
 end
 
 % get constants

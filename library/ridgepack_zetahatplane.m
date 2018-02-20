@@ -1,6 +1,6 @@
-function [HF,EPSILON,PHI,ALPHA,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
+function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 
-% function [HF,EPSILON,PHI,ALPHA,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
+% function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 %
 % This function is part of Ridgepack Version 1.0.
 % It calculates strain, porosity and the angle of repose of ridges
@@ -10,15 +10,15 @@ function [HF,EPSILON,PHI,ALPHA,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 %
 % OUTPUT:
 %
-% HF      - thickness of initial ice (m)
-% EPSILON - strain of ridge (dimensionless)
-% PHI     - porosity of a ridge (dimensionless)
-% ALPHA   - angle of repose of a ridge (degrees)
-% VR      - potential energy density of a ridge (J m^-2)
-% HK      - draft of a keel (m)
-% HS      - height of a sail (m)
-% LK      - cross-sectional width of a keel (m)
-% LS      - cross-sectional width of a sail (m)
+% HF       - thickness of initial ice (m)
+% EPSILON  - strain of ridge (dimensionless)
+% PHI      - porosity of a ridge (dimensionless)
+% ALPHAHAT - angle of repose of a ridge (degrees)
+% VR       - potential energy density of a ridge (J m^-2)
+% HK       - draft of a keel (m)
+% HS       - height of a sail (m)
+% LK       - cross-sectional width of a keel (m)
+% LS       - cross-sectional width of a sail (m)
 %
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
@@ -32,36 +32,32 @@ HF=10.^[log10(0.01):incr:log10(maxthick)];
 % assume there is no snow in v1 (although the library allows it)
 HFs=zeros(size(HF));
 
-% create strain and porosity grid
-stii=[-epres:-epres:-0.99];
-phii=[epres:epres:0.50];
-[strain,porosity]=meshgrid(stii,phii);
+% check resolution settings
+if epres>0.01
+ error('epres too large for convergence')
+end
 
-% step through floe thickness
+% create strain and porosity grid
+epsiloni=[-epres:-epres:-0.99];
+phii=[epres:epres:0.50];
+[epsilon,phi]=meshgrid(epsiloni,phii);
+size(phii)
+size(epsiloni)
+size(epsilon)
+size(phi)
+
+% step through initial ice thickness
 for i=1:length(HF) 
 
  % calculate potential energy field for a given strain
- vr=paper_ridge_energetics(HF(i),HFs(i),stii,phii);
+ [vr,alphahat,hk,hs,lk,ls]=ridgepack_energetics(HF(i),HFs(i),epsilon,phi);
 
- % calculate optimal path
- [EPSILON,PHI(i,:),VR(i,:)]=paper_ridging_path(strain,porosity,vr);
+ size(vr)
+ size(alphahat)
 
- for k=1:length(EPSILON)
-
-  % calculate thickness of deformed ice mass from strain
-  hdi(i,k)=HF(i)/(1+EPSILON(k));
-
-  % set snow thickness on ridge same as on level ice (as indicated in the paper)
-  hds(i)=HFs(i);
-
-  % get angle ot repose
-  ALPHA(i,k)=paper_ridge_ALPHA(EPSILON(k),PHI(i,k),HF(i),hdi(i,k));
-
-  % get morphological shape
-  [HFd,HFf,hdd,hdf,HK(i,k),HS(i,k),LK(i,k),LS(i,k)]=...
-      ridge_morphology(HF(i),HFs(i),hdi(i,k),hds(i),PHI(i,k),ALPHA(i,k));
-
- end
+ % calculate zeta-hat trajectory for ice and snow thickness HF and HFs
+ [EPSILON,PHI(i,:),ALPHAHAT(i,:),VR(i,:),HK(i,:),HS(i,:),LK(i,:),LS(i,:)]=...
+       ridgepack_trajectory(epsilon,phi,alphahat,vr,hk,hs,lk,ls);
 
 end
 
