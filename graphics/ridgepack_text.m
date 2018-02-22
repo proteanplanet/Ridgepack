@@ -1,9 +1,10 @@
-function [ht]=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcolor,interpreter)
+function ht=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcolor,interpreter)
 
-% function [ht]=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcolor,interpreter)
+% ridgepack_text - Text plotting function to annotate figures along lines
 %
-% This function is part of Ridgepack Version 1.0.
-% It plots curved text strings along given lines on plots specified 
+% function ht=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcolor,interpreter)
+%
+% This function plots curved text strings along given lines on plots specified 
 % with the Cartesian coordinates x and y. This can be used to mark
 % contours, or add annotations along lines on graphs.  The difference
 % between this and the standard MATLAB text function is that the characters
@@ -14,8 +15,7 @@ function [ht]=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundc
 % in using the default Latex interpreter, text buttressed by math mode indicators
 % (i.e. '$$' or '$') will be plotted at a constant angle.
 %
-% INPUT:
-%
+% Input:
 % x               - x-coordinate (Cartesian) 
 % y               - y-coordinate (Cartesian)
 % string          - Text string for annotation
@@ -30,9 +30,7 @@ function [ht]=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundc
 %                   e.g. [1 1 1], or 'none' (optional; default is [1 1 1])
 % interpreter     - Text interpreter (optional; default is 'Latex')
 %
-%
-% OUTPUT:
-%
+% Output:
 % ht - Cell array of handles for each character being plotted.
 %
 % IMPORTANT:
@@ -44,7 +42,7 @@ function [ht]=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundc
 % In future, this function could easily be expanded to work on maps for
 % x and y representing latitude and longitude.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
 
 % check inputs
 if nargin<3

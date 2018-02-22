@@ -1,9 +1,10 @@
 function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 
+% ridgepack_colormap - Generates indexed color scheme and a colorbar for contourf, pcolor etc
+%
 % function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 %
-% This function is part of Ridgepack Version 1.0.
-% It creates the colormap and draws a colorbar to the right
+% This function creates the colormap and draws a colorbar to the right
 % of or underneath the plot. Units are added, and a factor of ten
 % is also added if the number is less than 1 or greater than or
 % equal to 1000.  The colormap and colorbar have several features
@@ -11,11 +12,10 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 % to distinguish between values, which can be difficult using 
 % standard matlab color scales. Note that it is assumed that the 
 % data plotted is already indexed data which can be obtained
-% by running the nccolorindex function on data before 
+% by running the ridgepack_colorindex function on data before 
 % using them in color utilities such as pcolor.
 %
-% INPUTS:
-%
+% Inputs:
 % cont   - color levels entered as a vector [C1,C2,...,CX].
 %
 % ref    - reference point about which the color is centered, and, when
@@ -36,16 +36,21 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 %
 % logscale - set to true if log scale is being used (optional).
 %
-% OUTPUT:
-%
+% Output:
 % cmap   - colormap output
 %
 % The only two inputs that are compulsory are cont and units, the
 % others can be eliminated if need be.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 ht=get(gcf,'CurrentAxes');
+
+if debug; disp('Setting color scheme'); end
 
 % change renderer
 set(gcf,'renderer','zbuffer')
@@ -230,4 +235,6 @@ end
 
 % get final colormap
 cmap=colormap;
+
+if debug; disp(['...Leaving ',mfilename]); end
 

@@ -1,9 +1,10 @@
 function [tightinset]=ridgepack_cbextent(ha)
 
+% ridgepack_cbextent - Calculate the tightinset margins of colorbars created with ridgepack_colorbar
+%
 % function [tightinset]=ridgepack_cbextent(ha)
 %
-% This function is part of Ridgepack Version 1.0.
-% It is used internally by ridgepack to calculate the text extent, in 
+% This function is used internally by icepack to calculate the text extent, in 
 % normalized coordinates, of the colorbar scale and unit indicator.  The text
 % extent is first assigned to a structure for each text marker on the colorbar. 
 % This is done in ridgepack_colorbar, and is written in local data units on the axis. 
@@ -13,27 +14,28 @@ function [tightinset]=ridgepack_cbextent(ha)
 % units on the figure window using the pixel extent and x and y limits of the 
 % colorbar local data units. Please note that the arrow extents are not used
 % in this function, and this function is only for use with colorbars created
-% with the function "ridgepack_colorbar.m" in ridgepack. 
+% with the function "ridgepack_colorbar.m" in icepack. 
 %
-% INPUT:
-% 
+% Input:
 % ha - handle of the main axes with which the colorbar is associated
 %
-%
-% OUTPUT:
-%
+% Output:
 % TightInset - The tight inset of the colorbar axes, including markers, which
 %              is equivalent to the TightInset obtained from normal axes. 
 %
 % Note:
 % The original version of this function called up the extent in local data
 % units, but this caused unpredictable results due to internal MATLAB
-% computations and pixel rounding.  Therefore ridgepack was changed to immediately
+% computations and pixel rounding.  Therefore icepack was changed to immediately
 % obtain the text extent when a colorbar is created, and to convert these
 % to normalized coordinates whenever the colorbar position is changed.
 % This resulted in a stable implementation.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % Set the extra amount to be added to text extent for reading clarity
 % This may also be required if there are negative numbers in the colorbar
@@ -114,4 +116,6 @@ else
 end
 
 if nargout==0; clear tightinset; end
+
+if debug; disp(['...Leaving ',mfilename]); end
 

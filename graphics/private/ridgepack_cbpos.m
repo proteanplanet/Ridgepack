@@ -1,30 +1,32 @@
 function [hcb]=ridgepack_cbpos(h,orientation)
 
+% ridgepack_cbpos - Colorbar positioning function for native icepack colorbars
+%
 % function [hcb]=ridgepack_cbpos(h,orientation)
 % 
-% This function is part of Ridgepack Version 1.0.
-% It positions the colorbar axes and the main axes with which
+% This function positions the colorbar axes and the main axes with which
 % it is associated. It has two inputs, and the output is the colorbar 
 % axes handle.
 %
-% INPUT:
-%
+% Inputs:
 % h	      - handle of axes for which a colorbar is required.
 % orientation - specified as either 'vertical' colorbar on the right
 %               side of the main axes, or a 'horizontal' colorbar 
 %               underneath the main axes.
 %
-% OUTPUT:
-%
+% Output:
 % hcb	      - colorbar handle.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % Colorbar positioning and axis limit constants
 cbaspect=0.025; % default aspect ratio (height) of vertical (horizontal) bar
 cmap=colormap; % gives the color limits of the axis
 minsep=0.01; % minumum separation of colorbar from axes in normalized units
-             % (must be same as in ncmultipos.m)
+             % (must be same as in ridgepack_multipos.m)
 minwidth=0.015; % minimum width of colorbar in normalized units
 
 % Find axis and colorbar handles
@@ -43,7 +45,7 @@ end
 if isempty(hcb) && (nargin<2 || ~ischar(orientation))
  error('Colorbar orientation missing')
 elseif isempty(hcb)
- disp('Generating new Colorbar')
+ if debug; disp('Generating new Colorbar'); end
 elseif ishandle(hcb) 
  orientation=getappdata(h,'ColorbarOrientation');
 elseif ischar(hcb) && strcmp(hcb,'ColorbarDeleted')
@@ -151,6 +153,9 @@ if isempty(hcb)
                     'PlotBoxAspectRatioMode',...
                     'OuterPosition','XLabel','YLabel','ZLabel'},'PostSet',@ridgepack_cbfix);
 
+%                    'PlotBoxAspectRatioMode','YTickLabel','XTickLabel','ZTickLabel',...
+%                    'OuterPosition','XLabel','YLabel','ZLabel'},'PostSet',@ridgepack_cbfix);
+
  % Add colorbar axes, listener and orientation to main axes  app data
  setappdata(h,'ColorbarHandle',hcb)
  setappdata(h,'ColorbarListener',hdl)
@@ -240,4 +245,6 @@ end
 
 % Set colorbar axes position
 set(hcb,'Position',CBPosition);
+
+if debug; disp(['...Leaving ',mfilename]); end
 

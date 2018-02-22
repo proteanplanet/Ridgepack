@@ -1,23 +1,24 @@
 function ridgepack_labelxy(nc,X,Y,graph)
 
+% ridgepack_labelxy - Label Cartesian axes with names and units
+%
 % function ridgepack_labelxy(nc,X,Y,graph)
 %
-% This function is part of Ridgepack Version 1.0.
-% It labels figure axes
-% 
-% INPUT:
-%
-% nc    - netcdf structure (see ncstruct for more details)
+% Input:
+% nc    - netcdf structure (see ridgepack_struct for more details)
 % X     - x-coordinate of Cartesian plot in nc
 % Y     - y-coordinate of Cartesian plot in nc
 % graph - logical which is true if a graph is being plotted
 %         or else may be omitted.
 %
-% OUTPUT:
-%
+% Output:
 % All output is graphical and appears on the current selected axes
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % set defaults
 if nargin<4
@@ -30,7 +31,7 @@ fontsize=min(10,max(6,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
 
 % label axes and check set boundaries
 if (isfield(nc.(X),'units') && ~isempty(nc.(X).units)) | strcmp(X,'time')
- units=ncunits(nc,X);
+ units=ridgepack_units(nc,X);
  if strcmp(X,'time')
        	xlabel('Time','FontSize',fontsize)
 	set(gca,'xlim',[min(nc.(X).data(:)) max(nc.(X).data(:))])
@@ -62,11 +63,11 @@ end
 if graph & ~strcmp(Y,'time') & ...
    ~isempty(findstr(Y,'latitude')) & ~isempty(findstr(Y,'longitude'))
 	if isfield(nc.(Y),'units') && ~isempty(nc.(Y).units)
-		units=ncunits(nc,Y);
+		units=ridgepack_units(nc,Y);
 		ylabel(units,'FontSize',fontsize)
 	end
 elseif (isfield(nc.(Y),'units') && ~isempty(nc.(Y).units)) | strcmp(Y,'time')
- units=ncunits(nc,Y);
+ units=ridgepack_units(nc,Y);
  if strcmp(Y,'time')
        	ylabel('Time','FontSize',fontsize)
 	set(gca,'ylim',[min(nc.(Y).data(:)),max(nc.(Y).data(:))])
@@ -93,4 +94,6 @@ elseif (isfield(nc.(Y),'units') && ~isempty(nc.(Y).units)) | strcmp(Y,'time')
 else
  ylabel([char(nc.(Y).long_name)],'FontSize',fontsize)
 end
+
+if debug; disp(['...Leaving ',mfilename]); end
 

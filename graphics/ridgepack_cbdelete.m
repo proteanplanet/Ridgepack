@@ -1,26 +1,29 @@
-function ridgepack_cbdelete(h) 
+function ridgepack_cbdelete(h)
 
+% ridgepack_cbdelete - Delete the colorbar associated with main axes
+%
 % function ridgepack_cbdelete(h)
 %
-% This function is part of Ridgepack Version 1.0.
-% It deletes a colorbar associated with axes handle 
+% This function deletes an nc colorbar associated with axes handle 
 % h for a figure.  Note that the axes handle h is not the handle
 % of the colorbar itself, but rather of the axes whose colors
 % it describes. This is analagous to using "colorbar('off')" for
 % a standard matlab colorbar. 
 % 
-% INPUT:
-%
+% Input:
 % h - axes handle for main axes with which the colorbar is associated.
 %     This can be omitted if the current axis handle is the same has h.
 %
-% 
-% OUTPUT:
-% 
+% Output:
 % Output is only graphical for this function, with changes to the 
 % axes handle h going on under the hood.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Naval Postgraduate School, Department of Oceanography 
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % check for input applicability
 if nargin <1 
@@ -37,7 +40,7 @@ orientation=getappdata(h,'ColorbarOrientation');
 % Delete colorbar axis handle
 if ishandle(hcb)
  if ~strcmp(get(hcb,'Tag'),'Colorbar')
-   error('First handle is not for an ridgepack colorbar')
+   error('First handle is not for an icepack colorbar')
  elseif strcmp(orientation,'vertical')
    orientation='vertical';
    rmappdata(h,'ColorbarOrientation')
@@ -89,4 +92,6 @@ setpixelposition(h,axpos);
 setappdata(h,'ColorbarHandle','ColorbarDeleted')
 
 drawnow;
+
+if debug; disp(['...Leaving ',mfilename]); end
 

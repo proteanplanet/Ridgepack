@@ -1,17 +1,17 @@
 function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,colors,colvals)
 
+% ridgepack_image - Color fills data from an nc structure on Cartesian axes
+%
 % function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,colors,colvals)
 %
-% This function is part of Ridgepack Version 1.0.
-% It provides a styled filled color plot with a colorbar. This is an alternative 
-% to ncpcolor, and uses imagesc in instead. The advantage of using this function 
-% is that it gives a higher quality plot, with light gray mask and transparent 
-% areas not plotted as a result of specifying ref.  The disadvantage is that it 
-% is a more intensive to plot, taking longer.
+% This function provides a styled filled color plot with a colorbar. This is 
+% an alternative to ncpcolor, and uses imagesc in instead. The advantage of using
+% this function is that it gives a higher quality plot, with light gray mask
+% and transparent areas not plotted as a result of specifying ref.  The disadvantage
+% is that it is a more intensive to plot, taking longer.
 %
-% INPUT:
-%
-% nc     - a netcdf structure (see ncstruct for more details)
+% Inputs:
+% nc     - a netcdf structure (see ridgepack_struct for more details)
 %
 % X      - character variable naming the x-direction coordinate in nc.
 %
@@ -21,21 +21,21 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 %          calculation options are possible for Z, including _std for 
 %          the standard deviation over the bounds provide, or _samp for 
 %          the number of samples used in these calculations. See
-%          ncreduce or ncselect for more information.
+%          ridgepack_reduce or ridgepack_select for more information.
 %
 % dimnames - cell array of the dimensions to be removed from the nc
 %          structure to obtain the requested cross section. See example
-%          provided under ncreduce for more information.
+%          provided under ridgepack_reduce for more information.
 %
 % bounds - cell array of the boundaries on each dimension reduction.
 %          This includes either a low and high index over which a mean
 %          or slice is to be taken, or a low and high value representing
 %          the range over which the data is to be extracted.  Time
-%          values can be used. See example provided for ncreduce for
+%          values can be used. See example provided for ridgepack_reduce for
 %          more information.
 %
 % cont   - contour range entered as a vector [C1,C2,...,CX]. This may
-%          be entered as an empty vector [] to get ncimage to choose
+%          be entered as an empty vector [] to get ridgepack_image to choose
 %          the contour interval for you, or it may be omitted if
 %          no other proceeding arguments are required.
 %
@@ -78,7 +78,7 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 %
 % colvals- Cell array of text for each tick mark on the colorbar if required to 
 %          be different from the supplied contour values {optional}. 
-%	   See nccolorbar if further explanation is required.
+%	   See ridgepack_colorbar if further explanation is required.
 %
 % Apart from the first six inputs, the rest are identical to 
 % input to nccolor.m, the subordinate of this program. There are 
@@ -86,14 +86,17 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 % included, one at a time, as they are needed in the sequence 
 % provided here.
 %
-% OUTPUT:
-%
+% Output:
 % nc  - nc structure with information added on weigtings, etc
 %       for future calls if a movie is being made from 
 %       an nc structure. This includes circumstances where
 %       a dimension is removed from an nc structure
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % set defaults and check inputs
 if nargin<4; 
@@ -117,10 +120,10 @@ elseif ~isfield(nc.(X),'dimension') | ~isfield(nc.(Y),'dimension')
 elseif ~iscell(nc.(X).dimension) | ~iscell(nc.(Y).dimension)
  error([X,' or ',Y,' are dimension field not cell arrays'])
 elseif length(nc.(X).dimension)>1
- disp([X,' dimensions are: ',nccellcat(nc.(X).dimension)])
+ disp([X,' dimensions are: ',ridgepack_cellcat(nc.(X).dimension)])
  error([X,' must have a single dimension as the axis of a cartesian plot'])
 elseif length(nc.(Y).dimension)>1
- disp([Y,' dimensions are: ',nccellcat(nc.(Y).dimension)])
+ disp([Y,' dimensions are: ',ridgepack_cellcat(nc.(Y).dimension)])
  error([Y,' must have a single dimension as the axis of a cartesian plot'])
 end
 
@@ -171,10 +174,10 @@ end
 [nc]=ridgepack_select(nc,X,Y,Z,dimnames,bounds);
 
 % shuffle data to get z in correct order
-nc=ncshuffle(nc,{X Y});
+nc=ridgepack_shuffle(nc,{X Y});
 
 % change units if need be
-[z,nc]=ncstandardunits(nc,Z);
+[z,nc]=ridgepack_standardunits(nc,Z);
 
 % check that there isn't a time dimension
 if length(size(z))==3 & size(z,1)==1 & strcmp(char(nc.(Z).dimension{1}),'time') ; 
@@ -196,7 +199,7 @@ if size(b,1)>1 & size(b,2)>1; error('Y must have a single dimension');end
 
 % get units
 if isfield(nc.(Z),'units')
-	units=ncunits(nc,Z);
+	units=ridgepack_units(nc,Z);
 else
 	units=[];
 end
@@ -255,7 +258,7 @@ if isnumeric(loglin) && loglin~=0
 
 elseif nargin<7 || isempty(cont) ;
 
- cont=nccontlev(z);
+ cont=ridgepack_contlev(z);
 
 elseif length(cont)<2 
 
@@ -286,9 +289,9 @@ end
 
 % build the colormap with this information
 if strcmp(loglin,'linear')
- nccolormap(cont,ref,colors);
+ ridgepack_colormap(cont,ref,colors);
 else
- nccolormap(cont,ref,colors,true);
+ ridgepack_colormap(cont,ref,colors,true);
 end
 
 % Generate mask array
@@ -313,7 +316,7 @@ set(h,'fontsize',fontsize);
 if ~isvector(a) | ~isvector(b)
  error('x and/or y axis is a matrix instead of a vector')
 elseif length(a)==size(z,1) & length(b)==size(z,2)
- [zindex,truecol]=nccolorindex(z,cont,ref,mask);
+ [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask);
 elseif length(a)==size(z,2) & length(b)==size(z,1)
  disp(['length of a is ',num2str(length(a))])
  disp(['length of b is ',num2str(length(b))])
@@ -327,6 +330,13 @@ c(1)=a(1); c(2:end-1)=(a(1:end-1)+a(2:end))/2; c(end)=a(end);
 d(1)=b(1); d(2:end-1)=(b(1:end-1)+b(2:end))/2; d(end)=b(end);
 [c,d]=meshgrid(c,d);
 
+% get sizes of x, y, and color
+if debug;
+ disp(['      Size of a: ',num2str(size(a))])
+ disp(['      Size of b: ',num2str(size(b))])
+ disp(['Size of truecol: ',num2str(size(truecol))])
+end
+
 % stripe the figure with patches
 for j=1:size(c,2)-1
  px=[c(1:end-1,j)';c(2:end,j)';c(2:end,j+1)';c(1:end-1,j+1)'];
@@ -338,7 +348,7 @@ end
 
 % add white dividing line at reference contour unless using log shading
 if not(isempty(cont(cont==ref))) && not(blankout) && ~isnumeric(loglin)
- ncmask(a,b,z,'w',ref);
+ ridgepack_mask(a,b,z,'w',ref);
  disp('White divider added')
 end
 
@@ -346,7 +356,7 @@ end
 % Draw a black line around the mask perimeter 
 if isfield(nc,'mask')
  mask(mask<0.5)=NaN;
- ncmask(a,b,mask);
+ ridgepack_mask(a,b,mask);
  disp('Mask outline added')
 end
 
@@ -361,16 +371,16 @@ ridgepack_labelxy(nc,X,Y);
 if strcmp(horiz,'none')
  disp('No colorbar being plotted')
 elseif nargin==12 
- nccolorbar(cont,units,loglin,horiz,ref,colvals); 
+ ridgepack_colorbar(cont,units,loglin,horiz,ref,colvals); 
 else
- nccolorbar(cont,units,loglin,horiz,ref); 
+ ridgepack_colorbar(cont,units,loglin,horiz,ref); 
 end
 
 % add title, removing previous title
 if timed
- nctitle(nc,['Shading: ',char(nc.(Z).long_name),' ',datestr(nc.time.data)],1)
+ ridgepack_title(nc,['Shading: ',char(nc.(Z).long_name),' ',datestr(nc.time.data)],1)
 else
- nctitle(nc,['Shading: ',char(nc.(Z).long_name)],1)
+ ridgepack_title(nc,['Shading: ',char(nc.(Z).long_name)],1)
 end
 
 % if units of x and y are identical, then make
@@ -391,4 +401,6 @@ drawnow;
 
 % clear output if none requested
 if nargout==0; clear nc; end
+
+if debug; disp(['...Leaving ',mfilename]); end
 

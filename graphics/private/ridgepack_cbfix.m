@@ -1,9 +1,10 @@
 function ridgepack_cbfix(obj,src)
 
+% ridgepack_cbfix - Callback to reposition colorbar when axes change position
+%
 % function ridgepack_cbfix(obj,src)
 %
-% This function is part of Ridgepack Version 1.0.
-% It is a listener call back to reposition the location of colorbars
+% This function is a listener call back to reposition the location of colorbars
 % whenever there is a change to the axes accompanying the colorbar.  Note that
 % this is for colorbars generated with ridgepack_colorbar, not with the vanilla colorbar
 % routine available in matlab. 
@@ -13,7 +14,13 @@ function ridgepack_cbfix(obj,src)
 % src - information about the affected object, which includes the 
 %       affected axes handle that has been repositioned.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+%debug=true;
+
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % Find axis 
 if ~(ishandle(src.AffectedObject) && ...
@@ -23,4 +30,6 @@ end
 
 % Call repositioning function
 ridgepack_cbpos(src.AffectedObject);
+
+if debug; disp(['...Leaving ',mfilename]); end
 

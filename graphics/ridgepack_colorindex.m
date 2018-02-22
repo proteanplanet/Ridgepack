@@ -1,27 +1,29 @@
 function [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask)
 
+% ridgepack_colorindex - Generates indexed and true color arrays from data
+%
 % function [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask)
 %
-% This function is part of Ridgepack Version 1.0.
-% It generates a color index and true color array from a 
+% This function generates color index and true color arrays from a 
 % data array to be used in various matlab color plotting utilities 
 % given the original data values and the contour values, as well
-% the color reference value and mask.  
+% the color reference value and mask.  The 
 %
-% INPUT:
-%
+% Input:
 % z      - data to be mapped
 % cont   - vector of contour values (colormap boundaries)
 % ref    - reference contour about which color is referenced
 % mask   - mask to be added to true colors of same size as z
 %
-%
-% OUTPUT:
-%
+% Output:
 % zindex  - color indexed data to be used for graphics plotting.
 % truecol - true color array corresponding to zindex.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+%
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % check for limited color bands
 if length(cont)<3
@@ -30,6 +32,7 @@ end
 
 % sort cont in ascending numerical order
 cont=sort(cont);
+
 
 % turn shown array into indexed colors
 zindex=ones(size(z));
@@ -69,6 +72,7 @@ else
  truecol=zeros([length(zindex) 3]);
  for i=1:length(zindex)
   if isnan(zindex(i))
+   %truecol(i,:)=[1 1 1]; % NaNs in data are white
    truecol(i,:)=NaN; % NaNs in data are blank
   elseif zindex(i)<0
    truecol(i,:)=0.96*[1 1 1]; % masked areas are grey
@@ -80,4 +84,7 @@ else
  zindex=reshape(zindex,xsize(1:2));
  truecol=reshape(truecol,xsize(1:3));
 end
+
+
+if debug; disp(['...Leaving ',mfilename]); end
 

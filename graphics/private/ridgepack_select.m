@@ -1,29 +1,31 @@
 function [ncr]=ridgepack_select(nc,X,Y,Z,dimnames,bbounds)
 
+% ridgepack_select - For selecting dimensions and bbounds for plotting nc structured data
+%
 % function [ncr]=ridgepack_select(nc,X,Y,Z,dimnames,bbounds)
 %
-% This function is part of Ridgepack Version 1.0.
-% It is a front-end to ncreduce for selecting axes and data
+% This function is a front-end to ridgepack_reduce for selecting axes and data
 % to be plotted using ncfigure.  
 %
-% INPUT:
-%
-% nc        - nc structure (see ncstruct for more details)
+% Input:
+% nc        - nc structure (see ridgepack_struct for more details)
 % X         - string providing the X axis variable from nc
 % Y         - string providing the Y axis or Y variable on a graph from nc
 % Z         - string providing the Z Data field or Y variable on a graph in nc
 %             (for the case of graphs, Z and Y should be the same string)
 % dimnames  - cell array of names of dimensions over which Z (and Y for graphs) 
-%             is being sliced or average. This input is explained in ncreduce.
+%             is being sliced or average. This input is explained in ridgepack_reduce.
 % bbounds   - bbounds for the dimensions listed in the dimnames cell array.
-%             This is a cell array and is explained in detail in ncreduce.
+%             This is a cell array and is explained in detail in ridgepack_reduce.
 %
+% Output:
+% ncr - the reduced nc structure output from ridgepack_reduce which is checked for errors.
 %
-% OUTPUT:
+% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
 %
-% ncr - the reduced nc structure output from ncreduce which is checked for errors.
-%
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % Check data is a structure
 if not(isstruct(nc));
@@ -86,8 +88,12 @@ for i=1:length(nc.(Y).dimension)
 end
 
 
+if debug
+ disp('Finished dimension checking in ridgepack_select')
+end
+
 % strip type of calculation off X, Y and Z & check that X, Y and Z exist
-[nc,variablenames,numbervariables]=ncsort(nc);
+[nc,variablenames,numbervariables]=ridgepack_sort(nc);
 
 if ~isempty(setdiff({X},variablenames))
 	error(['Unable to find X variable ',X]);
@@ -102,7 +108,7 @@ calctypes={'_std','_samp'};
 if ~isempty(setdiff({Z},variablenames))
  for i=1:length(calctypes)
 	 Z=strtok(oldZ,char(calctypes{i}));
-	 unrecog=ncsetdiff({Z},variablenames);
+	 unrecog=ridgepack_setdiff({Z},variablenames);
 	 if isempty(unrecog)
 		 break
 	 elseif i==length(calctypes)
@@ -118,17 +124,17 @@ zdims=nc.(Z).dimension;
 
 % check dimensions of X and Y are in Z
 if strcmp(Z,Y) & ~isempty(setdiff(xdims,ydims))
- disp(['x dimensions: ',nccellcat(xdims)])
- disp(['y dimensions: ',nccellcat(ydims)])
- error(['x-dimensions not found in y-dimensions :',nccellcat(setdiff(xdims,ydims))])
+ disp(['x dimensions: ',ridgepack_cellcat(xdims)])
+ disp(['y dimensions: ',ridgepack_cellcat(ydims)])
+ error(['x-dimensions not found in y-dimensions :',ridgepack_cellcat(setdiff(xdims,ydims))])
 elseif ~isempty(setdiff(xdims,zdims))
- disp(['x dimensions: ',nccellcat(xdims)])
- disp(['z dimensions: ',nccellcat(zdims)])
- error(['x-dimensions not found in z-dimensions :',nccellcat(setdiff(xdims,zdims))])
+ disp(['x dimensions: ',ridgepack_cellcat(xdims)])
+ disp(['z dimensions: ',ridgepack_cellcat(zdims)])
+ error(['x-dimensions not found in z-dimensions :',ridgepack_cellcat(setdiff(xdims,zdims))])
 elseif ~isempty(setdiff(ydims,zdims))
- disp(['y dimensions: ',nccellcat(ydims)])
- disp(['z dimensions: ',nccellcat(zdims)])
- error(['y-dimensions not found in z-dimensions :',nccellcat(setdiff(ydims,zdims))])
+ disp(['y dimensions: ',ridgepack_cellcat(ydims)])
+ disp(['z dimensions: ',ridgepack_cellcat(zdims)])
+ error(['y-dimensions not found in z-dimensions :',ridgepack_cellcat(setdiff(ydims,zdims))])
 end
 
 
@@ -143,7 +149,16 @@ end
 
 
 % reduce dataset to a single 2D slice to be plotted
-ncr=ncreduce(nc,dimnames,bbounds);
+if debug
+ dimnames
+ bbounds
+end
+ncr=ridgepack_reduce(nc,dimnames,bbounds);
+if debug
+ size(ncr.(X).data)
+ size(ncr.(Y).data)
+ size(ncr.(Z).data)
+end
 
 % check that Z variable has been reduced to 2D
 if length(size(squeeze(ncr.(Z).data)))>2
@@ -160,23 +175,23 @@ if length(zdims)>2
  
  % Ccase of 3+ dimensions with the length of the third, fourth, etc dimensions being one
  if ndims(squeeze(ncr.(Z).data))==2
-  ncr=ncreduce(ncr,{char(setdiff(zdims,union(ncr.(X).dimension,ncr.(Y).dimension)))});
+  ncr=ridgepack_reduce(ncr,{char(setdiff(zdims,union(ncr.(X).dimension,ncr.(Y).dimension)))});
   return
  else % otherwise, throw an error
-  disp(['Please reduce ',Z,' to only two dimensions from: ',nccellcat(zdims)]);
-  error(['Please reduce ',Z,' to only two dimensions from: ',nccellcat(zdims)]);
+  disp(['Please reduce ',Z,' to only two dimensions from: ',ridgepack_cellcat(zdims)]);
+  error(['Please reduce ',Z,' to only two dimensions from: ',ridgepack_cellcat(zdims)]);
  end
 
 elseif length(xdims)==1 && length(ydims)==1 && ...
    all(strcmp({char(ydims) char(xdims)},zdims)) &&  ~strcmp(Z,Y)
- ncr=ncshuffle(ncr,{char(xdims) char(ydims)});
+ ncr=ridgepack_shuffle(ncr,{char(xdims) char(ydims)});
 elseif length(xdims)==1 && ~all(strcmp({char(xdims) char(ydims)},zdims)) && ~strcmp(Z,Y)
  error('Dimensions of Z don''t mach X and Y combined')
 end
  
 
 % sort the data
-%[ncr,variablenames,numbervariables]=ncsort(ncr);
+%[ncr,variablenames,numbervariables]=ridgepack_sort(ncr);
 
 if ~isempty(setdiff({X},variablenames))
  error(['Unable to find X variable ',X,' in nc output']);
@@ -190,4 +205,6 @@ if ~isempty(setdiff({oldZ},variablenames))
  disp('Check that bbounds and mask allow for standard deviations and samples size arrays to be calculated');
  error(['There is no ',oldZ,' in the nc output. Check that bbounds and mask allow for std and samp.']);
 end
+
+if debug; disp(['...Leaving ',mfilename]); end
 
