@@ -132,7 +132,7 @@ writedir=[fileparts(which('ridgepack')),'/figures'];
 cd(writedir)
 
 % print figure
-ridgepack_fprint('png','ridgepack_dilationplot',2,2)
-ridgepack_fprint('epsc','ridgepack_dilationplot',2,2)
+ridgepack_fprint('png','figure12',2,2)
+ridgepack_fprint('epsc','figure12',2,2)
 
 
