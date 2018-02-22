@@ -8,12 +8,15 @@ function [X,Y,SLAT,K]=ridgepack_geodetictoxy(lat,lon,SGN)
 % on a polar stereographic projection, and is essentially a JPL algorithm
 % rewritten to work in Matlab.
 % 
-% Input:
+% INPUT:
+%
 % lat  - latitude (degrees North)
 % lon  - longitude (degrees East)
 % SGN  - Hemisphere specifier: 1=Northern Hemisphere, -1=Southern Hemisphere
 %
-% Output:
+%
+% OUTPUT:
+%
 % X   - polar stereographic X coordinate (km)
 % Y   - polar stereographic Y coordinate (km)
 % SLAT - latitude of true distance (default is 70 degrees if omitted)

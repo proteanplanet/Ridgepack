@@ -27,7 +27,9 @@ function [ha]=ridgepack_multipos(hf,ha,nrows,ncols,row,col,notation,fontsize,fon
 %            left, and if set to 4, puts it in the upper right. If set to 5
 %            it places the number 1/4 down the left side.
 %
-% Output:
+%
+% OUTPUT:
+%
 % ha    - The axis handle of the row,col axes used or created during execution
 %
 % If ncols==1 (a single column figure), then the default span of the axes
@@ -38,7 +40,8 @@ function [ha]=ridgepack_multipos(hf,ha,nrows,ncols,row,col,notation,fontsize,fon
 % that describes the multiplot configuration to app data for the given
 % figure window.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug; if isempty(debug); debug=false; end
 if debug; disp(['Entering ',mfilename,'...']); end

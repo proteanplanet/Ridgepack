@@ -20,10 +20,13 @@ function [r]=ridgepack_multitight(ha,r,units,mingap,row,col)
 % mingap  - minimum allowable gap between different axes
 % row,col - row and column of axes for which the tight inset is calculated
 %
-% Output:
+%
+% OUTPUT:
+%
 % r       - adjusted configuration structure containing adjusted tight insets
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

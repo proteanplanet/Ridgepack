@@ -9,7 +9,8 @@ function [ncr,nc]=ridgepack_reduce(nc,dimnames,bounds,varmean)
 % gridded data without user prompting. Operations performed during execution are verbose
 % so the user understands exactly what automated operations are taking place.
 %
-% Input:
+% INPUT:
+%
 %
 % nc       - nc structure (see the help page of ridgepack_struct for more information)
 %
@@ -46,7 +47,9 @@ function [ncr,nc]=ridgepack_reduce(nc,dimnames,bounds,varmean)
 % CICEpatch- Patch CICE monthly mean data that is missing a time_bounds descriptor
 %
 %
-% Output:
+%
+% OUTPUT:
+%
 % ncr  - Reduced netcdf structure with requested dimensions removed and variable 
 %        means, and, if varmean is true, the standard deviations and number of 
 %        samples in means, and effective sample size.  These are calculated based
@@ -220,7 +223,8 @@ function [ncr,nc]=ridgepack_reduce(nc,dimnames,bounds,varmean)
 % }
 %            
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 %debug=true;

@@ -6,14 +6,18 @@ function [lat,lon]=ridgepack_placem(Name)
 %
 % Returns the latitude and longitude of the named place
 %
-% Input:
+% INPUT:
+%
 % Name - city name
 %
-% Output:
+%
+% OUTPUT:
+%
 % lat - latitude
 % lon - longitude
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

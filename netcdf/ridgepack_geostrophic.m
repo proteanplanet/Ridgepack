@@ -7,17 +7,21 @@ function ncg=ridgepack_geostrophic(nc,name)
 % This function calculates geostrophic wind from a pressure
 % field in a nc structure.
 %
-% Input:
+% INPUT:
+%
 % nc   - nc structure 
 % name - name of pressure field in netcdf structure
 %
-% Output:
+%
+% OUTPUT:
+%
 % ncg  - output netcdf structure containing the same
 %        latitudes, longitude, x and y coordinates of the
 %        original structure, and ugwind and vgwind 
 %        geostrophic components for each timestep in time.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

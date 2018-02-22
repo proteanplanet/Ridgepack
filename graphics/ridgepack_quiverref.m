@@ -25,7 +25,8 @@ function ridgepack_quiverref(x,y,u,v,units,reftype,veccol,cont)
 % colorbar is provided, complete with units, and no scaling vector is 
 % plotted.
 %
-% Input:
+% INPUT:
+%
 % x       - x-coordinate or latitude
 %
 % y       - y-coordinate or longitude
@@ -65,13 +66,16 @@ function ridgepack_quiverref(x,y,u,v,units,reftype,veccol,cont)
 %           vector color categories.  Optional.
 %
 %
-% Output:
+%
+% OUTPUT:
+%
 % Output is graphical to the current active figure axes. All vectors
 % are centered on the grid points, rather than the starting point of the 
 % vector being positioned on the grid point. This can easily be changed
 % in the code if required, but is the preference of the author.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

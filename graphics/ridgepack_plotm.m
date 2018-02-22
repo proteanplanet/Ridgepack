@@ -4,7 +4,8 @@ function [h]=ridgepack_plotm(latitude,longitude,marker,linestyle,color,markersiz
 %
 % function [h]=ridgepack_plotm(latitude,longitude,marker,linestyle,color,markersize)
 %
-% Input:
+% INPUT:
+%
 % latitude   - latitude of point(s) to be plotted
 % longitude  - longitude of point(s) to be plotted
 % marker     - marker string such as '.' or 'o', or else 'none' (optional)

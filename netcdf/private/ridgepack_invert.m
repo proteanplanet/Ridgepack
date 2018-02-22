@@ -4,16 +4,20 @@ function [nc_type]=ridgepack_invert(mclass)
 %
 % function [nc_type]=ridgepack_invert(mclass)
 %
-% Input:
+% INPUT:
+%
 % class  - text string corresponding to the input:
 %          int32, int8, char, int16, single, or double
 %
-% Output: 
+%
+% OUTPUT:
+% 
 % nc_type - text string of the netcdf type: 
 %           NC_INT, NC_BYTE, NC_CHAR, NC_SHORT, NC_FLOAT or ...
 % 	    NC_DOUBLE (respectively)
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

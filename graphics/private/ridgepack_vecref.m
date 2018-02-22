@@ -22,7 +22,8 @@ function ridgepack_vecref(h,scalelength,arrow,refval,units,veccol,vecwidth,accen
 % accenture   - shape of vectors (1=standard arrow)
 % lx,ly       - vector locations from ridgepack_quiverref
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

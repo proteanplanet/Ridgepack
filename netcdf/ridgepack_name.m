@@ -4,7 +4,8 @@ function [variablenames,numbervariables]=ridgepack_name(nc)
 %
 % function [variablenames,numbervariables]=ridgepack_name(nc)
 %
-% Input:
+% INPUT:
+%
 % This function extracts the names of variables in the data structure
 % nc designed to have the following setup:
 %
@@ -20,11 +21,14 @@ function [variablenames,numbervariables]=ridgepack_name(nc)
 % that the structure may include nc.global_atts as an alternative
 % to nc.attributes for global attributes.
 %
-% Output:
+%
+% OUTPUT:
+%
 % variablenames   - cell array of variable names
 % numbervariables - number of variables names in variablenames
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

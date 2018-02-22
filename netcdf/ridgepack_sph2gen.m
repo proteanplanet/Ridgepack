@@ -10,7 +10,8 @@ function [nc,calc]=ridgepack_sph2gen(nc)
 % that reduce the dimensions of netcdf data and manipulate the data to treat 
 % all linear geospatial data in the same manner within ncbox. 
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure (see ridgepack_struct for more information) with data in 
 %      spherical coordinates. An examples of the lat-lon dimension structure
 %      is provided here:
@@ -53,7 +54,9 @@ function [nc,calc]=ridgepack_sph2gen(nc)
 %  
 % }
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc   - netcdf structure (see ridgepack_struct for more information) with data 
 %        placed in a standardised generalised coordinates on a sphere.  
 %        An example of the structure created from the above input structure 
@@ -114,7 +117,8 @@ function [nc,calc]=ridgepack_sph2gen(nc)
 % }
 %
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

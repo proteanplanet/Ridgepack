@@ -8,13 +8,15 @@ function ridgepack_trackm(nc,color,label)
 % left side of the track, and in the color provided. A circle is plotted
 % at the end of the track provided.
 %
-% Input:
+% INPUT:
+%
 % nc    - nc structure containing the fields latitude and longitude of the 
 %         buoy track timeseries.
 % color - matlab color, e.g. 'k' for black, 'b' for blue and so on
 % label - text label to be placed on the upper right of the track.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

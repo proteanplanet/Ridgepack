@@ -14,13 +14,17 @@ function [NewPosition]=ridgepack_axpos(h)
 % colorbars in icepack using ridgepack_colorbar, and when aligning axes using 
 % ridgepack_multiplot and ridgepack_multialign to place severl axes on the one figure.
 %
-% Input:
+% INPUT:
+%
 % h - handle of the axes for which the true edge position is required.
 %
-% Output:
+%
+% OUTPUT:
+%
 % NewPosition - 'True' visual position of axes in normalized units
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Department of Oceonography, Naval Postgraduate School
 %
 

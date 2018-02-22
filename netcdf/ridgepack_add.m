@@ -11,7 +11,8 @@ function [nc]=ridgepack_add(nc,name,data,long_name,dimension,units,type,title)
 %
 % function [nc]=ridgepack_add(name,data,long_name,dimension,units,type,title)
 %
-% Input:
+% INPUT:
+%
 % nc        - netCDF structure (can be ommitted for starting a new structure)
 % name      - name of variable to be added
 % data      - data to be added
@@ -21,10 +22,13 @@ function [nc]=ridgepack_add(nc,name,data,long_name,dimension,units,type,title)
 % type      - netCDF type (e.g.'NC_CHAR','NC_DOUBLE')
 % title     - optional character arguement giving the title of the nc structure
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc        - netCDF structure with added data
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -8,7 +8,8 @@ function [nc,xdist,ydist]=ridgepack_gridsquare(nc,model)
 % a latitude-longitude grid, thus effectively calculating the 'split grid'
 % for the B-grid center or U-V points. 
 %
-% Input:
+% INPUT:
+%
 % nc    - netcdf structure (see ridgepack_struct for more information).
 %         This structure must be in generalized lat-lon coordinates
 %         as described in the help page for ridgepack_sph2gen output. An example
@@ -69,7 +70,9 @@ function [nc,xdist,ydist]=ridgepack_gridsquare(nc,model)
 %         2: Assumes the wgs84 ellipsoid
 %         3: Assumes a polar stereographic plane
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with a split grid, or corner coordinates
 %      for a grid with latitude and longitude coordinates. An example
 %      is provided here.
@@ -151,7 +154,8 @@ function [nc,xdist,ydist]=ridgepack_gridsquare(nc,model)
 %
 % }
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

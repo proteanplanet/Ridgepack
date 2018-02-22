@@ -2,10 +2,10 @@ function ridgepack_zetahatplot
 
 % function ridgepack_zetahatplot
 %
-% This function is part of Ridgepack Version 1.0.
-% It generates and plot a zeta-hat plane as a test of the function
-% ridgepack_zetahatplane. 
+% This function generates and plot a zeta-hat plane as a test 
+% of the function ridgepack_zetahatplane. 
 %
+% Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % generate or extract data (or not)
@@ -35,16 +35,16 @@ end
 
 % place data into a netcdf structure
 nc.attributes.title='expected path';
-[nc]=ridgepack_ncadd(nc,'hf',HF,'h_{fi}',{'hf'},'m');
-[nc]=ridgepack_ncadd(nc,'epsilon',EPSILON,'$\epsilon$',{'epsilon'},'');
-[nc]=ridgepack_ncadd(nc,'phi',PHI,'porosity',{'hf','epsilon'},'');
-[nc]=ridgepack_ncadd(nc,'alpha',ALPHAHAT,'angle of repose',{'hf','epsilon'},'degrees');
-[nc]=ridgepack_ncadd(nc,'VR',VR,'Potential Energy Density',{'hf','epsilon'},'J m^{-2}');
-[nc]=ridgepack_ncadd(nc,'VRF',VR,'Filtered Potential Energy Density',{'hf','epsilon'},'J m^{-2}');
-[nc]=ridgepack_ncadd(nc,'Hk',HK,'Keel Draft',{'hf','epsilon'},'m');
-[nc]=ridgepack_ncadd(nc,'Lk',LK,'Keel Width',{'hf','epsilon'},'m');
-[nc]=ridgepack_ncadd(nc,'Hs',HS,'Sail Height',{'hf','epsilon'},'m');
-[nc]=ridgepack_ncadd(nc,'Ls',LS,'Sail Width',{'hf','epsilon'},'m');
+[nc]=ridgepack_add(nc,'hf',HF,'h_{fi}',{'hf'},'m');
+[nc]=ridgepack_add(nc,'epsilon',EPSILON,'$\epsilon$',{'epsilon'},'');
+[nc]=ridgepack_add(nc,'phi',PHI,'porosity',{'hf','epsilon'},'');
+[nc]=ridgepack_add(nc,'alpha',ALPHAHAT,'angle of repose',{'hf','epsilon'},'degrees');
+[nc]=ridgepack_add(nc,'VR',VR,'Potential Energy Density',{'hf','epsilon'},'J m^{-2}');
+[nc]=ridgepack_add(nc,'VRF',VR,'Filtered Potential Energy Density',{'hf','epsilon'},'J m^{-2}');
+[nc]=ridgepack_add(nc,'Hk',HK,'Keel Draft',{'hf','epsilon'},'m');
+[nc]=ridgepack_add(nc,'Lk',LK,'Keel Width',{'hf','epsilon'},'m');
+[nc]=ridgepack_add(nc,'Hs',HS,'Sail Height',{'hf','epsilon'},'m');
+[nc]=ridgepack_add(nc,'Ls',LS,'Sail Width',{'hf','epsilon'},'m');
 
 % determine observed range and shade only every second cell outside the range
 % based on Tucker et al. (1984)
@@ -60,6 +60,7 @@ nc.VRF.data(2:2:end,2:2:end)=nc.VR.data(2:2:end,2:2:end).*HSmaxfilt(2:2:end,2:2:
 
 % close any open figures
 close all
+figure(1)
 
 % plot the data
 ridgepack_image(nc,'hf','epsilon','VRF',{},{},[1:1:11],10^-1,10^4,'vertical','parula')
@@ -223,6 +224,14 @@ end
 % label axes and title
 ylabel('Strain, $\epsilon_{R_I}$')
 xlabel('Parent Sheet Ice Thickness, $h_{F}$ (m)')
-title('$\hat{\zeta}$ - plane')
+title('')
 drawnow
+
+% determine directory for read/write of zeta-hat plane data
+writedir=[fileparts(which('ridgepack')),'/figures'];
+cd(writedir)
+
+% print figure
+ridgepack_fprint('png','ridgepack_zetahatplot',1,2)
+ridgepack_fprint('epsc','ridgepack_zetahatplot',1,2)
 

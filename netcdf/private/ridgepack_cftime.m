@@ -4,18 +4,22 @@ function [time]=ridgepack_cftimeextern(time,units,CFcalendar)
 %
 % function [time]=ridgepack_cftime(ncfile)
 %
-% Input:
+% INPUT:
+%
 % time       - time given in the CF convention units
 % units      - CF convention units
 % CFcalendar - type of calendar being used (e.g. gregorian, noleap etc)
 %
-% Output:
+%
+% OUTPUT:
+%
 % time       - time given in Matlab serial time units
 %
 % This function invokes the system's version of ridgepack_dump for listing 
 % time output in CF convention using any available calendar information.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

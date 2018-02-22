@@ -9,7 +9,8 @@ function ridgepack_plotgridm(nc,type)
 % types of plot, including one that provides the mask outline
 % and one that simply plots the grid points.  
 %
-% Input:
+% INPUT:
+%
 % nc   - nc structure containing the fields 'latitude' and 'longitude'
 %        of the model grid.  In addition, the field 'mask' can be
 %        used depending on the type of grid plot selected
@@ -23,7 +24,8 @@ function ridgepack_plotgridm(nc,type)
 %
 % Output is graphical only.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

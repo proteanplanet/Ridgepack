@@ -42,7 +42,9 @@ function [hpos,href,hneg]=ridgepack_contourm(nc,Z,dimnames,bounds,cont,ref,mode,
 %          omitted, then every second contour is labelled. The reference
 %          contour is never labeled.
 %
-% Output:
+%
+% OUTPUT:
+%
 % hpos   - handle of contours greater than ref
 % href   - handle of ref contour
 % hneg   - handle of contours less than ref
@@ -51,7 +53,8 @@ function [hpos,href,hneg]=ridgepack_contourm(nc,Z,dimnames,bounds,cont,ref,mode,
 % included, one at a time, as they are needed in the sequence 
 % provided here. This does not work with a 3D globe projections.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

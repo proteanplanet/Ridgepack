@@ -7,7 +7,8 @@ function [maph]=ridgepack_globem(varargin)
 % This generates a spherical map of the earth as seen 
 % from space directly above the coordinates vlat,vlon.
 %
-% Input:
+% INPUT:
+%
 % 'lon'       - Longitude of center of projection.
 %
 %  lon        - Actual lon value following 'lon'.
@@ -29,7 +30,9 @@ function [maph]=ridgepack_globem(varargin)
 % 'grid'      - Overlays a grid on the map.
 % 
 %
-% Output:
+%
+% OUTPUT:
+%
 % maph - this function generates a handle for the map
 %
 % A Spherical Projection is used.  Typing 'help globe' 
@@ -37,7 +40,8 @@ function [maph]=ridgepack_globem(varargin)
 % projection.   Use the function ridgepack_sunlightm to add
 % sunlight to the globe for a given date and time.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

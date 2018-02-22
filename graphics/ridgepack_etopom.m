@@ -9,18 +9,22 @@ function [nc]=ridgepack_etopom(sample,maplatlimit)
 % specified as output, an nc structure containing the sampled etopo data is 
 % created instead of plotting the data, in which case a map need not be drawn.
 %
-% Input:
+% INPUT:
+%
 % Sample - sample rate of 2 minute data.  The default is every fifth point.
 % maplatlimit - a two element vector with the min and max latitudes to be extracted.
 %          This is only read if an nc structure is being created, otherwise
 %          the information is automatically obtained from the map to which
 %          etopo data is being added.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - etopo data on (lat x long) grid.  If output is requested, then
 %     the data is not plotted graphically.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

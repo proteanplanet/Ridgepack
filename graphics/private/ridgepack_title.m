@@ -4,7 +4,8 @@ function ridgepack_title(nc,text,pos)
 %
 % function ridgepack_title(nc,text,pos)
 %
-% Input:
+% INPUT:
+%
 % nc   - netcdf structure (see ridgepack_struct for more information)
 % text - text to be added to the title
 % pos  - position of title (1,2 or 3)
@@ -12,10 +13,13 @@ function ridgepack_title(nc,text,pos)
 %        2 - bottom rung
 %        3 - remove previous title
 %
-% Output:
+%
+% OUTPUT:
+%
 % Output is graphical only
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

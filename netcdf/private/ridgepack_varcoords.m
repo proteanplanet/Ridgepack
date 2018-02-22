@@ -13,14 +13,18 @@ function [coords]=ridgepack_varcoords(nc,var)
 % where each coordinate variable is separated by a space and the attribute
 % is a simple character array.  
 %
-% Input:
+% INPUT:
+%
 % nc  - netcdf structure (see ridgepack_struct)
 % var - given variable in a netcdf structure
 % 
-% Output:
+%
+% OUTPUT:
+%
 % coords - coordinates in a cell array for the given variable
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -22,7 +22,8 @@ function ridgepack_mask(a,b,zi,col,ref,lw)
 % ref - reference value if it is other than NaN (default is NaN)
 % lw  - line width (default is 0.4)
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

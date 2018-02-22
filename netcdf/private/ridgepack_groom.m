@@ -18,14 +18,18 @@ function [nc]=ridgepack_groom(nc, name)
 % If the type of the data is nc_char or if a grid mapping is set, the 
 % normal checks on the data are bypassed.
 %
-% Input:
+% INPUT:
+%
 % nc   - netcdf data structure input
 % name - name of component being groomed in the netcdf structure.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc   - groomed data structure for nc.name
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

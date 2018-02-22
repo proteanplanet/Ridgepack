@@ -12,7 +12,8 @@ function [dimremove,template,tempsize,endsize,ant,time]=ridgepack_varbounds(nc,d
 % The main purpose of this function is to be called by the function ridgepack_reduce for
 % reducing datasets. See ridgepack_reduce for further explanation.
 %
-% Input:
+% INPUT:
+%
 % nc       - netcdf structure (see ridgepack_struct for more details)
 % dimnames - cell array of dimension variables in nc structure to be removed with 
 %            slices or averages across these dimensions.
@@ -23,7 +24,9 @@ function [dimremove,template,tempsize,endsize,ant,time]=ridgepack_varbounds(nc,d
 %            named variable may not possess all dimensions in dimnames, and this 
 %            is taken into account by this function.
 %
-% Output:
+%
+% OUTPUT:
+%
 % dimremove - cell array of dimensions to be removed from the variable name.
 % template  - A mask template of the same dimensional size as the dimensions to be
 %             removed from name.  The template is populated with NaNs for values
@@ -109,7 +112,8 @@ function [dimremove,template,tempsize,endsize,ant,time]=ridgepack_varbounds(nc,d
 % The reason being that 'time' is not a dimension of either latitude or longitude, and
 % so there would be no bounds applied to them. 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

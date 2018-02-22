@@ -4,11 +4,14 @@ function [z,nc]=ridgepack_standardunits(nc,Z)
 %
 % function [z,nc]=ridgepack_standardunits(nc,Z)
 %
-% Input:
+% INPUT:
+%
 % nc  - netcdf structure
 % Z   - name of variable to be extracted
 %
-% Output:
+%
+% OUTPUT:
+%
 % z   - data to be interpolated
 % nc  - netcdf structure re-gridded
 %

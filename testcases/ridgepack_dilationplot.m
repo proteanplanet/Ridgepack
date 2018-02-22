@@ -1,6 +1,10 @@
-function ridgepack_dilationplot
+function ridgepack_dilationplot(titleflag)
 
 % function ridgepack_dilationplot
+%
+% INPUT: 
+%
+% titleflag - logical turning on title
 %
 % This function is part of Ridgepack Version 1.0.
 % It generates a graphical example of the state space trajectory and 
@@ -8,11 +12,17 @@ function ridgepack_dilationplot
 % cover. This function is useful for testing the code in ridgepack_trajectory
 % and that is why it was created.
 %
+% Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % plot on figure 2
+clear
 figure(2)
 clf
+
+if nargin<1
+ titleflat=false;
+end
 
 % initial ice thickness (m)
 hf=2.0;
@@ -102,9 +112,27 @@ xlabel('Strain, $\epsilon_{R_I}$','Interpreter','Latex','fontsize',12)
 ylabel('Porosity, $\phi_R$','Interpreter','Latex','fontsize',12)
 zlabel('Potential Energy Density, $\mathcal{V}_R$ (J m$^{-2}$)','Interpreter','Latex','fontsize',12)
 
-% title
-title(['Dilation field and state space trajectory for $h_f=$',num2str(hf),'m, $h_{f_s}=$',num2str(hfs),'m'])
+if titleflat
 
-% changes the position
-axis square
+ % title
+ title(['Dilation field and state space trajectory for $h_f=$',num2str(hf),'m, $h_{f_s}=$',num2str(hfs),'m'])
+ 
+ % fix axes
+ axis square
+
+else
+
+ % changes the position
+ set(gca,'Position',[0.1 0.08 0.7 0.9])
+
+end
+
+% determine directory for read/write of zeta-hat plane data
+writedir=[fileparts(which('ridgepack')),'/figures'];
+cd(writedir)
+
+% print figure
+ridgepack_fprint('png','ridgepack_dilationplot',2,2)
+ridgepack_fprint('epsc','ridgepack_dilationplot',2,2)
+
 

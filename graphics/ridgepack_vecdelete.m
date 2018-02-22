@@ -12,7 +12,8 @@ function ridgepack_vecdelete(ha)
 % Inputs:
 % ha - axis handle for the quiver plot
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

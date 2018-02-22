@@ -60,7 +60,8 @@ function ridgepack_quiverm(nc1,U,nc2,V,dimnames,bounds,thin,mode,scale)
 % provided here. u and v are assumed to be int the +longitude and 
 % +latitude directions.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

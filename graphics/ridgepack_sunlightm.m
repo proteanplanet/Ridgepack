@@ -7,13 +7,15 @@ function ridgepack_sunlightm(time)
 % Adds sun light to a  3D plot of earth based on the time
 % provided through the global time variable.
 %
-% Input:
+% INPUT:
+%
 % time - Serial time in UTC.  This may be omitted for the time to
 % be set to 0300UTC on the Boreal Summer Solstice. Otherwise the 
 % solar angle is roughly calculated for the time provided.
 % maph - axis handle for globe map.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

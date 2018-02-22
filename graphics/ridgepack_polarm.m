@@ -14,7 +14,8 @@ function [maph]=ridgepack_polarm(varargin)
 % 
 % Several optional vargin arguments may be used:
 %
-% Input:
+% INPUT:
+%
 % 'lat'   - Provides the maximum equatorward extent the map
 %           and is proceeded by a scalar latitude.  Positive
 %           latitudes produce an Arctic polar stereographic
@@ -62,7 +63,9 @@ function [maph]=ridgepack_polarm(varargin)
 %
 % 'antarctic' - Map for Antarctic sea ice zone.
 %
-% Output:
+%
+% OUTPUT:
+%
 % This function generates a handle for the map:  maph
 %
 % An Azimuthal Stereographic Projection map projection is
@@ -82,7 +85,8 @@ function [maph]=ridgepack_polarm(varargin)
 % filling. This is an artifact from within Matlab's
 % Mapping toolbox.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

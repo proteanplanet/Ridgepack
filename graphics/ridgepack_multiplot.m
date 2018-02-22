@@ -54,7 +54,8 @@ function ridgepack_multiplot(nrows,ncols,row,col,notation)
 % this function for row=1 and col=1 first, before adding other axes
 % to the plot.  All other axes can be added in any order.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

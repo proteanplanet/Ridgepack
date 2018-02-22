@@ -8,13 +8,15 @@ function [varadd]=ridgepack_consistency(nc1,nc2)
 % nc structures are consistent in their structure and content, and to determine
 % which variables need to be added to nc2 from nc1 that are not already in nc2.
 %
-% Input:
+% INPUT:
+%
 % nc1, nc2 - two nc structures to be merged (nc1 merged into nc2)
 %
 % Ouput:
 % varadd - cell array of the variable names to be added from nc1 to nc2
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

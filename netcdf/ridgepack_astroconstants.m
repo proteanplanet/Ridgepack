@@ -7,7 +7,9 @@ function [h]=ridgepack_astroconstants
 % This function provides a handle with astronomical and physical constants 
 % for use in metocean calculations. 
 %
-% Output:
+%
+% OUTPUT:
+%
 % h - structure with the form:
 %     h.name.descr='description of constant';
 %     h.name.units='string';
@@ -18,7 +20,8 @@ function [h]=ridgepack_astroconstants
 %     name is a constant in the structure, and multiple names are possible
 %     within the one structure.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

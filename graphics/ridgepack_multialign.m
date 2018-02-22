@@ -31,7 +31,8 @@ function ridgepack_multialign(hf,titletext,notatsize,notatcol,notatbox)
 % Once all calls have been made to ridgepack_multiplot, a final call of ridgepack_multialign 
 % brings them into alignement and uses all available space on the figure. 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

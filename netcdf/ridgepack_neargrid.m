@@ -7,13 +7,16 @@ function [row,col,lat,lon,nrow,ncol,ndist]=ridgepack_neargrid(nc,lat,lon,switchd
 % 
 % function [row,col,lat,lon,nrow,ncol,ndist]=ridgepack_neargrid(nc,lat,lon,switchd)
 %
-% Input:
+% INPUT:
+%
 % nc      - netcdf structure with latitude and longitude
 % lat     - latitude of point
 % lon     - longitude of point
 % switchd - set to 1 to turn off wgs84 ellipsoid
 %
-% Output:
+%
+% OUTPUT:
+%
 % [row,col] - row and column of latmat (or longmat) matrix
 % lat     - latitude of point on grid
 % lon     - longitude of point on grid
@@ -21,7 +24,8 @@ function [row,col,lat,lon,nrow,ncol,ndist]=ridgepack_neargrid(nc,lat,lon,switchd
 % ncol - nine nearest col indices surrounding point
 % ndist - distance quad surrounding point
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 %debug=true;

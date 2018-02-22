@@ -6,7 +6,8 @@ function [latgrat,longrat,z]=ridgepack_mesh(lat,lon,z)
 %
 % This creates a grid suitable for mapping from data:
 %
-% Input:
+% INPUT:
+%
 % lat - latitude 1D matrix
 % lon - longitude 1D matrix
 % z   - array to be mapped
@@ -16,7 +17,8 @@ function [latgrat,longrat,z]=ridgepack_mesh(lat,lon,z)
 % longrat - mesh of longitude values
 % z       - array with added values for wrapped data
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

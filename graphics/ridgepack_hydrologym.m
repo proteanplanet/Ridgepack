@@ -13,7 +13,8 @@ function ridgepack_hydrologym(colorindex)
 % colorindex - integer from 1 to 4 that selects the desired 
 %              color (optional)
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

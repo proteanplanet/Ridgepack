@@ -13,7 +13,8 @@ function [lh]=ridgepack_multilegend(objecthandles,legendtext,location)
 % not include a box around the legend, but this can be changed by using the 
 % legend output handle from this function and setting: legend(lh,'boxoff').
 %
-% Input:
+% INPUT:
+%
 % objecthandles - Handles created from graphics objects (e.g. plot, contour, etc.)
 %                 that you would like represented in the legend.
 % legendtext    - A cell array of the text to accompany each legend entry,
@@ -22,7 +23,9 @@ function [lh]=ridgepack_multilegend(objecthandles,legendtext,location)
 %                 This can take the options 'North','West','East' and 'South'
 %                 and defaults to South.
 %
-% Output:
+%
+% OUTPUT:
+%
 % lh - this is the handle of the MATLAB legend created. 
 %
 % Example 1: Adding legends to a multiple graph axes
@@ -60,7 +63,8 @@ function [lh]=ridgepack_multilegend(objecthandles,legendtext,location)
 %    ridgepack_multilegend(hs,{'entry 1','entry 2'},'North')
 %    ridgepack_multialign(gcf,'This is the title')
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

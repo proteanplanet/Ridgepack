@@ -7,16 +7,20 @@ function nc=ridgepack_grid_gaussian(nc,resolution)
 % This function provides the latitudes and longitudes
 % of a global spherical grid.
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure to have new lats/longs and x and y data added
 %      This may be left empty [] if generating a new netcdf structure.
 % resolution - resolution of grid in terms of number of grid points
 %      per degree of the spherical grid.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with new lats/longs and x and y added
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -8,18 +8,22 @@ function [lonvar,latvar]=ridgepack_findlatlon(nc,coor);
 % like variables in the nc structure, where coor is a subset of variable
 % names in the netcdf structure nc.
 %
-% Input:
+% INPUT:
+%
 % nc   - netcdf structure (see ridgepack_struct for details)
 % coor - cell array containing a subset of variable names in nc
 %
-% Output:
+%
+% OUTPUT:
+%
 % lonvar - string of the longitude coordinate variable from coor in nc 
 % latvar - string of the latitude coordinate variable from coor in nc 
 %
 % If multiple possibilities exist in coor for lat/long coordinates, the
 % function throws an error.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

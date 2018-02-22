@@ -9,11 +9,14 @@ function [outset]=ridgepack_union(firstset,secondset)
 % output is not sorted and occurs in the same order as elements in 
 % firstset.  Also, elements are not repeated.
 %
-% Input:
+% INPUT:
+%
 % firstset   - cell array with elements that you want to test for commonality
 % secondeset - comparing cell array
 %
-% Output:
+%
+% OUTPUT:
+%
 % outset - cell array containing elements that are common between first set
 %          and the second set
 %
@@ -25,7 +28,8 @@ function [outset]=ridgepack_union(firstset,secondset)
 % In this example, the standard matlab union would provide
 % outset={'a','z'}
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

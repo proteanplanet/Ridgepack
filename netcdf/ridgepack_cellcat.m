@@ -7,7 +7,8 @@ function sc=ridgepack_cellcat(S,charinsert)
 % This function creates a single string from many individual strings 
 % in a cell array S, with elements blank-space separated.
 %
-% Input:
+% INPUT:
+%
 % S  - Cell array containing multiple strings. If S is a string only, 
 %      then just the value of the string is returned.
 %
@@ -16,14 +17,17 @@ function sc=ridgepack_cellcat(S,charinsert)
 %              between the characters. This is optional, and if omitted, 
 %              the default is to place a blanks space strings.
 %
-% Output:
+%
+% OUTPUT:
+%
 % sc - Concatenated string from S
 %
 % Example:
 % if S={'This','is','a','test'} then the output
 % will be sc=['This is a test']
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

@@ -4,7 +4,8 @@ function ridgepack_freqzplot(H,W,b,a,description,units)
 %
 % function ridgepack_freqzplot(H,W,b,a,description,units)
 % 
-% Input:
+% INPUT:
+%
 % H           - frequency response 
 % W           - frequency in cycles per units
 % b           - b coefficient in difference equation
@@ -12,10 +13,13 @@ function ridgepack_freqzplot(H,W,b,a,description,units)
 % description - information for the title of the plot. 
 % units       - time or space units of series (days, months, km etc)
 %
-% Output:
+%
+% OUTPUT:
+%
 % Output is graphical.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

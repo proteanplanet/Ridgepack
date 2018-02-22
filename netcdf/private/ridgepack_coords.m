@@ -8,16 +8,20 @@ function [nc]=ridgepack_coords(nc,name);
 % appropriate. It also changes the names of lat/long variables to latitude and 
 % longitude, where appropriate, based on the coordinates found in the netcdf structure. 
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure (see ridgepack_struct for more information)
 % name - optional input to assign the coordinates for a specific variable
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with latitude and longitude variable names, and coordinate
 %      attributes where a variable has the same dimension variable as latitude and 
 %      longitude.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Naval Postgraduate School, Department of Oceanography
 
 global debug;

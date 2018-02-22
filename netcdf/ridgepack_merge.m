@@ -4,13 +4,17 @@ function [nc1]=ridgepack_merge(nc1,nc2)
 %
 % function [nc1]=ridgepack_merge(nc1,nc2)
 %
-% Input:
+% INPUT:
+%
 % nc1, nc2 - two nc structures to be merged (nc2 merged into nc1)
 % 
-% Output:
+%
+% OUTPUT:
+%
 % nc1 - new nc structure nc1 which is a merge of nc1 and nc2
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

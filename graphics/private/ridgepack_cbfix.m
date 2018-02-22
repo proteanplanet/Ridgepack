@@ -14,7 +14,8 @@ function ridgepack_cbfix(obj,src)
 % src - information about the affected object, which includes the 
 %       affected axes handle that has been repositioned.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

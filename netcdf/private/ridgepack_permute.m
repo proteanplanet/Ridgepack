@@ -13,7 +13,9 @@ function [nc]=ridgepack_permute(nc,var,permutation)
 % var         - variable in netcdf structure to be rearranged (character)
 % permutation - cell array of the dimensions in the required permutation of var
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc          - netcdf structure with rearranged var and its dimension variables.
 %
 % Example:
@@ -65,7 +67,8 @@ function [nc]=ridgepack_permute(nc,var,permutation)
 % One reason for doing this could be to reduce the number of dimensions in p2t using
 % ncreducto, for example. 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

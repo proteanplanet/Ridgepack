@@ -16,10 +16,13 @@ function [tightinset]=ridgepack_cbextent(ha)
 % in this function, and this function is only for use with colorbars created
 % with the function "ridgepack_colorbar.m" in icepack. 
 %
-% Input:
+% INPUT:
+%
 % ha - handle of the main axes with which the colorbar is associated
 %
-% Output:
+%
+% OUTPUT:
+%
 % TightInset - The tight inset of the colorbar axes, including markers, which
 %              is equivalent to the TightInset obtained from normal axes. 
 %
@@ -31,7 +34,8 @@ function [tightinset]=ridgepack_cbextent(ha)
 % to normalized coordinates whenever the colorbar position is changed.
 % This resulted in a stable implementation.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

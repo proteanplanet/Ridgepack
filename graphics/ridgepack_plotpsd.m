@@ -6,7 +6,8 @@ function [AX,H2]=ridgepack_plotpsd(faxis,psd,leg,conf,cutconf,description,units,
 % 
 % This function plots one-sided or two-sided (rotary) spectra given the following inputs:
 %
-% Input:
+% INPUT:
+%
 % faxis       - Frequency axis with size (Nx1). If faxis has values less than zero,
 %               a rotary spectra is plotted, otherwise a scalar spectra is plotted.
 % psd         - Power spectral density corresponding to each faxis value (NxM)
@@ -29,11 +30,14 @@ function [AX,H2]=ridgepack_plotpsd(faxis,psd,leg,conf,cutconf,description,units,
 % col         - Color of the trace(s) to be plotted in cell array (e.g.{[0 0 1],[0 1 ]})
 % pattern     - Pattern required for trace in cell array (e.g. {'--',':'})
 %
-% Output:
+%
+% OUTPUT:
+%
 % AX - axis handles
 % H2 - psd handles
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

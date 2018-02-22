@@ -9,7 +9,8 @@ function [lat,lon,h,k]=ridgepack_xytoease(s,r,s0,r0,C,SGN)
 % more information, see http://nsidc.org/data/ease/ease_grid.html.
 % This function is for Azimuthal Polar EASE grids.
 %
-% Input:
+% INPUT:
+%
 % s   - vector of EASE row coordinates
 % r   - vector of EASE column coordinates 
 % s0  -	Map origin row
@@ -17,7 +18,9 @@ function [lat,lon,h,k]=ridgepack_xytoease(s,r,s0,r0,C,SGN)
 % C   -	Nominal cell (pixel) size in km
 % SGN - Hemisphere specifier: 1=Northern Hemisphere, -1=Southern Hemisphere
 %
-% Output:
+%
+% OUTPUT:
+%
 % lat   - Latitude
 % lon   - Longitude
 % h     - scale along meridian

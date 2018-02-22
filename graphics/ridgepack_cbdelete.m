@@ -10,15 +10,19 @@ function ridgepack_cbdelete(h)
 % it describes. This is analagous to using "colorbar('off')" for
 % a standard matlab colorbar. 
 % 
-% Input:
+% INPUT:
+%
 % h - axes handle for main axes with which the colorbar is associated.
 %     This can be omitted if the current axis handle is the same has h.
 %
-% Output:
+%
+% OUTPUT:
+%
 % Output is only graphical for this function, with changes to the 
 % axes handle h going on under the hood.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Naval Postgraduate School, Department of Oceanography 
 %
 

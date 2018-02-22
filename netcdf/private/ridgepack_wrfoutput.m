@@ -8,10 +8,13 @@ function [nc]=ridgepack_wrfoutput(nc)
 % dimension), and adds a turning angle for vectors for a polar stereographic
 % grid.
 %
-% Input: 
+% INPUT:
+% 
 % nc - netcdf structure prepared by ridgepack_clone
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf strucure with certain changes applicable to the WRF output
 %
 % Written Andrew Roberts 2012

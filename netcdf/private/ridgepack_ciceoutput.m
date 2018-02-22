@@ -4,13 +4,17 @@ function [nc]=ridgepack_ciceoutput(nc)
 %
 % function [nc]=ridgepack_ciceoutput(nc)
 %
-% Input:
+% INPUT:
+%
 % nc - structure input with 'CICE' in the source text
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - structure output with a few changed attributes 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

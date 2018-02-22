@@ -9,12 +9,15 @@ function [outset]=ridgepack_setdiff(firstset,secondset)
 % output is not sorted and occurs in the same order as elements in 
 % firstset
 %
-% Input:
+% INPUT:
+%
 % firstset   - cell array with elements that you want to test for differences
 %              from the second set
 % secondeset - comparing cell array
 %
-% Output:
+%
+% OUTPUT:
+%
 % outset - cell array containing elements that are different in firstset
 %          from those in second set
 %
@@ -26,7 +29,8 @@ function [outset]=ridgepack_setdiff(firstset,secondset)
 % In this example, the standard matlab setdiff would provide
 % outset={'a','y'}
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

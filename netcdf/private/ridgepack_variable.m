@@ -117,7 +117,8 @@ function ridgepack_variable(ncid,nc,rec,recp,recl)
 % as a result of checking for type and fill values. Also see 
 % ridgepack_struct for a description of the netcdf data structure.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

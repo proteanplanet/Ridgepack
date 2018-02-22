@@ -36,13 +36,16 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 %
 % logscale - set to true if log scale is being used (optional).
 %
-% Output:
+%
+% OUTPUT:
+%
 % cmap   - colormap output
 %
 % The only two inputs that are compulsory are cont and units, the
 % others can be eliminated if need be.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

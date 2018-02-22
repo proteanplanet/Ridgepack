@@ -4,11 +4,14 @@ function [cont]=ridgepack_contlev(z,v)
 %
 % function [cont]=ridgepack_contlev(z,v)
 %
-% Input: 
+% INPUT:
+% 
 % z    - 2D matrix of values to be contoured
 % v    - vector of contours to be calculated (optional)
 %
-% Output:
+%
+% OUTPUT:
+%
 % cont - matrix of contour levels
 %
 % Note that this function uses the matlab contourc function
@@ -17,7 +20,8 @@ function [cont]=ridgepack_contlev(z,v)
 % contours are rounded to the nearest six smalled orders of 
 % magnitude from the mean contour value.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Blair Greenan's code segment added from Matlab Central
 %
 %

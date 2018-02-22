@@ -8,7 +8,8 @@ function [nc]=ridgepack_gridgen(nc,mode,n,res)
 % and places the lats, longs, x and y into the netcdf
 % output structure nc.
 %
-% Input:
+% INPUT:
+%
 % nc   - nc structure. This may be left empty [] if generating 
 %        a new netcdf structure based on the grid.
 %
@@ -32,7 +33,8 @@ function [nc]=ridgepack_gridgen(nc,mode,n,res)
 %        if res is negative, it chooses SH, else NH is 
 %        the default.  Does not work for mode=8 to 11
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

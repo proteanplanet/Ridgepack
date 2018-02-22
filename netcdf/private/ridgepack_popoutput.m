@@ -4,13 +4,17 @@ function [nc]=ridgepack_popoutput(nc)
 %
 % function [nc]=ridgepack_popoutput(nc)
 %
-% Input:
+% INPUT:
+%
 % nc - structure input with 'POP HIST conventions' as the convention
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - structure output with time added from the attributes
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

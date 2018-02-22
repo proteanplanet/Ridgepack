@@ -10,11 +10,14 @@ function [nc,out]=ridgepack_struct(nc,varname)
 % is provided (optional), only details about this variable are 
 % provided, along with all values from that variable.
 %
-% Input:
+% INPUT:
+%
 % nc      - netcdf structure (see explanation below).
 % varname - variable name from the structure (optional)
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc      - groomed and sorted netcdf structure.
 % out     - this argument is included only if summary output
 %           is required to be written to screen, rather than
@@ -158,7 +161,8 @@ function [nc,out]=ridgepack_struct(nc,varname)
 % For an explanation of tools for nc structures, see ncpolar
 % (type 'help ncpolar').
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

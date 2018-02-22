@@ -8,15 +8,19 @@ function [z,nc]=ridgepack_polarplot(nc,Z)
 % if a polar stereographic projection is used, and the data is on 
 % 1D lat and 1D long described grid (lat-long grid).
 %
-% Input:
+% INPUT:
+%
 % nc  - netcdf structure
 % Z   - name of variable to be extracted
 %
-% Output:
+%
+% OUTPUT:
+%
 % z   - data to be interpolated
 % nc  - netcdf structure re-gridded
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

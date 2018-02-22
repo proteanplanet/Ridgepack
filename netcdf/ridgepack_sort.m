@@ -4,10 +4,13 @@ function [nc,variablenames,numbervariables,dimorder]=ridgepack_sort(nc)
 % 
 % function [nc,variablenames,numbervariables,dimorder]=ridgepack_sort(nc)
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf data structure defined in ridgepack_struct.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc              - Cleaned netcdf data structure
 % variablenames   - cell array of all variables names in nc
 % numbervariables - number of cells in variablenames
@@ -26,7 +29,8 @@ function [nc,variablenames,numbervariables,dimorder]=ridgepack_sort(nc)
 %  nc.namem (data variable)
 %  }
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -7,7 +7,8 @@ function nc=ridgepack_grid_ssmi(nc,ns,n,res,xsize,ysize)
 % This function provides the latitudes and longitudes
 % of the old ssmi polar stereographic grid.
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure to have new lats/longs and x and y data added
 %      This may be left empty [] if generating a new netcdf structure.
 % ns - 'north' or 'south' for north of south grids
@@ -19,10 +20,13 @@ function nc=ridgepack_grid_ssmi(nc,ns,n,res,xsize,ysize)
 % xsize - Number of grid points on x direction 
 % ysize - Number of grid points on y direction 
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with new lats/longs and x and y added
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -11,14 +11,17 @@ function [newtime,units,CFcalendar]=ridgepack_timeconvert(time,units,CFcalendar,
 % from the original calendar to Matlab serial UTC time, and converts back, depending 
 % on certain constraints discussed here.
 % 
-% Input:
+% INPUT:
+%
 % time       - time given in the CF convention units
 % units      - CF convention units
 % CFcalendar - type of calendar being used (e.g. gregorian, noleap etc)
 % tofrom     - logical for converting to (0) or from (1) serial time units 
 %              to netcdf units.
 %
-% Output:
+%
+% OUTPUT:
+%
 % newtime    - time given in Matlab serial time units
 % units      - CF convention units if changed where tofrom=1
 % CFcalendar - Calendar output for cases where conversion was not possible for tofrom=1
@@ -67,7 +70,8 @@ function [newtime,units,CFcalendar]=ridgepack_timeconvert(time,units,CFcalendar,
 % Unix, Linux and Mac OS X system being used. As already alluded to, calls to this 
 % external function are not made for calendars 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

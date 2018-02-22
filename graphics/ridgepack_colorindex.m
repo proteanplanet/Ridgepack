@@ -9,17 +9,21 @@ function [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask)
 % given the original data values and the contour values, as well
 % the color reference value and mask.  The 
 %
-% Input:
+% INPUT:
+%
 % z      - data to be mapped
 % cont   - vector of contour values (colormap boundaries)
 % ref    - reference contour about which color is referenced
 % mask   - mask to be added to true colors of same size as z
 %
-% Output:
+%
+% OUTPUT:
+%
 % zindex  - color indexed data to be used for graphics plotting.
 % truecol - true color array corresponding to zindex.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

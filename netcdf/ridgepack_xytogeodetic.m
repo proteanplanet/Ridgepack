@@ -8,14 +8,17 @@ function [lat,lon,SLAT]=ridgepack_xytogeodetic(X,Y,SGN)
 % to latitudes and longitudes, and is essentially a JPL algorithm rewritten
 % to work in Matlab.
 %
-% Input:
+% INPUT:
+%
 % X   - polar stereographic X coordinate (km)
 % Y   - polar stereographic Y coordinate (km)
 % SGN - Hemisphere specifier: 1=Northern Hemisphere, -1=Southern Hemisphere
 %
 % Where (X,Y)=(0,0) is at the pole.
 %
-% Output:
+%
+% OUTPUT:
+%
 % lat   - Latitude
 % lon   - Longitude
 % SLAT  - Latitude of true distance

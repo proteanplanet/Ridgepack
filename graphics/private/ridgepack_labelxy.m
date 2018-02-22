@@ -4,17 +4,21 @@ function ridgepack_labelxy(nc,X,Y,graph)
 %
 % function ridgepack_labelxy(nc,X,Y,graph)
 %
-% Input:
+% INPUT:
+%
 % nc    - netcdf structure (see ridgepack_struct for more details)
 % X     - x-coordinate of Cartesian plot in nc
 % Y     - y-coordinate of Cartesian plot in nc
 % graph - logical which is true if a graph is being plotted
 %         or else may be omitted.
 %
-% Output:
+%
+% OUTPUT:
+%
 % All output is graphical and appears on the current selected axes
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

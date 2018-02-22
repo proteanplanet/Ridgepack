@@ -7,11 +7,13 @@ function ridgepack_debugger(signal)
 % This function turns on or off debugging for the entire MATLAB
 % icepack package.
 %
-% Input:
+% INPUT:
+%
 % signal - Character string, either 'on' or 'off'.  Any other 
 %          string is rejected.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Naval Postgraduate School, Department of Oceanography
 %
 

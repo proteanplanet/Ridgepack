@@ -15,7 +15,8 @@ function ht=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcol
 % in using the default Latex interpreter, text buttressed by math mode indicators
 % (i.e. '$$' or '$') will be plotted at a constant angle.
 %
-% Input:
+% INPUT:
+%
 % x               - x-coordinate (Cartesian) 
 % y               - y-coordinate (Cartesian)
 % string          - Text string for annotation
@@ -30,7 +31,9 @@ function ht=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcol
 %                   e.g. [1 1 1], or 'none' (optional; default is [1 1 1])
 % interpreter     - Text interpreter (optional; default is 'Latex')
 %
-% Output:
+%
+% OUTPUT:
+%
 % ht - Cell array of handles for each character being plotted.
 %
 % IMPORTANT:
@@ -42,7 +45,8 @@ function ht=ridgepack_text(x,y,string,fontsize,color,halign,valign,backgroundcol
 % In future, this function could easily be expanded to work on maps for
 % x and y representing latitude and longitude.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % check inputs
 if nargin<3

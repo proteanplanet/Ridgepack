@@ -10,7 +10,8 @@ function [ncnew]=ridgepack_regrid(nc,u,v,opmode,rec1,rec2,n,method)
 % words, u (and v) must have two spatial dimensions, and optionally a time
 % dimension.
 %
-% Input:
+% INPUT:
+%
 % nc        - netcdf structure (see ridgepack_struct for more information)
 %
 % u         - u-component if vector is being interpolated, else z-component
@@ -52,10 +53,13 @@ function [ncnew]=ridgepack_regrid(nc,u,v,opmode,rec1,rec2,n,method)
 % method    - method by which interpolation is done. Default is 'linear',
 %             see help page on "griddata" for other options.
 %
-% Output:
+%
+% OUTPUT:
+%
 % ncnew     - regridded netcdf structure
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

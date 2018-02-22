@@ -12,7 +12,8 @@ function [nc]=ridgepack_cellarea(nc,model)
 % is the same spherical or generalized coordinates that was input in nc 
 % (see ridgepack_sph2gen for an explanation of each coordinate structure).
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure (see ridgepack_struct for more information) with 
 %      geolocated data.
 % model - type of model to use to calculate area on the grid integer:
@@ -20,7 +21,9 @@ function [nc]=ridgepack_cellarea(nc,model)
 %      2: Assumes the wgs84 ellipsoid
 %      3: Assumes a polar stereographic plane
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with a cell_area added to the structure. This is
 %      an element that looks like this in the netcdf structure:
 %
@@ -40,7 +43,8 @@ function [nc]=ridgepack_cellarea(nc,model)
 % these vertices to calculate the area within each grid cell provided in the 
 % latitude and longitude arrays in the nc structure input.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

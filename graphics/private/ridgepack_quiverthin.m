@@ -10,7 +10,8 @@ function [x,y,u,v]=ridgepack_quiverthin(x,y,u,v,times,method)
 % be drawn must already be plotted ready for vector overlay, and must be the current
 % axes.
 %
-% Input:
+% INPUT:
+%
 % x       - x-coordinate or latitude
 % y       - y-coordinated or longitude
 % u       - u-component (Cartesian +x-direction, map +longitude-direction)
@@ -27,13 +28,16 @@ function [x,y,u,v]=ridgepack_quiverthin(x,y,u,v,times,method)
 %           3: Calculate median with no more than half the points as NaNs to account
 %              for areas next to coastlines (areas masked out with NaNs in u and v). 
 %
-% Output:
+%
+% OUTPUT:
+%
 % x       - thinned x-coordinate or latitude
 % y       - thinned y-Coordinated or longitude
 % u       - thinned u-component (Cartesian +x-direction, map +longitude-direction)
 % v       - thinned v-component (Cartesian +y-direction, map +latitude-direction)
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

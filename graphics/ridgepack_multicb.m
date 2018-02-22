@@ -58,7 +58,8 @@ function ridgepack_multicb(h)
 % limits would need to be provided to ridgepack_image so that each figure has a uniform 
 % color scale. This has not been done in this example for brevity.
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

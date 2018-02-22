@@ -66,7 +66,9 @@ function [nc]=ridgepack_quiver(nc1,X,Y,U,nc2,V,dimnames,bounds,thin,mode,scale,u
 % cont   - contour interval of the underlay field if required entered as
 %          a vector [C1,C2,...,CX]. This is optional.
 %
-% Output: 
+%
+% OUTPUT:
+% 
 % nc     - nc structure with added scalar fields according to the 'underlay'
 %          option as detailed above. If no underlay is added, this is not 
 %          generated. The nc structure provides all fields in the nc1 and nc2
@@ -78,7 +80,8 @@ function [nc]=ridgepack_quiver(nc1,X,Y,U,nc2,V,dimnames,bounds,thin,mode,scale,u
 % included, one at a time, as they are needed in the sequence 
 % provided here.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

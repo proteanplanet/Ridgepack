@@ -4,7 +4,8 @@ function ridgepack_plot(nc,X,Y,dimnames,bounds,options)
 %
 % function ridgepack_plot(nc,X,Y,dimnames,bounds,options)
 %
-% Input:
+% INPUT:
+%
 % nc       - netcdf data structure
 %
 % X        - character variable of x variable in nc structure
@@ -25,10 +26,13 @@ function ridgepack_plot(nc,X,Y,dimnames,bounds,options)
 % options  - plot options used in Matlab function "plot".
 %            This variable is option.
 % 
-% Output:
+%
+% OUTPUT:
+%
 % Output is graphical
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

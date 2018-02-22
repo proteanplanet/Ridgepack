@@ -4,7 +4,8 @@ function [nc]=ridgepack_clone(ncfile,newvar,newrec,newrecp,newendp,nearestdate)
 %
 % function [nc]=ridgepack_clone(ncfile,newvar,newrec,newrecp,newendp,nearestdate)
 %
-% Input:
+% INPUT:
+%
 % ncfile - Name of the netCDF file to be read. NOTE THAT ALL NETCDF 
 %          INPUT FILES SHOULD END WITH THE SUFFIX ".nc".
 %
@@ -93,7 +94,9 @@ function [nc]=ridgepack_clone(ncfile,newvar,newrec,newrecp,newendp,nearestdate)
 % any variables that describe its dimensions. If newrec is a cell
 % array and newrecp is excluded, an error will result.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netCDF data structure briefly described here:
 %
 % This function extracts data from a netCDF file 'ncfile' and 
@@ -115,7 +118,8 @@ function [nc]=ridgepack_clone(ncfile,newvar,newrec,newrecp,newendp,nearestdate)
 % shown here.  For more information on the netCDF structure, 
 % see 'help ridgepack_struct'.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 % Set debug flag;

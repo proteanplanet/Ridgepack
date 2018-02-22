@@ -145,12 +145,15 @@ function ncid=ridgepack_write(nc,ncfile,rec,recp,recl)
 %
 % For further information on the structure, see documentation in ridgepack_struct.
 %
-% Output:
+%
+% OUTPUT:
+%
 % A netcdf file is added to or created in the directory in which you are working.
 %
 % ncid - Optional output giving the netcdf id of the file written to.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

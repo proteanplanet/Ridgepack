@@ -4,13 +4,15 @@ function ridgepack_dump(ncfile)
 %
 % function ridgepack_dump(ncfile)
 %
-% Input:
+% INPUT:
+%
 % ncfile - character string of the full netcdf file name.
 %
 % This is a dummy function to match the name of the native
 % netcdf library by Unidata that has a utility called ridgepack_dump.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

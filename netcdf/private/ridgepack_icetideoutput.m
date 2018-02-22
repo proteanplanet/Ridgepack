@@ -7,10 +7,13 @@ function [nc]=ridgepack_icetideoutput(nc)
 % This function adds a turning angle to vectors for the rotated sterographic 
 % ice-tide grid.
 %
-% Input: 
+% INPUT:
+% 
 % nc - netcdf structure prepared by ridgepack_clone
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf strucure with certain changes applicable to ice-tide output
 %
 % Written Andrew Roberts 2012

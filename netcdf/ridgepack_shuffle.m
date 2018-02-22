@@ -10,7 +10,8 @@ function [nc]=ridgepack_shuffle(nc,lastdims)
 % on certain dimensions within an array, because it can easily 
 % reorganize the array.
 %
-% Input:
+% INPUT:
+%
 % nc       - input netcdf structure (see ridgepack_struct for more information)
 %
 % lastdims - cell array providing the dimensions wished to be made last
@@ -18,7 +19,9 @@ function [nc]=ridgepack_shuffle(nc,lastdims)
 %            of dimensions specified in lastdims is the same order that
 %            the nc structure will have.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc       - netcdf structure with permuted dimensions.
 %
 % Working example:
@@ -91,7 +94,8 @@ function [nc]=ridgepack_shuffle(nc,lastdims)
 %										       
 % }
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

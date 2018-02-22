@@ -18,7 +18,8 @@ function [maph]=ridgepack_worldm(varargin)
 %
 % Example:  ncworld('center',70)
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

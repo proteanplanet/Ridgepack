@@ -7,7 +7,8 @@ function ridgepack_conicm(varargin)
 % This function generates a conic projection over an area of the globe.
 % It is limited to preset arguments listed below.
 %
-% Input:
+% INPUT:
+%
 % 'noland'    - Stop land mask being plotted.
 %
 % 'labeloff'   - Stop printing axis labels.
@@ -22,10 +23,13 @@ function ridgepack_conicm(varargin)
 %
 % 'gulfofalaska' - Conic projection of the Gulf of Alaska.
 %
-% Output:
+%
+% OUTPUT:
+%
 % This function generates a handle for the map:  maph
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

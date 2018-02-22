@@ -8,7 +8,8 @@ function ridgepack_plotcoh(faxis,coh,cohou,leg,conf,cutconf,description,flo,fhi)
 % coherence squared, rotary coherence or auto coherence given 
 % information to plot M traces:
 %
-% Input:
+% INPUT:
+%
 % faxis       - frequency axis with size (Nx1)
 % coh         - co-rotating coherence squared spectra (NxM)
 % cohou       - counter-rotating coherence squared spectra (NxM)
@@ -24,7 +25,8 @@ function ridgepack_plotcoh(faxis,coh,cohou,leg,conf,cutconf,description,flo,fhi)
 %
 % Output is graphical only.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

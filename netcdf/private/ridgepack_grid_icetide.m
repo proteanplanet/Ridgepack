@@ -7,7 +7,8 @@ function nc=ridgepack_grid_icetide(nc,n)
 % This function provides the latitudes and longitudes
 % of the model used for Bill HIbler's ice-tide work.
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure to have new lats/longs and x and y data added
 %      This may be left empty [] if generating a new netcdf structure.
 % n  - number of grid points to append along each boundary of the grid 
@@ -15,10 +16,13 @@ function nc=ridgepack_grid_icetide(nc,n)
 %      input fields.  This may be omitted or left empty if 
 %      no grid points are to be appended to the grid.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure with new lats/longs and x and y added
 % 
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

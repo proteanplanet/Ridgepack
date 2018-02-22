@@ -8,7 +8,8 @@ function [dimc,coor,dims,vars,mdim,mesh,supp]=ridgepack_content(nc)
 % purpose in the dataset. It is primarily of use when data is being 
 % manipulated and dimensions or data are being removed during analysis.
 %
-% Input:
+% INPUT:
+%
 % nc - netCDF structure (see help ridgepack_struct for more information).
 % 
 % Output defining the content of nc:
@@ -98,7 +99,8 @@ function [dimc,coor,dims,vars,mdim,mesh,supp]=ridgepack_content(nc)
 % Coordinate variables are defined by the attribute 'coordinates' such as:
 % nc.p2t.coordinates='latitude longitude'
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

@@ -20,10 +20,13 @@ function [h]=ridgepack_maskm(a,b,zi,co,wi,li,alt)
 %      work for strongly curvilinear cases.
 % alt- altitude of point in km
 % 
-% Output:
+%
+% OUTPUT:
+%
 % h  - handle for generating graphic legends
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

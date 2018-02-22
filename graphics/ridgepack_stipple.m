@@ -10,7 +10,8 @@ function ridgepack_stipple(nc,var,mat,cutoff,colors)
 % grid cells, and is centered above them. This is particular useful for indicating
 % areas of statistical significance as calculate from ncttest2.
 %
-% Input:
+% INPUT:
+%
 %
 % nc     - netcdf structure containing the variable var used to stipple 
 %
@@ -28,7 +29,8 @@ function ridgepack_stipple(nc,var,mat,cutoff,colors)
 % Note, if using output from ncttest2, one could use 'ridgepack_stipple(nc,'h',3,0.5)'
 % which would stipple a square mat of 9 grid points that are statistically significant.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 if nargin<2
  error('incorrect number of inputs')

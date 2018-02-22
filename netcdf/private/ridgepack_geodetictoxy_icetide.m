@@ -7,13 +7,17 @@ function nc=ridgepack_geodetictoxy_icetide(nc)
 % This function converts latitudes and longitudes to x and y coordinates
 % on the Hibler and Roberts ice-tide grid.
 % 
-% Input:
+% INPUT:
+%
 % nc - nc structure containing lats and longs from the model
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - nc structure containing lats and longs from the model, and model positions
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

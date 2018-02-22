@@ -8,13 +8,17 @@ function [gridtype]=ridgepack_gridtype(nc)
 % model grid based on a few simple assumptions about the 
 % extent of latitude and longitude.
 %
-% Input:
+% INPUT:
+%
 % nc - nc structure containing the 2D fields 'latitude' and 'longitude'
 %      
-% Output:
+%
+% OUTPUT:
+%
 % gridtype - a text string as either 'regional' or 'global'
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

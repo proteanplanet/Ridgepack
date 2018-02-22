@@ -7,7 +7,8 @@ function ridgepack_fprint(form,name,fig,movie)
 % This prints without using the zbuffer which is better for some rendering
 % images with opacity built into them.
 % 
-% Input:
+% INPUT:
+%
 % form - format of output (default is 'epsc'). Valid values:
 %
 %        ps       - PostScript for black and white printers
@@ -32,10 +33,13 @@ function ridgepack_fprint(form,name,fig,movie)
 %         this option to work, otherwise set to 0 (default is 0).
 %         To Set to 1200dpi, set movie to 2.
 %
-% Output:
+%
+% OUTPUT:
+%
 % Graphics file called name.form
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;
@@ -60,8 +64,8 @@ elseif movie==1
 	disp(['Printing 300dpi resolution ',name])
 	form=[form,' -r300'];
 elseif movie==2
-	disp(['Printing 1200dpi resolution ',name])
-	form=[form,' -r1200'];
+	disp(['Printing 600dpi resolution ',name])
+	form=[form,' -r600'];
 else
 	disp(['Printing 150dpi resolution ',name])
 	form=[form,' -r150'];

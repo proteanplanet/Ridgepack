@@ -83,7 +83,9 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 % included, one at a time, as they are needed in the sequence 
 % provided here.
 %
-% Output:
+%
+% OUTPUT:
+%
 %
 % nc - nc structure with information added ont he position of 
 %      grid cells' centers if the data is plotted as pixelated grid cells.
@@ -91,7 +93,8 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 %      plotting of the data, drastically reducing the time it takes
 %      to produce pixellated data on a map.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

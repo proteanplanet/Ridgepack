@@ -6,11 +6,14 @@ function ridgepack_globeatt(ncid,nc)
 %
 % Adds CF-1.4 convention attributes to a netcdf file.  Inputs required are:
 %
-% Input:
+% INPUT:
+%
 % ncid    - ID number of the open netcdf file
 % nc      - netcdf structure (defined below, but also see ridgepack_struct).
 %
-% Output:
+%
+% OUTPUT:
+%
 % Appends to an open netcdf file in the working directory.
 %
 % Global attributes for the netcdf file appear in the nc data structure:
@@ -61,7 +64,8 @@ function ridgepack_globeatt(ncid,nc)
 % setenv('USER_ORG','International Arctic Research Center');
 % setenv('USER_REAL','Andrew Roberts');
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

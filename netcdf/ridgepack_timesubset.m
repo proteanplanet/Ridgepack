@@ -14,7 +14,8 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 % would be sampled from 1991 to 1995, and January would be sampled from 1992 to 1996
 % to construct the seasonal mean.
 %
-% Input:
+% INPUT:
+%
 %
 % ncfile    - character variable giving the name of the netcdf file to be sampled.
 % ncvar     - character variable of variable for which seasonal means are required.
@@ -24,7 +25,9 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 % yearend   - last year of timeseries to be analyzed.
 %
 % 
-% Output:
+%
+% OUTPUT:
+%
 %
 % nc - netcdf structure containing the mean values for each entry in ncvar, as well
 %      as the sample size, and the standard deviation.
@@ -61,7 +64,8 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 % and 
 % timeseries.cice.h.aice.months_1_2_12_1990_1992.mean.nc
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

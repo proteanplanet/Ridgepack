@@ -86,13 +86,16 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 % included, one at a time, as they are needed in the sequence 
 % provided here.
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc  - nc structure with information added on weigtings, etc
 %       for future calls if a movie is being made from 
 %       an nc structure. This includes circumstances where
 %       a dimension is removed from an nc structure
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

@@ -19,7 +19,8 @@ function [mstruct]=ridgepack_extendframe
 % will typically take 2.5 degree datasets two grid cells past the edge of the
 % frame.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

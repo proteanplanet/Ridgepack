@@ -4,7 +4,8 @@ function [units]=ridgepack_units(nc,name)
 %
 % function [units]=ridgepack_units(nc,name)
 %
-% Input:
+% INPUT:
+%
 % nc   - netcdf structure (see ridgepack_struct for more details) or
 %        Matlab timeseries object
 % name - field of netcdf structure for which units are required
@@ -13,7 +14,8 @@ function [units]=ridgepack_units(nc,name)
 % Ouput:
 % units - character variable of tex formatted units for plotting
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

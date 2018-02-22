@@ -14,7 +14,8 @@ function ridgepack_maptextm(Name,Name2)
 %         the function will plot the track between the two 
 %         places, Name and Name2, using a great circle.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % 
 
 global debug;

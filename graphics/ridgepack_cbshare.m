@@ -18,10 +18,12 @@ function ridgepack_cbshare(h)
 % for colorbars created with ridgepack_colorbar, not with generic MATLAB
 % colorbars.
 %
-% Input:
+% INPUT:
+%
 % h - main axes with the colorbar to be shared.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 % Find axis and colorbar handles

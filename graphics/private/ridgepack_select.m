@@ -7,7 +7,8 @@ function [ncr]=ridgepack_select(nc,X,Y,Z,dimnames,bbounds)
 % This function is a front-end to ridgepack_reduce for selecting axes and data
 % to be plotted using ncfigure.  
 %
-% Input:
+% INPUT:
+%
 % nc        - nc structure (see ridgepack_struct for more details)
 % X         - string providing the X axis variable from nc
 % Y         - string providing the Y axis or Y variable on a graph from nc
@@ -18,10 +19,13 @@ function [ncr]=ridgepack_select(nc,X,Y,Z,dimnames,bbounds)
 % bbounds   - bbounds for the dimensions listed in the dimnames cell array.
 %             This is a cell array and is explained in detail in ridgepack_reduce.
 %
-% Output:
+%
+% OUTPUT:
+%
 % ncr - the reduced nc structure output from ridgepack_reduce which is checked for errors.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;

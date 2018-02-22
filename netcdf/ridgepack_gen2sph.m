@@ -9,15 +9,19 @@ function [nc]=ridgepack_gen2sph(nc)
 % if it is indeed possible.  To understand the structures. see the explanation in
 % the help page for ridgepack_sph2gen.
 %
-% Input:
+% INPUT:
+%
 % nc - netcdf structure (see ridgepack_struct for more information) with data 
 %      placed in a standardarised generalised coodinates on a sphere.  
 %
-% Output:
+%
+% OUTPUT:
+%
 % nc - netcdf structure (see ridgepack_struct for more information) with data in 
 %      spherical coordinates.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018  (afrobert@nps.edu)
+% Ridgepack Version 1.0
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %
 
 global debug;
