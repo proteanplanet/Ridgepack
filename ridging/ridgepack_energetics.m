@@ -2,8 +2,7 @@ function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 
 % function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 % 
-% This function is part of Ridgepack Version 1.0.
-% It calculates the potential energy density, angle of repose, keel depth
+% This calculates the potential energy density, angle of repose, keel depth
 % sail height, and cross-sectional keel and sail widths given the floe ice 
 % and snow thickness, and ridge strain and porosity. 
 %
@@ -24,6 +23,7 @@ function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 % LK       - cross-sectional width of a keel (m)
 % LS       - cross-sectional width of a sail (m)
 %
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % check there are sufficient inputs

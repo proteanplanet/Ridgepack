@@ -4,8 +4,7 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=..
 % function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epsilonsplit,phisplit,d1,d2]=...
 %            ridgepack_trajectory(hf,hfs,epsilon,phi)
 %
-% This function is part of Ridgepack Version 1.0.
-% It calculates the zeta-hat trajectory on VR leafs of the alpha-hat
+% This calculates the zeta-hat trajectory on VR leafs of the alpha-hat
 % plane of an individual ridge with potential energy density.
 %
 % INPUT:
@@ -32,6 +31,7 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=..
 % d1           - dilation field [epsilon-component] (J m^-2)
 % d2           - dilation field [phi-component] (J m^-2)
 %
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % error check

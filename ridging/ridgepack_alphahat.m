@@ -2,8 +2,7 @@ function [ALPHAHAT]=ridgepack_ALPHAHAT(epsilon,phi,hf,hd)
 
 % function [ALPHAHAT]=paper_ridge_ALPHAHAT(epsilon,phi,hf,hd)
 %
-% This function is part of Ridgepack Version 1.0.
-% It calculates the angle of repose for which the gain is potential 
+% This calculates the angle of repose for which the gain is potential 
 % energy density is minimized for a ridge given Coulombic deformation
 % within a ridge.
 % 
@@ -19,6 +18,7 @@ function [ALPHAHAT]=ridgepack_ALPHAHAT(epsilon,phi,hf,hd)
 %
 % ALPHAHAT - angle of repose observing the Principle of Virtual Work (degrees)
 %
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % check there are sufficient inputs

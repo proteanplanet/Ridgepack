@@ -4,8 +4,7 @@ function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 % function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 %                    ridgepack_morphology(hf,hfs,hd,hds,phi,alpha)
 %
-% This function is part of Ridgepack Version 1.0.
-% It calculates the floe draft and freeboard, mean ridge draft and freeboard,
+% This calculates the floe draft and freeboard, mean ridge draft and freeboard,
 % keel depth, sail height, undeformed cross-sectional length of a floe,
 % and strain based upon the floe ice and snow thickness, ridge mean
 % ice and snow thickness, macroporosity and angle of repose.
@@ -33,6 +32,7 @@ function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 % L0      - original cross-sectional width of undeformed parent ice (m)
 % EPSILON - compressional strain or ridge
 % 
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % check there are sufficient inputs

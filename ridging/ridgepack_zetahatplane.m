@@ -2,8 +2,7 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 
 % function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 %
-% This function is part of Ridgepack Version 1.0.
-% It calculates strain, porosity and the angle of repose of ridges
+% This calculates strain, porosity and the angle of repose of ridges
 % on the the zeta hat trajectory plane of potential energy density. 
 % The entire ridge state space may be determined from these variables,
 % and is output as part of the calculations.
@@ -20,6 +19,7 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % LK       - cross-sectional width of a keel (m)
 % LS       - cross-sectional width of a sail (m)
 %
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % retrieve constants

@@ -1,8 +1,9 @@
 function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridge_constants;
 
-% This function declares the parameter space of variational ridging
-
+% function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridge_constants;
 %
+%
+% Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 
