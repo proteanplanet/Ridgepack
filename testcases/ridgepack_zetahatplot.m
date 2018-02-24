@@ -9,8 +9,8 @@ function ridgepack_zetahatplot
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % generate or extract data (or not)
-%generate=true;
-generate=false;
+generate=true;
+%generate=false;
 
 % plot individual paths (or not)
 pathplot=true;

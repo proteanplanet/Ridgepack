@@ -36,7 +36,7 @@ delrho = rhow - rhoi;
 g = 9.8;       
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-eincr = 0.01;
+eincr = 0.001;
 
 % log thickness resolution on zeta-hat plane (m)
 hincr = (log10(10)-log10(0.01))/1000;
@@ -45,5 +45,5 @@ hincr = (log10(10)-log10(0.01))/1000;
 minthick = 0.01;
 
 % maximum thickness on zeta-hat plane trajectory plane (m)
-maxthick = 50;
+maxthick = 20;
 
