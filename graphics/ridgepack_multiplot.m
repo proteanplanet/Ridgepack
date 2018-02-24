@@ -16,7 +16,8 @@ function ridgepack_multiplot(nrows,ncols,row,col,notation)
 % associated with a particular axes can be switched into a colorbar that applies
 % to the entire multiplot. To do this, use the function ridgepack_multicb. 
 %
-% Inputs:
+% INPUT:
+%
 % nrows    - total number of rows of axes in the figure 
 % ncols    - total number of columns of axes in the figure
 % row      - row number being added to the figure
@@ -56,7 +57,7 @@ function ridgepack_multiplot(nrows,ncols,row,col,notation)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

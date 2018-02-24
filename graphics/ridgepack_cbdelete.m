@@ -23,8 +23,6 @@ function ridgepack_cbdelete(h)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Naval Postgraduate School, Department of Oceanography 
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

@@ -12,7 +12,6 @@ function ridgepack_stipple(nc,var,mat,cutoff,colors)
 %
 % INPUT:
 %
-%
 % nc     - netcdf structure containing the variable var used to stipple 
 %
 % var    - Variable being stippled

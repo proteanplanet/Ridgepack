@@ -10,7 +10,8 @@ function [ha]=ridgepack_multipos(hf,ha,nrows,ncols,row,col,notation,fontsize,fon
 % is called by ridgepack_multiplot and ridgepack_multialign, and is not available directly
 % for the user to call. 
 %
-% Inputs:
+% INPUT:
+%
 % hf       - Figure handle
 % ha       - Axes handle (may be left empty if no axes yet created)
 % nrows    - Number of rows of axes in the figure

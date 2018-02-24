@@ -6,7 +6,8 @@ function [hpos,href,hneg]=ridgepack_contour(nc,X,Y,Z,dimnames,bounds,cont,ref,mo
 %
 % This function provides a styled contours on a Cartesian plot.
 %
-% Inputs:
+% INPUT:
+%
 % nc     - a netcdf structure (see ridgepack_struct for more details)
 %
 % X      - character variable naming the x-direction coordinate in nc
@@ -61,7 +62,6 @@ function [hpos,href,hneg]=ridgepack_contour(nc,X,Y,Z,dimnames,bounds,cont,ref,mo
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

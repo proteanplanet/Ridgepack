@@ -13,7 +13,8 @@ function [r]=ridgepack_multitight(ha,r,units,mingap,row,col)
 % colorbar function.  This function is called by ridgepack_multipos, which in turn
 % is called by ridgepack_multiplot and ridgepack_multialign. 
 %
-% Inputs:
+% INPUT:
+%
 % ha      - handle of axis for which the adjusted tight inset is required
 % r       - configuration structure for a multiple axes plot (see ridgepack_multipos)
 % units   - axes units to be used (e.g. normalized, pixels etc)
@@ -27,7 +28,7 @@ function [r]=ridgepack_multitight(ha,r,units,mingap,row,col)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

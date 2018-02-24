@@ -10,14 +10,15 @@ function ridgepack_vecfix(obj,src)
 % and a new one is redrawn in the correct place on the plot, with the new 
 % handle for the key being added to the main axes app data.
 %
-% Inputs:
+% INPUT:
+%
 % obj - object being called
 % src - information about the affected object, which includes the 
 %       affected axes handle that has been repositioned.
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

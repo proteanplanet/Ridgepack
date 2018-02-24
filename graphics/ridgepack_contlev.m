@@ -23,8 +23,6 @@ function [cont]=ridgepack_contlev(z,v)
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Blair Greenan's code segment added from Matlab Central
-%
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

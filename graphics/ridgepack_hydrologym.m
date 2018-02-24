@@ -8,14 +8,14 @@ function ridgepack_hydrologym(colorindex)
 % Also adds in prominant rivers to the current map. There is a
 % choice of four different colors for the rivers.
 %
-% Inputs
+% INPUT:
 %
 % colorindex - integer from 1 to 4 that selects the desired 
 %              color (optional)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% 
+ 
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

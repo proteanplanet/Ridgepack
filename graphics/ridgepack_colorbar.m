@@ -23,7 +23,8 @@ function [hcb]=ridgepack_colorbar(cont,units,loglin,horiz,ref,colvals)
 % This generates the colormap, then obtains the true color array
 % for plotting, then generates a color plot, then plots the colorbar.
 %
-% Inputs to this function:
+% INPUT:
+%
 % cont    - color levels entered as a vector [C1,C2,...,CX].
 %
 % units   - units to be plotted on the colorbar (as string)
@@ -52,7 +53,6 @@ function [hcb]=ridgepack_colorbar(cont,units,loglin,horiz,ref,colvals)
 % 
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

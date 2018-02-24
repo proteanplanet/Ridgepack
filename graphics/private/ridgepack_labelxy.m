@@ -19,7 +19,6 @@ function ridgepack_labelxy(nc,X,Y,graph)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

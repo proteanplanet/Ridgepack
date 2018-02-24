@@ -24,7 +24,6 @@ function ridgepack_cbshare(h)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 % Find axis and colorbar handles
 if nargin==0

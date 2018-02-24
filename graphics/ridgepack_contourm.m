@@ -6,7 +6,8 @@ function [hpos,href,hneg]=ridgepack_contourm(nc,Z,dimnames,bounds,cont,ref,mode,
 %
 % This function provides a styled contours on a map.
 %
-% Inputs:
+% INPUT:
+%
 % nc     - a netcdf structure (see ridgepack_struct for more details)
 %
 % Z      - character variable naming the data to be contoured
@@ -55,7 +56,7 @@ function [hpos,href,hneg]=ridgepack_contourm(nc,Z,dimnames,bounds,cont,ref,mode,
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

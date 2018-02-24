@@ -25,8 +25,6 @@ function [NewPosition]=ridgepack_axpos(h)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Department of Oceonography, Naval Postgraduate School
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

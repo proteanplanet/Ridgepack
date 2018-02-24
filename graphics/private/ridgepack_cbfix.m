@@ -9,17 +9,16 @@ function ridgepack_cbfix(obj,src)
 % this is for colorbars generated with ridgepack_colorbar, not with the vanilla colorbar
 % routine available in matlab. 
 % 
-% Inputs:
+% INPUT:
+%
 % obj - object being called
 % src - information about the affected object, which includes the 
 %       affected axes handle that has been repositioned.
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
-%debug=true;
 
 if debug; disp(['Entering ',mfilename,'...']); end
 

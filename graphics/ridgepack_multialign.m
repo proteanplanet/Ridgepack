@@ -12,7 +12,8 @@ function ridgepack_multialign(hf,titletext,notatsize,notatcol,notatbox)
 % first executed, it may be executed or as many iterations as desired, although
 % a need to run ridgepack_multialign multiple times to line up axes is rare.
 %
-% Usage:
+% INPUT:
+%
 % hf        - Figure handle (if omitted, the current figure is adopted)
 % titletext - Title text of multiple axes figure (optional).  A title added 
 %             can later be removed by including titletext as an empty string 
@@ -33,7 +34,7 @@ function ridgepack_multialign(hf,titletext,notatsize,notatcol,notatbox)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

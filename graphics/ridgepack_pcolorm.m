@@ -8,7 +8,8 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 % matlab mapping toolbox. A graded colorbar is provided.  The data must be in curvilinear
 % or rectilinear coordinates.  Geodesic meshes are not allowed for this routine.
 %
-% Inputs:
+% INPUT:
+%
 % nc     - a netcdf structure (see ridgepack_struct for more details). The
 %          structure must contain the fields "latitude" and "longitude". 
 %
@@ -95,7 +96,7 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

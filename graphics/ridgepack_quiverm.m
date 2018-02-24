@@ -6,7 +6,8 @@ function ridgepack_quiverm(nc1,U,nc2,V,dimnames,bounds,thin,mode,scale)
 %
 % This function provides a styled quiver plot on a catesian axis.
 %
-% Inputs:
+% INPUT:
+%
 % nc1    - a netcdf structure for u (see ridgepack_struct for more details)
 %
 % U      - character variable naming the u-component data 
@@ -62,7 +63,7 @@ function ridgepack_quiverm(nc1,U,nc2,V,dimnames,bounds,thin,mode,scale)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

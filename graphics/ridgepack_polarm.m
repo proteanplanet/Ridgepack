@@ -79,15 +79,13 @@ function [maph]=ridgepack_polarm(varargin)
 % ridgepack_polarm('lat',40,'lon',-40,'grid','label')
 % ridgepack_polarm('lat',-60,'grid')
 %
-% When printing maps with Postscript or EPSC, it is 
-% advisable to use the -zbuffer option to avoid
-% thin white filaments showing up as part of the land 
-% filling. This is an artifact from within Matlab's
-% Mapping toolbox.
+% When printing maps with Postscript or EPSC, it is advisable to use the 
+% -zbuffer option to avoid thin white filaments showing up as part of the land 
+% filling. This is an artifact from within Matlab's Mapping toolbox.
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

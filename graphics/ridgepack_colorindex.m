@@ -24,7 +24,6 @@ function [zindex,truecol]=ridgepack_colorindex(z,cont,ref,mask)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

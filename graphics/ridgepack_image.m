@@ -10,7 +10,8 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 % and transparent areas not plotted as a result of specifying ref.  The disadvantage
 % is that it is a more intensive to plot, taking longer.
 %
-% Inputs:
+% INPUTS:
+%
 % nc     - a netcdf structure (see ridgepack_struct for more details)
 %
 % X      - character variable naming the x-direction coordinate in nc.
@@ -96,7 +97,7 @@ function [nc]=ridgepack_image(nc,X,Y,Z,dimnames,bounds,cont,loglin,ref,horiz,col
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

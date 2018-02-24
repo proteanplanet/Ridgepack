@@ -14,7 +14,8 @@ function ridgepack_mask(a,b,zi,col,ref,lw)
 % a mask that is filled, using ridgepack_image, but this is typically
 % a matlab graphics problem, not a misallignment.
 %
-% Inputs:
+% INPUT:
+%
 % a   - x-direction coordinates
 % b   - y-direction coordinates
 % zi  - values of axb array containing NaN or reference values as a mask
@@ -24,7 +25,7 @@ function ridgepack_mask(a,b,zi,col,ref,lw)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

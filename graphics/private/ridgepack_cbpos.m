@@ -8,7 +8,8 @@ function [hcb]=ridgepack_cbpos(h,orientation)
 % it is associated. It has two inputs, and the output is the colorbar 
 % axes handle.
 %
-% Inputs:
+% INPUT:
+%
 % h	      - handle of axes for which a colorbar is required.
 % orientation - specified as either 'vertical' colorbar on the right
 %               side of the main axes, or a 'horizontal' colorbar 

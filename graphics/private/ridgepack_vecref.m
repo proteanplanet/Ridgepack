@@ -9,7 +9,8 @@ function ridgepack_vecref(h,scalelength,arrow,refval,units,veccol,vecwidth,accen
 % that describes information required to create the key is added to the 
 % app data of the main axes to which the key is assigned.
 %
-% Inputs:
+% INPUT:
+%
 % h	      - main axes handle on which the vector key is to be added
 % scalelength - the scalelength of all vectors, such that every vector on 
 %               the figure is set by [u,v]*scalelength/refval

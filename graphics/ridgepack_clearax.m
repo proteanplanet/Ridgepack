@@ -7,7 +7,8 @@ function ridgepack_clearax(axisxy,keeptick)
 % This function clears tick marks and axis labels from the
 % current axes and centers the axes positions accordingly.
 %
-% Inputs:
+% INPUT:
+%
 % axisxy   - Specifies if only the x or y axes are to be cleared
 %            This is a character variables with allowable values
 %            of 'x' or 'y'.  If it is omitted, then all axes are 
@@ -17,7 +18,6 @@ function ridgepack_clearax(axisxy,keeptick)
 % 
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

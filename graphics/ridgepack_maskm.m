@@ -9,7 +9,8 @@ function [h]=ridgepack_maskm(a,b,zi,co,wi,li,alt)
 % boundaries in numerical model output from climate, weather and ocean 
 % models or for highlighting regions of diffent numerical value.
 %
-% Inputs:
+% INPUT:
+%
 % a  - latitude coordinates
 % b  - longitude coordinates
 % zi - values of array containing values as a mask.  This should
@@ -27,7 +28,7 @@ function [h]=ridgepack_maskm(a,b,zi,co,wi,li,alt)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

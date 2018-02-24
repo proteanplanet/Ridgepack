@@ -7,14 +7,15 @@ function ridgepack_multifix(obj,src)
 % This function is a listener call back to align multiple axes on the one figure
 % that have been generated with the ridgepack_multiplot function.
 % 
-% Inputs:
+% INPUT:
+%
 % obj - object being called
 % src - information about the affected object, which includes the 
 %       affected axes handle that has been repositioned.
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

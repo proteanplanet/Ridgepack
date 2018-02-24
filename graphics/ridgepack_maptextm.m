@@ -7,6 +7,8 @@ function ridgepack_maptextm(Name,Name2)
 % This function adds text to a map for a given place name. The 
 % function looks at an internal database for the name.
 %
+% INPUT:
+%
 % Name  - name of place for which a latitude and longitude are
 %         required
 %
@@ -16,7 +18,7 @@ function ridgepack_maptextm(Name,Name2)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% 
+ 
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

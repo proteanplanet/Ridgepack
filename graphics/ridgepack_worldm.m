@@ -2,9 +2,11 @@ function [maph]=ridgepack_worldm(varargin)
 
 % ridgepack_worldm - Generates a global miller projection with land mask
 %
-% function [maph]=ridgepack_worldm(center)
+% function [maph]=ridgepack_worldm(varargin)
 %
 % This generates a miller projection of the globe. 
+%
+% INPUT:
 %
 % center - Central meridian of the plot east from
 %          the Greenwich Median (between 0 and 360)
@@ -20,7 +22,7 @@ function [maph]=ridgepack_worldm(varargin)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

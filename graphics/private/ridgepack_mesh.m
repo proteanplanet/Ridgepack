@@ -12,14 +12,15 @@ function [latgrat,longrat,z]=ridgepack_mesh(lat,lon,z)
 % lon - longitude 1D matrix
 % z   - array to be mapped
 %
-% Ouput:
+%
+% OUTPUT:
+%
 % latgrat - mesh of latitude values
 % longrat - mesh of longitude values
 % z       - array with added values for wrapped data
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

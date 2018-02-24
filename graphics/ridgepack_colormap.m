@@ -15,7 +15,8 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 % by running the ridgepack_colorindex function on data before 
 % using them in color utilities such as pcolor.
 %
-% Inputs:
+% INPUT:
+%
 % cont   - color levels entered as a vector [C1,C2,...,CX].
 %
 % ref    - reference point about which the color is centered, and, when
@@ -46,7 +47,7 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 % 
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

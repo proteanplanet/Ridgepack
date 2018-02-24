@@ -9,12 +9,13 @@ function ridgepack_vecdelete(ha)
 % axes on a single page, but only show a single vector key that applies to
 % all panels (axes) of the figure window.
 %
-% Inputs:
+% INPUT:
+%
 % ha - axis handle for the quiver plot
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-%
+
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
