@@ -15,7 +15,6 @@ function [hcb]=ridgepack_cbpos(h,orientation)
 %               side of the main axes, or a 'horizontal' colorbar 
 %               underneath the main axes.
 %
-%
 % OUTPUT:
 %
 % hcb	      - colorbar handle.
@@ -113,8 +112,16 @@ if strcmp(orientation,'vertical')
 
  CBPosition(3)=NewPosition(4)*cbaspect;
  CBPosition(1)=NewPosition(1)+NewPosition(3)+VSeparation;
- CBPosition(4)=NewPosition(4);
- CBPosition(2)=NewPosition(2);
+
+ % slightly shorten colorbar
+ shorten=true;
+ if shorten
+  CBPosition(4)=NewPosition(4)*0.9;
+  CBPosition(2)=NewPosition(2)+0.05*NewPosition(4);
+ else
+  CBPosition(4)=NewPosition(4);
+  CBPosition(2)=NewPosition(2);
+ end
 
  xlim=[-1 2]; 
  ylim=0.5+[0 length(cmap)];
