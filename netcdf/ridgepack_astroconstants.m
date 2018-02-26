@@ -28,8 +28,10 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 h=[];
-h=ridgepack_addc(h,'omega','Angular velocity of earth''s rotation','per second',0.00007292115);
-h=ridgepack_addc(h,'rhoa','density of air at standard temperature and pressure','kg m^-3',1.225);
+h=ridgepack_addc(h,'omega','Angular velocity of earth''s rotation',...
+                   'per second',0.00007292115);
+h=ridgepack_addc(h,'rhoa','density of air at standard temperature and pressure',...
+                   'kg m^-3',1.225);
 h=ridgepack_addc(h,'r','mean radius of the Earth','m',earthRadius);
 
 if debug; disp(['...Leaving ',mfilename]); end

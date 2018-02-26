@@ -9,15 +9,19 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 %
 % OUTPUT:
 %
-% HF       - thickness of initial ice (m)
-% EPSILON  - strain of ridge (dimensionless)
-% PHI      - porosity of a ridge (dimensionless)
-% ALPHAHAT - angle of repose of a ridge (degrees)
-% VR       - potential energy density of a ridge (J m^-2)
-% HK       - draft of a keel (m)
-% HS       - height of a sail (m)
-% LK       - cross-sectional width of a keel (m)
-% LS       - cross-sectional width of a sail (m)
+% HF       - thickness of initial ice (m, length N)
+% EPSILON  - strain of ridge (dimensionless, length M)
+% PHI      - porosity of a ridge (dimensionless, size MxN)
+% ALPHAHAT - angle of repose of a ridge (degrees, size MxN)
+% VR       - potential energy density of a ridge (J m^-2, size MxN)
+% HK       - draft of a keel (m, size MxN)
+% HS       - height of a sail (m, size MxN)
+% LK       - cross-sectional width of a keel (m, size MxN)
+% LS       - cross-sectional width of a sail (m, size MxN)
+%
+% Please note that this function is dependent on snow cover, but for the 
+% purpose of the paper that Ridgepack Version 1.0 supports, this dependency
+% has been removed.
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)

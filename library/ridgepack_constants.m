@@ -1,6 +1,6 @@
-function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridge_constants;
+function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
 
-% function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridge_constants;
+% RIDGEPACK_CONSTANT - Gives constants of sea ice for Ridgepack library
 %
 % This function supplies physical constants to the Ridgepack physics library
 % 
