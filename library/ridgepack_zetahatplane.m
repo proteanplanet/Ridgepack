@@ -1,5 +1,7 @@
 function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 
+% RIDGEPACK_ZETAHATPLANE - Calculate ridge state on zeta-hat plane
+%
 % function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 %
 % This calculates strain, porosity and the angle of repose of ridges
@@ -29,28 +31,18 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % retrieve constants
 [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
 
-% set HF grid from 1cm to maxthick thick ice
-HF=10.^[log10(0.01):hincr:log10(maxthick)];
+% initialze grid
+[HF]=ridgepack_gridinit;
 
-% assume there is no snow in v1 (although the library allows it)
+% remove snow for Version 1.0
 HFs=zeros(size(HF));
-
-% check resolution settings
-if eincr>0.01
- error('eincr too large for convergence')
-end
-
-% create strain and porosity grid
-epsiloni=[-eincr:-eincr:-0.99];
-phii=[eincr:eincr:0.50];
-[epsilon,phi]=meshgrid(epsiloni,phii);
 
 % step through initial ice thicknesses
 for i=1:length(HF) 
 
  % calculate zeta-hat trajectory for ice and snow thickness HF and HFs
  [EPSILON,PHI(i,:),ALPHAHAT(i,:),VR(i,:),HK(i,:),HS(i,:),LK(i,:),LS(i,:)]=...
-      ridgepack_trajectory(HF(i),HFs(i),epsilon,phi);
+      ridgepack_trajectory(HF(i),HFs(i));
 
 end
 

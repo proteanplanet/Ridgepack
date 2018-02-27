@@ -33,14 +33,9 @@ hfs=0.0;
 % retrieve constants
 [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
 
-% create strain and porosity grid
-epsiloni=[-eincr:-eincr:-0.99];
-phii=[eincr:eincr:0.99];
-[epsilon,phi]=meshgrid(epsiloni,phii);
-
 % calculate trajectory for given thickness
-[EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=...
-            ridgepack_trajectory(hf,hfs,epsilon,phi);
+[EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,phsplitmesh,d1,d2]=...
+            ridgepack_trajectory(hf,hfs);
 
 % set log color scale for potential energy density
 contourss=10.^[floor(log10(min(vr(:)))):0.25:ceil(log10(max(vr(:))))];
@@ -48,12 +43,12 @@ cmap=colormap(parula(length(contourss)));
 [zindex,truecol]=ridgepack_colorindex(vr,contourss,0);
 
 % plot potential energy
-surface(epsilon,phi,-0.1*ones(size(vr)),truecol,'EdgeColor','k')
+surface(epmesh,phmesh,-0.1*ones(size(vr)),truecol,'EdgeColor','k')
 shading flat
 hold on
 
 % plot the dilation field over the top as streamlines
-hstr=streamslice(epsilonsplit,phisplit,d1,d2);
+hstr=streamslice(epsplitmesh,phsplitmesh,d1,d2);
 set(hstr,'Color',[1 1 1])
 
 % only plot zeta-hat trajector up to a min strain of -0.96

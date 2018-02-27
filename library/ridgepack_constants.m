@@ -1,6 +1,8 @@
-function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
+function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants
 
-% RIDGEPACK_CONSTANT - Gives constants of sea ice for Ridgepack library
+% RIDGEPACK_CONSTANTS - Gives constants of sea ice for the Ridgepack library
+%
+% function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants
 %
 % This function supplies physical constants to the Ridgepack physics library
 % 
@@ -36,7 +38,8 @@ delrho = rhow - rhoi;
 g = 9.8;       
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-eincr = 0.001;
+%eincr = 0.001;
+eincr = 0.01;
 
 % log thickness resolution on zeta-hat plane (m)
 hincr = (log10(10)-log10(0.01))/1000;

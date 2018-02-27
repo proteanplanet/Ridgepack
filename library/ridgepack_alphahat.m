@@ -1,6 +1,8 @@
-function [ALPHAHAT]=ridgepack_ALPHAHAT(epsilon,phi,hf,hd)
+function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
 
-% function [ALPHAHAT]=paper_ridge_ALPHAHAT(epsilon,phi,hf,hd)
+% RIDGEPACK_ALPHAHAT - Calculate angle of repose in the alpha-hat manifold
+%  
+% function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
 %
 % This calculates the angle of repose for which the gain is potential 
 % energy density is minimized for a ridge given Coulombic deformation

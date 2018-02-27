@@ -25,8 +25,7 @@ hfii=[0.5 2.0]; % thickness of initial ice
 hfsi=[0.0 0.0]; % thickness of snow on the initial ice
 
 % create strain and phi coordinates
-epsiloni=[-eincr:-eincr:-0.99]; % strain coordinate discretization
-phii=[eincr:eincr:0.99];    % phi coordinate discretization
+[hgrid,epsiloni,phii]=ridgepack_gridinit;
 [epsilon,phi]=meshgrid(epsiloni,phii);
 
 % ALPHAHAT color contours (degrees)
@@ -132,7 +131,7 @@ for i=1:length(hfii)
  drawnow
 
  % calculate zeta-hat trajectory
- [EPSILON,PHI,ALPHAHAT,VR]=ridgepack_trajectory(hfii(i),hfsi(i),epsilon,phi);
+ [EPSILON,PHI,ALPHAHAT,VR]=ridgepack_trajectory(hfii(i),hfsi(i));
 
  % only plot up to a min strain of -0.98
  idx=find(EPSILON>=-0.98);

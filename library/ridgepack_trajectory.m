@@ -1,6 +1,8 @@
-function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=...
-            ridgepack_trajectory(hf,hfs,epsilon,phi)
+function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
+           epsplitmesh,phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs)
 
+% RIDGEPACK_TRAJECTORY - Calculate state-space trajectory of a ridge 
+%
 % function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epsilonsplit,phisplit,d1,d2]=...
 %            ridgepack_trajectory(hf,hfs,epsilon,phi)
 %
@@ -11,8 +13,6 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=..
 %
 % hf       - parent ice thickness (m)
 % hfs      - thickness of snow on parent ice (m)
-% epsilon  - ridge strain coordinate on alphahat plane (dimensionless)
-% phi      - ridge macroporosity coordinate on alphahat plane (dimensionless)
 %
 %
 % OUTPUT:
@@ -25,63 +25,53 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,vr,epsilonsplit,phisplit,d1,d2]=..
 % HS           - height of a sail (m)
 % LK           - cross-sectional width of a keel (m)
 % LS           - cross-sectional width of a sail (m)
-% vr           - potential energy density on (epsilon,phi) grid (J m^-2)
-% epsilonsplit - ridge strain on split epsilon grid (dimensionless)
-% phisplit     - porosity on split epsilon grid (dimensionless)
-% d1           - dilation field [epsilon-component] (J m^-2)
-% d2           - dilation field [phi-component] (J m^-2)
+% epmesh       - ridge strain on standard epsilon mesh (dimensionless)
+% phmesh       - porosity on standard phi mesh (dimensionless)
+% vr           - potential energy density on (epmesh,phmesh) grid (J m^-2)
+% epsplitmesh  - ridge strain on split epsilon mesh (dimensionless)
+% phsplitmesh  - porosity on split phi mesh (dimensionless)
+% d1           - dilation field on (epsplitmesh,phsplitmesh) [epsilon-component] (J m^-2)
+% d2           - dilation field on (epsplitmesh,phsplitmesh) [phi-component] (J m^-2)
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 % error check
-if nargin~=4
+if nargin~=2
  error('incorrect number of inputs')
-elseif any(size(epsilon)~=size(phi))
- error('size of epsilon not the same as phi')
-elseif ndims(epsilon)>2
- error('epsilon and phi have a dimension greater than 2')
 elseif length(hf)>1 | length(hfs)>1
  error('length of hf or hfs is greater than 1')
 end
 
-% create epsilon and split epsilon coordinates (could use ridgepack_constants here)
-try
- stspacing=abs(epsilon(1,2)-epsilon(1,1));
-catch
- error('epsilon array is not the correct shape or size')
-end
-stii=epsilon(1,:);
-dstii=(stspacing./2)+stii(1:end-1);
+% retrieve constants
+[rhoi,rhos,rhow,delrho,g,eincr]=ridgepack_constants;
 
-% create phi and split phi coordinates (could use ridgepack_constants here)
-try
- phspacing=abs(phi(1,2)-phi(1,1));
-catch
- error('epsilon array is not the correct shape or size')
-end
-phii=phi(:,1);
-dphii=(phspacing./2)+phii(1:end-1);
+% initialize grids, using split grids to calculate dilation
+[hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=ridgepack_gridinit;
 
-% get potential energy density for given ice thickness *
-[vr]=ridgepack_energetics(hf,hfs,epsilon,phi);
+% prepare mesh and split mesh
+[epmesh,phmesh]=meshgrid(epsilongrid,phigrid);
+[epsplitmesh,phsplitmesh]=meshgrid(epsilonsplit,phisplit);
+
+% get potential energy density for given ice thickness 
+[vr]=ridgepack_energetics(hf,hfs,epmesh,phmesh);
 
 % calculate dilation field
-dVdep=(vr(:,2:end)-vr(:,1:end-1))./(epsilon(:,2:end)-epsilon(:,1:end-1));
-dVdph=(vr(2:end,:)-vr(1:end-1,:))./(phi(2:end,:)-phi(1:end-1,:));
+dVdep=(vr(:,2:end)-vr(:,1:end-1))./(epmesh(:,2:end)-epmesh(:,1:end-1));
+dVdph=(vr(2:end,:)-vr(1:end-1,:))./(phmesh(2:end,:)-phmesh(1:end-1,:));
 d1=(dVdep(1:end-1,:)+dVdep(2:end,:))/2;
 d2=(dVdph(:,1:end-1)+dVdph(:,2:end))/2;
 
 % initialize arrays
-EPSILON=stii(1:1:end-1);
+EPSILON=epsilonsplit;
 PHI=zeros(size(EPSILON));
 
 % integrate streamline from initial conditions
 jdx=1;
-PHI(1)=phii(jdx); % initial condition
+PHI(1)=phisplit(jdx); % initial condition
 for i=2:length(EPSILON)
- PHI(i)=PHI(i-1)-(d2(jdx,i)./d1(jdx,i)).*stspacing;
- jdx=find(min(abs(PHI(i)-phii(:)))==abs(PHI(i)-phii(:)));
+ PHI(i)=PHI(i-1)-(d2(jdx,i)./d1(jdx,i)).*eincr;
+ jdx=find(min(abs(PHI(i)-phisplit(:)))==abs(PHI(i)-phisplit(:)));
  if jdx>size(d2,1) | jdx>size(d1,1)
   error('Max phi exceeded')
  end
@@ -89,9 +79,4 @@ end
 
 % determine entire state space (note this step can be added to * for efficiency)
 [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,EPSILON,PHI);
-
-% prepare dilation field for output
-[epsilonsplit,phisplit]=meshgrid(dstii,dphii);
-d1=d1;
-d2=d2;
 

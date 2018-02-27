@@ -1,14 +1,28 @@
+%function ridgepack
 
 
 % Written by Andrew Roberts, March 2018
 
-% initial thickness of sea ice field (meters)
-hinitial = 2.0;
+% inititalize thickness distribution  
+[hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=ridgepack_gridinit;
 
-% determine accuracy of trajectory solution
-lowres=false;
 
-[hf,epsilon,phi,alpha,vr,HK,HS,LK,LS]=paper_ridge_expected_plane(lowres);
+disp(['size of ghphi is ',num2str(size(ghphi))])
+
+% set initial thickness distribution of sea ice field (meters)
+gshape='delta';
+if strcmp(gshape,'delta')
+ hinitial = 2.0;
+ idx=find(min(abs(hgrid(:)-hinitial))==abs(hgrid(:)-hinitial));
+ ghphi(idx,1)=1;
+else
+ error('gshape is set incorrectly')
+end
+
+% calculate thickness distribution
+[GHPHI]=ridgepack_redistribution(ghphi,hgrid,epsilonsplit);
+
+
 
 
 

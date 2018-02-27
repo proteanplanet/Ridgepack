@@ -1,5 +1,7 @@
 function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 
+% RIDGEPACK_ENERGETICS - calculate potential energy density of a ridge
+%
 % function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 % 
 % This calculates the potential energy density, angle of repose, keel depth

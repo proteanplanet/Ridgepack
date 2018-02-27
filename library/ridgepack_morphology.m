@@ -1,6 +1,8 @@
 function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
                     ridgepack_morphology(hf,hfs,hd,hds,phi,alpha)
 
+% RIDGEPACK_MORPHOLOGY - Calculate ridge dimension and strain
+%
 % function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 %                    ridgepack_morphology(hf,hfs,hd,hds,phi,alpha)
 %
