@@ -48,10 +48,12 @@ GHPHI=zeros(size(ghphi));
 
 % work per ridge shape M x N, where gin(1,:) is the concentration 
 % of ice with zero porosity, and is therefore unridged
-energyratio=sum(ghphi(:,1).*LK(:,:).*VR(:,:))./(ghphi(:,1).*LK(:,:).*VR(:,:));
+denominator=LK(:,:).*VR(:,:);
+energyratio=sum(denominator(:))./denominator;
 
 % probability of a ridge forming with strain and HF
-probability=ghphi(:,1).*energyratio./sum(energyratio(:));
+numerator=ghphi(:,1).*energyratio;
+probability=numerator./sum(numerator(:));
 
 % debug information
 if debug
@@ -70,18 +72,6 @@ end
 % only do calculations where there is ice
 hidx=find(ghphi(:,1)>0)
 
-HF(hidx)
-
-clf
-size(hgrid)
-size(phigrid)
-size(energyratio)
-surface(hgrid,phigrid,energyratio')
-shading flat
-
-return
-
-
 % Calculate ar dependent on strain for the area change from non-porous ice
 % where i represents both the EPSILON and PHI indicy is no snow is included.
 for i=hidx
@@ -99,17 +89,14 @@ for i=hidx
 end
 
 % check ar function 
-if debug
+clf
 
- clf
+size(ar)
+size(hgrid)
 
- size(ar)
- size(hgrid)
+plot(hgrid',ar(:,20))
 
- plot(hgrid',ar(:,5))
-
-
-end
+return
 
 
 % finish determining by determining gout       
