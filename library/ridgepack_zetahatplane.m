@@ -28,11 +28,8 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
-% retrieve constants
-[rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
-
 % initialze grid
-[HF]=ridgepack_gridinit;
+[hincr,eincr,HF]=ridgepack_gridinit;
 
 % remove snow for Version 1.0
 HFs=zeros(size(HF));

@@ -34,9 +34,6 @@ end
 ar=zeros(size(ghphi));
 GHPHI=zeros(size(ghphi));
 
-% constants
-[rhoi,rhos,rhow,delrho,g]=ridgepack_constants;
-
 % Calculate the zeta-hat plane. Please note that this function is dependent 
 % on snow cover, but for the purpose of the paper that Ridgepack Version 1.0 
 % supports, this dependency has been removed. In this instance, there is a 
@@ -72,32 +69,31 @@ end
 % only do calculations where there is ice
 hidx=find(ghphi(:,1)>0)
 
+length(hgrid)
+
 % Calculate ar dependent on strain for the area change from non-porous ice
 % where i represents both the EPSILON and PHI indicy is no snow is included.
 for i=hidx
  for j=1:length(EPSILON)
 
-  % calculate position on hgrid where steps occur
-  h1idx=find(hgrid>=HF(i) & hgrid<=HF(i)+LK(i,j)-LS(i,j));
-  h2idx=find(hgrid>HF(i)+LK(i,j)-LS(i,j) & hgrid<=HF(i)+LK(i,j)+LS(i,j));
+  % Calculate position on hgrid where steps occur
+  h1idx=find(hgrid>=HF(i) & hgrid<=HF(i)+(LK(i,j)-LS(i,j))*tand(ALPHAHAT(i,j))/2);
+  h2idx=find(hgrid>HF(i)+(LK(i,j)-LS(i,j))*tand(ALPHAHAT(i,j))/2 & hgrid<=HF(i)+(LK(i,j)+LS(i,j))*tand(ALPHAHAT(i,j))/2);
+
+  if any(h2idx==length(hgrid))
+   disp(['Past end of grid, EPSILON:',num2str(j)])
+   %break
+  end
+
+  % map PHI to phigrid
+  pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
 
   % calculate ar function for an indidividual parent sheet thickness
-  ar(h1idx,j) = probability(i,j)*(1+EPSILON(j))/(LK(i,j)) + ar(h1idx,j);
-  ar(h2idx,j) = probability(i,j)*(1+EPSILON(j))/(2*LK(i,j)) + ar(h2idx,j);
+  ar(h1idx,pidx) = probability(i,j)*(1+EPSILON(j))*2/(LK(i,j)*tand(ALPHAHAT(i,j))) + ar(h1idx,j);
+  ar(h2idx,pidx) = probability(i,j)*(1+EPSILON(j))*1/(LK(i,j)*tand(ALPHAHAT(i,j))) + ar(h2idx,j);
 
  end
 end
-
-% check ar function 
-clf
-
-size(ar)
-size(hgrid)
-
-plot(hgrid',ar(:,20))
-
-return
-
 
 % finish determining by determining gout       
 GHPHI(:,2:end)=ar(:,2:end)+ghphi(:,2:end);

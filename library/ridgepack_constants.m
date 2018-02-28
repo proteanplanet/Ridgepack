@@ -1,4 +1,4 @@
-function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants
+function [rhoi,rhos,rhow,delrho,ghat]=ridgepack_constants
 
 % RIDGEPACK_CONSTANTS - Gives constants of sea ice for the Ridgepack library
 %
@@ -12,11 +12,7 @@ function [rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_const
 % rhos     - density of snow (kg/m^3)
 % rhow     - density of sea water (kg/m^3)
 % delrho   - difference of rhow minus rhoi (kg/m^3)
-% g        - acceleration due to gravity (m/s^2)
-% eincr    - increment of epsilon and phi on alpha-hat plane (dimensionless)
-% hincr    - thickness increment on zeta-hat plane (m)
-% minthick - minimum thickness on zeta-hat plane (m)
-% maxthick - maximum thickness on zeta-hat plane (m)
+% ghat     - acceleration due to gravity (m/s^2)
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
@@ -35,18 +31,5 @@ rhow = 1026.0;
 delrho = rhow - rhoi; 
 
 % acceleration due to gravity (m/s^2)
-g = 9.8;       
-
-% resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-%eincr = 0.001;
-eincr = 0.01;
-
-% log thickness resolution on zeta-hat plane (m)
-hincr = (log10(10)-log10(0.01))/1000;
-
-% minimum thickness on zeta-hat plane trajectory plane (m)
-minthick = 0.01;
-
-% maximum thickness on zeta-hat plane trajectory plane (m)
-maxthick = 20;
+ghat = 9.8;       
 

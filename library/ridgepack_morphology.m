@@ -54,7 +54,7 @@ elseif any(hd<0)
 end
 
 % get constants
-[rhoi,rhos,rhow,delrho,g]=ridgepack_constants;
+[rhoi,rhos,rhow,delrho,ghat]=ridgepack_constants;
 
 % calculate freeboard and draft of level ice
 HFD=(rhoi*hf+rhos*hfs)/rhow; % level draft

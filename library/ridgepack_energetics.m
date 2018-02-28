@@ -38,7 +38,7 @@ elseif length(hf)>1 | length(hfs)>1
 end
 
 % get constants
-[rho,rhos,rhow,delrho,g]=ridge_constants;
+[rho,rhos,rhow,delrho,ghat]=ridge_constants;
 
 % calculate thickness of deformed ice mass from strain
 hd=hf./(1+epsilon);
@@ -53,7 +53,7 @@ ALPHAHAT=ridgepack_alphahat(epsilon,phi,hf,hd);
 [hfd,hff,hdd,hdf,HK,HS,LK,LS]=ridgepack_morphology(hf,hfs,hd,hds,phi,ALPHAHAT);
 
 % calculate potential energy density 
-VR = delrho*g*(1-phi).*(hfd.*LK+0.25*(LK.^2).*tand(ALPHAHAT)) + ...
-        rho*g*(1-phi).*(hff.*LK+0.25*(LS.^2).*tand(ALPHAHAT));
+VR = delrho*ghat*(1-phi).*(hfd.*LK+0.25*(LK.^2).*tand(ALPHAHAT)) + ...
+        rho*ghat*(1-phi).*(hff.*LK+0.25*(LS.^2).*tand(ALPHAHAT));
 
 

@@ -43,11 +43,8 @@ elseif length(hf)>1 | length(hfs)>1
  error('length of hf or hfs is greater than 1')
 end
 
-% retrieve constants
-[rhoi,rhos,rhow,delrho,g,eincr]=ridgepack_constants;
-
 % initialize grids, using split grids to calculate dilation
-[hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=ridgepack_gridinit;
+[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=ridgepack_gridinit;
 
 % prepare mesh and split mesh
 [epmesh,phmesh]=meshgrid(epsilongrid,phigrid);
