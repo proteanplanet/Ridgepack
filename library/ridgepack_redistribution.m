@@ -36,12 +36,12 @@ GHPHI=zeros(size(ghphi));
 
 % Calculate the zeta-hat plane. Please note that this function is dependent 
 % on snow cover, but for the purpose of the paper that Ridgepack Version 1.0 
-% supports, this dependency has been removed. In this instance, there is a 
-% one-to-one mapping of EPSILON to PHI, so it can be assumed that the first
-% PHI dimension corresponds to EPSILON.  This assumption cannot be made 
-% if snow is included in the calculation, and a further mapping step is required
-% that is not included here.
 [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane;
+HFs=zeros(size(HF));
+
+% Only include thickness within the range of the chosen ridge (this
+% can be adjusted for Earth System Model with variable thicknesses grid.)
+VR(HK+HS>max(hgrid))=0;
 
 % work per ridge shape M x N, where gin(1,:) is the concentration 
 % of ice with zero porosity, and is therefore unridged
@@ -50,12 +50,12 @@ energyratio=sum(denominator(:))./denominator;
 
 % probability of a ridge forming with strain and HF
 numerator=ghphi(:,1).*energyratio;
+numerator(VR==0)=0;
 probability=numerator./sum(numerator(:));
 
 % debug information
 if debug
  disp(['size of ghphi is ',num2str(size(ghphi))])
- disp(['size of GHPHI is ',num2str(size(GHPHI))])
  disp(['size of ar is ',num2str(size(ar))])
  disp(['size of LK is ',num2str(size(LK))])
  disp(['size of LS is ',num2str(size(LS))])
@@ -67,37 +67,33 @@ if debug
 end
 
 % only do calculations where there is ice
-hidx=find(ghphi(:,1)>0)
-
-length(hgrid)
+hidx=find(ghphi(:,1)>0);
 
 % Calculate ar dependent on strain for the area change from non-porous ice
 % where i represents both the EPSILON and PHI indicy is no snow is included.
 for i=hidx
  for j=1:length(EPSILON)
 
-  % Calculate position on hgrid where steps occur
-  h1idx=find(hgrid>=HF(i) & hgrid<=HF(i)+(LK(i,j)-LS(i,j))*tand(ALPHAHAT(i,j))/2);
-  h2idx=find(hgrid>HF(i)+(LK(i,j)-LS(i,j))*tand(ALPHAHAT(i,j))/2 & hgrid<=HF(i)+(LK(i,j)+LS(i,j))*tand(ALPHAHAT(i,j))/2);
+  if VR(i,j)>0
 
-  if any(h2idx==length(hgrid))
-   disp(['Past end of grid, EPSILON:',num2str(j)])
-   %break
+   % map PHI on EPSILON grid to phigrid used by GHPHI
+   pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
+
+   % calculate step function for an indidividual ridge
+   GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j));
+   
+   % now determine total area based on strain and probability of occurrence
+   ar(:,pidx)=probability(i,j)*(1+EPSILON(j))*GRHPHI(:) + ar(:,pidx);
+  
   end
-
-  % map PHI to phigrid
-  pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
-
-  % calculate ar function for an indidividual parent sheet thickness
-  ar(h1idx,pidx) = probability(i,j)*(1+EPSILON(j))*2/(LK(i,j)*tand(ALPHAHAT(i,j))) + ar(h1idx,j);
-  ar(h2idx,pidx) = probability(i,j)*(1+EPSILON(j))*1/(LK(i,j)*tand(ALPHAHAT(i,j))) + ar(h2idx,j);
 
  end
 end
 
 % finish determining by determining gout       
-GHPHI(:,2:end)=ar(:,2:end)+ghphi(:,2:end);
-GHPHI(:,1)=ar(:,1);
+%GHPHI(:,2:end)=ar(:,2:end)+ghphi(:,2:end);
+%GHPHI(:,1)=ar(:,1);
+GHPHI=ar;
 
 if debug; disp(['...Leaving ',mfilename]); end
 

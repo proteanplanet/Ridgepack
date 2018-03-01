@@ -11,7 +11,8 @@ if debug; disp(['Entering ',mfilename,'...']); end
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
 %eincr = 0.001;
-eincr = 0.01;
+eincr = 0.005;
+%eincr = 0.01;
 
 % minimim abs(strain) and porosity
 minstrain = 0.001;
@@ -25,16 +26,30 @@ minthick = 0.01;
 % maximum thickness on zeta-hat plane trajectory plane (m)
 maxthick = 100;
 
-% log thickness resolution on zeta-hat plane (m)
-hincr = (log10(maxthick)-log10(0.01))/1000;
-
 % check resolution settings
 if eincr>0.01
  error('eincr too large for convergence')
 end
 
-% ice thickness grid
-hgrid = 10.^[log10(0.01):hincr:log10(maxthick)];
+%logthickness=false;
+logthickness=true;
+if logthickness
+ % set initial log thickness resolution on zeta-hat plane (m)
+ hincr = (log10(10)-log10(0.01))/1000;
+
+ % ice thickness grid
+ hgrid = 10.^[log10(0.01):hincr:log10(maxthick)];
+else
+ % set linear thickness resolution on zeta-hat plane (m)
+ hincr = 0.1;
+
+ hgrid = [minthick hincr:hincr:maxthick];
+end
+
+
+% determine final increment
+hincr(1)=hgrid(1);
+hincr(2:length(hgrid))=diff(hgrid);
 
 % strain grid and splot grid
 epsilongrid = [-minstrain:-eincr:-maxstrain];

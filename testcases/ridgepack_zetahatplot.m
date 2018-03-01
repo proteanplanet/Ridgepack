@@ -225,7 +225,6 @@ end
 ylabel('Strain, $\epsilon_{R_I}$')
 xlabel('Parent Sheet Ice Thickness, $h_{F}$ (m)')
 title('')
-drawnow
 
 % determine directory for read/write of zeta-hat plane data
 writedir=[fileparts(which('ridgepack')),'/figures'];
