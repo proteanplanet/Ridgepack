@@ -48,12 +48,16 @@ VR(HK+HS>max(hgrid))=0;
 denominator=LK(:,:).*VR(:,:);
 energyratio=sum(denominator(:))./denominator;
 
-% probability of a ridge forming with strain and HF
+% probability of a ridge forming with strain and parent ice thickness HF
+% with discrete distribution ghphi.
 numerator=ghphi(:,1).*energyratio;
 numerator(VR==0)=0;
 probability=numerator./sum(numerator(:));
 
-% debug information
+% calculate normlized ghphi
+ghphinormal=ghphi./sum(ghphi(:));
+
+% debug information 
 if debug
  disp(['size of ghphi is ',num2str(size(ghphi))])
  disp(['size of ar is ',num2str(size(ar))])
@@ -69,15 +73,18 @@ end
 % only do calculations where there is ice
 hidx=find(ghphi(:,1)>0);
 
+% Integral transform:
+
 % Calculate ar dependent on strain for the area change from non-porous ice
-% where i represents both the EPSILON and PHI indicy is no snow is included.
-for i=hidx
+% where i represents the undeformed ice index, and j is the strain index.
+for i=hidx'
  for j=1:length(EPSILON)
 
   if VR(i,j)>0
 
    % map PHI on EPSILON grid to phigrid used by GHPHI
    pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
+   pidx(pidx==1)=2; % bug fix 
 
    % calculate step function for an indidividual ridge
    GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j));
@@ -89,6 +96,21 @@ for i=hidx
 
  end
 end
+
+% Now calculate the transform of porous ice
+for j=2:length(phigrid)-1
+
+ jdx=find(phigrid>phigrid(j));
+
+ weight(j)=sum(ghphinormal(:,j));
+
+ ar(:,j)=ar(:,j)-weight(j)*ghphi(:,j);
+
+ ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
+
+end
+
+
 
 % finish determining by determining gout       
 %GHPHI(:,2:end)=ar(:,2:end)+ghphi(:,2:end);

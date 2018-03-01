@@ -31,6 +31,8 @@ if debug; disp(['Entering ',mfilename,'...']); end
 if nargin~=4
  error('incorrect number of inputs')
 elseif length(hF)>1 | length(hFs)>1 
+ size(hF)
+ size(hFs)
  error('length of hF or hFs is greater than 1')
 elseif length(epsilon)>1 | length(phi)>1 
  error('length of epsilon or phi is greater than 1')

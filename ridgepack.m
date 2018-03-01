@@ -20,12 +20,17 @@ else
 end
 
 % calculate thickness distribution
-[GHPHI]=ridgepack_redistribution(ghphi,hgrid,phisplit);
+for i=1:20
+ [ghphi]=ridgepack_redistribution(ghphi,hgrid,phisplit);
+ disp(num2str(i))
+end
 
+clf
+semilogy(hgrid,sum(ghphi,2))
+hold on
+drawnow
 
 % plot up thickness distribution along thickness axis
-clf
-semilogy(hgrid,sum(GHPHI,2))
 
 
 
