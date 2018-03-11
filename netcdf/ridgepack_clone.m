@@ -1037,8 +1037,10 @@ for mm=1:length(newvar)
       end
 
       % rewrite the corrected coordinate strings
-      if isempty(newcoords)
+      if ~exist('newcoords','var') | isempty(newcoords) 
        nc.(name)=rmfield(nc.(name),'coordinates');
+       getcoords=false;
+       disp(['Coordinates attribute broken for ',name])
       else
        nc.(name).coordinates=ridgepack_cellcat(newcoords);
        nc.(name).coordinates=nc.(name).coordinates(2:end);

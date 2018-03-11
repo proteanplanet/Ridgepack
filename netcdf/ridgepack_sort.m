@@ -172,7 +172,6 @@ if numbers ~= numbervariables ;
 	disp(['Expected variables: ',ridgepack_cellcat(names)]);
 	disp(['Actual variables: ',ridgepack_cellcat(variablenames)]);
 	disp('ERROR: Variables and dimensions are not coherent in the nc structure');
-        nc
 	error('You may be missing some dimension variables in your nc structure');
 end
 
