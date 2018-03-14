@@ -989,7 +989,20 @@ for mm=1:length(newvar)
       % extract individual coordinate variables from the coordinate list
       for chpos=1:10
        [coords{chpos},cords]=strtok(cords,' ');
-       if strcmp(cords,''); coords=coords(1:chpos-1); break; end
+       % Th line below was changed because lats and longs were going missing 
+       % and ** was added below
+       %if strcmp(cords,''); coords=coords(1:chpos-1); break; end
+       if strcmp(cords,''); coords=coords(1:chpos); break; end
+      end
+
+      % ** remove blanks from any part of coords
+      cords=coords;
+      k=0;
+      for chpos=1:length(cords)
+       if ~strcmp(char(cords{chpos}),' ')
+        k=k+1;
+        coords{k}=cords{chpos};
+       end
       end
 
       % now interrogate netCDF file for coordinate variables
@@ -1036,6 +1049,7 @@ for mm=1:length(newvar)
 
       end
 
+
       % rewrite the corrected coordinate strings
       if ~exist('newcoords','var') | isempty(newcoords) 
        nc.(name)=rmfield(nc.(name),'coordinates');
@@ -1045,6 +1059,7 @@ for mm=1:length(newvar)
        nc.(name).coordinates=ridgepack_cellcat(newcoords);
        nc.(name).coordinates=nc.(name).coordinates(2:end);
       end
+
 
      else
 
