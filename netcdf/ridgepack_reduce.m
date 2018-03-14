@@ -409,14 +409,13 @@ if ~fasttrack
 
         elseif strcmpi(name,'time') 
 
-         warning('No time bounds to calculate time weights')
+         disp('WARNING: No time bounds to calculate time weights')
 
          % convert to netcdf time units so as to take calendar type into account
          if length(nc.time.dimension)>1
           error('times has more than two dimensions')
          end
 
-     
          % convert to netcdf time units so as to take calendar type into account
          time=ridgepack_timeconvert(nc.time.data(:),...
                             'days since 0000-01-01 00:00:0.0',...
@@ -426,10 +425,21 @@ if ~fasttrack
          diffs=diff(time);
 
          % if any diffs greater than a month, stop running
-         %if any(diffs>28)
+         % if any(diffs>28)
          % error('time seperation is more than 28 days apart')
          if any(diffs>31)
-          error('time seperation is more than 31 days apart')
+          if all(diffs>31)
+           error('Time seperation is more than 31 days apart in all cases')
+          elseif diffs(diffs>31)>2*std(diffs) & all(diff(diffs(diffs<=31))==0)
+           % this takes into account case where timeseries is, say, daily data
+           % for an individual month spread over several years, so that 
+           % the exceptional diffs are jumps from one year to the next, while
+           % the non-exceptional time diffs are between days in the month(s)
+           disp('WARNING: Reconstructing time weightings statistically')
+           diffs(diffs>31)=mean(diffs(diffs(:)<31));
+          else
+           error('Unable to reconstruct time weightings')
+          end
          else
           disp('Creating linear time weighting with boundary condition')
          end
