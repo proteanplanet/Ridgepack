@@ -30,6 +30,9 @@ function [AX,H2]=ridgepack_plotpsd(faxis,psd,leg,conf,cutconf,description,units,
 % col         - Color of the trace(s) to be plotted in cell array (e.g.{[0 0 1],[0 1 ]})
 % pattern     - Pattern required for trace in cell array (e.g. {'--',':'})
 %
+% Note: If the length of the colors or patters is not the same as the number of
+% spectra to be plotted, then first color is supplied to all spectra except for the
+% last n-1 spectra for n supplied colors or patterns.
 %
 % OUTPUT:
 %
@@ -80,17 +83,31 @@ psd=ncdb(psd);
 
 % plot one side in dB and other in semilogy. This is done this way
 % so that text and the error bar can be plotted more easily on the 
-% linear scale (with units of dB).
+% linear scale (with units of dB). Only plot 
 [AX,H1,H2]=plotyy(faxis,psd,faxis,ncinvdb(psd),'plot','semilogy'); hold on;
 if nargin>11
 
+ nk=length(H1)-length(col)+1;
  for hn=1:length(H1)
-  set(H1(hn),'Color',col{hn}); set(H2(hn),'Color',col{hn}); 
+  if hn<=nk
+   set(H1(hn),'Color',col{1}); 
+   set(H2(hn),'Color',col{1});
+  else
+   set(H1(hn),'Color',col{hn-nk+1}); 
+   set(H2(hn),'Color',col{hn-nk+1});
+  end
  end
 
  if nargin>12
+  nk=length(H1)-length(pattern)+1;
   for hn=1:length(H1)
-   set(H1(hn),'LineStyle',pattern{hn}); set(H2(hn),'LineStyle',pattern{hn}); 
+   if hn<=nk
+    set(H1(hn),'LineStyle',pattern{1}); 
+    set(H2(hn),'LineStyle',pattern{1}); 
+   else
+    set(H1(hn),'LineStyle',pattern{hn-nk+1}); 
+    set(H2(hn),'LineStyle',pattern{hn-nk+1}); 
+   end
   end
  end
 
