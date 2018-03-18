@@ -709,7 +709,7 @@ for i=1:length(vars)
 	  ncr.(varstd).data=squeeze(reshape(ncr.(varstd).data,endsize));
 	  ncr.(varstd).data(ncr.(varsamp).data==1)=NaN; 
 	  ncr.(varstd).dimension=ridgepack_setdiff(nc.(name).dimension,dimremove);
-	  ncr.(varstd).type=nc.(name).type;
+	  ncr.(varstd).type='NC_FLOAT';
 	  if isfield(nc.(name),'units'); ncr.(varstd).units=nc.(name).units; end
 
           % Calculate equivalent sample size based on Wilks (2006)
@@ -783,8 +783,10 @@ for i=1:length(vars)
          end
 	 ncr.(name).data=squeeze(reshape(ncr.(name).data,endsize));
 	 ncr.(name).dimension=ridgepack_setdiff(nc.(name).dimension,dimremove);
-	 ncr.(name).type=nc.(name).type;
-	 if isfield(nc.(name),'units'); ncr.(name).units=nc.(name).units; end
+	 ncr.(name).type='NC_FLOAT';
+	 if isfield(nc.(name),'units'); 
+            ncr.(name).units=nc.(name).units; 
+         end
  
  	 % reshape the initial data array back to its initial size
  	 nc.(name).data=squeeze(reshape(nc.(name).data,[endsize,tempsize]));
@@ -854,13 +856,13 @@ if ~isempty(setdiff(coor,dimc));
 	  ncr.(lonvar).data=reshape(ncr.(lonvar).data,endsize);
 	  ncr.(lonvar).dimension=ridgepack_setdiff(nc.(lonvar).dimension,dimremove);
 	  ncr.(lonvar).long_name=['Mean longitude along track ',ridgepack_cellcat(ant)];
-	  ncr.(lonvar).type=nc.(lonvar).type;
+	  ncr.(lonvar).type='NC_FLOAT';
 	  if isfield(nc.(lonvar),'units'); ncr.(lonvar).units=nc.(lonvar).units; end
 
 	  ncr.(latvar).data=reshape(ncr.(latvar).data,endsize);
 	  ncr.(latvar).dimension=ridgepack_setdiff(nc.(latvar).dimension,dimremove);
 	  ncr.(latvar).long_name=['Mean latitude along track ',ridgepack_cellcat(ant)];
-	  ncr.(latvar).type=nc.(latvar).type;
+	  ncr.(latvar).type='NC_FLOAT';
 	  if isfield(nc.(latvar),'units'); ncr.(latvar).units=nc.(latvar).units; end
 
          end

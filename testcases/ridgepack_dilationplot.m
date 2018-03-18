@@ -31,7 +31,7 @@ hf=2.0;
 hfs=0.0;
 
 % retrieve constants
-[rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
+[rhoi,rhos,rhow,delrho,g]=ridgepack_constants;
 
 % calculate trajectory for given thickness
 [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,phsplitmesh,d1,d2]=...

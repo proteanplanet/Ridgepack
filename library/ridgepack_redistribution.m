@@ -34,6 +34,11 @@ end
 ar=zeros(size(ghphi));
 GHPHI=zeros(size(ghphi));
 
+% NOTES
+Need a non-deformed initial distribution g(h) following the ice, and 
+then the thickness distribution g(h,phi), of which the first category it the
+minimum strain category, indicating how much of the ice is not deformed
+
 % Calculate the zeta-hat plane. Please note that this function is dependent 
 % on snow cover, but for the purpose of the paper that Ridgepack Version 1.0 
 [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane;
@@ -84,7 +89,6 @@ for i=hidx'
 
    % map PHI on EPSILON grid to phigrid used by GHPHI
    pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
-   pidx(pidx==1)=2; % bug fix 
 
    % calculate step function for an indidividual ridge
    GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j));

@@ -86,14 +86,26 @@ HS=HFF+2*sqrt(((HDD./(1-phi))-HFD).*(((HDF./(1-phi))-HFF)));
 alpha=alpha*pi/180;
 
 % calculate horizontal extent of keel structure 
-LK=2*(HK-HFD).*cot(alpha);
+if alpha==0
+ LK=0;
+else
+ LK=2*(HK-HFD).*cot(alpha);
+end
 
 % calculate horizontal extent of ridge structure 
-LS=2*(HS-HFF).*cot(alpha);
+if alpha==0
+ LS=0;
+else
+ LS=2*(HS-HFF).*cot(alpha);
+end
 
 % initial length of sea ice in ridging
 L0=LK.*hd./hf;
 
 % strain 
-EPSILON=(L0-LK)./L0;
+if alpha==0
+ EPSILON=0;
+else
+ EPSILON=(L0-LK)./L0;
+end
 

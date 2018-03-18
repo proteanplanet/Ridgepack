@@ -11,14 +11,14 @@ if debug; disp(['Entering ',mfilename,'...']); end
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
 %eincr = 0.001;
-eincr = 0.005;
-%eincr = 0.01;
+%eincr = 0.005;
+eincr = 0.01;
 
 % minimim abs(strain) and porosity
-minstrain = 0.001;
+minstrain = 0.01;
 
 % maximim abs(strain) and porosity
-maxstrain = 0.99-minstrain;
+maxstrain = 0.99-eincr-minstrain;
 
 % minimum thickness on zeta-hat plane trajectory plane (m)
 minthick = 0.01;
@@ -35,10 +35,10 @@ end
 logthickness=true;
 if logthickness
  % set initial log thickness resolution on zeta-hat plane (m)
- hincr = (log10(10)-log10(0.01))/1000;
+ hincr = (log10(10)-log10(minthick+0.01))/1000;
 
  % ice thickness grid
- hgrid = 10.^[log10(0.01):hincr:log10(maxthick)];
+ hgrid = [minthick 10.^[log10(0.01):hincr:log10(maxthick)]];
 else
  % set linear thickness resolution on zeta-hat plane (m)
  hincr = 0.1;
