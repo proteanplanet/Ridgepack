@@ -202,7 +202,7 @@ if nargin>=6
   yinfo=plo+(phi-plo)*0.90;
   text(xinfo,yinfo,description,'HorizontalAlignment','left');
  else
-  yinfo=plo+(phi-plo)*0.96;
+  yinfo=plo+(phi-plo)*0.9525;
   text(xinfo,yinfo,description,'HorizontalAlignment','left','VerticalAlignment','top');
  end
 end
