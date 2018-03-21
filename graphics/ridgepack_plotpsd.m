@@ -19,7 +19,8 @@ function [AX,H2]=ridgepack_plotpsd(faxis,psd,leg,conf,cutconf,description,units,
 % conf        - Lower and upper confidence bounds on psd with size (Nx2) 
 %               (the first index of the second dimension is the lower error bound, 
 %               the second index of second dimension is the upper error bound)
-% cutconf     - Confidence limit for confidence bounds in conf
+% cutconf     - Confidence limit for confidence bounds in conf.  Leave this
+%               as an empty array if confidence bar is not required.
 % description - A cell array of strings describing spectra details (optional)
 % units       - Units of psd.  If this is omitted, psd is plotted in dB, otherwise
 %               it is plotted on semilogarithmic axes. (optional)
@@ -146,7 +147,12 @@ xlab=xlabel(['Frequency (cycles day$^{-1}$)']);
 % If units are not defined, use a relative axis with dB 
 if nargin<7 | isempty(units) | strcmp(units,'')
  disp('Using linear dB axis')
- set(AX(1),'YAxisLocation','left','YColor','k','Ytick',[-100:5:100]);
+ if (phi-plo)>70
+  tickstep=10;
+ else
+  tickstep=5;
+ end
+ set(AX(1),'YAxisLocation','left','YColor','k','Ytick',[-100:tickstep:100]);
  set(AX(2),'YAxisLocation','right','YColor','k','YTickLabel',[],'YMinorTick','off');
  ylabel(AX(1),'Power Spectral Density (dB)')
 else % switch the axes to semilogy
@@ -170,7 +176,7 @@ if min(faxis)<0
 end
 
 % provide error bar
-if nargin>4
+if nargin>4 & ~isempty(cutconf)
  disp('Plotting error bar')
  conf=ncdb(conf*ncinvdb(psd(1,1)));
  errbelow=psd(1,1)-conf(1,1);
@@ -192,15 +198,20 @@ if nargin>=6
  disp('Adding description')
  N=size(psd,1);
  if flo<0; xinfo=flo+(fhi-flo)*0.05; else; xinfo=flo+(fhi-flo)*0.10; end
- yinfo=plo+(phi-plo)*0.90;
- text(xinfo,yinfo,description,'HorizontalAlignment','left');
+ if iscell(description)
+  yinfo=plo+(phi-plo)*0.90;
+  text(xinfo,yinfo,description,'HorizontalAlignment','left');
+ else
+  yinfo=plo+(phi-plo)*0.96;
+  text(xinfo,yinfo,description,'HorizontalAlignment','left','VerticalAlignment','top');
+ end
 end
 
 % remove hold on plotting
 hold off;
 
-set(AX(1),'FontSize',fontsize,'box','on');
-set(AX(2),'FontSize',fontsize,'box','on');
+set(AX(1),'FontSize',fontsize,'box','on','Layer','Top');
+set(AX(2),'FontSize',fontsize,'box','on','Layer','Top');
 
 drawnow
 

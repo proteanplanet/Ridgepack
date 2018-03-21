@@ -248,8 +248,8 @@ if asm
 elseif seaice
  [x1,y] = mfwdtran(equatorextent+16,leftlon);
  [x2,y] = mfwdtran(equatorextent+17,rightlon);
- [x,y1] = mfwdtran(equatorextent+3,bottomlon);
- [x,y2] = mfwdtran(equatorextent-3,toplon);
+ [x,y1] = mfwdtran(equatorextent+5,bottomlon);
+ [x,y2] = mfwdtran(equatorextent-0,toplon);
 elseif seaicerasm
  [x1,y] = mfwdtran(equatorextent-1,leftlon);
  [x2,y] = mfwdtran(equatorextent+10,rightlon);
@@ -286,8 +286,8 @@ elseif rasmmask
  [x,y1] = mfwdtran(equatorextent+22.5,bottomlon);
  [x,y2] = mfwdtran(equatorextent+11,toplon);
 elseif antarctic
- [x1,y] = mfwdtran(equatorextent-5,leftlon);
- [x2,y] = mfwdtran(equatorextent,rightlon);
+ [x1,y] = mfwdtran(equatorextent-7,leftlon);
+ [x2,y] = mfwdtran(equatorextent-1,rightlon);
  [x,y1] = mfwdtran(equatorextent-2.5,bottomlon);
  [x,y2] = mfwdtran(equatorextent+2.5,toplon);
 else
@@ -314,8 +314,8 @@ set(gca,'fontsize',fontsize);
 % Scaled degree spacing of grid dots 
 ddeg=distance(latc1,lonc1,latc3,lonc3)*sqrt(2)/(360*sqrt((figout(3).^2)+(figout(4).^2)));
 
-%markersize=1;
-markersize=min(1,sqrt((figout(3).^2)+(figout(4).^2)));
+markersize=1;
+%markersize=min(1,sqrt((figout(3).^2)+(figout(4).^2)));
 
 
 set(gca,'box','on')
@@ -325,7 +325,7 @@ if (land==1)
  landm = shaperead('landareas.shp', 'UseGeoCoords', true);
 
  % land mask 
- p1=patchm([landm.Lat],[landm.Lon],-0.00001,0.98*[1 1 1],...
+ p1=patchm([landm.Lat],[landm.Lon],-0.00001,0.96*[1 1 1],...
            'Clipping','on','EdgeColor','none');
 
  % land outline (positioned at a slight altitude to remain visible)
@@ -394,7 +394,7 @@ if(label==1)
   %end
   rot=0;
 
-  ht=text(x(li),y(li),[' $',num2str(mlon(i)),'^{\circ}$ '],...
+  ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...
@@ -434,7 +434,14 @@ if(label==1)
  y(y>y2)=NaN;
 
  for i=1:length(x)
-  ht=text(x(i),y(i),['$',num2str(plat(i)),'^{\circ}$'],...
+  if plat(i)>0
+   tstring=['$',num2str(plat(i)),'^{\circ}$N'];
+  elseif plat(i)<0
+   tstring=['$',num2str(abs(plat(i))),'^{\circ}$S'];
+  else
+   tstring=['$',num2str(plat(i)),'^{\circ}$'];
+  end
+  ht=text(x(i),y(i),tstring,...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...
@@ -503,9 +510,8 @@ if(grid==1)
  end
 end
 
-[x,y]=mfwdtran(mult*90,0);
-plot(x,y,'.','Color',gridcolor)
-
+%[x,y]=mfwdtran(mult*90,0);
+%plot(x,y,'.','Color',gridcolor)
 
 % Remove meridians and parallels from the legend (if one is used)
 h1=handlem('parallel');

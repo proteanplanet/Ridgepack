@@ -17,6 +17,9 @@ function [gridtype]=ridgepack_gridtype(nc)
 %
 % gridtype - a text string as either 'regional' or 'global'
 %
+% Note that nc.attributes.gridtype can be manually set before calling
+% this function to explicitly set the type, rather than relying on automation.
+%
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 %

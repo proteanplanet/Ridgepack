@@ -19,9 +19,9 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 %          the number of samples used in these calculations. See
 %          ridgepack_reduce or ridgepack_select for more information.  If Z is set
 %          to 'mask' and a mask field exists in the nc structure, the
-%          function shades the mask light grey instead of color rendering
+%          function shades the mask light gray instead of color rendering
 %          a field.  No colorbar is added in this case, but this 
-%          can be used to over plot an existing field with a grey mask.
+%          can be used to over plot an existing field with a gray mask.
 %
 % dimnames - cell array of the dimensions to be removed from the nc
 %          structure to obtain the requested cross section. See example

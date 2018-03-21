@@ -141,6 +141,20 @@ if (strcmpi(name,'time') | strcmpi(name,'time_bounds')) & ...
 
 end
 
+% make sure fill values have been assigned to latitude and longitude
+if strcmp(name,'latitude')
+        nc.(name).data(nc.(name).data>90)=NaN;
+        nc.(name).data(nc.(name).data<-90)=NaN;
+end
+
+% make sure fill values have been assigned to latitude and longitude
+if strcmp(name,'longitude')
+        nc.(name).data(nc.longitude.data>360)=NaN;
+        nc.(name).data(nc.longitude.data<-360)=NaN;
+        nc.(name).data(isnan(nc.latitude.data))=NaN;
+end
+
+
 % remove units if it is empty
 if isfield(nc.(name),'units') & isempty(nc.(name).units) ;
 	nc.(name)=rmfield(nc.(name),'units');

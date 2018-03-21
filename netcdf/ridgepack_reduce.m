@@ -437,6 +437,9 @@ if ~fasttrack
            % the non-exceptional time diffs are between days in the month(s)
            disp('WARNING: Reconstructing time weightings statistically')
            diffs(diffs>31)=mean(diffs(diffs(:)<31));
+          elseif diffs(diffs>31)>2*std(diffs) & any(diffs==0)
+           disp('WARNING: Reconstructing time weightings, some times are identical')
+           diffs(diffs>31 & diffs==0)=mean(diffs(diffs(:)<31 & diffs(:)==0));
           else
            error('Unable to reconstruct time weightings')
           end
