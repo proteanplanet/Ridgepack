@@ -142,7 +142,7 @@ end
 
 xlim(AX(1),[flo, fhi]); xlim(AX(2),[flo, fhi]);
 ylim(AX(1),[plo, phi]); ylim(AX(2),[ncinvdb(plo), ncinvdb(phi)]);
-xlab=xlabel(['Frequency (cycles day$^{-1}$)']);
+xlab=xlabel(['Frequency (cycles day$^{-1}$)'],'Interpreter','Latex');
 
 % If units are not defined, use a relative axis with dB 
 if nargin<7 | isempty(units) | strcmp(units,'')
@@ -159,7 +159,7 @@ else % switch the axes to semilogy
  disp('Using semilog axis')
  set(AX(2),'YAxisLocation','left','YColor','k','Ytick',10.^[-20:1:3]);
  set(AX(1),'YAxisLocation','right','YColor','k','YTickLabel',[],'Ytick',[]);
- ylabel(AX(2),['Power Spectral Density (',units,')'])
+ ylabel(AX(2),['Power Spectral Density (',units,')'],'Interpreter','Latex')
 end
 
 position=get(AX(1),'Position');
@@ -169,9 +169,9 @@ fontsize=min(max(8,12*position(4).^(1/3)),10);
 % if rotary, add clockwise and anticlockwise indicators
 if min(faxis)<0
  pos=get(xlab,'position');
- T(1)=text(flo,pos(2),'$\hookleftarrow$ Clockwise',...
+ T(1)=text(flo,pos(2),'$\hookleftarrow$ Clockwise','Interpreter','Latex',...
       'HorizontalAlignment','left','VerticalAlignment','cap','Parent',AX(1));
- T(2)=text(fhi,pos(2),'Anticlockwise $\hookrightarrow$',...
+ T(2)=text(fhi,pos(2),'Anticlockwise $\hookrightarrow$','Interpreter','Latex',...
       'HorizontalAlignment','right','VerticalAlignment','cap','Parent',AX(1));
 end
 
@@ -185,7 +185,7 @@ if nargin>4 & ~isempty(cutconf)
  %yerror=plo+(phi-plo)*0.78; 
  yerror=plo+(phi-plo)*0.65; 
  hCLines=errorbar(xerror,yerror,errbelow,errabove,'.k'); hold on;
- text(xerror,yerror,['$\;$ ',num2str(cutconf),'\% confidence'])
+ text(xerror,yerror,['$\;$ ',num2str(cutconf),'\% confidence'],'Interpreter','Latex')
 
  % remove error bar from legend information
  hCGroup=hggroup; 
@@ -200,10 +200,12 @@ if nargin>=6
  if flo<0; xinfo=flo+(fhi-flo)*0.05; else; xinfo=flo+(fhi-flo)*0.10; end
  if iscell(description)
   yinfo=plo+(phi-plo)*0.90;
-  text(xinfo,yinfo,description,'HorizontalAlignment','left');
+  text(xinfo,yinfo,description,'HorizontalAlignment','left',...
+                     'Interpreter','Latex');
  else
-  yinfo=plo+(phi-plo)*0.9525;
-  text(xinfo,yinfo,description,'HorizontalAlignment','left','VerticalAlignment','top');
+  yinfo=plo+(phi-plo)*0.9530;
+  text(xinfo,yinfo,description,'HorizontalAlignment','left',...
+                     'VerticalAlignment','top','Interpreter','Latex');
  end
 end
 
