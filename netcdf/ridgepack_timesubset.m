@@ -16,7 +16,6 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 %
 % INPUT:
 %
-%
 % ncfile    - character variable giving the name of the netcdf file to be sampled.
 % ncvar     - character variable of variable for which seasonal means are required.
 % months    - vector of numbers 1 through 12 for January through December indicating
@@ -27,7 +26,6 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 % 
 %
 % OUTPUT:
-%
 %
 % nc - netcdf structure containing the mean values for each entry in ncvar, as well
 %      as the sample size, and the standard deviation.
@@ -217,19 +215,24 @@ if recreatemean
   disp([char(xdir.name),' already exists.'])
   nctimes=ridgepack_clone(fileout,{'time'});
   generate=false;
-  if length(nctimes.time.data)~=length(index)
-   disp(['Records are missing from ',fileout])
-   generate=true;
-  else
-   generate=false;
-   for t=1:length(nctimes.time.data)
-    if isempty(find(nctimes.time.data(t)==nc.time.data))
-     generate=true;
-     datestr(nctimes.time.data(t))
-     disp(['Times are not correct in ',fileout,'...regenerating file'])
-     break
+  try
+   if length(nctimes.time.data)~=length(index)
+    disp(['Records are missing from ',fileout])
+    generate=true;
+   else
+    generate=false;
+    for t=1:length(nctimes.time.data)
+     if isempty(find(nctimes.time.data(t)==nc.time.data))
+      generate=true;
+      datestr(nctimes.time.data(t))
+      disp(['Times are not correct in ',fileout,'...regenerating file'])
+      break
+     end
     end
    end
+  catch
+   disp(['There is a problem with ',fileout])
+   generate=true;
   end
  else
   generate=true;
