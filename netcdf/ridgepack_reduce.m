@@ -12,39 +12,39 @@ function [ncr,nc]=ridgepack_reduce(nc,dimnames,bounds,varmean)
 % INPUT:
 %
 %
-% nc       - nc structure (see the help page of ridgepack_struct for more information)
+% nc        - nc structure (see the help page of ridgepack_struct for more information)
 %
-% dimnames - cell array of dimension variable names and order of dimensions to be 
-%            removed from var. These may be specified in any order, with ridgepack_reduce 
-%            being clever enough to work out the way in which they will be removed 
-%            from each variable. So for a variable with dimensions 
-%            {'time'  'latitude'  'longitude'} for which you want a latitudinal
-%            average, you would set dimnames={'time','longitude'} but 
-%            dimnames={'longitude','time'} would work in exactly the same way.
+% dimnames  - cell array of dimension variable names and order of dimensions to be 
+%             removed from var. These may be specified in any order, with ridgepack_reduce 
+%             being clever enough to work out the way in which they will be removed 
+%             from each variable. So for a variable with dimensions 
+%             {'time'  'latitude'  'longitude'} for which you want a latitudinal
+%             average, you would set dimnames={'time','longitude'} but 
+%             dimnames={'longitude','time'} would work in exactly the same way.
 %
-% bounds   - cell array of bounds to be applied to the dimension in reducing the data.  
-%            This input may take several forms:
-%            1) The boundaries may be specified in terms of index values:
-%            e.g. dimnames={'time'}, bounds={[1 4]} will take a linearly 
-%            weighted-in-time mean between time slices 1 and 4 in the nc structure.
-%            2) The boundaries may be specified in terms of dimension values:
-%            e.g. dimnames={'time'}, bounds={{'01-Jan-2007','04-Jan-2007 06:00:00.0'}}
-%            which will take a linearly weighted-in-time mean between 
-%            Jan 1 12AM  and Jan 4 6AM 2007
-%            3) Multiple combinations where multiple dimensions are to be removed 
-%            at once: e.g. dimnames={'time','latitude'}, bounds={[1 4],{'70 90'}} 
-%            for latitude in degrees will take a linearly weighted-in-time mean 
-%            and an area weighted-on-a-sphere meanfor grid points between 70 and 90 
-%            North. Note that, as shown in the last example, that the bounds for 
-%            reducing a dimension appears in the same order as the name of the 
-%            dimensions in dimnames. There must be two elements in bounds, even if 
-%            they are the same to simply take a slice.
+% bounds    - cell array of bounds to be applied to the dimension in reducing the data.  
+%             This input may take several forms:
+%             1) The boundaries may be specified in terms of index values:
+%             e.g. dimnames={'time'}, bounds={[1 4]} will take a linearly 
+%             weighted-in-time mean between time slices 1 and 4 in the nc structure.
+%             2) The boundaries may be specified in terms of dimension values:
+%             e.g. dimnames={'time'}, bounds={{'01-Jan-2007','04-Jan-2007 06:00:00.0'}}
+%             which will take a linearly weighted-in-time mean between 
+%             Jan 1 12AM  and Jan 4 6AM 2007
+%             3) Multiple combinations where multiple dimensions are to be removed 
+%             at once: e.g. dimnames={'time','latitude'}, bounds={[1 4],{'70 90'}} 
+%             for latitude in degrees will take a linearly weighted-in-time mean 
+%             and an area weighted-on-a-sphere meanfor grid points between 70 and 90 
+%             North. Note that, as shown in the last example, that the bounds for 
+%             reducing a dimension appears in the same order as the name of the 
+%             dimensions in dimnames. There must be two elements in bounds, even if 
+%             they are the same to simply take a slice.
 %
-% varmean  - logical set to 'true' to gain more statistical output rather than 
-%            just means during the reduction process. The default is 'false'.  
-%            This is an optional argument.
+% varmean   - logical set to 'true' to gain more statistical output rather than 
+%             just means during the reduction process. The default is 'false'.  
+%             This is an optional argument.
 %
-% CICEpatch- Patch CICE monthly mean data that is missing a time_bounds descriptor
+% CICEpatch - Patch CICE monthly mean data that is missing a time_bounds descriptor
 %
 %
 %
