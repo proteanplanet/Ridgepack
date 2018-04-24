@@ -1,5 +1,7 @@
 # Ridgepack 
 
+ Ridgepack 
+
  This MATLAB package accompanies a manuscript submitted in March 2018 to:
 
  Journal of Advances in Modeling Earth Systems (JAMES) 
