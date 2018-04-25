@@ -20,7 +20,7 @@ pathplot=true;
 set(0,'DefaultTextInterpreter','Latex')
 
 % determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/data'];
+writedir=[fileparts(which('ridgepack')),'/output'];
 cd(writedir)
 
 % generate or extract data for zeta-hat plane
@@ -227,7 +227,7 @@ xlabel('Parent Sheet Ice Thickness, $h_{F}$ (m)')
 title('')
 
 % determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/figures'];
+writedir=[fileparts(which('ridgepack')),'/output'];
 cd(writedir)
 
 % print figure

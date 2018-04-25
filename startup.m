@@ -15,9 +15,11 @@ set(0,'DefaultTextInterpreter','Latex')
 set(0,'defaultaxesfontname','Serif')
 set(0,'defaulttextfontname','Serif')
 
-% Set defaults and environment variable for icepack
-setenv('USER_ORG','Department of Oceanography, Naval Postgraduate School');
-setenv('USER_REAL','Andrew Roberts');
+% Set defaults and environment variable for Ridgepack functions
+%  organization and name that appears in netcdf files written
+setenv('USER_ORG','my organization'); 
+setenv('USER_REAL','My Name');
+%  location of data files (ETOPO and WRF files for RASM)
 setenv('ETOPOFILE',[getenv('HOME'),'/data/TOPOBATHYMETRY/ETOPO2/ETOPO2.raw.bin'])
 setenv('WRFGRIDFILE',[getenv('HOME'),'/data/MODEL/RACM'])
 

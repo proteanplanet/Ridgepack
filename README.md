@@ -1,8 +1,6 @@
 # Ridgepack 
 
- Ridgepack 
-
- This MATLAB package accompanies a manuscript submitted in March 2018 to:
+ This MATLAB package accompanies a manuscript submitted in May 2018 to:
 
  Journal of Advances in Modeling Earth Systems (JAMES) 
  
@@ -20,18 +18,54 @@
  (3) - National Center for Atmospheric Research, Boulder, CO \
  (4) - Brown University, Providence, RI
 
- All equations solved within this package are currently subject to peer review. This
- code is published as part of the publication policy of the American Geophysical Union.
- Further information on the use of this code is available in the aforementioned paper,
- and will be released subject to the outcome of peer review.
-
+ This code is published in consonance with American Geophysical Union publication policy.
+ Here, we briefly describe the intended use of the functions and scripts within Ridgepack.
+ Further information on the use of the morphology library within Ridgepack is available 
+ in the aforementioned paper, and detailed technical descriptions of all components of 
+ the package are available with the use of the 'help' command in MATLAB. \
+ 
  Code version: 1.0 \
  Code authors: Andrew Roberts and Samy Kamal \
- Code tested with MATLAB version R2017b 
+ Code tested with MATLAB version R2018a \
+
+ Embargo: This code is currently held in a private GitHub repository, and will
+          be published when and if the above manuscript passes peer review.
 
  ----------------------------------------------------------------------------------------
 
-# Instructions for using Ridgepack
+# Introduction
+
+
+
+
+# startup file
+
+
+
+
+# scripts
+
+
+
+# output
+
+
+
+# libraries
+
+## data
+
+
+## graphics
+
+
+
+## morphology
+
+
+
+# Further Information
+
 
 
 
