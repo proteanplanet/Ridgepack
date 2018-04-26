@@ -1,4 +1,4 @@
-function [rhoi,rhos,rhow,delrho,ghat]=ridgepack_constants
+function [rhoi,rhos,rhow,delrho,ghat]=ridgepack_morphconstants
 
 % RIDGEPACK_CONSTANTS - Gives constants of sea ice for the Ridgepack library
 %
