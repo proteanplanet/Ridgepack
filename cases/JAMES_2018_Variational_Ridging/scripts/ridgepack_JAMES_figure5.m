@@ -1,3 +1,13 @@
+% ridgepack_JAMES_figure3 - Script for generating Figure 3 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 3 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
 clear
 
 % Create figure
@@ -743,7 +753,6 @@ if info
             'EdgeColor','none');
 end
 
-%if frame==1 | frame==2
 if frame==2
 
  % provide horizontal and vertical scale bar in lower right corner
@@ -797,11 +806,9 @@ end
 
 end
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
-
-ncfprint('png',['Rough_Diagram'],1,2)
-ncfprint('epsc',['Rough_Diagram'],1,2)
-ncfprint('png',['Rough_Diagram_LowRes'],1,1)
-ncfprint('epsc',['Rough_Diagram_LowRes'],1,1)
-
+% print out file in Ridgepack/cases/JAMES_2018_Variational_Ridging/output
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
+ncfprint('png',['figure5'],1,2)
+ncfprint('epsc',['figure5'],1,2)
 
