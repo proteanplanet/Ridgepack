@@ -652,10 +652,8 @@ for setting=1:3
 
 end % for setting=1:3
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
-
-ncfprint('png','Principle_Diagram',1,2)
-ncfprint('epsc','Principle_Diagram',1,2)
-ncfprint('png','Principle_Diagram_lowres',1,1)
-ncfprint('epsc','Principle_Diagram_lowres',1,1)
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
+ncfprint('png',['figure3'],1,2)
+ncfprint('epsc',['figure3'],1,2)
 

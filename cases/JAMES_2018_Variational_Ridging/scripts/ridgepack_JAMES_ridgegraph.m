@@ -635,13 +635,25 @@ for setting=1:maxset
 
 end % for setting=1:3
 
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
-
-ncfprint('png',['Comparison_Diagram_',num2str(fig)],1,2)
-ncfprint('epsc',['Comparison_Diagram_',num2str(fig)],1,2)
-ncfprint('png',['Comparison_Diagram_',num2str(fig)],1,1)
-ncfprint('epsc',['Comparison_Diagram_',num2str(fig)],1,1)
+if fig==1
+ ncfprint('png',['figure1'],1,2)
+ ncfprint('epsc',['figure1'],1,2)
+elseif fig==2
+ ncfprint('png',['figure1'],1,2)
+ ncfprint('epsc',['figure1'],1,2)
+elseif fig==3
+ ncfprint('png',['figureS1'],1,2)
+ ncfprint('epsc',['figureS1'],1,2)
+elseif fig==6
+ ncfprint('png',['figureS2'],1,2)
+ ncfprint('epsc',['figureS2'],1,2)
+else
+ ncfprint('png',['Comparison_Diagram_',num2str(fig)],1,2)
+ ncfprint('epsc',['Comparison_Diagram_',num2str(fig)],1,2)
+end
 
 set(0,'DefaultTextInterpreter','Latex')
 

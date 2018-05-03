@@ -670,13 +670,8 @@ ncmultialign(gcf)
 h=get(gcf,'Children');
 set(h(5),'Visible','off');
 
-set(0,'DefaultTextInterpreter','Tex')
-
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
-
-ncfprint('png',['Plan_Diagram'],1,2)
-ncfprint('epsc',['Plan_Diagram'],1,2)
-ncfprint('png',['Plan_Diagram_lowres'],1,1)
-ncfprint('epsc',['Plan_Diagram_lowres'],1,1)
-
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
+ncfprint('png',['figure4'],1,2)
+ncfprint('epsc',['figure4'],1,2)
 
