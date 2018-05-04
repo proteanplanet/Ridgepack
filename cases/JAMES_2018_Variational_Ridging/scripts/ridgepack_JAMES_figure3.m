@@ -1,3 +1,13 @@
+% ridgepack_JAMES_figure3 - Generates Figure 5 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 3 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
 clear
 
 % Create figure
