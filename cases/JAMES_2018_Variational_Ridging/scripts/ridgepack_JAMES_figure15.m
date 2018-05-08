@@ -8,7 +8,7 @@ hfs=0;
 
 % color along line
 cont=[0:0.05:0.40];
-cmap=nccolormap(cont,0,'parula');
+cmap=ridgepack_colormap(cont,0,'parula');
 cmap=flipud(cmap);
 colormap(cmap)
 
@@ -94,7 +94,7 @@ for i=1:length(hfi)
         'facecol','no',...
         'edgecol','interp',...
         'linew',2);
- nctext(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hfi(i),'%5.1f'),'$m'],9,cmap(end,:))
+ ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hfi(i),'%5.1f'),'$m'],9,cmap(end,:))
 
 end
 
@@ -108,12 +108,12 @@ else
 end
 
 
-nccolorbar(cont,'\phi_R')
+ridgepack_colorbar(cont,'\phi_R')
 
 cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures 
 
-ncfprint('png',['Ridge_Formation_Probability_lowres.png'],1,1)
-ncfprint('epsc',['Ridge_Formation_Probability_lowres.eps'],1,1)
-ncfprint('png',['Ridge_Formation_Probability.png'],1,2)
-ncfprint('epsc',['Ridge_Formation_Probability.eps'],1,2)
+ridgepack_fprint('png',['Ridge_Formation_Probability_lowres.png'],1,1)
+ridgepack_fprint('epsc',['Ridge_Formation_Probability_lowres.eps'],1,1)
+ridgepack_fprint('png',['Ridge_Formation_Probability.png'],1,2)
+ridgepack_fprint('epsc',['Ridge_Formation_Probability.eps'],1,2)
 

@@ -25,7 +25,7 @@ yt=0.92;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % first figure
-ncmultiplot(1,2,1,1)
+ridgepack_multiplot(1,2,1,1)
 
 % create initial deformation box
 iboxx=[xl xr xr xl xl];
@@ -288,7 +288,7 @@ text((xl+xr)/2,(yt+1)/2,'Pressure Ridge','HorizontalAlignment','center',...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % second figure
-ncmultiplot(1,2,1,2)
+ridgepack_multiplot(1,2,1,2)
 
 % create initial deformation box
 iboxx=[xl xr xr xl xl];
@@ -665,13 +665,13 @@ text((xl+xr)/2,(yt+1)/2,'Shear Ridge','HorizontalAlignment','center',...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % finalize figure
-ncmultialign(gcf)
+ridgepack_multialign(gcf)
 
 h=get(gcf,'Children');
 set(h(5),'Visible','off');
 
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
-ncfprint('png',['figure4'],1,2)
-ncfprint('epsc',['figure4'],1,2)
+ridgepack_fprint('png',['figure4'],1,2)
+ridgepack_fprint('epsc',['figure4'],1,2)
 

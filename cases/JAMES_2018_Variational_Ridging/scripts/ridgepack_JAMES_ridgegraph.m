@@ -409,7 +409,7 @@ for setting=1:maxset
       'Box','off','Visible','off','Clipping','off','Xtick',[],'XTickLabel',[],...
       'Ytick',[],'YTickLabel',[])
  
- ncclearax
+ ridgegraph_clearax
 
  if fig~=7
   % add "a)", "b)", and "c)" etc
@@ -639,20 +639,20 @@ dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
 if fig==1
- ncfprint('png',['figure1'],1,2)
- ncfprint('epsc',['figure1'],1,2)
+ ridgepack_fprint('png',['figure1'],1,2)
+ ridgepack_fprint('epsc',['figure1'],1,2)
 elseif fig==2
- ncfprint('png',['figure1'],1,2)
- ncfprint('epsc',['figure1'],1,2)
+ ridgepack_fprint('png',['figure1'],1,2)
+ ridgepack_fprint('epsc',['figure1'],1,2)
 elseif fig==3
- ncfprint('png',['figureS1'],1,2)
- ncfprint('epsc',['figureS1'],1,2)
+ ridgepack_fprint('png',['figureS1'],1,2)
+ ridgepack_fprint('epsc',['figureS1'],1,2)
 elseif fig==6
- ncfprint('png',['figureS2'],1,2)
- ncfprint('epsc',['figureS2'],1,2)
+ ridgepack_fprint('png',['figureS2'],1,2)
+ ridgepack_fprint('epsc',['figureS2'],1,2)
 else
- ncfprint('png',['Comparison_Diagram_',num2str(fig)],1,2)
- ncfprint('epsc',['Comparison_Diagram_',num2str(fig)],1,2)
+ ridgepack_fprint('png',['Comparison_Diagram_',num2str(fig)],1,2)
+ ridgepack_fprint('epsc',['Comparison_Diagram_',num2str(fig)],1,2)
 end
 
 set(0,'DefaultTextInterpreter','Latex')

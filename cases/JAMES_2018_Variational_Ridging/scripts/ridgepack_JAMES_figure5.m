@@ -150,7 +150,7 @@ else
       'Ytick',[],'YTickLabel',[])
 end
  
-ncclearax
+ridgepack_clearax
 
 ymin=get(gca,'Ylim');
 
@@ -809,6 +809,6 @@ end
 % print out file in Ridgepack/cases/JAMES_2018_Variational_Ridging/output
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
-ncfprint('png',['figure5'],1,2)
-ncfprint('epsc',['figure5'],1,2)
+ridgepack_fprint('png',['figure5'],1,2)
+ridgepack_fprint('epsc',['figure5'],1,2)
 

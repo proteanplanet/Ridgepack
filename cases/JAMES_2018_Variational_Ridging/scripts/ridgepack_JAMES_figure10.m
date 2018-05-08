@@ -133,7 +133,7 @@ axes('Position',[0.025 0.025 0.95 0.95],...
      'Box','off','Visible','off','Clipping','off','Xtick',[],'XTickLabel',[],...
      'Ytick',[],'YTickLabel',[])
  
-ncclearax
+ridgepack_clearax
 
 ymin=get(gca,'Ylim');
 
@@ -882,9 +882,9 @@ end
 
 cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
 
-ncfprint('png',['Friction_Model_Diagram'],1,2)
-ncfprint('epsc',['Friction_Model_Diagram'],1,2)
-ncfprint('png',['Friction_Model_Diagram_lowres'],1,1)
-ncfprint('epsc',['Friction_Model_Diagram_lowres'],1,1)
+ridgepack_fprint('png',['Friction_Model_Diagram'],1,2)
+ridgepack_fprint('epsc',['Friction_Model_Diagram'],1,2)
+ridgepack_fprint('png',['Friction_Model_Diagram_lowres'],1,1)
+ridgepack_fprint('epsc',['Friction_Model_Diagram_lowres'],1,1)
 
 

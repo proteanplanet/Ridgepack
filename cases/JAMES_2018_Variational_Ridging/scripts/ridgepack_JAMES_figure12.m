@@ -110,7 +110,8 @@ zlabel('Potential Energy Density, $\mathcal{V}_R$ (J m$^{-2}$)','Interpreter','L
 if titleflat
 
  % title
- title(['Dilation field and state space trajectory for $h_f=$',num2str(hf),'m, $h_{f_s}=$',num2str(hfs),'m'])
+ title(['Dilation field and state space trajectory for $h_f=$',num2str(hf),...
+        'm, $h_{f_s}=$',num2str(hfs),'m'])
  
  % fix axes
  axis square

@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure3 - Generates Figure 5 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure3 - Generates Figure 3 in JAMES Variation Ridging paper
 % 
 % This script generates Figure 3 from:
 %
@@ -664,6 +664,7 @@ end % for setting=1:3
 
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
-ncfprint('png',['figure3'],1,2)
-ncfprint('epsc',['figure3'],1,2)
+
+ridgepack_fprint('png',['figure3'],1,2)
+ridgepack_fprint('epsc',['figure3'],1,2)
 
