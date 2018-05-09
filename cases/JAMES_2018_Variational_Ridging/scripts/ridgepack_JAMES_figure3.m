@@ -664,6 +664,7 @@ end % for setting=1:3
 
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
+disp(['Writing graphics output to ',pwd])
 
 ridgepack_fprint('png',['figure3'],1,2)
 ridgepack_fprint('epsc',['figure3'],1,2)

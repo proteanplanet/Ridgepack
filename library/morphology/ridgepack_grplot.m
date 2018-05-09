@@ -61,8 +61,16 @@ title(['$\epsilon_{R_I}$=',num2str(epsilon),', $\phi$=',num2str(phi)]);
 xlim([max(0,step(1)-0.5) step(6)+0.5])
 
 % determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/figures'];
-cd(writedir)
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'library')-1),'cases/JAMES_2018_Variational_Ridging/output'])
+disp(['Writing graphics output to ',pwd])
+
+x=strfind(mfilename,'_')
+p=x(end)+1
+xxx=mfilename;
+xxx(p:end)
+%graphicsout=mfilename(x(end)+1:end)
+
 
 % print figure
 ridgepack_fprint('png','ridgepack_grplot',1,2)

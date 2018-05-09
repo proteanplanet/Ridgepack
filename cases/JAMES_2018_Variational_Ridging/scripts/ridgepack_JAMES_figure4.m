@@ -1,6 +1,15 @@
+% ridgepack_JAMES_figure4 - Generates Figure 4 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 4 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-clear
 clf
+clear
 
 set(0,'DefaultTextInterpreter','Latex')
 
@@ -672,6 +681,7 @@ set(h(5),'Visible','off');
 
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
+
 ridgepack_fprint('png',['figure4'],1,2)
 ridgepack_fprint('epsc',['figure4'],1,2)
 
