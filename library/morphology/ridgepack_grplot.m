@@ -10,6 +10,9 @@ function ridgepack_grplot
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+% close files
+close all
+
 hF=2;
 hFs=0.3;
 epsilon=-1/10;
@@ -60,19 +63,18 @@ ylabel('$g_{R}(h,\phi)$')
 title(['$\epsilon_{R_I}$=',num2str(epsilon),', $\phi$=',num2str(phi)]);
 xlim([max(0,step(1)-0.5) step(6)+0.5])
 
-% determine directory for read/write of zeta-hat plane data
+% determine directory for read/write 
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'library')-1),'cases/JAMES_2018_Variational_Ridging/output'])
-disp(['Writing graphics output to ',pwd])
 
-x=strfind(mfilename,'_')
-p=x(end)+1
-xxx=mfilename;
-xxx(p:end)
-%graphicsout=mfilename(x(end)+1:end)
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
 
 % print figure
-ridgepack_fprint('png','ridgepack_grplot',1,2)
-ridgepack_fprint('epsc','ridgepack_grplot',1,2)
+ridgepack_fprint('epsc',graphicsout,1,2)
 

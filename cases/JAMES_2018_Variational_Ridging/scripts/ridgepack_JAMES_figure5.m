@@ -9,6 +9,7 @@
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 clear
+close all
 
 % Create figure
 h=figure(1);
@@ -806,9 +807,14 @@ end
 
 end
 
-dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
-ridgepack_fprint('png',['figure5'],1,2)
-ridgepack_fprint('epsc',['figure5'],1,2)
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
 

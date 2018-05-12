@@ -8,8 +8,8 @@
 %
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-clf
 clear
+close all
 
 set(0,'DefaultTextInterpreter','Latex')
 
@@ -32,7 +32,6 @@ xr=0.92;
 yb=0.08;
 yt=0.92;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % first figure
 ridgepack_multiplot(1,2,1,1)
 
@@ -295,7 +294,6 @@ text((xl+xr)/2,(yt+1)/2,'Pressure Ridge','HorizontalAlignment','center',...
              'FontSize',labelsize,'Color','k',...
              'Parent',gca,'Interpreter','Tex');
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % second figure
 ridgepack_multiplot(1,2,1,2)
 
@@ -672,16 +670,21 @@ text((xl+xr)/2,(yt+1)/2,'Shear Ridge','HorizontalAlignment','center',...
              'FontSize',labelsize,'Color','k',...
              'Parent',gca,'Interpreter','Tex');
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % finalize figure
 ridgepack_multialign(gcf)
 
 h=get(gcf,'Children');
 set(h(5),'Visible','off');
 
-dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
-ridgepack_fprint('png',['figure4'],1,2)
-ridgepack_fprint('epsc',['figure4'],1,2)
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
+
 

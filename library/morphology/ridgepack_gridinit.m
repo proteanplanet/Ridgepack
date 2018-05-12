@@ -10,9 +10,9 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-%eincr = 0.001;
+eincr = 0.001;
 %eincr = 0.005;
-eincr = 0.01;
+%eincr = 0.01;
 
 % minimim abs(strain) and porosity
 minstrain = 0.01;

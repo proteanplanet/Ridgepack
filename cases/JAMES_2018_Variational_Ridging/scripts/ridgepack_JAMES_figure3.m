@@ -9,6 +9,7 @@
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 clear
+close all
 
 % Create figure
 figure(1);
@@ -22,7 +23,8 @@ hfs=0.3; % snow thickness
 hdi=3.0; % ridged ice thickness
 hds=0.3; % ridged snow thickness
 
-epsilon=(hfi-hdi)/hdi
+% strain
+epsilon=(hfi-hdi)/hdi;
 
 % parameter settings of scheme
 rhoi=917.0; % density of ice (kg/m^3)
@@ -662,10 +664,18 @@ for setting=1:3
 
 end % for setting=1:3
 
+% determine directory for read/write
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
-disp(['Writing graphics output to ',pwd])
 
-ridgepack_fprint('png',['figure3'],1,2)
-ridgepack_fprint('epsc',['figure3'],1,2)
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
+
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
 
