@@ -1,10 +1,24 @@
 function [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
             ridgepack_gridinit
 
-
-% epsilon  - ridge strain coordinate on alphahat plane (dimensionless)
-% phi      - ridge macroporosity coordinate on alphahat plane (dimensionless)
-
+% RIDGEPACK_GRIDINIT - set up the initial thickness, strain and porosity grid 
+%
+% function [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+%             ridgepack_gridinit
+% 
+% OUTPUT:
+%
+% hincr        - increment in thickness grid (m)
+% eincr        - resolution of strain and porosity (dimensionless)
+% hgrid        - thickness grid (m)
+% epsilongrid  - strain grid (dimensionless)
+% phigrid      - porosity grid (dimensionless)
+% epsilonsplit - split strain grid (dimensionless)
+% phisplit     - split porosity grid (dimensionless)
+% ghphi        - initialized thickness distribition g(h,phi)
+%
+% Ridgepack Version 1.0.
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

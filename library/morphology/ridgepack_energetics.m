@@ -38,7 +38,12 @@ elseif length(hf)>1 | length(hfs)>1
 end
 
 % get constants
-[rho,rhos,rhow,delrho,ghat]=ridge_constants;
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
+delrho=hc.rhow.const-hc.rhoi.const; % difference of water and ice densities
+ghat=hc.ghat.const; % acceleration due to gravity
 
 % calculate thickness of deformed ice mass from strain
 hd=hf./(1+epsilon);

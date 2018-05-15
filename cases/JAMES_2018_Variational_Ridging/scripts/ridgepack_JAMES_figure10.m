@@ -1,11 +1,18 @@
-% This script generates the friction diagram for the paper's
-% coulombic rheology.
+% ridgepack_JAMES_figure10 - Generates Figure 10 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 10 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 clear
+close all
 
 % Create figure
 h=figure(1);
-clf
 
 % set up colors
 cols=lines(10);
@@ -17,8 +24,6 @@ boxrightx=1-boxleftx;
 
 figLk=boxrightx-boxleftx;
 levelextent=0.0;
-%sealeft=0;
-%searight=1;
 sealeft=-0.05;
 searight=1.05;
 aspectratio=1;
@@ -34,9 +39,10 @@ whitecol=0.999999*[1 1 1];
 fricol=11;
 
 % parameter settings of scheme
-rhoi=917.0; % density of ice (kg/m^3)
-rhos=330.0; % density of snow (kg/m^3)
-rhow=1026.0; % density of seawater (kg/m^3)
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 % level ice and snow thickness left side
 hfi1=2.0; % level ice thickness
@@ -57,15 +63,15 @@ hds1=0.0; % ridged snow thickness
 porosity=0.2; 
 
 % calculate freeboard and draft of level ice
-hfd1=(rhoi*hfi1+rhos*hfs1)/rhow; % level draft
+hfd1=(rho*hfi1+rhos*hfs1)/rhow; % level draft
 hff1=(hfi1+hfs1)-hfd1; % level freeboard
 
 % calculate freeboard and draft of level ice
-hfd2=(rhoi*hfi2+rhos*hfs2)/rhow; % level draft
+hfd2=(rho*hfi2+rhos*hfs2)/rhow; % level draft
 hff2=(hfi2+hfs2)-hfd2; % level freeboard
 
 % calculate freeboard and draft of deformed ice 
-hdd1=(rhoi*hdi1+rhos*hds1)/rhow; % ridged draft
+hdd1=(rho*hdi1+rhos*hds1)/rhow; % ridged draft
 hdf1=(hdi1+hds1)-hdd1; % ridged freeboard
 
 % check for bounds of level ice
@@ -123,7 +129,7 @@ ykbottom=ylbottom1-(Hk-hfd1)*scalefactory;
 yb=sealevely-scalefactory*hdd1/(1-porosity);
 yt=sealevely+scalefactory*(hdf1-hds1)/(1-porosity);
 ys=sealevely+scalefactory*hdf1/(1-porosity);
-yc=(0.5*(yt+yb)*rhoi + 0.5*(ys+yt)*rhos)./(rhoi+rhos);
+yc=(0.5*(yt+yb)*rho + 0.5*(ys+yt)*rhos)./(rho+rhos);
 xc=mean([xlleft xlright]);
 
 % start axis
@@ -880,11 +886,20 @@ if info
 
 end
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
-ridgepack_fprint('png',['Friction_Model_Diagram'],1,2)
-ridgepack_fprint('epsc',['Friction_Model_Diagram'],1,2)
-ridgepack_fprint('png',['Friction_Model_Diagram_lowres'],1,1)
-ridgepack_fprint('epsc',['Friction_Model_Diagram_lowres'],1,1)
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
+
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
+
 
 

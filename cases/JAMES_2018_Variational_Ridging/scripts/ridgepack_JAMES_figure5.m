@@ -42,9 +42,10 @@ icecol=0.75*[1 1 1];
 fricol=11;
 
 % parameter settings of scheme
-rhoi=917.0; % density of ice (kg/m^3)
-rhos=330.0; % density of snow (kg/m^3)
-rhow=1026.0; % density of seawater (kg/m^3)
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 % level ice and snow thickness left side
 hfi1=2.0; % level ice thickness
@@ -80,15 +81,15 @@ epsilon1=(hfi1-hdi1*(1-porosity))/(hdi1*(1-porosity))
 epsilon2=(hfi2-hdi1*(1-porosity))/(hdi1*(1-porosity))
 
 % calculate freeboard and draft of level ice
-hfd1=(rhoi*hfi1+rhos*hfs1)/rhow; % level draft
+hfd1=(rho*hfi1+rhos*hfs1)/rhow; % level draft
 hff1=(hfi1+hfs1)-hfd1; % level freeboard
 
 % calculate freeboard and draft of level ice
-hfd2=(rhoi*hfi2+rhos*hfs2)/rhow; % level draft
+hfd2=(rho*hfi2+rhos*hfs2)/rhow; % level draft
 hff2=(hfi2+hfs2)-hfd2; % level freeboard
 
 % calculate freeboard and draft of deformed ice 
-hdd1=(rhoi*hdi1+rhos*hds1)/rhow; % ridged draft
+hdd1=(rho*hdi1+rhos*hds1)/rhow; % ridged draft
 hdf1=(hdi1+hds1)-hdd1; % ridged freeboard
 
 % check for bounds of level ice
@@ -123,7 +124,7 @@ scalefactorx=figLk/Lk1;
 scalefactory=min(aspectratio*scalefactorx,1/(Hk+Hr));
 
 % calculate level ice box and surface snow, centered slightly to left
-sealevely=0.6; % rhoi/rhow
+sealevely=0.6; % rho/rhow
 ylsnow1=sealevely+hff1*scalefactory;
 ylbottom1=sealevely-hfd1*scalefactory;
 xlleft=boxleftx+(boxrightx-boxleftx-Lk1*scalefactorx)/2;
@@ -396,7 +397,7 @@ yb=sealevely-scalefactory*hdd1/(1-porosity);
 yt=sealevely+scalefactory*(hdf1-hds1)/(1-porosity);
 ys=sealevely+scalefactory*hdf1/(1-porosity);
 
-yc=(0.5*(yt+yb)*rhoi + 0.5*(ys+yt)*rhos)./(rhoi+rhos);
+yc=(0.5*(yt+yb)*rho + 0.5*(ys+yt)*rhos)./(rho+rhos);
 xc=mean([xlleft xlright]);
 
 % put in rubble descriptor, removing nearby stipples

@@ -1,10 +1,21 @@
+% ridgepack_JAMES_figure7 - Generates Figure 7 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 7 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 clear
-clf
+close all
 
-rho=917.0; % density of ice (kg/m^3)
-rhos=330.0; % density of snow (kg/m^3)
-rhow=1026.0; % density of seawater (kg/m^3)
+% parameter settings of scheme
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 cols=lines(10); % colors
 
@@ -109,8 +120,6 @@ for i=1:4
 
 end
 
-%set(gca,'YScale','log')
-
 legend(h,legendtext,'FontSize',fontsize,'Interpreter','Latex')
 legend('boxoff')
 xlim([hF-0.2 maxy])
@@ -118,20 +127,18 @@ ylim([0 1.1])
 xlabel('$h$ (m)','Interpreter','Latex')
 ylabel('Ridge ice thickness distribution $g_R(h,\phi_R)$','Interpreter','Latex')
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
-ncfprint('png',['Thickness_DistR'],1,2)
-ncfprint('epsc',['Thickness_DistR'],1,2)
-ncfprint('png',['Thickness_DistR_lowres'],1,1)
-ncfprint('epsc',['Thickness_DistR_lowres'],1,1)
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
 
-
-
-
-
-
-
-
-
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
 

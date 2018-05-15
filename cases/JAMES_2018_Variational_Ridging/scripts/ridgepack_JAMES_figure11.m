@@ -1,31 +1,36 @@
-function ridgepack_manifoldplot
-
-% function ridgepack_manifoldplot
-%
-% This function generates a cross-section of the potential energy density 
-% manifold on alpha-hat space, as presented in Figure 11 of the paper submitted
-% to JAMES. 
+% ridgepack_JAMES_figure11 - Generates Figure 11 in JAMES Variation Ridging paper
 % 
-% Ridgepack Version 1.0
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% This script generates Figure 11 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 % clear all variables and graphics
 clear
+close all
+
+% Create figure
 figure(1)
-clf
 
 % set Latex intepreter for graphics
 set(0,'DefaultTextInterpreter','Latex')
 
 % set constants
-[rhoi,rhos,rhow,delrho,g,eincr,hincr,minthick,maxthick]=ridgepack_constants;
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % density of seawater (kg/m^3)
 
 % set thickness of paranet ice and snow
 hfii=[0.5 2.0]; % thickness of initial ice
 hfsi=[0.0 0.0]; % thickness of snow on the initial ice
 
 % create strain and phi coordinates
-[hgrid,epsiloni,phii]=ridgepack_gridinit;
+[hincr,eincr,hgrid,epsiloni,phii]=ridgepack_gridinit;
 [epsilon,phi]=meshgrid(epsiloni,phii);
 
 % ALPHAHAT color contours (degrees)
@@ -70,7 +75,7 @@ for i=1:length(hfii)
  end
 
  % find contour values of observed keel depth (Melling and Riedel, 1996)
- hfd=(rhoi*hfii(i)+rhos*hfsi(i))/rhow; 
+ hfd=(rho*hfii(i)+rhos*hfsi(i))/rhow; 
  contval=16*sqrt(hfd);
  ssk=NaN*zeros(size(phii));
  vrk=NaN*zeros(size(phii));
@@ -134,7 +139,7 @@ for i=1:length(hfii)
  [EPSILON,PHI,ALPHAHAT,VR]=ridgepack_trajectory(hfii(i),hfsi(i));
 
  % only plot up to a min strain of -0.98
- idx=find(EPSILON>=-0.98);
+ idx=find(EPSILON>=-0.96);
  EPSILON=EPSILON(idx);
  PHI=PHI(idx);
  VR=VR(idx);
@@ -182,9 +187,9 @@ for i=1:length(hfii)
   erplor=[0,-0.2,-0.4,-0.6];
   for m=1:length(erplor)
    idx=find(abs(EPSILON(:)-erplor(m))==min(abs(EPSILON(:)-erplor(m))));
-   plot3(EPSILON(idx),PHI(idx),1.1*VR(idx),'o','MarkerFaceColor','w',...
+   plot3(EPSILON(idx(1)),PHI(idx(1)),1.1*VR(idx(1)),'o','MarkerFaceColor','w',...
          'Color',colplo{m},'MarkerSize',4)
-   plot3(EPSILON(idx),PHI(idx),1.1*VR(idx),'+',...
+   plot3(EPSILON(idx(1)),PHI(idx(1)),1.1*VR(idx(1)),'+',...
          'Color',colplo{m},'MarkerSize',4)
   end
  end
@@ -228,11 +233,20 @@ ylabel('Porosity, $\phi_R$','Interpreter','Latex','HorizontalAlignment','center'
 zlabel('Potential Energy Density, $\mathcal{V}_R$ (J m$^{-2}$)',...
        'Interpreter','Latex','fontsize',12)
 
-% determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/figures'];
-cd(writedir)
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
-% plot figures
-ridgepack_fprint('png','ridgepack_manifoldplot',1,2)
-ridgepack_fprint('epsc','ridgepack_manifoldplot',1,2)
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
+
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
+
 

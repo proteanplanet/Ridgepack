@@ -54,10 +54,15 @@ elseif any(hd<0)
 end
 
 % get constants
-[rhoi,rhos,rhow,delrho,ghat]=ridgepack_constants;
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
+delrho=hc.rhow.const-hc.rhoi.const; % difference of water and ice densities
+ghat=hc.ghat.const; % acceleration due to gravity
 
 % calculate freeboard and draft of level ice
-HFD=(rhoi*hf+rhos*hfs)/rhow; % level draft
+HFD=(rho*hf+rhos*hfs)/rhow; % level draft
 HFF=(hf+hfs)-HFD; % level freeboard
 
 % check that answers add up for floe ice
@@ -68,7 +73,7 @@ elseif HFF<hfs
 end
 
 % calculate freeboard and draft of deformed ice 
-HDD=(rhoi*hd+rhos*hds)/rhow; % ridged draft
+HDD=(rho*hd+rhos*hds)/rhow; % ridged draft
 HDF=(hd+hds)-HDD; % ridged freeboard
 
 % check that answers add up for ridged ice

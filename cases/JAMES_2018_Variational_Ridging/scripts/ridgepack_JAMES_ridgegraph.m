@@ -1,12 +1,24 @@
+% ridgepack_JAMES_ridgegraph - Generates ridgegraphs JAMES Variation Ridging paper
+% 
+% This script generates ridgegraphs from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% The following settings generate figures in the paper:
+%
+% fig=1 - Generates figure 8 
+% fig=2 - Generates figure 9 
+% fig=3 - Generates figure S1 
+% fig=6 - Generates figure S2 
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
 clear
 close all
 
-% Options
-% fig=1: Compare change in Phi and alpha
-% fig=2: Compare change in ice thickness feeding ice structure for same alpha
-% fig=3: Compare changes in snow thickness keeping everything else constant
-
-fig=2
+fig=1
 
 if fig==1
  nrows=1;
@@ -80,9 +92,11 @@ bluecol=[0 0.447058826684952 0.74117648601532];
 greycol=0.25*[1 1 1];
 
 % parameter settings of scheme
-rhoi=917.0; % density of ice (kg/m^3)
-rhos=330.0; % density of snow (kg/m^3)
-rhow=1026.0; % density of seawater (kg/m^3)
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % density of seawater (kg/m^3)
 
 if fig==1 
  notation='bacd';
@@ -271,18 +285,12 @@ for setting=1:maxset
  end
 
  % calculate freeboard and draft of level ice
- hld=(rhoi*hli+rhos*hls)/rhow; % level draft
+ hld=(rho*hli+rhos*hls)/rhow; % level draft
  hlf=(hli+hls)-hld; % level freeboard
 
- % apply correction
- %hlf = (hld*(1-rhoi/rhow) + (hls-(hli-hlf)*rhoi/rhos) * (1-rhos/rhow))
-
  % calculate freeboard and draft of deformed ice 
- hdd=(rhoi*hdi+rhos*hds)/rhow; % ridged draft
+ hdd=(rho*hdi+rhos*hds)/rhow; % ridged draft
  hdf=(hdi+hds)-hdd; % ridged freeboard
-
- % apply correction
- %hdf = (hdd*(1-rhoi/rhow) + (hds-(hdi-hdf)*rhoi/rhos) * (1-rhos/rhow))
 
  if hlf<hls
   error('Level snow too thick')
@@ -330,7 +338,7 @@ for setting=1:maxset
  end
 
  % calculate level ice box and surface snow, centered slightly to left
- sealevely=0.6; % rhoi/rhow
+ sealevely=0.6; % rho/rhow
  ylsnow=sealevely+hlf*scalefactory
  ylbottom=sealevely-hld*scalefactory;
  xlleft=boxleftx+(boxrightx-boxleftx-Lk*scalefactory)/2
@@ -409,7 +417,7 @@ for setting=1:maxset
       'Box','off','Visible','off','Clipping','off','Xtick',[],'XTickLabel',[],...
       'Ytick',[],'YTickLabel',[])
  
- ridgegraph_clearax
+ ridgepack_clearax
 
  if fig~=7
   % add "a)", "b)", and "c)" etc
@@ -635,26 +643,27 @@ for setting=1:maxset
 
 end % for setting=1:3
 
+% determine directory for read/write
 dir=fileparts(which(mfilename));
 cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
+% determine filename
 if fig==1
- ridgepack_fprint('png',['figure1'],1,2)
- ridgepack_fprint('epsc',['figure1'],1,2)
+ graphicsout='figure8';
 elseif fig==2
- ridgepack_fprint('png',['figure1'],1,2)
- ridgepack_fprint('epsc',['figure1'],1,2)
+ graphicsout='figure9';
 elseif fig==3
- ridgepack_fprint('png',['figureS1'],1,2)
- ridgepack_fprint('epsc',['figureS1'],1,2)
+ graphicsout='figureS1';
 elseif fig==6
- ridgepack_fprint('png',['figureS2'],1,2)
- ridgepack_fprint('epsc',['figureS2'],1,2)
+ graphicsout='figureS2';
 else
- ridgepack_fprint('png',['Comparison_Diagram_',num2str(fig)],1,2)
- ridgepack_fprint('epsc',['Comparison_Diagram_',num2str(fig)],1,2)
+ graphicsout=['Comparison_Diagram_',num2str(fig)];
 end
 
-set(0,'DefaultTextInterpreter','Latex')
+% output
+disp(['Writing graphics output ',graphicsout,' to ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
 
 

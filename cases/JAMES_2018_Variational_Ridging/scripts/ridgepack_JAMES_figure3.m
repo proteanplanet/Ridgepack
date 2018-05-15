@@ -13,7 +13,6 @@ close all
 
 % Create figure
 figure(1);
-clf
 
 % level ice and snow thickness
 hfi=2.0; % level ice thickness
@@ -27,11 +26,12 @@ hds=0.3; % ridged snow thickness
 epsilon=(hfi-hdi)/hdi;
 
 % parameter settings of scheme
-rhoi=917.0; % density of ice (kg/m^3)
-rhos=330.0; % density of snow (kg/m^3)
-rhow=1026.0; % density of seawater (kg/m^3)
-deltar=rhow-rhoi;
-g=9.8; % gravity
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % density of seawater (kg/m^3)
+
 alphar=22; % angle of ridge
 alphak=22; % angle of keel
 %porosity=0.8; % porosity of ridge and keel complex
@@ -57,11 +57,11 @@ bluecol=cols(1,:)
 
 
 % calculate freeboard and draft of level ice
-hld=(rhoi*hfi+rhos*hfs)/rhow; % level draft
+hld=(rho*hfi+rhos*hfs)/rhow; % level draft
 hlf=(hfi+hfs)-hld; % level freeboard
 
 % calculate freeboard and draft of deformed ice 
-hdd=(rhoi*hdi+rhos*hds)/rhow; % ridged draft
+hdd=(rho*hdi+rhos*hds)/rhow; % ridged draft
 hdf=(hdi+hds)-hdd; % ridged freeboard
 
 % check for bounds of level ice
