@@ -9,25 +9,25 @@ function ridgepack_fprint(form,name,fig,movie)
 % 
 % INPUT:
 %
-% form - format of output (default is 'epsc'). Valid values:
+% form  - format of output (default is 'epsc'). Valid values:
 %
-%        ps       - PostScript for black and white printers
-%        psc      - PostScript for color printers
-%        ps2      - Level 2 PostScript for black and white printers
-%        psc2     - Level 2 PostScript for color printers
-%        eps      - Encapsulated PostScript
-%        epsc     - Encapsulated Color PostScript
-%        eps2     - Encapsulated Level 2 PostScript
-%        epsc2    - Encapsulated Level 2 Color PostScript
-%        jpeg<nn> - JPEG image, quality level of nn (figures only)
-%        tiff     - TIFF with packbits (lossless run-length encoding)
-%        tiffnocompression - TIFF without compression (figures only)
-%        png      - Portable Network Graphic 24-bit truecolor image
-%        pdf      - PDF
+%         ps       - PostScript for black and white printers
+%         psc      - PostScript for color printers
+%         ps2      - Level 2 PostScript for black and white printers
+%         psc2     - Level 2 PostScript for color printers
+%         eps      - Encapsulated PostScript
+%         epsc     - Encapsulated Color PostScript
+%         eps2     - Encapsulated Level 2 PostScript
+%         epsc2    - Encapsulated Level 2 Color PostScript
+%         jpeg<nn> - JPEG image, quality level of nn (figures only)
+%         tiff     - TIFF with packbits (lossless run-length encoding)
+%         tiffnocompression - TIFF without compression (figures only)
+%         png      - Portable Network Graphic 24-bit truecolor image
+%         pdf      - PDF
 %         
-% name - name of the file to be output (default is 'figure1')
+% name  - name of the file to be output (default is 'figure1')
 %
-% fig  - matlab figure number (default is 1)
+% fig   - matlab figure number (default is 1)
 %
 % movie - changes dots per inch to 300 for movies.  Set to 1 for
 %         this option to work, otherwise set to 0 (default is 0).
@@ -84,7 +84,9 @@ else
  error([num2str(fig),' is not a valid figure'])
 end
 
-disp(printcommand)
+if debug;
+ disp(printcommand)
+end
 
 eval(printcommand);
 

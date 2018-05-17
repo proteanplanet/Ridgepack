@@ -1,28 +1,27 @@
-function ridgepack_dilationplot(titleflag)
-
-% function ridgepack_dilationplot
+% ridgepack_JAMES_figure12 - Generates Figure 12 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 12 from:
 %
-% INPUT: 
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
 %
-% titleflag - logical turning on title
-%
-% This function is part of Ridgepack Version 1.0.
 % It generates a graphical example of the state space trajectory and 
 % dilation field for a ridge with parent sheet thickness of 2m and no snow
 % cover. This function is useful for testing the code in ridgepack_trajectory
-% and that is why it was created.
+% in the morphology library and that is why it was created.
 %
-% Ridgepack Version 1.0
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-% plot on figure 2
+% clear all variables and graphics
 clear
-figure(2)
-clf
+close all
 
-if nargin<1
- titleflat=false;
-end
+% Create figure
+figure(1)
+
+% switch to turn on/off the figure title 
+titleflat=false;
 
 % initial ice thickness (m)
 hf=2.0;
@@ -31,7 +30,10 @@ hf=2.0;
 hfs=0.0;
 
 % retrieve constants
-[rhoi,rhos,rhow,delrho,g]=ridgepack_constants;
+hc=ridgepack_astroconstants;
+rho=hc.rhoi.const;  % density of ice (kg/m^3)
+rhos=hc.rhos.const; % density of snow (kg/m^3)
+rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 % calculate trajectory for given thickness
 [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,phsplitmesh,d1,d2]=...
@@ -123,12 +125,19 @@ else
 
 end
 
-% determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/figures'];
-cd(writedir)
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
+
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
+
+% output
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
-ridgepack_fprint('png','ridgepack_dilationplot',2,2)
-ridgepack_fprint('epsc','ridgepack_dilationplot',2,2)
+ridgepack_fprint('epsc',graphicsout,1,2)
 
 

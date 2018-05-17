@@ -31,7 +31,7 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % initialze grid
 [hincr,eincr,HF]=ridgepack_gridinit;
 
-% remove snow for Version 1.0
+% remove snow for Version 1.0 (this step can be removed in future versions)
 HFs=zeros(size(HF));
 
 % step through initial ice thicknesses

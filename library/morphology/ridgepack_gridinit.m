@@ -1,21 +1,21 @@
-function [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
             ridgepack_gridinit
 
 % RIDGEPACK_GRIDINIT - set up the initial thickness, strain and porosity grid 
 %
-% function [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+% function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
 %             ridgepack_gridinit
 % 
 % OUTPUT:
 %
-% hincr        - increment in thickness grid (m)
-% eincr        - resolution of strain and porosity (dimensionless)
-% hgrid        - thickness grid (m)
-% epsilongrid  - strain grid (dimensionless)
-% phigrid      - porosity grid (dimensionless)
-% epsilonsplit - split strain grid (dimensionless)
-% phisplit     - split porosity grid (dimensionless)
-% ghphi        - initialized thickness distribition g(h,phi)
+% HINCR        - increment in thickness grid (m)
+% EINCR        - resolution of strain and porosity (dimensionless)
+% HGRID        - thickness grid (m)
+% EPSILONGRID  - strain grid (dimensionless)
+% PHIGRID      - porosity grid (dimensionless)
+% EPSILONSPLIT - split strain grid (dimensionless)
+% PHISPLIT     - split porosity grid (dimensionless)
+% GHPHI        - initialized thickness distribition g(h,phi)
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
@@ -24,15 +24,15 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-eincr = 0.001;
-%eincr = 0.005;
-%eincr = 0.01;
+EINCR = 0.001;
+%EINCR = 0.005;
+%EINCR = 0.01;
 
 % minimim abs(strain) and porosity
 minstrain = 0.01;
 
 % maximim abs(strain) and porosity
-maxstrain = 0.99-eincr-minstrain;
+maxstrain = (1-EINCR)-EINCR-minstrain;
 
 % minimum thickness on zeta-hat plane trajectory plane (m)
 minthick = 0.01;
@@ -41,49 +41,50 @@ minthick = 0.01;
 maxthick = 100;
 
 % check resolution settings
-if eincr>0.01
- error('eincr too large for convergence')
+if EINCR>0.01
+ error('EINCR too large for convergence')
 end
 
+% flag for logarithmic thickness grid
 %logthickness=false;
 logthickness=true;
+
 if logthickness
  % set initial log thickness resolution on zeta-hat plane (m)
- hincr = (log10(10)-log10(minthick+0.01))/1000;
+ HINCR = (log10(10)-log10(minthick))/1000;
 
  % ice thickness grid
- hgrid = [minthick 10.^[log10(0.01):hincr:log10(maxthick)]];
+ HGRID = [10.^[log10(minthick):HINCR:log10(maxthick)]];
 else
  % set linear thickness resolution on zeta-hat plane (m)
- hincr = 0.1;
+ HINCR = 0.1;
 
- hgrid = [minthick hincr:hincr:maxthick];
+ HGRID = [minthick:HINCR:maxthick];
 end
 
-
 % determine final increment
-hincr(1)=hgrid(1);
-hincr(2:length(hgrid))=diff(hgrid);
+HINCR(1)=HGRID(1);
+HINCR(2:length(HGRID))=diff(HGRID);
 
 % strain grid and splot grid
-epsilongrid = [-minstrain:-eincr:-maxstrain];
-epsilonsplit = [-minstrain-eincr/2:-eincr:-maxstrain+eincr/2];
+EPSILONGRID = [-minstrain:-EINCR:-maxstrain];
+EPSILONSPLIT = [-minstrain-EINCR/2:-EINCR:-maxstrain+EINCR/2];
 
 % porosity grid
-phigrid = [minstrain:eincr:maxstrain];
-phisplit = [minstrain+eincr/2:eincr:maxstrain-eincr/2];
+PHIGRID = [minstrain:EINCR:maxstrain];
+PHISPLIT = [minstrain+EINCR/2:EINCR:maxstrain-EINCR/2];
 
 % initialize thickness distribution with zeros
-[ghphi] = 0*meshgrid(phisplit,hgrid);
+[GHPHI] = 0*meshgrid(PHISPLIT,HGRID);
 
 % debug information
 if debug
- disp(['size of hgrid is ',num2str(size(hgrid))])
- disp(['size of epsilongrid is ',num2str(size(epsilongrid))])
- disp(['size of epsilonsplit is ',num2str(size(epsilonsplit))])
- disp(['size of phigrid is ',num2str(size(phigrid))])
- disp(['size of phisplit is ',num2str(size(phisplit))])
- disp(['size of ghphi is ',num2str(size(ghphi))])
+ disp(['size of HGRID is ',num2str(size(HGRID))])
+ disp(['size of EPSILONGRID is ',num2str(size(EPSILONGRID))])
+ disp(['size of EPSILONSPLIT is ',num2str(size(EPSILONSPLIT))])
+ disp(['size of PHIGRID is ',num2str(size(PHIGRID))])
+ disp(['size of PHISPLIT is ',num2str(size(PHISPLIT))])
+ disp(['size of GHPHI is ',num2str(size(GHPHI))])
 end
 
 if debug; disp(['...Leaving ',mfilename]); end

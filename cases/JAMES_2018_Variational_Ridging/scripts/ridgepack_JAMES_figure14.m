@@ -1,16 +1,22 @@
-function ridgepack_zetahatplot
-
-% function ridgepack_zetahatplot
+% ridgepack_JAMES_figure14 - Generates Figure 14 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 14 from:
 %
-% This function generates and plot a zeta-hat plane as a test 
-% of the function ridgepack_zetahatplane. 
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
 %
-% Ridgepack Version 1.0
+% This function generates and plot a zeta-hat plane as a test of the function 
+% ridgepack_zetahatplane in the morphology library. 
+%
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+clear
+close all
+
 % generate or extract data (or not)
-generate=true;
-%generate=false;
+%generate=true;
+generate=false;
 
 % plot individual paths (or not)
 pathplot=true;
@@ -20,17 +26,18 @@ pathplot=true;
 set(0,'DefaultTextInterpreter','Latex')
 
 % determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/output'];
-cd(writedir)
+dir=fileparts(which(mfilename));
+writedir=[dir(1:strfind(dir,'scripts')-1),'output'];
+cd(writedir);
 
 % generate or extract data for zeta-hat plane
 if generate
  disp(['Generating data in ',writedir])
  [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane;
- save zetahatplane
+ save('ridgepack_zetahatplane','HF','EPSILON','PHI','ALPHAHAT','VR','HK','HS','LK','LS')
 else
  disp(['Reading from ',writedir])
- load zetahatplane
+ load ridgepack_zetahatplane
 end
 
 % place data into a netcdf structure
@@ -59,7 +66,6 @@ nc.VRF.data(1:2:end,1:2:end)=nc.VR.data(1:2:end,1:2:end).*HSmaxfilt(1:2:end,1:2:
 nc.VRF.data(2:2:end,2:2:end)=nc.VR.data(2:2:end,2:2:end).*HSmaxfilt(2:2:end,2:2:end);
 
 % close any open figures
-close all
 figure(1)
 
 % plot the data
@@ -226,11 +232,18 @@ ylabel('Strain, $\epsilon_{R_I}$')
 xlabel('Parent Sheet Ice Thickness, $h_{F}$ (m)')
 title('')
 
-% determine directory for read/write of zeta-hat plane data
-writedir=[fileparts(which('ridgepack')),'/output'];
-cd(writedir)
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
+
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
+
+% output
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
-ridgepack_fprint('png','ridgepack_zetahatplot',1,2)
-ridgepack_fprint('epsc','ridgepack_zetahatplot',1,2)
+ridgepack_fprint('epsc',graphicsout,1,2)
 

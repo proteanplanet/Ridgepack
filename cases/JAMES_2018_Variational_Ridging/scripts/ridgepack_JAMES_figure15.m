@@ -1,10 +1,25 @@
+% ridgepack_JAMES_figure15 - Generates Figure 15 in JAMES Variation Ridging paper
+% 
+% This script generates Figure 15 from:
+%
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% This function generates and plot a zeta-hat plane as a test of the function 
+% ridgepack_zetahatplane in the morphology library.  The script also calculates
+% mean values of porosity, strain, and angle of repose for the entire model
+% and with observational limitations imposed by Peter Wadhams when interpreting
+% sea ice draft measurements from submarine SONAR.
+%
+% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
 clear
 close all
 
 % set ice and snow thickness
 hfi=[0.5 2.0];
-hfs=0;
+hfs=[0 0];
 
 % color along line
 cont=[0:0.05:0.40];
@@ -27,35 +42,39 @@ final=true;
 for i=1:length(hfi)
 
  % calculate path for a given thickness
- [hfii,strainp,pep,phip,alphap,HK,HS,LK,LS]=paper_ridge_expected_plane(true,hfi(i));
+ [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(hfi(i),0);
 
  % work per ridge shape
- energyratio=sum(LK(1:end).*pep(1:end))./(LK(1:end).*pep(1:end));
+ energyratio=sum(LK(1:end).*VR(1:end))./(LK(1:end).*VR(1:end));
 
  % probability
  probability=energyratio./sum(energyratio);
 
+ % explanatory output
+ disp(['------- For floe ice thickness ',num2str(hfi(i),'%8.1f'),...
+       'm ----------------------'])
+
  % calculate mean porosity
- sum(probability.*phip)
+ disp(['Mean porosity: ',num2str(sum(probability.*phip),'%8.2f')])
 
  % calculate mean strain
- sum(probability.*strainp')
+ disp(['Mean strain: ',num2str(sum(probability.*strainp),'%8.2f')])
 
  % calculate mean alpha
- sum(probability.*alphap)
+ disp(['Mean angle of repose: ',num2str(sum(probability.*alphap),'%8.2f')])
 
  % calculate 5m cutoff
  mask=(HK>5.0);
  maskprob=(probability.*mask)/sum(probability.*mask);
 
  % calculate mean porosity
- sum(maskprob.*phip)
+ disp(['Mean porosity with Wadhams 5m draft cutoff: ',num2str(sum(maskprob.*phip),'%8.2f')])
 
  % calculate mean strain
- sum(maskprob.*strainp')
+ disp(['Mean strain with Wadhams 5m draft cutoff: ',num2str(sum(maskprob.*strainp),'%8.2f')])
 
  % calculate mean alpha
- sum(maskprob.*alphap)
+ disp(['Mean angle of repose with Wadhams 5m draft cutoff: ',num2str(sum(maskprob.*alphap),'%8.2f')])
 
  % x coordinate is total ridge thickness
  x=LK;
@@ -75,7 +94,7 @@ for i=1:length(hfi)
  sstot=sum((y2-mean(y2)).^2);
  ssres=sum((y2-f2).^2);
  rsquared2 = 1-(ssres/sstot);
- hh(i)=plot(exp(x2),exp(f2),'--b')
+ hh(i)=plot(exp(x2),exp(f2),':r');
  legtext{i}=['D=',num2str(p2(1),'%5.2f'),', R^2=',num2str(rsquared2,'%5.3f')];
 
  if i==1
@@ -94,9 +113,13 @@ for i=1:length(hfi)
         'facecol','no',...
         'edgecol','interp',...
         'linew',2);
- ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hfi(i),'%5.1f'),'$m'],9,cmap(end,:))
+ ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hfi(i),...
+                 '%5.1f'),'$m'],9,cmap(end,:));
 
 end
+
+% tidy up written output
+disp(['----------------------------------------------------------'])
 
 % only plot first line data because they both agree
 if final
@@ -107,13 +130,21 @@ else
  legend('boxoff')
 end
 
+ridgepack_colorbar(cont,'\phi_R');
 
-ridgepack_colorbar(cont,'\phi_R')
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
-cd /Users/aroberts/Publications/2015_Unified_Morphology_1/figures 
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
-ridgepack_fprint('png',['Ridge_Formation_Probability_lowres.png'],1,1)
-ridgepack_fprint('epsc',['Ridge_Formation_Probability_lowres.eps'],1,1)
-ridgepack_fprint('png',['Ridge_Formation_Probability.png'],1,2)
-ridgepack_fprint('epsc',['Ridge_Formation_Probability.eps'],1,2)
+% output
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
+
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
+
 
