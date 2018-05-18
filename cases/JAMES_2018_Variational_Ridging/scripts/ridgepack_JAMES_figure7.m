@@ -107,10 +107,10 @@ for i=1:4
  step(5)=hF+Lkd+Lsd;
  g(5)=1/(2*Lkd);
 
- step(6)=hF+Lkd+Lsd
+ step(6)=hF+Lkd+Lsd;
  g(6)=0;
 
- area=g(3)*(Lkd-Lsd)+g(5)*(2*Lsd)
+ area=g(3)*(Lkd-Lsd)+g(5)*(2*Lsd);
 
  maxy=max(maxy,ceil(step(6)));
 

@@ -42,8 +42,8 @@ plot(iboxx,iboxy,'--','Color',0.25*[1 1 1])
 
 % calculate ridge dimenions based on strain 
 % based on frac of the floe deforming
-frac=0.5
-strain=-1/3
+frac=0.5;
+strain=-1/3;
 LF=frac*(xr-xl);
 LK=LF*(1+strain);
 xrl=(1-LK)/2;
@@ -239,7 +239,7 @@ text(xdr,yc,...
      ylbottom+envelopey-scaleaxes ...
      ylbottom+envelopey-scaleaxes-0.5*arrowhead];
 
-  greycol=0.5*[1 1 1]
+  greycol=0.5*[1 1 1];
   line(x,y,'Color',greycol)
 
   text(x(2)-textoffset,(y(end-1)+y(1))/2,...
@@ -295,7 +295,7 @@ text((xl+xr)/2,(yt+1)/2,'Pressure Ridge','HorizontalAlignment','center',...
              'Parent',gca,'Interpreter','Tex');
 
 % second figure
-ridgepack_multiplot(1,2,1,2)
+ridgepack_multiplot(1,2,1,2);
 
 % create initial deformation box
 iboxx=[xl xr xr xl xl];
@@ -331,7 +331,7 @@ patch(iboxx,iboxy,ridgecolor,'EdgeColor','none')
 xdl=xl+deltax;
 xdr=xr+deltax;
 xdm=xr+deltax;
-ydb=yb
+ydb=yb;
 ydm=yb+0.5*(yt-yb)*(1-cotd(theta))-deltax*cotd(theta);
 ydt=yb+0.5*(yt-yb)*(1+cotd(theta))-deltax*cotd(theta);
 iboxx=[xdl xdl xdl xdr xdm];
@@ -530,34 +530,34 @@ text((xdr+xrr)/2,yc+6*textoffset,...
 arrowheads=arrowhead*cosd(45);
 
 % plot LK metric bar
-xlk=0.5-(LK/2)*cosd(theta)*cosd(theta)
-xrk=0.5+(LK/2)*cosd(theta)*cosd(theta)
-ybk=0.5-(LK/2)*cosd(theta)*sind(theta)
-ytk=0.5+(LK/2)*cosd(theta)*sind(theta)
+xlk=0.5-(LK/2)*cosd(theta)*cosd(theta);
+xrk=0.5+(LK/2)*cosd(theta)*cosd(theta);
+ybk=0.5-(LK/2)*cosd(theta)*sind(theta);
+ytk=0.5+(LK/2)*cosd(theta)*sind(theta);
 x=[xlk xrk];
 y=[ybk ytk];
 plot(x,y,'Color',[1 0. 0],'LineWidth',0.7)
 
-xx=(arrowhead)*cosd(theta-45-90)
-yy=(arrowhead)*sind(theta-45-90)
+xx=(arrowhead)*cosd(theta-45-90);
+yy=(arrowhead)*sind(theta-45-90);
 x=[xrk xrk+xx];
 y=[ytk ytk+yy];
 plot(x,y,'Color',[1 0. 0],'LineWidth',0.7)
 
-xx=(arrowhead)*cosd(theta+45+90)
-yy=(arrowhead)*sind(theta+45+90)
+xx=(arrowhead)*cosd(theta+45+90);
+yy=(arrowhead)*sind(theta+45+90);
 x=[xrk xrk+xx];
 y=[ytk ytk+yy];
 plot(x,y,'Color',[1 0. 0],'LineWidth',0.7)
 
-xx=(arrowhead)*cosd(theta+45)
-yy=(arrowhead)*sind(theta+45)
+xx=(arrowhead)*cosd(theta+45);
+yy=(arrowhead)*sind(theta+45);
 x=[xlk xlk+xx];
 y=[ybk ybk+yy];
 plot(x,y,'Color',[1 0. 0],'LineWidth',0.7)
 
-xx=(arrowhead)*cosd(theta-45)
-yy=(arrowhead)*sind(theta-45)
+xx=(arrowhead)*cosd(theta-45);
+yy=(arrowhead)*sind(theta-45);
 x=[xlk xlk+xx];
 y=[ybk ybk+yy];
 plot(x,y,'Color',[1 0. 0],'LineWidth',0.7)
@@ -615,7 +615,7 @@ text(0.5+x(floor(end/2)),0.5+y(floor(end/2)),...
      ylbottom+envelopey-scaleaxes ...
      ylbottom+envelopey-scaleaxes-0.5*arrowhead];
 
-  greycol=0.5*[1 1 1]
+  greycol=0.5*[1 1 1];
   line(x,y,'Color',greycol)
 
   text(x(2)-textoffset,(y(end-1)+y(1))/2,...

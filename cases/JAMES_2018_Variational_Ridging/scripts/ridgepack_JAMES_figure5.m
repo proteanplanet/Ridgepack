@@ -29,8 +29,8 @@ boxcenterxb=(boxleftx+boxrightx)/2;
 
 figLk=boxrightx-boxleftx;
 levelextent=0.0;
-sealeft=-0.1
-searight=1.1
+sealeft=-0.1;
+searight=1.1;
 aspectratio=1;
 textoffset=0.012;
 arrowhead=0.006;
@@ -77,8 +77,8 @@ end
 porosity=0.2; % porosity of ridge and keel complex
 %porosity=0.3; % porosity of ridge and keel complex
 
-epsilon1=(hfi1-hdi1*(1-porosity))/(hdi1*(1-porosity))
-epsilon2=(hfi2-hdi1*(1-porosity))/(hdi1*(1-porosity))
+epsilon1=(hfi1-hdi1*(1-porosity))/(hdi1*(1-porosity));
+epsilon2=(hfi2-hdi1*(1-porosity))/(hdi1*(1-porosity));
 
 % calculate freeboard and draft of level ice
 hfd1=(rho*hfi1+rhos*hfs1)/rhow; % level draft
@@ -450,7 +450,7 @@ plot(xk,yk,'.','MarkerEdgeColor',0.999999*[1 1 1],'MarkerSize',5)
 
 % draw centroid
 plot(xc,yc,'o','Color',cols(4,:),'MarkerSize',10,'LineWidth',0.75)
-hp=plot(xc,yc,'x','Color',cols(4,:),'MarkerSize',18,'LineWidth',0.75)
+hp=plot(xc,yc,'x','Color',cols(4,:),'MarkerSize',18,'LineWidth',0.75);
 
 drawnow
 
@@ -580,7 +580,7 @@ else
 end
 
 % annotate angles of repose
-radius=(scalefactorx*Lr1/2)*0.25
+radius=(scalefactorx*Lr1/2)*0.25;
 theta=-[0:1:atan2d(ylbottom1-ykbottom,(boxrightx-boxleftx)/2)];
 x=boxleftx+radius*cosd(theta);
 y=ylbottom1+radius*sind(theta);
