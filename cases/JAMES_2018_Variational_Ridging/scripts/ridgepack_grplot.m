@@ -1,16 +1,16 @@
-function ridgepack_grplot
-
-% RIDGEPACK_GRPLOT - Plot gR on discrete and continuous grid
+% ridgepack_grplot - Generates plot of gR on discrete and continuous grid
 % 
-% function ridgepack_grplot
-% 
-% This function plots a comparison of the step function building 
-% block of redistribution on both a discrete and continuous grid.
+% This function plots a comparison of the step function building block of 
+% redistribution on both a discrete and continuous grid as a support for 
+% checking numerics used in the paper:
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
+% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
+% submitted to J. Adv. Model Earth Sy.
+%
+% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-% close files
+clear
 close all
 
 hF=2;
@@ -26,7 +26,6 @@ phi=0.2;
 disp(['Total area of gR on grid is: ',num2str(sum(hincr.*GRHPHI))]);
 
 % plot function
-clf
 plot(hgrid,GRHPHI)
 hold on
 
@@ -65,15 +64,13 @@ xlim([max(0,step(1)-0.5) step(6)+0.5])
 
 % determine directory for read/write 
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'library')-1),'cases/JAMES_2018_Variational_Ridging/output'])
+cd([dir(1:strfind(dir,'scripts')-1),'output']);
 
 % determine filename
-x=strfind(mfilename,'_');
-thisfilename=mfilename;
-graphicsout=thisfilename(x(end)+1:end);
+graphicsout=mfilename;
 
 % output
-disp(['Writing graphics output ',graphicsout,' to ',pwd])
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)

@@ -43,8 +43,8 @@ boxrightx=0.775;
 boxcenterx=(boxleftx+boxrightx)/2;
 figLk=boxrightx-boxleftx;
 levelextent=0.20;
-sealeft=0
-searight=1
+sealeft=0;
+searight=1;
 aspectratio=2;
 textbox=0.05;
 textoffset=0.012;
@@ -52,8 +52,8 @@ arrowhead=0.005;
 envelope=0.025;
 scaleaxes=0.15;
 cols=lines(10);
-greycol=0.5*[1 1 1]
-bluecol=cols(1,:)
+greycol=0.5*[1 1 1];
+bluecol=cols(1,:);
 
 
 % calculate freeboard and draft of level ice
@@ -76,22 +76,22 @@ end
 Hk=(2*hdd/porosity)-hld;
 
 % calculate horizontal extent of keel structure 
-Lk=2*(Hk-hld)/tan(alphak*pi/180)
+Lk=2*(Hk-hld)/tan(alphak*pi/180);
 
 % calculate height of ridge
 Hr=hlf+sqrt((tan(alphar*pi/180))*(((hdf*Lk)/porosity)-hlf*Lk));
 
 % calculate horizontal extent of ridge structure 
-Lr=2*(Hr-hlf)/tan(alphar*pi/180)
+Lr=2*(Hr-hlf)/tan(alphar*pi/180);
 
 % use this to determine the scale factor for the diagram
-scalefactorx=figLk/Lk
-scalefactory=min(aspectratio*scalefactorx,1/(Hk+Hr))
+scalefactorx=figLk/Lk;
+scalefactory=min(aspectratio*scalefactorx,1/(Hk+Hr));
 
 % calculate level ice box and surface snow, centered slightly to left
-ylbottom=max((1-(hfi+hfs)*scalefactory)/2,(Hk-hld)*scalefactory)
-yltop=ylbottom+hfi*scalefactory
-ylsnow=yltop+hfs*scalefactory
+ylbottom=max((1-(hfi+hfs)*scalefactory)/2,(Hk-hld)*scalefactory);
+yltop=ylbottom+hfi*scalefactory;
+ylsnow=yltop+hfs*scalefactory;
 sealevely=ylbottom+hld*scalefactory;
 
 % calculate deformed ice coordinates
@@ -169,8 +169,8 @@ for setting=1:3
  if setting==3
 
  % plot keel left
-  x=[boxleftx boxcenterx]
-  y=[ylbottom ykbottom]
+  x=[boxleftx boxcenterx];
+  y=[ylbottom ykbottom];
   line(x,y,'Color',0.5*[1 1 1],'LineStyle','-');
 
  % overlay top of box with white except to indicate angle
@@ -204,6 +204,7 @@ for setting=1:3
   patch(x,y,0.85*[1 1 1])
 
  end
+
 
  % plot sea level line across figure
  x=[sealeft searight]; 
@@ -437,11 +438,11 @@ for setting=1:3
            'EdgeColor','none')
 
  % annotation of alphak
-  radius=(scalefactorx*Lr/2)*0.35
+  radius=(scalefactorx*Lr/2)*0.35;
   theta=-[0:1:atan2d(ylbottom-ykbottom,(boxrightx-boxleftx)/2)];
   x=boxleftx+radius*cosd(theta);
   y=ylbottom+radius*sind(theta);
-  line(x,y,'Color','k')
+  line(x,y,'Color','k');
 
   text(boxleftx+0.06,ylbottom-0.06*tan(alphak*pi/180),...
            '$\alpha_K$',...
@@ -449,10 +450,10 @@ for setting=1:3
 	   'LineWidth',0.4,...
            'Interpreter','Latex',...
            'Fontsize',labelsize+1,...
-           'EdgeColor','none')
+           'EdgeColor','none');
 
  % annotation of alphar
-  radius=(scalefactorx*Lr/2)*0.35
+  radius=(scalefactorx*Lr/2)*0.35;
   theta=[0:1:atan2d(ylbottom-ykbottom,(boxrightx-boxleftx)/2)];
   x=(boxcenterx-(scalefactorx*Lr/2))+radius*cosd(theta);
   y=ylsnow+radius*sind(theta);
@@ -464,10 +465,10 @@ for setting=1:3
 	   'LineWidth',0.4,...
            'Interpreter','Latex',...
            'Fontsize',labelsize+1,...
-           'EdgeColor','none')
+           'EdgeColor','none');
 
  % add ridge line
-  x=[boxcenterx boxrightx]
+  x=[boxcenterx boxrightx];
   y=[(yrtop+ylsnow)/2 (yrtop+ylsnow)/2];
   handle=text(x(1),y(1)+1.75*textoffset,...
            'Sail',...
@@ -477,11 +478,11 @@ for setting=1:3
            'Fontsize',labelsize+2,...
            'Color','r',...
            'BackgroundColor','none',...
-           'EdgeColor','none')
+           'EdgeColor','none');
   uistack(handle,'top')
 
  % add keel line
-  x=[boxcenterx boxrightx]
+  x=[boxcenterx boxrightx];
   y=[(ykbottom+ylbottom)/2 (ykbottom+ylbottom)/2];
   text(x(1),y(1),...
            'Keel',...
@@ -491,7 +492,7 @@ for setting=1:3
            'Fontsize',labelsize+4,...
            'Color','r',...
            'BackgroundColor','none',...
-           'EdgeColor','none')
+           'EdgeColor','none');
 
  % annotate deformed ice and snow
   text((boxrightx+boxleftx)/2,(ydbottom+sealevely)/2,...
@@ -501,7 +502,7 @@ for setting=1:3
            'HorizontalAlignment','center',...
            'Interpreter','Latex',...
            'Fontsize',labelsize+2,...
-           'EdgeColor','none')
+           'EdgeColor','none');
 
   text((boxrightx+boxleftx)/2,sealevely,...
            {'Freeboard volume ${2 V_{R_f}}$'},...

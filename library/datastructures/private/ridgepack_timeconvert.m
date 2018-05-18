@@ -328,6 +328,7 @@ if any(strcmpi(CFcalendar,{'standard','gregorian','proleptic_gregorian','noleap'
                newtime(j:end)=newtime(j:end)+1;
               end
              elseif length(yearrange(leapflag))>1 
+              disp(['Encountered problems with leap years: ',num2str(yearrange(leapflag))])
               error('Unable to process noleap times spanning more than one leap year jump')
              end
             end  
