@@ -13,22 +13,28 @@
 % fig=3 - Generates figure S1 
 % fig=6 - Generates figure S2 
 %
+% There are additional ridgegraphs possible that are embedded in the code,
+% and were used in the development of the paper.
+%
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 clear
 close all
 
-fig=1
+fig=4
 
 if fig==1
  nrows=1;
  ncols=4;
+ disp('Comparing different porosities and ridge strains')
 elseif fig==2
  nrows=1;
  ncols=2;
+ disp('Comparing different quantities of horizontal shear')
 elseif fig==3
  nrows=3;
  ncols=1;
+ disp('Comparing different treatments of snow on ridged ice')
 elseif fig==4
  nrows=3;
  ncols=1;
@@ -38,6 +44,7 @@ elseif fig==5
 elseif fig==6
  nrows=1;
  ncols=2;
+ disp('Comparing different angles of sail repose')
 elseif fig==7
  nrows=1;
  ncols=1;
@@ -50,9 +57,9 @@ clf
 
 % geometric settings of figure
 if fig==1
- boxleftx=-0.06
+ boxleftx=-0.06;
 elseif fig==2
- boxleftx=+0.13
+ boxleftx=+0.13;
 elseif fig==3
  boxleftx=+0.10;
 elseif fig==4
@@ -75,19 +82,19 @@ boxcenterx=(boxleftx+boxrightx)/2;
 figLk=boxrightx-boxleftx;
 levelextent=0.0;
 if fig==1
- sealeft=-0.045
- searight=1.255
+ sealeft=-0.045;
+ searight=1.255;
 elseif fig==2
- sealeft=0.03
- searight=0.91
+ sealeft=0.03;
+ searight=0.91;
 else
- sealeft=0.0
- searight=1.0
+ sealeft=0.0;
+ searight=1.0;
 end
 aspectratio=1;
 textoffset=0.012;
 arrowhead=0.010;
-envelope=0.025
+envelope=0.025;
 bluecol=[0 0.447058826684952 0.74117648601532];
 greycol=0.25*[1 1 1];
 
@@ -112,7 +119,7 @@ if fig==4
 end
 
 if nrows==1 | ncols==1
- maxset=max(ncols,nrows)
+ maxset=max(ncols,nrows);
 else
  error('not set up for multiple rows AND multiple columns')
 end
@@ -120,17 +127,17 @@ end
 for setting=1:maxset
 
  % level ice and snow thickness
- hli=2.0; % level ice thickness
- hls=0.3; % snow thickness
+ hF=2.0; % level ice thickness
+ hFs=0.3; % snow thickness
 
  % deformed ice and snow thickness
- hdi=3.0; % ridged ice thickness
- hds=0.3; % ridged snow thickness
+ hR=3.0; % ridged ice thickness
+ hRs=0.3; % ridged snow thickness
  
- alphar=22; % angle of ridge
- alphak=22; % angle of keel
+ alphaS=22; % angle of ridge
+ alphaK=22; % angle of keel
 
- porosity=0.2; % porosity of ridge and keel complex
+ phiR=0.2; % phiR of ridge and keel complex
 
  cols=lines(10); % set line colors
 
@@ -138,163 +145,157 @@ for setting=1:maxset
   if setting==1
    edgecol=cols(2,:);
    epsilon=-1/2;
-   hdi=hli/(epsilon+1);
-   porosity=0.; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0.; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=0; %angle of actual repose
+   thetaR=0; %angle of actual repose
   elseif setting==2
    edgecol=cols(1,:);
    epsilon=-1/3;
-   hdi=hli/(epsilon+1);
-   porosity=0; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=0; %angle of actual repose
+   thetaR=0; %angle of actual repose
   elseif setting==3
    edgecol=cols(4,:);
    epsilon=-1/3;
-   hdi=hli/(epsilon+1);
-   porosity=0.2; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=0; %angle of actual repose
+   thetaR=0; %angle of actual repose
   elseif setting==4
    edgecol=cols(5,:);
    epsilon=0;
-   hdi=hli/(epsilon+1);
-   porosity=0.2; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=0; %angle of actual repose
+   thetaR=0; %angle of actual repose
   end
-  alphar=acotd(cosd(theta)*cotd(alpha_R)); % apparent angle of repose
-  alphak=alphar % angle of keel
+  alphaS=acotd(cosd(thetaR)*cotd(alpha_R)); % apparent angle of repose
+  alphaK=alphaS; % angle of keel
  elseif fig==2
   if setting==1
    edgecol=cols(4,:);
    epsilon=-1/3;
-   hdi=hli/(epsilon+1);
-   porosity=0.2; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=0; %angle of actual repose
+   thetaR=0; %angle of actual repose
   elseif setting==2
    edgecol=cols(4,:);
    epsilon=-1/3;
-   hdi=hli/(epsilon+1);
-   porosity=0.2; % porosity of ridge and keel complex
+   hR=hF/(epsilon+1);
+   phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   theta=55; %angle of actual repose
+   thetaR=55; %angle of actual repose
   end
-  alphar=acotd(cosd(theta)*cotd(alpha_R)); % apparent angle of repose
-  alphak=alphar % angle of keel
+  alphaS=acotd(cosd(90-thetaR)*cotd(alpha_R)); % apparent angle of sail repose
+  alphaK=acotd(cosd(90-thetaR)*cotd(alpha_R)); % apparent angle of keel repose
  elseif fig==3
   edgecol=[0 0 0];
   if setting==1
-   hli=2.0
-   hls=0.3
-   hdi=3.0
-   epsilon=(hli-hdi)/hdi
-   hds=0.5*hls/(epsilon+1)
+   hF=2.0;
+   hFs=0.3;
+   hR=3.0;
+   epsilon=(hF-hR)/hR;
+   hRs=0.5*hFs/(epsilon+1);
   elseif setting==2
-   hls=0.0
-   hli=2.0
-   hds=0.0
-   hdi=3.0
+   hFs=0.0;
+   hF=2.0;
+   hRs=0.0;
+   hR=3.0;
   elseif setting==3
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
   end
  elseif fig==4
+  hFs=0;
+  hF=2.0;
+  hRs=hFs;
   if setting==1
+   epsilon=-0.2;
    edgecol='g';
-   hls=hfsP1;
-   hli=hfiP1;
-   hds=hfsP1;
-   hdi=hfiP1./(1-stiP1);
-   alphak=alphaP1;
-   alphar=alphaP1;
-   porosity=phiP1;
+   hR=hFiP1./(1-epsilon);
+   [alphaR]=ridgepack_alphahat(epsilon,phi,hf,hd);
+   phiR=phiP1;
   elseif setting==2
+   epsilon=-0.4;
    edgecol='b';
-   hls=hfsP2;
-   hli=hfiP2;
-   hds=hfsP2;
-   hdi=hfiP2./(1-stiP2);
-   alphak=alphaP2;
-   alphar=alphaP2;
-   porosity=phiP2;
+   hR=hFiP2./(1-epsilon);
+   phiR=phiP2;
   elseif setting==3
+   epsilon=-0.6;
    edgecol='m';
-   hls=hfsP3;
-   hli=hfiP3;
-   hds=hfsP3;
-   hdi=hfiP3./(1-stiP3);
-   alphak=alphaP3;
-   alphar=alphaP3;
-   porosity=phiP3;
+   hR=hFiP3./(1-epsilon);
+   phiR=phiP3;
   end
+  alphaK=alphaR;
+  alphaS=alphaR;
  elseif fig==5
   edgecol=[0 0 0];
   if setting==1
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
-   alphak=26.6;
-   alphar=26.6;
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
+   alphaK=26.6;
+   alphaS=26.6;
   elseif setting==2
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
-   alphak=26.6;
-   alphar=32.9;
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
+   alphaK=26.6;
+   alphaS=32.9;
   elseif setting==3
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
-   alphak=26.6;
-   alphar=20.7;
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
+   alphaK=26.6;
+   alphaS=20.7;
   end
  elseif fig==6
   edgecol=[0 0 0];
   if setting==1
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
-   alphak=22;
-   alphar=12;
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
+   alphaK=22;
+   alphaS=12;
   elseif setting==2
-   hls=0.3
-   hli=2.0
-   hds=0.3
-   hdi=3.0
-   alphak=22;
-   alphar=32;
+   hFs=0.3;
+   hF=2.0;
+   hRs=0.3;
+   hR=3.0;
+   alphaK=22;
+   alphaS=32;
   end
  elseif fig==7
   edgecol=[0 0 0];
   epsilon=-1/3;
-  hdi=hli/(epsilon+1);
-  porosity=0; % porosity of ridge and keel complex
+  hR=hF/(epsilon+1);
+  phiR=0; % phiR of ridge and keel complex
   alpha_R=22; %angle of compressional repose
-  theta=0; %angle of actual repose
+  thetaR=0; %angle of actual repose
  else
   error('fig is wrong')
  end
 
  % calculate freeboard and draft of level ice
- hld=(rho*hli+rhos*hls)/rhow; % level draft
- hlf=(hli+hls)-hld; % level freeboard
+ hld=(rho*hF+rhos*hFs)/rhow; % level draft
+ hlf=(hF+hFs)-hld; % level freeboard
 
  % calculate freeboard and draft of deformed ice 
- hdd=(rho*hdi+rhos*hds)/rhow; % ridged draft
- hdf=(hdi+hds)-hdd; % ridged freeboard
+ hdd=(rho*hR+rhos*hRs)/rhow; % ridged draft
+ hdf=(hR+hRs)-hdd; % ridged freeboard
 
- if hlf<hls
+ if hlf<hFs
   error('Level snow too thick')
- elseif hdf<hds
+ elseif hdf<hRs
   error('Deformed snow too thick')
  end
 
@@ -302,22 +303,22 @@ for setting=1:maxset
  if hld<0
   hld=0;
   hlf=0;
- elseif hld>hdd/(1-porosity) | hlf>hdf/(1-porosity)
+ elseif hld>hdd/(1-phiR) | hlf>hdf/(1-phiR)
   hdd=hld;
   hdf=hlf;
  end
 
  % calculate depth of keel relative to sea level
- Hk=(2*hdd/(1-porosity))-hld;
+ Hk=(2*hdd/(1-phiR))-hld;
 
  % calculate horizontal extent of keel structure 
- Lk=2*(Hk-hld)/tan(alphak*pi/180)
+ Lk=2*(Hk-hld)/tan(alphaK*pi/180);
 
  % calculate height of ridge
- Hr=hlf+sqrt((tan(alphar*pi/180))*(((hdf*Lk)/(1-porosity))-hlf*Lk));
+ Hr=hlf+sqrt((tan(alphaS*pi/180))*(((hdf*Lk)/(1-phiR))-hlf*Lk));
 
  % calculate horizontal extent of ridge structure 
- Lr=2*(Hr-hlf)/tan(alphar*pi/180)
+ Lr=2*(Hr-hlf)/tan(alphaS*pi/180);
 
  % use this to determine the scale factor for the diagram
  if setting==1; 
@@ -339,10 +340,10 @@ for setting=1:maxset
 
  % calculate level ice box and surface snow, centered slightly to left
  sealevely=0.6; % rho/rhow
- ylsnow=sealevely+hlf*scalefactory
+ ylsnow=sealevely+hlf*scalefactory;
  ylbottom=sealevely-hld*scalefactory;
- xlleft=boxleftx+(boxrightx-boxleftx-Lk*scalefactory)/2
- xlright=boxrightx-(boxrightx-boxleftx-Lk*scalefactory)/2
+ xlleft=boxleftx+(boxrightx-boxleftx-Lk*scalefactory)/2;
+ xlright=boxrightx-(boxrightx-boxleftx-Lk*scalefactory)/2;
 
  % calculate ridge top and keel bottom
  yrtop=ylsnow+(Hr-hlf)*scalefactory;
@@ -483,32 +484,32 @@ for setting=1:maxset
    else
     epstring=num2str(epsilon);
    end
-   if porosity>0
-    porstring=num2str(porosity,'%8.2f');
+   if phiR>0
+    porstring=num2str(phiR,'%8.2f');
    else
-    porstring=num2str(porosity);
+    porstring=num2str(phiR);
    end
    textbox={['\makebox[4in][c]{$\phi_R\!=\!',porstring,'$}'],...
-            ['\makebox[4in][c]{$\epsilon_{R_I}\!=\!',epstring,'$}']}
+            ['\makebox[4in][c]{$\epsilon_{R_I}\!=\!',epstring,'$}']};
  elseif fig==2
    textbox={['\makebox[4in][c]{$\alpha_R=',num2str(alpha_R,'%8.1f'),'^{\circ}$}'],...
-            ['\makebox[4in][c]{$\theta_R=',num2str(180-theta,'%8.1f'),'^{\circ}$}'],...
-            ['\makebox[4in][c]{$\alpha_K=',num2str(alphak,'%8.1f'),'^{\circ}$}']}
+            ['\makebox[4in][c]{$\theta_R=',num2str(180-thetaR,'%8.1f'),'^{\circ}$}'],...
+            ['\makebox[4in][c]{$\alpha_K=',num2str(alphaK,'%8.1f'),'^{\circ}$}']};
  elseif fig==3
-   textbox={['\makebox[4in][c]{$h_{Fs}=',num2str(hls),'$ m}'],...
-            ['\makebox[4in][c]{$h_{Rs}=',num2str(hds),'$ m}']}
+   textbox={['\makebox[4in][c]{$h_{Fs}=',num2str(hFs),'$ m}'],...
+            ['\makebox[4in][c]{$h_{Rs}=',num2str(hRs),'$ m}']};
  elseif fig==4
-   textbox={['\makebox[4in][c]{$h_{Fi}=',num2str(hli),'$ m}'],...
-            ['\makebox[4in][c]{$h_{Fs}=',num2str(hls),'$ m}'],...
-            ['\makebox[4in][c]{$h_{Ri}=',num2str(hdi,'%5.2f'),'$ m}'],...
-            ['\makebox[4in][c]{$\phi_R=',num2str(porosity),'$}']}
+   textbox={['\makebox[4in][c]{$h_{Fi}=',num2str(hF),'$ m}'],...
+            ['\makebox[4in][c]{$h_{Fs}=',num2str(hFs),'$ m}'],...
+            ['\makebox[4in][c]{$h_{Ri}=',num2str(hR,'%5.2f'),'$ m}'],...
+            ['\makebox[4in][c]{$\phi_R=',num2str(phiR),'$}']};
  elseif fig==5
-   textbox={['\makebox[4in][c]{$\alpha_S=',num2str(alphar),'^{\circ}$}'],...
+   textbox={['\makebox[4in][c]{$\alpha_S=',num2str(alphaS),'^{\circ}$}'],...
             ['\makebox[4in][c]{$L_S=',num2str(Lr,'%5.1f'),'$ m}'],...
-            ['\makebox[4in][c]{$C_{Ran}=',num2str(Cran*(10^3),'%5.1f'),'\times 10^{-3}$}']}
+            ['\makebox[4in][c]{$C_{Ran}=',num2str(Cran*(10^3),'%5.1f'),'\times 10^{-3}$}']};
  elseif fig==6
-   textbox={['\makebox[4in][c]{$\alpha_S=',num2str(alphar),'^{\circ}$}'],...
-            ['\makebox[4in][c]{$L_S=',num2str(Lr,'%5.1f'),'$ m}']}
+   textbox={['\makebox[4in][c]{$\alpha_S=',num2str(alphaS),'^{\circ}$}'],...
+            ['\makebox[4in][c]{$L_S=',num2str(Lr,'%5.1f'),'$ m}']};
  elseif fig==7
    textbox='';
  end
@@ -661,7 +662,7 @@ else
 end
 
 % output
-disp(['Writing graphics output ',graphicsout,' to ',pwd])
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)

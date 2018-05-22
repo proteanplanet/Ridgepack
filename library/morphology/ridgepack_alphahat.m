@@ -6,7 +6,8 @@ function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
 %
 % This calculates the angle of repose for which the gain is potential 
 % energy density is minimized for a ridge given Coulombic deformation
-% within a ridge.
+% within a ridge, based on strain, porosity, floe ice and deformed ice
+% thickness.
 % 
 % INPUT:
 % 
