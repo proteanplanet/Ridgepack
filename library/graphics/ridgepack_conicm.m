@@ -118,11 +118,11 @@ elseif gulfofalaska
  PLabelLocation=[30:5:65];
 elseif beaufort
  minlat=67;
- maxlat=85;
+ maxlat=80;
  minlon=-165;
  maxlon=-115;
  MLabelLocation=[-160:10:-120];
- PLabelLocation=[70:5:85];
+ PLabelLocation=[70:5:80];
 elseif beaufort2
  minlat=73;
  maxlat=78;
