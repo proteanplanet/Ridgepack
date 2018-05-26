@@ -23,10 +23,6 @@ cols=lines(10);
 
 
 % dimensions of outer box
-%xl=0.1;
-%xr=0.9;
-%yb=0.1;
-%yt=0.9;
 xl=0.08;
 xr=0.92;
 yb=0.08;
@@ -81,6 +77,45 @@ xc=(xl+xr)/2;
 yc=(yt+yb)/2;
 plot([xc xc],[yb yt],':','Color',cols(1,:))
 %plot([xr xl],[yc yc],':k')
+
+% plot arrows and WR annotation
+xlk=0.5-(LK/2)*cosd(90)*cosd(90);
+xrk=0.5+(LK/2)*cosd(90)*cosd(90);
+ybk=0.5-(LK/2)*cosd(90)*sind(90);
+ytk=0.5+(LK/2)*cosd(90)*sind(90);
+
+xx=(arrowhead)*cosd(45);
+yy=(arrowhead)*sind(45);
+x=[xrk xrk+xx];
+y=[yt yt-yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45+90);
+yy=(arrowhead)*sind(45+90);
+x=[xrk xrk+xx];
+y=[yt yt-yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45);
+yy=(arrowhead)*sind(45);
+x=[xlk xlk+xx];
+y=[yb yb+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45+90);
+yy=(arrowhead)*sind(45+90);
+x=[xlk xlk+xx];
+y=[yb yb+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+text(xlk,(yb+yt)/3,...
+      '$W_R$',...
+      'VerticalAlignment','bottom',...
+      'HorizontalAlignment','center',...
+      'Interpreter','Latex',...
+      'Rotation',-90,...
+      'Fontsize',labelsize-1,...
+      'Color',cols(1,:));
 
 % add ridge annotation
 text(xc,(1.2*yt+0.8*yc)/2,...
@@ -461,6 +496,46 @@ yc=(yt+yb)/2;
 plot([xc xc],[yb yt],':','Color',cols(1,:))
 %plot([xr xl],[yc yc],':k')
 
+% plot arrows and WR annotation
+xlk=0.5-(LK/2)*cosd(90)*cosd(90);
+xrk=0.5+(LK/2)*cosd(90)*cosd(90);
+ybk=0.5-(LK/2)*cosd(90)*sind(90);
+ytk=0.5+(LK/2)*cosd(90)*sind(90);
+
+xx=(arrowhead)*cosd(45);
+yy=(arrowhead)*sind(45);
+x=[xrk xrk+xx];
+y=[yt yt-yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45+90);
+yy=(arrowhead)*sind(45+90);
+x=[xrk xrk+xx];
+y=[yt yt-yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45);
+yy=(arrowhead)*sind(45);
+x=[xlk xlk+xx];
+y=[yb yb+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(45+90);
+yy=(arrowhead)*sind(45+90);
+x=[xlk xlk+xx];
+y=[yb yb+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+text(xlk,(yb+yt)/3,...
+      '$W_R$',...
+      'VerticalAlignment','bottom',...
+      'HorizontalAlignment','center',...
+      'Interpreter','Latex',...
+      'Rotation',-90,...
+      'Fontsize',labelsize-1,...
+      'Color',cols(1,:));
+
+
 % add feeding plate right arrows
 x=[xrr+2*envelope ...
    xrr+2*arrowhead ...
@@ -525,6 +600,23 @@ text((xdr+xrr)/2,yc+6*textoffset,...
       'Rotation',0,...
       'Fontsize',labelsize-2,...
       'Color',0.25*[1 1 1]);
+
+% plot LK<hat> metric bar
+lkhatcol=[0 0.7 0];
+arrowheads=arrowhead*cosd(45);
+x=[xrl+arrowheads xrl xrl+arrowheads xrl xrr xrr-arrowheads xrr xrr-arrowheads];
+y=[yc+arrowheads yc yc-arrowheads yc yc yc-arrowheads yc yc+arrowheads];
+plot(x,y,'Color',lkhatcol,'LineWidth',0.7,'LineStyle','-')
+
+text((2*xrl+xc)/3,yc,...
+      '$\hat{L}_{K}$',...
+      'VerticalAlignment','bottom',...
+      'HorizontalAlignment','center',...
+      'Interpreter','Latex',...
+      'Rotation',0,...
+      'Fontsize',labelsize-1,...
+      'Color',lkhatcol);
+
 
 % plot LK metric bar
 arrowheads=arrowhead*cosd(45);
@@ -686,5 +778,6 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 
 

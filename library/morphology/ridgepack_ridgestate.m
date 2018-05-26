@@ -1,6 +1,6 @@
 function [PHI,ALPHAHAT,HR,HRs]=ridgepack_ridgestate(hF,hFs,theta,epsilon)
 
-hR=hFiP1./(1-epsilon);
+HR=hF./(1-epsilon);
 
 [EPSILON,PHI,ALPHAHAT]=ridgepack_trajectory(hF,hFs);
 
