@@ -75,7 +75,7 @@ plot(iboxx,iboxy,'-.','Color',cols(2,:))
 % plot cross-hairs
 xc=(xl+xr)/2;
 yc=(yt+yb)/2;
-plot([xc xc],[yb yt],':','Color',cols(1,:))
+plot([xc xc],[yb yt],'-','Color',cols(1,:))
 %plot([xr xl],[yc yc],':k')
 
 % plot arrows and WR annotation
@@ -108,7 +108,7 @@ x=[xlk xlk+xx];
 y=[yb yb+yy];
 plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
 
-text(xlk,(yb+yt)/3,...
+text(xlk,(yb+yt)/4,...
       '$W_R$',...
       'VerticalAlignment','bottom',...
       'HorizontalAlignment','center',...
@@ -468,11 +468,40 @@ iboxx=[xdm xdl xdr xdr];
 iboxy=[ydm ydt ydt ydb];
 plot(iboxx,iboxy,'-','Color',0*[1 1 1])
 
-
-% annotate ridge line
+% plot ridge line
 iboxx=[xdm1 xdm];
 iboxy=[ydm1 ydm];
-plot(iboxx,iboxy,':','Color',cols(4,:))
+plot(iboxx,iboxy,'-','Color',cols(1,:))
+
+% plot arrows, Ridge Line and WR annotation
+xlk=0.5-(LK/2)*cosd(theta)*cosd(theta);
+xrk=0.5+(LK/2)*cosd(theta)*cosd(theta);
+ybk=0.5-(LK/2)*cosd(theta)*sind(theta);
+ytk=0.5+(LK/2)*cosd(theta)*sind(theta);
+
+xx=(arrowhead)*cosd(theta-45+90);
+yy=(arrowhead)*sind(theta-45+90);
+x=[xdm1 xdm1+xx];
+y=[ydm1 ydm1+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(theta+45+90);
+yy=(arrowhead)*sind(theta+45+90);
+x=[xdm1 xdm1+xx];
+y=[ydm1 ydm1+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(theta+45+180);
+yy=(arrowhead)*sind(theta+45+180);
+x=[xdm xdm+xx];
+y=[ydm ydm+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+
+xx=(arrowhead)*cosd(theta-45);
+yy=(arrowhead)*sind(theta-45);
+x=[xdm xdm+xx];
+y=[ydm ydm+yy];
+plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
 
 text(xdl1-0.035*cosd(90+theta),ydt1-(0.035*sind(90+theta)),...
       'Ridge Line',...
@@ -483,7 +512,17 @@ text(xdl1-0.035*cosd(90+theta),ydt1-(0.035*sind(90+theta)),...
       'Rotation',theta-90,...
       'Margin',0.5,...
       'Fontsize',labelsize-1,...
-      'Color',cols(4,:));
+      'Color',cols(1,:));
+
+text(xdl1-0.7*cosd(90+theta),ydt1-(0.7*sind(90+theta)),...
+      '$W_R$',...
+      'VerticalAlignment','bottom',...
+      'HorizontalAlignment','center',...
+      'Interpreter','Latex',...
+      'Rotation',-90+theta,...
+      'Fontsize',labelsize-1,...
+      'Color',cols(1,:));
+
 
 % plot pressure ridge edges
 iboxx=[xrr xrr NaN xrl xrl];
@@ -493,47 +532,46 @@ plot(iboxx,iboxy,'-.','Color',cols(2,:))
 % plot cross-hairs
 xc=(xl+xr)/2;
 yc=(yt+yb)/2;
-plot([xc xc],[yb yt],':','Color',cols(1,:))
-%plot([xr xl],[yc yc],':k')
+plot([xc xc],[ydm ydm1],':','Color',cols(4,:))
 
 % plot arrows and WR annotation
-xlk=0.5-(LK/2)*cosd(90)*cosd(90);
-xrk=0.5+(LK/2)*cosd(90)*cosd(90);
-ybk=0.5-(LK/2)*cosd(90)*sind(90);
-ytk=0.5+(LK/2)*cosd(90)*sind(90);
+xlk=xc;
+xrk=yc;
+ybk=ydm1;
+ytk=ydm;
 
 xx=(arrowhead)*cosd(45);
 yy=(arrowhead)*sind(45);
 x=[xrk xrk+xx];
-y=[yt yt-yy];
-plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+y=[ytk ytk-yy];
+plot(x,y,'Color',cols(4,:),'LineWidth',0.7)
 
 xx=(arrowhead)*cosd(45+90);
 yy=(arrowhead)*sind(45+90);
 x=[xrk xrk+xx];
-y=[yt yt-yy];
-plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+y=[ytk ytk-yy];
+plot(x,y,'Color',cols(4,:),'LineWidth',0.7)
 
 xx=(arrowhead)*cosd(45);
 yy=(arrowhead)*sind(45);
 x=[xlk xlk+xx];
-y=[yb yb+yy];
-plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+y=[ybk ybk+yy];
+plot(x,y,'Color',cols(4,:),'LineWidth',0.7)
 
 xx=(arrowhead)*cosd(45+90);
 yy=(arrowhead)*sind(45+90);
 x=[xlk xlk+xx];
-y=[yb yb+yy];
-plot(x,y,'Color',cols(1,:),'LineWidth',0.7)
+y=[ybk ybk+yy];
+plot(x,y,'Color',cols(4,:),'LineWidth',0.7)
 
-text(xlk,(yb+yt)/3,...
-      '$W_R$',...
+text(xlk,(yb+yt)/4,...
+      '$\hat{W}_{R}$',...
       'VerticalAlignment','bottom',...
       'HorizontalAlignment','center',...
       'Interpreter','Latex',...
       'Rotation',-90,...
       'Fontsize',labelsize-1,...
-      'Color',cols(1,:));
+      'Color',cols(4,:));
 
 
 % add feeding plate right arrows
@@ -602,11 +640,19 @@ text((xdr+xrr)/2,yc+6*textoffset,...
       'Color',0.25*[1 1 1]);
 
 % plot LK<hat> metric bar
-lkhatcol=[0 0.7 0];
+lkhatcol=[0 0.6 0];
 arrowheads=arrowhead*cosd(45);
-x=[xrl+arrowheads xrl xrl+arrowheads xrl xrr xrr-arrowheads xrr xrr-arrowheads];
-y=[yc+arrowheads yc yc-arrowheads yc yc yc-arrowheads yc yc+arrowheads];
+x=[xrr xrr-arrowheads xrr xrr-arrowheads];
+y=[yc yc-arrowheads yc yc+arrowheads];
 plot(x,y,'Color',lkhatcol,'LineWidth',0.7,'LineStyle','-')
+
+x=[xrl+arrowheads xrl xrl+arrowheads xrl];
+y=[yc+arrowheads yc yc-arrowheads yc];
+plot(x,y,'Color',lkhatcol,'LineWidth',0.7,'LineStyle','-')
+
+x=[xrl xrr];
+y=[yc yc];
+plot(x,y,'Color',lkhatcol,'LineWidth',0.7,'LineStyle',':')
 
 text((2*xrl+xc)/3,yc,...
       '$\hat{L}_{K}$',...
@@ -616,7 +662,6 @@ text((2*xrl+xc)/3,yc,...
       'Rotation',0,...
       'Fontsize',labelsize-1,...
       'Color',lkhatcol);
-
 
 % plot LK metric bar
 arrowheads=arrowhead*cosd(45);
