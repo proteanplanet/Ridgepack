@@ -43,7 +43,7 @@ Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, *
 
 This code is published to satisfy the American Geophysical Union publication policy.  
 
-## Authors
+## Author
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 

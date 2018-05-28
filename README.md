@@ -42,7 +42,7 @@ RASM\_Sea_Ice_Toolbox - Scripts used to analyse the dynamics and thermodynamics 
 This is a sample MATLAB startup file to accompany Ridgepack, and includes examples of setting several environment variables relevant to this MATLAB utility. It is anticipated that MATLAB will be run on a Unix, Linux or Mac OSX platform when using this package. 
 
 
-## Author
+## Authors
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 Case reviewer for JAMES\_2018\_Variational\_Ridging: Samy Kamal, Naval Postgraduate School, May 2018
