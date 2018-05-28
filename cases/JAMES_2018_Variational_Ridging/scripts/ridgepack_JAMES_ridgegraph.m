@@ -1,4 +1,4 @@
-% ridgepack_JAMES_ridgegraph - Generates ridgegraphs JAMES Variation Ridging paper
+% ridgepack_JAMES_ridgegraph - Generates ridgegraphs JAMES Variational Ridging paper
 % 
 % This script generates ridgegraphs from:
 %
@@ -13,6 +13,12 @@
 % fig=3 - Generates figure S1 
 % fig=6 - Generates figure S2 
 %
+% There is additional functionality:
+%
+% fig=4 - Compares ridges aong the state-space trajectory
+% fig=5 - Compares form drag for different shaped sails
+% fig=7 - Plots basic ridge shapes for a single ridge
+%
 % There are additional ridgegraphs possible that are embedded in the code,
 % and were used in the development of the paper.
 %
@@ -21,7 +27,7 @@
 clear
 close all
 
-fig=4
+fig=6;
 
 if fig==1
  nrows=1;
@@ -38,9 +44,11 @@ elseif fig==3
 elseif fig==4
  nrows=3;
  ncols=1;
+ disp('Comparing ridges along the state-space trajectory')
 elseif fig==5
  nrows=3;
  ncols=1;
+ disp('Comparing form drag for different angles of sail repose')
 elseif fig==6
  nrows=1;
  ncols=2;
@@ -48,6 +56,7 @@ elseif fig==6
 elseif fig==7
  nrows=1;
  ncols=1;
+ disp('Basic outline plot of an individual ridge without metrics')
 end
 
 % Create figure
@@ -103,19 +112,14 @@ hc=ridgepack_astroconstants;
 rho=hc.rhoi.const;  % density of ice (kg/m^3)
 rhos=hc.rhos.const; % density of snow (kg/m^3)
 rhow=hc.rhow.const; % density of seawater (kg/m^3)
-g=hc.ghat.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % acceleration due to gravity (m/s^2)
 
 if fig==1 
  notation='bacd';
-elseif fig==3 | fig==4 | fig==5
+elseif fig==3 
  notation='bac';
 else
  notation='abcdefgh';
-end
-
-if fig==4
- cd /Users/aroberts/science/publications/2015_Variational_Principle/Data/Ridge_Energetics
- load meanpath1
 end
 
 if nrows==1 | ncols==1
@@ -211,26 +215,19 @@ for setting=1:maxset
    hR=3.0;
   end
  elseif fig==4
-  hFs=0;
   hF=2.0;
-  hRs=hFs;
+  hFs=0;
   if setting==1
-   epsilon=-0.2;
+   epsilon=-0.3;
    edgecol='g';
-   hR=hFiP1./(1-epsilon);
-   [alphaR]=ridgepack_alphahat(epsilon,phi,hf,hd);
-   phiR=phiP1;
   elseif setting==2
-   epsilon=-0.4;
+   epsilon=-0.2;
    edgecol='b';
-   hR=hFiP2./(1-epsilon);
-   phiR=phiP2;
   elseif setting==3
-   epsilon=-0.6;
+   epsilon=-0.1;
    edgecol='m';
-   hR=hFiP3./(1-epsilon);
-   phiR=phiP3;
   end
+  [EPSILON,phiR,alphaR,hR,hRs]=ridgepack_ridgestate(hF,hFs,epsilon)
   alphaK=alphaR;
   alphaS=alphaR;
  elseif fig==5
@@ -282,7 +279,7 @@ for setting=1:maxset
   alpha_R=22; %angle of compressional repose
   thetaR=0; %angle of actual repose
  else
-  error('fig is wrong')
+  error('fig setting is wrong')
  end
 
  % calculate freeboard and draft of level ice
@@ -290,12 +287,12 @@ for setting=1:maxset
  hlf=(hF+hFs)-hld; % level freeboard
 
  % calculate freeboard and draft of deformed ice 
- hdd=(rho*hR+rhos*hRs)/rhow; % ridged draft
- hdf=(hR+hRs)-hdd; % ridged freeboard
+ hrd=(rho*hR+rhos*hRs)/rhow; % ridged draft
+ hrf=(hR+hRs)-hrd; % ridged freeboard
 
  if hlf<hFs
   error('Level snow too thick')
- elseif hdf<hRs
+ elseif hrf<hRs
   error('Deformed snow too thick')
  end
 
@@ -303,19 +300,19 @@ for setting=1:maxset
  if hld<0
   hld=0;
   hlf=0;
- elseif hld>hdd/(1-phiR) | hlf>hdf/(1-phiR)
-  hdd=hld;
-  hdf=hlf;
+ elseif hld>hrd/(1-phiR) | hlf>hrf/(1-phiR)
+  hrd=hld;
+  hrf=hlf;
  end
 
  % calculate depth of keel relative to sea level
- Hk=(2*hdd/(1-phiR))-hld;
+ Hk=(2*hrd/(1-phiR))-hld;
 
  % calculate horizontal extent of keel structure 
  Lk=2*(Hk-hld)/tan(alphaK*pi/180);
 
  % calculate height of ridge
- Hr=hlf+sqrt((tan(alphaS*pi/180))*(((hdf*Lk)/(1-phiR))-hlf*Lk));
+ Hr=hlf+sqrt((tan(alphaS*pi/180))*(((hrf*Lk)/(1-phiR))-hlf*Lk));
 
  % calculate horizontal extent of ridge structure 
  Lr=2*(Hr-hlf)/tan(alphaS*pi/180);
@@ -329,7 +326,7 @@ for setting=1:maxset
   Hr1=Hr;
  end
 
- if fig==5 % calculate form drag
+ if fig==5 % calculate form drag from Tsamados
   Hrd=Hr-hlf;
   Scsquared=(1-exp(-0.18*Lk/Hrd));
   Cra=0.2;
@@ -499,10 +496,8 @@ for setting=1:maxset
    textbox={['\makebox[4in][c]{$h_{Fs}=',num2str(hFs),'$ m}'],...
             ['\makebox[4in][c]{$h_{Rs}=',num2str(hRs),'$ m}']};
  elseif fig==4
-   textbox={['\makebox[4in][c]{$h_{Fi}=',num2str(hF),'$ m}'],...
-            ['\makebox[4in][c]{$h_{Fs}=',num2str(hFs),'$ m}'],...
-            ['\makebox[4in][c]{$h_{Ri}=',num2str(hR,'%5.2f'),'$ m}'],...
-            ['\makebox[4in][c]{$\phi_R=',num2str(phiR),'$}']};
+   textbox={['\makebox[4in][c]{$\epsilon_{R_I}=',num2str(epsilon,'%8.2f'),'$}'],...
+            ['\makebox[4in][c]{$\phi_R=',num2str(phiR,'%8.2f'),'$}']};
  elseif fig==5
    textbox={['\makebox[4in][c]{$\alpha_S=',num2str(alphaS),'^{\circ}$}'],...
             ['\makebox[4in][c]{$L_S=',num2str(Lr,'%5.1f'),'$ m}'],...
@@ -646,7 +641,9 @@ end % for setting=1:3
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 if fig==1
@@ -658,7 +655,7 @@ elseif fig==3
 elseif fig==6
  graphicsout='figureS2';
 else
- graphicsout=['Comparison_Diagram_',num2str(fig)];
+ graphicsout=['ridgepack_ridgegraph_',num2str(fig)];
 end
 
 % output
@@ -666,5 +663,6 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 
 

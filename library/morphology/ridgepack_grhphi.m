@@ -1,24 +1,25 @@
 function [GRHPHI,hgrid]=ridgepack_grhphi(hF,hFs,epsilon,phi)
 
-% RIDGEPACK_GRHPHI - Gives gR distribution for strain, porosity and initial conditions
+% ridgepack_grhphi - gR distribution for strain, porosity and initial conditions
 %
-% function [GRHPHI]=ridgepack_grhphi(hF,hFs,hgrid,epsilon,phi)
+% function [GRHPHI,hgrid]=ridgepack_grhphi(hF,hFs,epsilon,phi)
 %
 % INPUT:
 % 
-% hF      - parent sheet sea ice thickness 
-% hFs     - parent sheet snow thickness on sea ice 
-% epsilon - ridge strain
-% phi     - ridge macroporosity
+% hF      - parent sheet sea ice thickness (m) 
+% hFs     - parent sheet snow thickness on sea ice (m)
+% epsilon - ridge strain with value range (-1,0) (dimensionless)
+% phi     - ridge macroporosity with value range (0,1)
 %
 %
 % OUTPUT:
 %
 % GRHPHI - step thickness distribution on hgrid with porosity phi
+% hgrid  - thickness grid (m)
 %
 % This function calculates the thickness distribution step function GRHPHI on the 
 % thickness axis given the initial sea ice thickness, hF, snow thickness on top, hFs,
-% as well as strain and porosity of the ice in thie given ridge. If the step
+% as well as strain and porosity of the ice in the given ridge. If the step
 % function exceeds the thickness grid, it is returned as NaNs.
 %
 % Ridgepack Version 1.0.

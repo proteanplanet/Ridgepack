@@ -1,8 +1,8 @@
-function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
+function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hr)
 
-% RIDGEPACK_ALPHAHAT - Calculate angle of repose in the alpha-hat manifold
+% ridgepack_alphahat - Calculate angle of repose in the alpha-hat manifold
 %  
-% function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
+% function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hr)
 %
 % This calculates the angle of repose for which the gain in potential 
 % energy density is minimized for a ridge given Coulombic deformation
@@ -11,10 +11,10 @@ function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
 % 
 % INPUT:
 % 
-% epsilon - compressive ridge strain (dimensionless)
+% epsilon - ridge strain with value range (-1,0) (dimensionless)
 % phi     - ridge porosity (dimensionless)
 % hf      - floe ice thickness (m)
-% hd      - deformed ice thickness (m)
+% hr      - ridged ice thickness (m)
 %
 %
 % OUTPUT:
@@ -24,13 +24,16 @@ function [ALPHAHAT]=ridgepack_alphahat(epsilon,phi,hf,hd)
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
+
 % check there are sufficient inputs
 if nargin~=4
  error('incorrect number of inputs')
 end
 
 % calculate angle of repose 
-if hd>hf
+if hr>hf
 
  gamma=(phi+phi.*epsilon-epsilon);
 
@@ -39,13 +42,18 @@ if hd>hf
  
  ALPHAHAT=180*ALPHAHAT/pi;
 
-elseif hd<hf
+elseif hr<hf
 
- error('Deformed ice mean thickness is less than floe ice mean hickness (hd<hf)')
+ error('Deformed ice mean thickness is less than floe ice mean hickness (hr<hf)')
 
 else
 
  ALPHAHAT=0;
 
 end
+
+if debug
+  disp(['...Leaving ',mfilename]);
+end
+
 

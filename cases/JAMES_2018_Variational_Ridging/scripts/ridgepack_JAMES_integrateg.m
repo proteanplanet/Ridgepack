@@ -1,5 +1,4 @@
-%function ridgepack
-
+% PLACEHOLDER
 
 % Written by Andrew Roberts, March 2018
 
@@ -39,8 +38,21 @@ legend({'initial distribution','final distribution'})
 
 % plot up thickness distribution along thickness axis
 
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
+% determine filename
+x=strfind(mfilename,'_');
+thisfilename=mfilename;
+graphicsout=thisfilename(x(end)+1:end);
 
+% output
+disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
-
+% print figure
+ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 

@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure10 - Generates Figure 10 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure10 - Generates Figure 10 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 10 from:
 %
@@ -888,7 +888,9 @@ end
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');

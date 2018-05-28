@@ -1,6 +1,6 @@
 function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 
-% RIDGEPACK_ENERGETICS - calculate potential energy density of a ridge
+% ridgepack_energetics - calculate potential energy density of a ridge
 %
 % function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 % 
@@ -12,7 +12,7 @@ function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 %
 % hf      - floe ice thickness (m)
 % hfs     - floe snow thickness (m)
-% epsilon - ridge strain (dimensionless)
+% epsilon - ridge strain with value range (-1,0) (dimensionless)
 % phi     - ridge porosity (dimensionless)
 %
 % 
@@ -27,6 +27,9 @@ function [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,epsilon,phi)
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % check there are sufficient inputs
 if nargin~=4
@@ -46,19 +49,20 @@ delrho=hc.rhow.const-hc.rhoi.const; % difference of water and ice densities
 ghat=hc.ghat.const; % acceleration due to gravity
 
 % calculate thickness of deformed ice mass from strain
-hd=hf./(1+epsilon);
+hr=hf./(1+epsilon);
 
 % set snow thickness on ridge same as on level ice 
-hds=hfs;
+hrs=hfs;
 
 % calculate angle of repose of the ridge
-ALPHAHAT=ridgepack_alphahat(epsilon,phi,hf,hd);
+ALPHAHAT=ridgepack_alphahat(epsilon,phi,hf,hr);
 
 % get the morphological shape of the ridge
-[hfd,hff,hdd,hdf,HK,HS,LK,LS]=ridgepack_morphology(hf,hfs,hd,hds,phi,ALPHAHAT);
+[hfd,hff,hrd,hrf,HK,HS,LK,LS]=ridgepack_morphology(hf,hfs,hr,hrs,phi,ALPHAHAT);
 
 % calculate potential energy density 
 VR = delrho*ghat*(1-phi).*(hfd.*LK+0.25*(LK.^2).*tand(ALPHAHAT)) + ...
         rho*ghat*(1-phi).*(hff.*LK+0.25*(LS.^2).*tand(ALPHAHAT));
 
+if debug; disp(['...Leaving ',mfilename]); end
 

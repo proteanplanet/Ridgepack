@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure11 - Generates Figure 11 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure11 - Generates Figure 11 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 11 from:
 %
@@ -23,7 +23,7 @@ hc=ridgepack_astroconstants;
 rho=hc.rhoi.const;  % density of ice (kg/m^3)
 rhos=hc.rhos.const; % density of snow (kg/m^3)
 rhow=hc.rhow.const; % density of seawater (kg/m^3)
-g=hc.ghat.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % acceleration due to gravity (m/s^2)
 
 % set thickness of paranet ice and snow
 hfii=[0.5 2.0]; % thickness of initial ice
@@ -235,7 +235,9 @@ zlabel('Potential Energy Density, $\mathcal{V}_R$ (J m$^{-2}$)',...
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');
@@ -247,5 +249,6 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 
 

@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure5 - Generates Figure 5 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure5 - Generates Figure 5 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 5 from:
 %
@@ -808,6 +808,12 @@ end
 
 end
 
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
+
 % determine filename
 x=strfind(mfilename,'_');
 thisfilename=mfilename;
@@ -818,4 +824,5 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 

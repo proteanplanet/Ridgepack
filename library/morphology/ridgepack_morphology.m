@@ -1,10 +1,10 @@
-function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
-                    ridgepack_morphology(hf,hfs,hd,hds,phi,alpha)
+function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
+                    ridgepack_morphology(hf,hfs,hr,hrs,phi,alpha)
 
-% RIDGEPACK_MORPHOLOGY - Calculate ridge dimension and strain
+% ridgepack_morphology - Calculate ridge dimension and strain
 %
-% function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
-%                    ridgepack_morphology(hf,hfs,hd,hds,phi,alpha)
+% function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
+%                    ridgepack_morphology(hf,hfs,hr,hrs,phi,alpha)
 %
 % This calculates the floe draft and freeboard, mean ridge draft and freeboard,
 % keel depth, sail height, undeformed cross-sectional length of a floe,
@@ -15,8 +15,8 @@ function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 % 
 % hf    - floe ice thickness (m)
 % hfs   - floe snow thickness (m)
-% hd    - ridge mean ice thickness (m)
-% hds   - ridge mean snow thickness (m)
+% hr    - ridge mean ice thickness (m)
+% hrs   - ridge mean snow thickness (m)
 % phi   - macroporosity of ridge (dimensionless)
 % alpha - angle of repose of a ridge (degrees)
 %
@@ -25,8 +25,8 @@ function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 %
 % HFD     - floe draft (m)
 % HFF     - floe freeboard (m)
-% HDD     - ridge mean draft (m)
-% HDF     - ridge mean freeboard (m)
+% HRD     - ridge mean draft (m)
+% HRF     - ridge mean freeboard (m)
 % HK      - keel depth (m)
 % HS      - sail height (m)
 % LK      - cross-sectional keel width (m)
@@ -37,20 +37,23 @@ function [HFD,HFF,HDD,HDF,HK,HS,LK,LS,L0,EPSILON]=...
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
+
 % check there are sufficient inputs
 if nargin~=6
  error('incorrect number of inputs')
 end
 
 % error checking
-if any(hd<hf)
- error('ERROR: hd<hf')
-elseif any(hds<0)
- error('ERROR: hds<0')
+if any(hr<hf)
+ error('ERROR: hr<hf')
+elseif any(hrs<0)
+ error('ERROR: hrs<0')
 elseif any(hf<0)
  error('ERROR: hf<0')
-elseif any(hd<0)
- error('ERROR: hd<0')
+elseif any(hr<0)
+ error('ERROR: hr<0')
 end
 
 % get constants
@@ -73,19 +76,19 @@ elseif HFF<hfs
 end
 
 % calculate freeboard and draft of deformed ice 
-HDD=(rho*hd+rhos*hds)/rhow; % ridged draft
-HDF=(hd+hds)-HDD; % ridged freeboard
+HRD=(rho*hr+rhos*hrs)/rhow; % ridged draft
+HRF=(hr+hrs)-HRD; % ridged freeboard
 
 % check that answers add up for ridged ice
-if any((HDD+HDF)~=(hd+hds))
- error('HDD+HDF is not equal fo hd+hds')
+if any((HRD+HRF)~=(hr+hrs))
+ error('HRD+HRF is not equal fo hr+hrs')
 end
 
 % calculate depth of keel relative to sea level
-HK=(2*HDD./(1-phi))-HFD;
+HK=(2*HRD./(1-phi))-HFD;
 
 % calculate height of ridge
-HS=HFF+2*sqrt(((HDD./(1-phi))-HFD).*(((HDF./(1-phi))-HFF)));
+HS=HFF+2*sqrt(((HRD./(1-phi))-HFD).*(((HRF./(1-phi))-HFF)));
 
 % convert alpha to radians
 alpha=alpha*pi/180;
@@ -105,7 +108,7 @@ else
 end
 
 % initial length of sea ice in ridging
-L0=LK.*hd./hf;
+L0=LK.*hr./hf;
 
 % strain 
 if alpha==0
@@ -113,4 +116,7 @@ if alpha==0
 else
  EPSILON=(L0-LK)./L0;
 end
+
+if debug; disp(['...Leaving ',mfilename]); end
+
 

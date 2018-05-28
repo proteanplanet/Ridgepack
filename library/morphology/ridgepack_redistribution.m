@@ -1,10 +1,10 @@
 function [GHPHI]=ridgepack_redistribution(ghphi,hgrid,phigrid,epsilondot,dt)
 
-% RIDGEPACK_REDISTRIBUTION - Redistribution function Psi
+% ridgepack_redistribution - Redistribution function Psi
 %
 % function [g]=ridgepack_redistribution(g,epsilondot,dt)
 %
-% Thid function calculate Psi in the sea ice mass conservation 
+% This function calculates Psi in the sea ice mass conservation 
 % equation for a bivariate thickness distribution that is a function
 % of both thickness and macroporosity.
 %

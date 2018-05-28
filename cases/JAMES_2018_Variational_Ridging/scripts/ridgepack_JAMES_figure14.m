@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure14 - Generates Figure 14 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure14 - Generates Figure 14 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 14 from:
 %
@@ -6,7 +6,7 @@
 % Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
 % submitted to J. Adv. Model Earth Sy.
 %
-% This function generates and plot a zeta-hat plane as a test of the function 
+% This function generates and plots a zeta-hat plane as a test of the function 
 % ridgepack_zetahatplane in the morphology library. 
 %
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
@@ -14,13 +14,18 @@
 clear
 close all
 
-% generate or extract data (or not)
-%generate=true;
-generate=false;
+% generate or extract data on the zeta-hat plane (or not)
+generate=true;
+%generate=false;
 
 % plot individual paths (or not)
 pathplot=true;
 %pathplot=false;
+
+% resolution of phi and epsilon grid
+%resolution=0.01; % lowest resolution 
+%resolution=0.005; % moderate resolution
+resolution=0.001; % high resolution
 
 % set latex as default interpreter for graphics
 set(0,'DefaultTextInterpreter','Latex')
@@ -28,16 +33,21 @@ set(0,'DefaultTextInterpreter','Latex')
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
 writedir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(writedir);
 cd(writedir);
 
 % generate or extract data for zeta-hat plane
 if generate
- disp(['Generating data in ',writedir])
- [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane;
+ disp(['Generating data in: ',char(13),' ',writedir])
+ [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(resolution);
  save('ridgepack_zetahatplane','HF','EPSILON','PHI','ALPHAHAT','VR','HK','HS','LK','LS')
 else
- disp(['Reading from ',writedir])
- load ridgepack_zetahatplane
+ disp(['Reading from:',char(13),' ',writedir])
+ try
+  load ridgepack_zetahatplane
+ catch
+  disp('Unable to load zeta-hat plane - switch to generate')
+ end
 end
 
 % place data into a netcdf structure
@@ -234,7 +244,9 @@ title('')
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');
@@ -246,4 +258,5 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 

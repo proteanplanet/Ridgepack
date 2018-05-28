@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure4 - Generates Figure 4 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure4 - Generates Figure 4 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 4 from:
 %
@@ -812,6 +812,12 @@ ridgepack_multialign(gcf)
 
 h=get(gcf,'Children');
 set(h(5),'Visible','off');
+
+% determine directory for read/write
+dir=fileparts(which(mfilename));
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');

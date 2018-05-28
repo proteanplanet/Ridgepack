@@ -1,18 +1,20 @@
 function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
-           epsplitmesh,phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs)
+           epsplitmesh,phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs,res)
 
-% RIDGEPACK_TRAJECTORY - Calculate state-space trajectory of a ridge 
+% ridgepack_trajectory - Calculate state-space trajectory of a ridge 
 %
-% function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epsilonsplit,phisplit,d1,d2]=...
-%            ridgepack_trajectory(hf,hfs,epsilon,phi)
+% function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
+%            epsplitmesh,phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs,res)
 %
 % This calculates the zeta-hat trajectory on VR leafs of the alpha-hat
 % plane of an individual ridge with potential energy density.
 %
 % INPUT:
 %
-% hf       - parent ice thickness (m)
-% hfs      - thickness of snow on parent ice (m)
+% hf  - parent ice thickness (m)
+% hfs - thickness of snow on parent ice (m)
+% res - resolution of the strain and porosity grid (optional)
+%       with typical values between 0.01 and 0.001.
 %
 %
 % OUTPUT:
@@ -30,21 +32,33 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
 % vr          - potential energy density on (epmesh,phmesh) grid (J m^-2)
 % epsplitmesh - ridge strain on split epsilon mesh (dimensionless)
 % phsplitmesh - porosity on split phi mesh (dimensionless)
-% d1          - dilation field on (epsplitmesh,phsplitmesh)[epsilon-component](J m^-2)
-% d2          - dilation field on (epsplitmesh,phsplitmesh)[phi-component](J m^-2)
+% d1          - dilation field on (epsplitmesh,phsplitmesh)
+%               [epsilon-component](J m^-2)
+% d2          - dilation field on (epsplitmesh,phsplitmesh)
+%               [phi-component](J m^-2)
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
+
 % error check
-if nargin~=2
+if nargin<2
  error('incorrect number of inputs')
 elseif length(hf)>1 | length(hfs)>1
  error('length of hf or hfs is greater than 1')
 end
 
+if nargin<3
+ res=0.005
+elseif res>0.01
+ error('Resolution is incorretly set')
+end
+
 % initialize grids, using split grids to calculate dilation
-[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=ridgepack_gridinit;
+[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+   ridgepack_gridinit(res);
 
 % prepare mesh and split mesh
 [epmesh,phmesh]=meshgrid(epsilongrid,phigrid);
@@ -74,6 +88,8 @@ for i=2:length(EPSILON)
  end
 end
 
-% determine entire state space (note this step can be added to * for efficiency)
+% determine entire state space 
 [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hf,hfs,EPSILON,PHI);
+
+if debug; disp(['...Leaving ',mfilename]); end
 

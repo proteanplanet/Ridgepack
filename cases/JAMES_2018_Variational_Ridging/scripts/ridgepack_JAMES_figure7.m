@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure7 - Generates Figure 7 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure7 - Generates Figure 7 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 7 from:
 %
@@ -129,7 +129,9 @@ ylabel('Ridge ice thickness distribution $g_R(h,\phi_R)$','Interpreter','Latex')
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');
@@ -141,4 +143,5 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 

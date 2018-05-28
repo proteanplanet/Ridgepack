@@ -1,10 +1,20 @@
 function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
-            ridgepack_gridinit
+            ridgepack_gridinit(resolution)
 
-% RIDGEPACK_GRIDINIT - set up the initial thickness, strain and porosity grid 
+% ridgepack_gridinit - set up the initial thickness, strain and porosity grid 
 %
 % function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
-%             ridgepack_gridinit
+%             ridgepack_gridinit(resolution)
+%
+% Initializes the numerical grid for calculating the state-space trajectory
+% of a ridge and for integrating thickness distribution changes. A thickness
+% distribution GHPHI is also initialized.
+%
+% INTPUT:
+%
+% resolution - resolution of the strain and porosity grid (optional)
+%              with typical values between 0.01 and 0.001.
+%
 % 
 % OUTPUT:
 %
@@ -24,9 +34,19 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % resolution of epsilon and phi in calculating zeta hat plane (dimensionless)
-EINCR = 0.001;
-%EINCR = 0.005;
-%EINCR = 0.01;
+if nargin==1
+ EINCR = resolution;
+else
+ EINCR = 0.001;
+ %EINCR = 0.005;
+ %EINCR = 0.01;
+end
+
+if EINCR<0.001
+ disp('WARNING: This could be computationally expensive for little gain')
+elseif EINCR>0.01
+ disp('WARNING: This may produce unconverged results')
+end
 
 % minimim abs(strain) and porosity
 minstrain = 0.01;
@@ -39,11 +59,6 @@ minthick = 0.01;
 
 % maximum thickness on zeta-hat plane trajectory plane (m)
 maxthick = 100;
-
-% check resolution settings
-if EINCR>0.01
- error('EINCR too large for convergence')
-end
 
 % flag for logarithmic thickness grid
 %logthickness=false;
@@ -85,7 +100,6 @@ if debug
  disp(['size of PHIGRID is ',num2str(size(PHIGRID))])
  disp(['size of PHISPLIT is ',num2str(size(PHISPLIT))])
  disp(['size of GHPHI is ',num2str(size(GHPHI))])
+ disp(['...Leaving ',mfilename]); end
 end
-
-if debug; disp(['...Leaving ',mfilename]); end
 

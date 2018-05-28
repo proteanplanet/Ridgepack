@@ -1,6 +1,6 @@
 function ridgepack_debugger(signal)
 
-% NCDEBUG - Turn degging off and on in icepack
+% ridgepack_debugger - Turn degging off and on in icepack
 %
 % function ridgepack_debugger(signal)
 %

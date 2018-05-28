@@ -1,13 +1,21 @@
-function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
+function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 
-% RIDGEPACK_ZETAHATPLANE - Calculate ridge state on zeta-hat plane
+% ridgepack_zetahatplane - Calculate ridge state on zeta-hat plane
 %
-% function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
+% function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 %
 % This calculates strain, porosity and the angle of repose of ridges
 % on the the zeta hat trajectory plane of potential energy density. 
 % The entire ridge state space may be determined from these variables,
 % and is output as part of the calculations.
+%
+% INPUT:
+%
+% hf  - parent ice thickness (m)
+% hfs - thickness of snow on parent ice (m)
+% res - resolution of the strain and porosity grid (optional)
+%       with typical values between 0.01 and 0.001.
+%
 %
 % OUTPUT:
 %
@@ -28,18 +36,36 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
+
+if nargin<1
+ res=0.005
+elseif res>0.01
+ error('Resolution is incorretly set')
+end
+
 % initialze grid
-[hincr,eincr,HF]=ridgepack_gridinit;
+[hincr,eincr,HF]=ridgepack_gridinit(res);
 
 % remove snow for Version 1.0 (this step can be removed in future versions)
 HFs=zeros(size(HF));
 
 % step through initial ice thicknesses
+tic;
 for i=1:length(HF) 
 
  % calculate zeta-hat trajectory for ice and snow thickness HF and HFs
- [EPSILON,PHI(i,:),ALPHAHAT(i,:),VR(i,:),HK(i,:),HS(i,:),LK(i,:),LS(i,:)]=...
-      ridgepack_trajectory(HF(i),HFs(i));
+ [EPSILON(i,:),PHI(i,:),ALPHAHAT(i,:),VR(i,:),HK(i,:),HS(i,:),LK(i,:),LS(i,:)]=...
+      ridgepack_trajectory(HF(i),HFs(i),res);
 
 end
+elapsedtime=toc;
+
+EPSILON=EPSILON(1,:);
+
+disp(['Zetahat plane calculated at ',num2str(res),' resolution in ',...
+      num2str(elapsedtime),' seconds'])
+
+if debug; disp(['...Leaving ',mfilename]); end
 

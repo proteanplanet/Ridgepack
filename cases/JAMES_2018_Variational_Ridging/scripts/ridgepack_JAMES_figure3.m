@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure3 - Generates Figure 3 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure3 - Generates Figure 3 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 3 from:
 %
@@ -30,7 +30,7 @@ hc=ridgepack_astroconstants;
 rho=hc.rhoi.const;  % density of ice (kg/m^3)
 rhos=hc.rhos.const; % density of snow (kg/m^3)
 rhow=hc.rhow.const; % density of seawater (kg/m^3)
-g=hc.ghat.const; % density of seawater (kg/m^3)
+g=hc.ghat.const; % acceleration due to gravity (m/s^2)
 
 alphar=22; % angle of ridge
 alphak=22; % angle of keel
@@ -667,7 +667,9 @@ end % for setting=1:3
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');
@@ -679,4 +681,5 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 

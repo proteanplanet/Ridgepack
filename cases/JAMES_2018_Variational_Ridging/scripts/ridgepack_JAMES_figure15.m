@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure15 - Generates Figure 15 in JAMES Variation Ridging paper
+% ridgepack_JAMES_figure15 - Generates Figure 15 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 15 from:
 %
@@ -39,10 +39,11 @@ ymax=10^-2;
 final=true;
 %final=false;
 
+% plot probabilities of ridges forming
 for i=1:length(hfi)
 
  % calculate path for a given thickness
- [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(hfi(i),0);
+ [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(hfi(i),0,0.001);
 
  % work per ridge shape
  energyratio=sum(LK(1:end).*VR(1:end))./(LK(1:end).*VR(1:end));
@@ -134,7 +135,9 @@ ridgepack_colorbar(cont,'\phi_R');
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 x=strfind(mfilename,'_');
@@ -146,5 +149,6 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 
 

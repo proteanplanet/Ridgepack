@@ -62,9 +62,11 @@ ylabel('$g_{R}(h,\phi)$')
 title(['$\epsilon_{R_I}$=',num2str(epsilon),', $\phi$=',num2str(phi)]);
 xlim([max(0,step(1)-0.5) step(6)+0.5])
 
-% determine directory for read/write 
+% determine directory for read/write
 dir=fileparts(which(mfilename));
-cd([dir(1:strfind(dir,'scripts')-1),'output']);
+outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(outdir);
+cd(outdir);
 
 % determine filename
 graphicsout=mfilename;
@@ -74,4 +76,5 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
+ridgepack_fprint('png',graphicsout,1,2)
 
