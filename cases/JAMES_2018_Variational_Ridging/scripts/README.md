@@ -31,5 +31,6 @@ help ridgepack/cases/JAMES\_2018\_Variational\_Ridging/scripts
 ## Authors
 
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
 Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
 

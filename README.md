@@ -45,8 +45,7 @@ This is a sample MATLAB startup file to accompany Ridgepack, and includes exampl
 ## Author
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-## Reviewer
-Samy Kamal, Naval Postgraduate School, May 2018
+Case reviewer for JAMES\_2018\_Variational\_Ridging: Samy Kamal, Naval Postgraduate School, May 2018
 
 
 

@@ -28,9 +28,8 @@ Scripts used to analyse the dynamics and thermodynamics of the coupled RASM sea 
 component.
 
 
-## Author
+## Authors
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
-## Reviewer
-amy Kamal, Naval Postgraduate School, May 2018 
+Reviewer for JAMES\_2018\_Variational\_Ridging: Samy Kamal, Naval Postgraduate School, May 2018
 
