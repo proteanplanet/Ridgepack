@@ -1,5 +1,3 @@
-# Contents
-
 # Ridgepack Case: JAMES\_2018\_Variational\_Ridging
 
 This directory contains scripts used to generate figures 3 to 16, S1 and S2 in:
@@ -30,7 +28,8 @@ using the help command:
 
 help ridgepack/cases/JAMES\_2018\_Variational\_Ridging/scripts
 
-## Author 
+## Authors
 
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
 

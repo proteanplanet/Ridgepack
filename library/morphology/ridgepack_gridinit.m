@@ -29,6 +29,7 @@ function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
 %
 % Ridgepack Version 1.0.
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

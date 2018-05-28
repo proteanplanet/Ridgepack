@@ -1,79 +1,52 @@
 # Ridgepack 
 
- This MATLAB package accompanies a manuscript submitted in May 2018 to:
+Ridgepack is a MATLAB sea ice model analysis and development package designed
+as part of the Regional Arctic System Model (RASM) project, funded by the 
+Department of Energy, Office of Naval Research, and National Science Foundation.
+It is used primarily to analyse output from RASM and the Community Earth System
+Model (CESM) sea ice components, and for model developments leading to contributions
+to the CICE Consortium sea ice model (https://github.com/CICE-Consortium).  
 
- Journal of Advances in Modeling Earth Systems (JAMES) 
- 
- "Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory" 
+## Contents
 
- Andrew F. Roberts (1) \
- Elizabeth C. Hunke (2) \
- Samy M. Kamal (1) \
- William H. Lipscomb (3) \
- Christopher Horvat (4) \
- Wieslaw Maslowski (1)
+### Library
 
- (1) - Naval Postgraduate School, Monterey, CA \
- (2) - Los Alamos National Laboratory, Los Alamos, NM \
- (3) - National Center for Atmospheric Research, Boulder, CO \
- (4) - Brown University, Providence, RI
+This is a library of MATLAB functions to read netCDF data output from CICE and 
+make vigorous use of the metadata within the output to aid model analysis. The library also contains development libraries for new physics being implemented in the RASM
+sea ice component.  There are currently four libraries:
 
- This code is published in consonance with the American Geophysical Union publication 
- policy.  Here, we briefly describe the intended use of the functions and scripts within 
- Ridgepack.  Further information on the use of the morphology library within Ridgepack 
- is available in the aforementioned paper, and detailed technical descriptions of all 
- components of the package are available with the use of the 'help' command in MATLAB. 
- 
- Code version: 1.0 \
- Code authors: Andrew Roberts and Samy Kamal \
- Code tested with MATLAB version R2018a 
+datastructures - ingesting, twisting and turning and outputting CICE data
 
- Embargo: This code is currently held in a private GitHub repository, and will
-          be published when and if the above manuscript passes peer review.
+graphics       - publication quality graphics functions for CICE
 
- ----------------------------------------------------------------------------------------
+infrastructure - basic infrastructure for Ridgepack to operate smoothly
 
-# Introduction
-
-The startup file
-
-Paths
+morphology     - library of sea ice thickness distribution functions
 
 
-# Cases 
+### Cases
 
-## JAMES\_2018\_Variational\_Ridging
+The cases area of Ridgepack is designed for MATLAB scripts that make use of the 
+above function library. Currently there is one set of case scripts available to 
+accompany a publication under review:
 
+JAMES\_2018\_Variational\_Ridging - Scripts used to demonstrate the functionality of the sea ice morphology library described in: Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018), Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, *submitted to J. Adv. Model Earth Sy.*.
 
+A second case will be released in 2018:
 
-# Libraries
-
-## datastructures
-
-
-## graphics
-
-
-## morphology
+RASM\_Sea_Ice_Toolbox - Scripts used to analyse the dynamics and thermodynamics of the coupled RASM sea ice component.
 
 
-# Output
+### startup.m
 
-## JAMES\_2018\_Variational\_Ridging
-
-
-# Further Information
+This is a sample MATLAB startup file to accompany Ridgepack, and includes examples of setting several environment variables relevant to this MATLAB utility. It is anticipated that MATLAB will be run on a Unix, Linux or Mac OSX platform when using this package. 
 
 
+## Author
+Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
+## Reviewer
+Samy Kamal, Naval Postgraduate School, May 2018
 
 
-
-
-
- 
-
-
- ----------------------------------------------------------------------------------------
-
- This documentation last edited by Andrew Roberts, March 1, 2018
 
