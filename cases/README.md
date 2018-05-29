@@ -33,3 +33,7 @@ Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 Reviewer for JAMES\_2018\_Variational\_Ridging: Samy Kamal, Naval Postgraduate School, May 2018
 
+## Required software
+
+Designed to be used with MATLAB 2018a or a newer version
+

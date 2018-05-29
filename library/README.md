@@ -47,3 +47,8 @@ This code is published to satisfy the American Geophysical Union publication pol
 Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
 
+## Required software
+
+Designed to be used with MATLAB 2018a or a newer version
+
+
