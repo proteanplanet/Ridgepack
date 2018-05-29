@@ -1,4 +1,4 @@
-function [GHPHI]=ridgepack_redistribution(ghphi,hgrid,phigrid,epsilondot,dt)
+function [GHPHI]=ridgepack_redistribution(ghphi,resolution,epsilondot,dt)
 
 % ridgepack_redistribution - Redistribution function Psi
 %
@@ -27,26 +27,33 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % check there are sufficient inputs
-if nargin~=3
+if nargin~=4
  error('incorrect number of inputs')
 end
+
+% initialize grids
+[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit]=...
+      ridgepack_gridinit(resolution);
 
 % initialize ar and GHPHI
 ar=zeros(size(ghphi));
 GHPHI=zeros(size(ghphi));
 
 % NOTES
-Need a non-deformed initial distribution g(h) following the ice, and 
-then the thickness distribution g(h,phi), of which the first category it the
-minimum strain category, indicating how much of the ice is not deformed
+%Need a non-deformed initial distribution g(h) following the ice, and 
+%then the thickness distribution g(h,phi), of which the first category it the
+%minimum strain category, indicating how much of the ice is not deformed
 
 % Calculate the zeta-hat plane. Please note that this function is dependent 
 % on snow cover, but for the purpose of the paper that Ridgepack Version 1.0 
-[HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane;
+% snow has been excluded from the calculation to demonstrate the method
+[HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(resolution);
 HFs=zeros(size(HF));
 
 % Only include thickness within the range of the chosen ridge (this
 % can be adjusted for Earth System Model with variable thicknesses grid.)
+% This is achieved numerically by zero-ing out the potential energy off-grid
+% thicknesses
 VR(HK+HS>max(hgrid))=0;
 
 % work per ridge shape M x N, where gin(1,:) is the concentration 
@@ -60,7 +67,7 @@ numerator=ghphi(:,1).*energyratio;
 numerator(VR==0)=0;
 probability=numerator./sum(numerator(:));
 
-% calculate normlized ghphi
+% calculate normalized ghphi
 ghphinormal=ghphi./sum(ghphi(:));
 
 % debug information 
@@ -89,9 +96,9 @@ for i=hidx'
   if VR(i,j)>0
 
    % map PHI on EPSILON grid to phigrid used by GHPHI
-   pidx=find(min(abs(PHI(i,j)-phigrid))==abs(PHI(i,j)-phigrid));
+   pidx=find(min(abs(PHI(i,j)-phisplit))==abs(PHI(i,j)-phisplit));
 
-   % calculate step function for an indidividual ridge
+   % calculate step function for an indidividual ridge of the given strain
    GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j));
    
    % now determine total area based on strain and probability of occurrence
@@ -103,9 +110,9 @@ for i=hidx'
 end
 
 % Now calculate the transform of porous ice
-for j=2:length(phigrid)-1
+for j=2:length(phisplit)-1
 
- jdx=find(phigrid>phigrid(j));
+ jdx=find(phisplit>phisplit(j));
 
  weight(j)=sum(ghphinormal(:,j));
 
@@ -114,6 +121,8 @@ for j=2:length(phigrid)-1
  ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
 
 end
+
+
 
 
 

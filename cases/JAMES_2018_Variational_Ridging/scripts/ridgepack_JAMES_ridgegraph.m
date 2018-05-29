@@ -24,10 +24,16 @@
 %
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
+% version check
+[v d] = version;
+if str2num(d(end-3:end))<2018
+ warning('This script designed for MATLAB 2018a or more recent version')
+end
+
 clear
 close all
 
-fig=6;
+fig=2;
 
 if fig==1
  nrows=1;
@@ -152,30 +158,30 @@ for setting=1:maxset
    hR=hF/(epsilon+1);
    phiR=0.; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=0; %angle of actual repose
+   thetaR=180; %angle of actual repose
   elseif setting==2
    edgecol=cols(1,:);
    epsilon=-1/3;
    hR=hF/(epsilon+1);
    phiR=0; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=0; %angle of actual repose
+   thetaR=180; %angle of actual repose
   elseif setting==3
    edgecol=cols(4,:);
    epsilon=-1/3;
    hR=hF/(epsilon+1);
    phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=0; %angle of actual repose
+   thetaR=180; %angle of actual repose
   elseif setting==4
    edgecol=cols(5,:);
    epsilon=0;
    hR=hF/(epsilon+1);
    phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=0; %angle of actual repose
+   thetaR=180; %angle of actual repose
   end
-  alphaS=acotd(cosd(thetaR)*cotd(alpha_R)); % apparent angle of repose
+  alphaS=acotd(cosd(180-thetaR)*cotd(alpha_R)); % apparent angle of repose
   alphaK=alphaS; % angle of keel
  elseif fig==2
   if setting==1
@@ -184,17 +190,17 @@ for setting=1:maxset
    hR=hF/(epsilon+1);
    phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=0; %angle of actual repose
+   thetaR=180; %angle of actual repose
   elseif setting==2
    edgecol=cols(4,:);
    epsilon=-1/3;
    hR=hF/(epsilon+1);
    phiR=0.2; % phiR of ridge and keel complex
    alpha_R=22; %angle of compressional repose
-   thetaR=55; %angle of actual repose
+   thetaR=125; %angle of actual repose
   end
-  alphaS=acotd(cosd(90-thetaR)*cotd(alpha_R)); % apparent angle of sail repose
-  alphaK=acotd(cosd(90-thetaR)*cotd(alpha_R)); % apparent angle of keel repose
+  alphaS=acotd(cosd(180-thetaR)*cotd(alpha_R)); % apparent angle of sail repose
+  alphaK=acotd(cosd(180-thetaR)*cotd(alpha_R)); % apparent angle of keel repose
  elseif fig==3
   edgecol=[0 0 0];
   if setting==1
@@ -277,7 +283,7 @@ for setting=1:maxset
   hR=hF/(epsilon+1);
   phiR=0; % phiR of ridge and keel complex
   alpha_R=22; %angle of compressional repose
-  thetaR=0; %angle of actual repose
+  thetaR=180; %angle of actual repose
  else
   error('fig setting is wrong')
  end
@@ -490,7 +496,7 @@ for setting=1:maxset
             ['\makebox[4in][c]{$\epsilon_{R_I}\!=\!',epstring,'$}']};
  elseif fig==2
    textbox={['\makebox[4in][c]{$\alpha_R=',num2str(alpha_R,'%8.1f'),'^{\circ}$}'],...
-            ['\makebox[4in][c]{$\theta_R=',num2str(180-thetaR,'%8.1f'),'^{\circ}$}'],...
+            ['\makebox[4in][c]{$\theta_R=',num2str(thetaR,'%8.1f'),'^{\circ}$}'],...
             ['\makebox[4in][c]{$\alpha_K=',num2str(alphaK,'%8.1f'),'^{\circ}$}']};
  elseif fig==3
    textbox={['\makebox[4in][c]{$h_{Fs}=',num2str(hFs),'$ m}'],...

@@ -10,6 +10,12 @@
 %
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
+% version check
+[v d] = version;
+if str2num(d(end-3:end))<2018
+ warning('This script designed for MATLAB 2018a or more recent version')
+end
+
 clear
 close all
 
@@ -18,7 +24,7 @@ hFs=0.3;
 epsilon=-1/10;
 phi=0.2;
 
-% Calculate discrete thickness distribution on given thickness axis
+% Calculate discrete numerical thickness distribution on given thickness axis
 [hincr,eincr,hgrid]=ridgepack_gridinit;
 [GRHPHI]=ridgepack_grhphi(hF,hFs,epsilon,phi);
 

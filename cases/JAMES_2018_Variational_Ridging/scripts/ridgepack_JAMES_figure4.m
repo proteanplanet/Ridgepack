@@ -8,6 +8,12 @@
 %
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
 
+% version check
+[v d] = version;
+if str2num(d(end-3:end))<2018
+ warning('This script designed for MATLAB 2018a or more recent version')
+end
+
 clear
 close all
 

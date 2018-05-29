@@ -41,7 +41,7 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 if nargin<1
- res=0.005
+ res=0.005;
 elseif res>0.01
  error('Resolution is incorretly set')
 end
