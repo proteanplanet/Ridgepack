@@ -17,15 +17,16 @@
 clear
 close all
 
-% set ice and snow thickness
-hfi=[0.5 2.0];
-hfs=[0 0];
 
-% color along line
+% porosity color divisions along line
 cont=[0:0.05:0.40];
 cmap=ridgepack_colormap(cont,0,'parula');
 cmap=flipud(cmap);
 colormap(cmap)
+
+% set ice and snow thickness
+hf=[0.5 2.0];
+hfs=[0 0];
 
 % Limits and labels
 xlab='Ridge Width, $L_K$ (m)';
@@ -35,15 +36,15 @@ ylab='Probability Density';
 ymin=10^-9;
 ymax=10^-2;
 
-% switch to only indicate gradient once 
+% switch on to only indicate gradient once (rather than for both lines
 final=true;
 %final=false;
 
 % plot probabilities of ridges forming
-for i=1:length(hfi)
+for i=1:length(hf)
 
  % calculate path for a given thickness
- [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(hfi(i),0,0.001);
+ [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(hf(i),0,0.001);
 
  % work per ridge shape
  energyratio=sum(LK(1:end).*VR(1:end))./(LK(1:end).*VR(1:end));
@@ -52,7 +53,7 @@ for i=1:length(hfi)
  probability=energyratio./sum(energyratio);
 
  % explanatory output
- disp(['------- For floe ice thickness ',num2str(hfi(i),'%8.1f'),...
+ disp(['------- For floe ice thickness ',num2str(hf(i),'%8.1f'),...
        'm ----------------------'])
 
  % calculate mean porosity
@@ -114,7 +115,7 @@ for i=1:length(hfi)
         'facecol','no',...
         'edgecol','interp',...
         'linew',2);
- ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hfi(i),...
+ ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hf(i),...
                  '%5.1f'),'$m'],9,cmap(end,:));
 
 end
@@ -130,8 +131,6 @@ else
  legend(hh,legtext,'Location','northeast')
  legend('boxoff')
 end
-
-ridgepack_colorbar(cont,'\phi_R');
 
 % determine directory for read/write
 dir=fileparts(which(mfilename));
@@ -150,5 +149,46 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
 ridgepack_fprint('png',graphicsout,1,2)
+
+% Calculate mean values for table
+hf=[0.2 0.5 1.0 2.0 5.0 5.5];
+
+for i=1:length(hf)
+
+ % calculate path for a given thickness
+ [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_trajectory(hf(i),0,0.001);
+
+ % work per ridge shape
+ energyratio=sum(LK(:).*VR(:))./(LK(:).*VR(:));
+
+ % probability
+ probability=energyratio./sum(energyratio);
+
+ % calculate mean porosity
+ meanphi=sum(probability.*PHI(:));
+
+ % calculate mean alpha
+ meanalpha=sum(probability.*ALPHAHAT(:));
+
+ % calculate 5m cutoff
+ mask=(HK(:)>5.0);
+ maskprob=(probability.*mask)/sum(probability.*mask);
+
+ % calculate mean porosity
+ meanphilim(i)=sum(maskprob.*PHI(:));
+
+ % calculate mean alpha
+ meanalphalim(i)=sum(maskprob.*ALPHAHAT(:));
+
+end
+
+disp(['----------------------------------------------------------'])
+disp('Information for published table of observable values')
+disp(['$h_F$ (m) ',num2str(hf,'& %6.2f '),' \\'])
+disp(['$\alpha_{\mathrm{obs}}$ ',num2str(meanalphalim,'& %6.1f '),' \\'])
+disp(['$\phi_{\mathrm{obs}}$  ',num2str(meanphilim,'& %6.2f '),' \\'])
+disp(['----------------------------------------------------------'])
+
+
 
 
