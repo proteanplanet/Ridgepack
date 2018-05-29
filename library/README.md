@@ -22,7 +22,7 @@ directory.
 ### graphics
 
 A MATLAB library for producing publication-quality graphics for Earth System Models. 
-All code documentation may be obtained from within MATLAB by typing 'help graphics' from within this library directory.  Functions within this directory fix a number of problems with vanilla release MATLAB graphics functions when used to analyze the data on a geoid. 
+All code documentation may be obtained from within MATLAB by typing 'help graphics' from within this library directory.  Functions within this directory fix a number of problems with existing MATLAB graphics when applied to Earth System Models. 
 
 
 ### infrastructure
@@ -33,10 +33,13 @@ A repository of supporting infrastructure, currently confined to a debugger that
 
 ### morphology
 
-A library of sea ice ridging functions used to calculate statistics of ridges in the pack.  Functions in this library are applicable to interpreting measurements of 
-sea ice topography from underneath and above sea ice.  However, the main purpose of this library is to act as a testbed for a new variational ridging method being implemented in RASM. 'help morphology' from within this library directory in MATLAB will
-reveal the functions available.  A description of the science underwriting this 
-morphology library is in a paper under review:
+A library of sea ice ridging functions used to calculate statistics of ridges in the pack.  
+Functions in this library may be used to interpret measurements of sea ice topography 
+from underneath and above sea ice.  However, the main purpose of this library is to act as 
+a testbed for a new variational ridging method being implemented in RASM. Documentation is
+accessible through the 'help morphology' command from within this library directory in 
+MATLAB.  A description of the science underwriting this morphology library is in a paper 
+under review:
 
 Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
 Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, *submitted to J. Adv. Model Earth Sy.*.

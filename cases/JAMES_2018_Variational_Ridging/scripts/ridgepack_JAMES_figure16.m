@@ -1,4 +1,4 @@
-% ridgepack_JAMES_figure5 - Generates Figure 16 in JAMES Variational Ridging paper
+% ridgepack_JAMES_figure16 - Generates Figure 16 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 16 from:
 %
@@ -17,9 +17,8 @@ end
 clear
 close all
 
-
 % set resolution of Epsilon
-resolution=0.01
+resolution=0.001
 
 % inititalize the thickness distribution, thickness grid, porosity grid and epsilon grid
 [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
@@ -45,6 +44,15 @@ epsilondot=-10^-6;
 dt=10;
 
 [ghphinew]=ridgepack_redistribution(ghphi,resolution,epsilondot,dt);
+
+clf
+surf(hgrid,phisplit,ghphinew')
+shading flat
+set(gca,'Zscale','log')
+xlim([0 0.4])
+ylim([0 10])
+zlim([10^-7 10^0])
+view(45,30)
 
 
 return

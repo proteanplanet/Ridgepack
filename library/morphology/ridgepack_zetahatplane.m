@@ -11,8 +11,6 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 %
 % INPUT:
 %
-% hf  - parent ice thickness (m)
-% hfs - thickness of snow on parent ice (m)
 % res - resolution of the strain and porosity grid (optional)
 %       with typical values between 0.01 and 0.001.
 %

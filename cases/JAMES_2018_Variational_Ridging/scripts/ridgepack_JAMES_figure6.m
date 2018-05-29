@@ -1,3 +1,4 @@
+function ridgepack_JAMES_figure6
 % ridgepack_JAMES_figure6 - Generates Figure 6 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 6 from:
@@ -220,13 +221,15 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 ridgepack_fprint('epsc',graphicsout,1,2)
 ridgepack_fprint('png',graphicsout,1,2)
 
-function [ratio,alpha]=ridgeshape(beta)
+ function [ratio,alpha]=ridgeshape(beta)
 
- ratio=[0.5:0.1:15]';
+  ratio=[0.5:0.1:15]';
 
- for i=1:length(ratio)
+  for i=1:length(ratio)
 
-  alpha(i)=acotd(ratio(i)/(1+beta));
+   alpha(i)=acotd(ratio(i)/(1+beta));
+
+  end
 
  end
 
