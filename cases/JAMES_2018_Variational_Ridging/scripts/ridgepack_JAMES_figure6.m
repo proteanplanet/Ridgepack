@@ -34,35 +34,39 @@ colormap(colmap);
 
 % read in image of Peter Wadham's paper
 fname='DavisWadhamsFig16c.png';
-floc='/Users/aroberts/science/publications/2015_Variational_Principle/Data/Wadhams_Data';
+floc='/Users/aroberts/Publications/2018_Morphology/Figures/Figure6';
 try
+ foundimage=true;
  cd(floc);
  im=imread(fname);
  im=im(1:end,1:end,1);
  im(end-50:end-5,5:50)=1;
 catch
- disp('This function uses AGU copyrighted and cropped figure 16c from Davis and Wadhams')
- disp(['Unable to find ',fname,' at ',floc]);
- error('Figure 16c from Davis and Wadhams (1996) must be supplied with this function')
+ foundimage=false;
+ disp('This script uses American Geophysical Union copyrighted material cropped')
+ disp(['from figure 16c of Davis and Wadhams (1996) named ',fname])
+ disp(['Unable to find ',fname,' in ',char(13),' ',floc]);
 end
 
 % switch off Wadhams tick marks (comment out this to check for alignment)
-im(end-15:end,1:end)=1;
-im(1:end,1:15)=1;
+if foundimage
+ im(end-15:end,1:end)=1;
+ im(1:end,1:15)=1;
 
-% set x and y coordinates
-x=[1:size(im,1)]*15/size(im,1);
-y=[size(im,2):-1:1]*90/size(im,2);
+ % set x and y coordinates
+ x=[1:size(im,1)]*15/size(im,1);
+ y=[size(im,2):-1:1]*90/size(im,2);
 
-cls=ones([length(x) length(y) 3]);
-for i=1:length(x)
-for j=1:length(y)
- if abs(im(i,j))>0 & abs(im(i,j))<=255
-  cls(i,j,:)=[1 1 1];
- else
-  cls(i,j,:)=colmap(1,:);
+ cls=ones([length(x) length(y) 3]);
+ for i=1:length(x)
+ for j=1:length(y)
+  if abs(im(i,j))>0 & abs(im(i,j))<=255
+   cls(i,j,:)=[1 1 1];
+  else
+   cls(i,j,:)=colmap(1,:);
+  end
  end
-end
+ end
 end
 
 for ncol=1:2
@@ -70,10 +74,12 @@ for ncol=1:2
  ridgepack_multiplot(1,2,1,ncol,[notation(ncol),')'])
 
  % plot wadhams data
- hi=image(x,y,cls);
- hold on
+ if foundimage
+  hi=image(x,y,cls);
+  hold on
 
- hp=plot(1,100,'s','Color',colmap(1,:),'MarkerSize',10,'MarkerFaceColor',colmap(1,:));
+  hp=plot(1,100,'s','Color',colmap(1,:),'MarkerSize',10,'MarkerFaceColor',colmap(1,:));
+ end
 
  axis xy
 
@@ -99,7 +105,7 @@ for ncol=1:2
  ridgepack_colormap(cont,0,'bluered');
 
  [ratio,alpha]=ridgeshape(0);
- [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(2.0,0.0);
+ [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(2.0,0.0,0.001);
 
  if ncol==1
   thetad=0;
@@ -107,7 +113,7 @@ for ncol=1:2
   thetad=55;
  end
 
- [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(2.0,0.0);
+ [strainp,phip,alphap,VR,HK,HS,LK,LS]=ridgepack_trajectory(2.0,0.0,0.001);
 
  [ratio1,alpha1]=ridgeshape(0);
  x1=ratio1;
@@ -140,7 +146,7 @@ for ncol=1:2
  shading flat
 
  if ncol==2 
-  ridgepack_colorbar(cont,'\phi_R')
+  ridgepack_colorbar(cont,'\phi_R');
  end
 
  % now plot the model
@@ -150,8 +156,18 @@ for ncol=1:2
  [ratio,alpha]=ridgeshape(0.5);
  h2=plot(ratio(:),squeeze(alpha(:)),':','color',cols(1,:),'LineWidth',1);
 
- if ncol==2 
+
+ if ncol==2 & foundimage
   legend([hp h1 h2],{'Sonar',...
+   '$h_{Fd}=0$',...
+   '$h_{Fd}=H_K/2$'},...
+   'location','NorthEast',...
+   'FontSize',fonts,...
+   'Color','none',...
+   'Interpreter','Latex')
+  legend('boxoff')
+ elseif ncol==2
+  legend([h1 h2],{...
    '$h_{Fd}=0$',...
    '$h_{Fd}=H_K/2$'},...
    'location','NorthEast',...
@@ -197,7 +213,6 @@ disp(['Writing graphics output ',graphicsout,' to:',char(13),' ',pwd])
 % print figure
 ridgepack_fprint('epsc',graphicsout,1,2)
 ridgepack_fprint('png',graphicsout,1,2)
-
 
 function [ratio,alpha]=ridgeshape(beta)
 
