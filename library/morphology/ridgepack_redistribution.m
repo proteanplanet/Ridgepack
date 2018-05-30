@@ -95,8 +95,10 @@ for i=hidx'
 
   if VR(i,j)>0
 
-   % map PHI on EPSILON grid to phigrid used by GHPHI
+   % map PHI on EPSILON grid to phisplit used by GHPHI
    pidx=find(min(abs(PHI(i,j)-phisplit))==abs(PHI(i,j)-phisplit));
+
+   % add interpolation in here
 
    % calculate step function for an indidividual ridge of the given strain
    GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j));
@@ -109,18 +111,19 @@ for i=hidx'
  end
 end
 
-% Now calculate the transform of porous ice
-for j=2:length(phisplit)-1
-
- jdx=find(phisplit>phisplit(j));
-
- weight(j)=sum(ghphinormal(:,j));
-
- ar(:,j)=ar(:,j)-weight(j)*ghphi(:,j);
-
- ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
-
-end
+% Now calculate the transform of porous ice, summing over all 
+% porosities
+%for j=2:length(phisplit)-1
+%
+% jdx=find(phisplit>=phisplit(j));
+%
+% weight(j)=sum(ghphinormal(:,j));
+%
+% ar(:,j)=ar(:,j)-weight(j)*ghphi(:,j);
+%
+% ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
+%
+%end
 
 
 

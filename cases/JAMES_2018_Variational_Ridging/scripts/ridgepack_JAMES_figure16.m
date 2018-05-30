@@ -18,7 +18,7 @@ clear
 close all
 
 % set resolution of Epsilon
-resolution=0.001
+resolution=0.005
 
 % inititalize the thickness distribution, thickness grid, porosity grid and epsilon grid
 [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
@@ -46,13 +46,13 @@ dt=10;
 [ghphinew]=ridgepack_redistribution(ghphi,resolution,epsilondot,dt);
 
 clf
-surf(hgrid,phisplit,ghphinew')
+surf(hgrid,phisplit,ghphinew','FaceAlpha',0.75)
 shading flat
 set(gca,'Zscale','log')
-xlim([0 0.4])
-ylim([0 10])
+ylim([0 0.4])
+xlim([0 10])
 zlim([10^-7 10^0])
-view(45,30)
+view(135,30)
 
 
 return

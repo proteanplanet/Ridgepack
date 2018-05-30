@@ -43,10 +43,12 @@ else
  %EINCR = 0.01;
 end
 
-if EINCR<0.001
- disp('WARNING: This could be computationally expensive for little gain')
-elseif EINCR>0.01
- disp('WARNING: This may produce unconverged results')
+if debug
+ if EINCR<0.001
+  disp('WARNING: This could be computationally expensive for little gain')
+ elseif EINCR>0.01
+  disp('WARNING: This may produce unconverged results')
+ end
 end
 
 % minimim abs(strain) and porosity
