@@ -52,7 +52,8 @@ if debug
 end
 
 % minimim abs(strain) and porosity
-minstrain = 0.01;
+%minstrain = 0.01;
+minstrain = EINCR;
 
 % maximim abs(strain) and porosity
 maxstrain = (1-EINCR)-EINCR-minstrain;

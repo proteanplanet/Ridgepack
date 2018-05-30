@@ -20,11 +20,40 @@ close all
 % set resolution of Epsilon
 resolution=0.005
 
-% inititalize the thickness distribution, thickness grid, porosity grid and epsilon grid
-[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
-      ridgepack_gridinit(resolution);
+% determine directory for read/write of zeta-hat plane data
+dir=fileparts(which(mfilename));
+writedir=[dir(1:strfind(dir,'scripts')-1),'output'];
+[status,msg]=mkdir(writedir);
+cd(writedir);
 
-% put ghphi on zetahatplane 
+generate=false;
+%generate=true;
+
+% calculate or load zetahat plane
+if generate
+ disp(['Generating data in: ',char(13),' ',writedir])
+ [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(resolution);
+ save('ridgepack_zetahatplane','HF','EPSILON','PHI','ALPHAHAT','VR','HK','HS','LK','LS')
+else
+ disp(['Reading from:',char(13),' ',writedir])
+ try
+  load ridgepack_zetahatplane
+ catch
+  disp('Unable to load zeta-hat plane - switch to generate')
+ end
+end
+
+% set thickness grid for ghphi, and increment
+hgrid=HF;
+hincr=ridgepack_gridinit(resolution);
+
+% use PHI on the zetahatplane as the porosity coordinate for ghphi
+% This is done because it is numerically preferable in this circumstance
+phigrid=PHI(1,:);
+
+% initialize thickness distribution with zeros
+[ghphi] = 0*meshgrid(phigrid,hgrid);
+[ghphiinit] = 0*meshgrid(phigrid,hgrid);
 
 % print diagnostics for checking
 disp(['Size of ghphi is ',num2str(size(ghphi))])
@@ -37,7 +66,7 @@ hinitial = 2.0;
 % Case of the initial thickness distribution as a delta function on discrete grid
 if strcmp(gshape,'delta')
  idx=find(min(abs(hgrid(:)-hinitial))==abs(hgrid(:)-hinitial));
- ghphi(idx,1)=hinitial/hincr(idx);
+ ghphiinit(idx,1)=hinitial/hincr(idx);
 else
  error('gshape specification not currently available')
 end
@@ -45,30 +74,31 @@ end
 epsilondot=-10^-6;
 dt=10;
 
-[ghphinew]=ridgepack_redistribution(ghphi,resolution,epsilondot,dt);
+[ghphinit]=ridgepack_redist(hgrid,phigrid,ghphiinit,EPSILON,PHI,VR,HK,HS,LK,LS,...
+               epsilondot,dt);
 
 clf
-surf(hgrid,phisplit,ghphinew','FaceAlpha',0.75)
+surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
 shading flat
 set(gca,'Zscale','log')
-ylim([0 0.05])
-xlim([0 5])
+xlim([0 10])
+ylim([0 0.4])
 zlim([10^-7 10^0])
 view(135,30)
 
-
-return
+clf
 
 % calculate thickness distribution
-for i=1:100
- [ghphi]=ridgepack_redistribution(ghphi,hgrid,phisplit);
+for i=1:20
+ [ghphi]=ridgepack_redist(hgrid,phigrid,ghphi,EPSILON,PHI,VR,HK,HS,LK,LS,...
+               epsilondot,dt);
  disp(num2str(i))
- if i==1
-  clf
+% if i==1
+%  clf
   semilogy(hgrid,sum(ghphi,2))
   hold on
   drawnow
- end
+% end
 end
 
 semilogy(hgrid,sum(ghphi,2))

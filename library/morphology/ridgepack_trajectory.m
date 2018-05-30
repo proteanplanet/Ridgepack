@@ -52,7 +52,7 @@ elseif length(hf)>1 | length(hfs)>1
 end
 
 if nargin<3
- res=0.005
+ res=0.005;
 elseif res>0.01
  error('Resolution is incorretly set')
 end
