@@ -51,9 +51,10 @@ hincr=ridgepack_gridinit(resolution);
 % This is done because it is numerically preferable in this circumstance
 phigrid=PHI(1,:);
 
-% initialize thickness distribution with zeros
+% initialize thickness distribution with zeros where ghphi is MxN 
+% where M is the length of hgrid, and N is the length of phigrid
+[ghinit] = 0*meshgrid(phigrid,hgrid);
 [ghphi] = 0*meshgrid(phigrid,hgrid);
-[ghphiinit] = 0*meshgrid(phigrid,hgrid);
 
 % print diagnostics for checking
 disp(['Size of ghphi is ',num2str(size(ghphi))])
@@ -66,7 +67,8 @@ hinitial = 2.0;
 % Case of the initial thickness distribution as a delta function on discrete grid
 if strcmp(gshape,'delta')
  idx=find(min(abs(hgrid(:)-hinitial))==abs(hgrid(:)-hinitial));
- ghphiinit(idx,1)=hinitial/hincr(idx);
+ ghinit(idx,1)=hinitial/hincr(idx);
+ ghphi=ghinit;
 else
  error('gshape specification not currently available')
 end
@@ -74,8 +76,20 @@ end
 epsilondot=-10^-6;
 dt=10;
 
-[ghphinit]=ridgepack_redist(hgrid,phigrid,ghphiinit,EPSILON,PHI,VR,HK,HS,LK,LS,...
-               epsilondot,dt);
+clf
+
+for i=1:12
+ i
+ [ghphi]=ridgepack_redist(hgrid,phigrid,...
+                     EPSILON,PHI,VR,HK,HS,LK,LS,ghinit,ghphi,epsilondot,dt);
+
+ semilogy(hgrid,sum(ghphi,2))
+ hold on
+ drawnow
+
+end
+
+return
 
 clf
 surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
@@ -86,24 +100,22 @@ ylim([0 0.4])
 zlim([10^-7 10^0])
 view(135,30)
 
+return
+
 clf
 
 % calculate thickness distribution
-for i=1:20
+for i=1:1
  [ghphi]=ridgepack_redist(hgrid,phigrid,ghphi,EPSILON,PHI,VR,HK,HS,LK,LS,...
                epsilondot,dt);
  disp(num2str(i))
-% if i==1
-%  clf
-  semilogy(hgrid,sum(ghphi,2))
-  hold on
-  drawnow
-% end
+
+%  semilogy(hgrid,sum(ghphi,2))
+%  hold on
+%  drawnow
+
 end
 
-semilogy(hgrid,sum(ghphi,2))
-hold on
-drawnow
 
 legend({'initial distribution','final distribution'})
 

@@ -1,5 +1,5 @@
-function [GHPHI]=ridgepack_redistribution(hgrid,phigrid,ghphi,...
-                     EPSILON,PHI,VR,HK,HS,LK,LS,epsilondot,dt)
+function [GHPHI]=ridgepack_redistribution(hgrid,phigrid,...
+                     EPSILON,PHI,VR,HK,HS,LK,LS,ghinit,ghphi,epsilondot,dt)
 
 % ridgepack_redistribution - Redistribution function Psi
 %
@@ -28,21 +28,18 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % check there are sufficient inputs
-if nargin~=12
+if nargin~=13
  error('incorrect number of inputs')
 end
 
-% initialize ar and GHPHI
+% initialize ar and GHPHI, which each have size MxN
+% where M is the length of hgrid, and N is the length of phigrid
 ar=zeros(size(ghphi));
-GHPHI=zeros(size(ghphi));
+GRHPHI=zeros(size(ghphi));
+size(GRHPHI)
 
 % set snow cover to zero for version 1
 HFs=zeros(size(hgrid));
-
-% NOTES
-%Need a non-deformed initial distribution g(h) following the ice, and 
-%then the thickness distribution g(h,phi), of which the first category it the
-%minimum strain category, indicating how much of the ice is not deformed
 
 % Only include thickness within the range of the chosen ridge (this
 % can be adjusted for Earth System Model with variable thicknesses grid.)
@@ -55,75 +52,63 @@ VR(HK+HS>max(hgrid))=0;
 denominator=LK(:,:).*VR(:,:);
 energyratio=sum(denominator(:))./denominator;
 
-% probability of a ridge forming with strain and parent ice thickness HF
-% with discrete distribution ghphi.
-numerator=ghphi(:,1).*energyratio;
-numerator(VR==0)=0;
-probability=numerator./sum(numerator(:));
-
-% calculate normalized ghphi
-ghphinormal=ghphi./sum(ghphi(:));
-
-% debug information 
-if debug
- disp(['size of ghphi is ',num2str(size(ghphi))])
- disp(['size of ar is ',num2str(size(ar))])
- disp(['size of LK is ',num2str(size(LK))])
- disp(['size of LS is ',num2str(size(LS))])
- disp(['size of VR is ',num2str(size(VR))])
- disp(['size of hgrid is ',num2str(size(hgrid))])
- disp(['size of EPSILON is ',num2str(size(EPSILON))])
- disp(['size of energyratio is ',num2str(size(energyratio))])
- disp(['size of probability is ',num2str(size(probability))])
-end
-
 
 % Integral transform:
 
-% Calculate ar dependent on strain for the area change from non-porous ice
-% where i represents the undeformed ice index, and j is the strain index.
+% filter results
+hidx=find(ghinit(:)>0);
+if isempty(hidx)
+ error('Nothing positive found in the thickness distribution')
+end
 
-% only do calculations where there is ice
-hidx=find(ghphi(:,1)>0);
-
+% prepare step function building block in continuous (h,phi) space
 for i=hidx'
+ for j=1:length(phigrid)
+  if VR(i,j)>0
+   GRHPHI(:,j)=ridgepack_grhphi(hgrid(i),HFs(i),EPSILON(j),PHI(i,j)); 
+  end
+ end
+end
+
+% calculate normalized ghphi at first timestep
+ghphinormal=GRHPHI./sum(GRHPHI(:));
+
+% integrate out
+for i=hidx'
+
  for j=1:length(phigrid)
 
   if VR(i,j)>0
 
-   % calculate step function for an indidividual ridge of the given strain
-   GRHPHI=ridgepack_grhphi(hgrid(i),HFs(i),EPSILON(j),PHI(i,j));
-   
-   % now determine total area based on strain and probability of occurrence
-   ar(:,j)=probability(i,j)*(1+EPSILON(j))*GRHPHI(:) + ar(:,j);
+   if ghphi(i,j)>0
+
+    weight(j)=sum(ghphinormal(:,j));
+
+    numerator=ghphi(:,j).*energyratio(:,j:end);
+    numerator(VR(:,j:end)==0)=0;
+
+    probability=weight(j)*numerator./sum(numerator(:));
+
+    for k=j:length(phigrid)-1
+
+     if VR(i,k)>0
+
+      % now determine total area based on strain and probability of occurrence
+      ar(:,k)=probability(i,k-j+1)*(1+EPSILON(k))*GRHPHI(:,k) + ar(:,k);
+
+     end
+ 
+    end
+
+   end
   
   end
-
+ 
  end
-end
-
-% Now calculate the transform of porous ice, summing over all 
-% porosities (porous ice starts at phigrid==2)
-for j=2:length(phigrid)-1
-
- jdx=find(phigrid>phigrid(j));
-
- weight(j)=sum(ghphinormal(:,j));
-
- % remove thickness distribution from current strain category
- ar(:,j)=ar(:,j)-weight(j)*ghphi(:,j);
-
- % and redistribute to all higher strain categories
- ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
 
 end
 
-% finish determining by determining gout       
-%GHPHI(:,2:end)=ar(:,2:end)+ghphi(:,2:end);
-%GHPHI(:,1)=ar(:,1);
 GHPHI=ar;
-
-make sure GHPHI is normalized, which accounts for advection in of new distributed ice
 
 if debug; disp(['...Leaving ',mfilename]); end
 
