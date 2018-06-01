@@ -138,6 +138,8 @@ else
  legend('boxoff')
 end
 
+ridgepack_colorbar(cont,'\phi_R')
+
 % determine directory for read/write
 dir=fileparts(which(mfilename));
 outdir=[dir(1:strfind(dir,'scripts')-1),'output'];
