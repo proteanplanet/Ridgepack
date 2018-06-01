@@ -35,7 +35,7 @@ hf=[0.5 2.0];
 hfs=[0 0];
 
 % Limits and labels
-xlab='Ridge Width, $L_K$ (m)';
+xlab='Ridge Width, $\hat{L}_K$ (m)';
 xmin=10^0;
 xmax=2*10^3;
 ylab='Probability Density';

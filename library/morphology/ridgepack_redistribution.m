@@ -48,7 +48,8 @@ HFs=zeros(size(hgrid));
 % can be adjusted for Earth System Model with variable thicknesses grid.)
 % This is achieved numerically by zero-ing out the potential energy off-grid
 % thicknesses
-VR(HK+HS>max(hgrid))=0;
+maskin=(HK+HS<max(hgrid));
+maskout=(HK+HS>=max(hgrid));
 
 % work per ridge shape M x N, where gin(1,:) is the concentration 
 % of ice with zero porosity, and is therefore unridged
@@ -58,94 +59,97 @@ energyratio=sum(denominator(:))./denominator;
 % probability of a ridge forming with strain and parent ice thickness HF
 % with discrete distribution ghphi with minimim porosity.
 numerator=ghphi(:,1).*energyratio;
-numerator(VR==0)=0;
+numerator(maskout)=0;
 probability=numerator./sum(numerator(:));
-
-size(probability)
-
-sum(probability(:))
 
 % calculate a normalized version of ghphi
 [phincrs,hincrs]=meshgrid(phincr,hincr);
 scratch=ghphi.*phincrs.*hincrs;
 ghphinormal=scratch./sum(scratch(:));
 
-%ghphinormal=ghphi./sum(ghphi(:));
-
 scratch=ghphi.*phincrs.*hincrs;
-disp(['Integrated g(h) before: ',num2str(sum(scratch(:)))])
 
-% only do calculations where there is ice
+disp(['Integrated g(h) before redistribution: ',num2str(sum(scratch(:)))])
+
+% only do calculations where there is ice in the initial category
 hidx=find(ghphi(:,1)>0);
 
 % Integral transform:
-
+%
 % Calculate ar dependent on strain for the area change from non-porous ice
 % where i represents the undeformed ice index, and j is the strain index.
+
+weight=sum(ghphinormal(:,1))
+
 for i=hidx'
  for j=1:length(phigrid)
 
-  if VR(i,j)>0
+  if maskin(i,j)
 
    % calculate step function for an indidividual ridge of the given strain
-   GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j))/phincr(j);
+   GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j))./phincr(j);
    
    % now determine total area based on strain and probability of occurrence
-   % spread between the two closest numerical categories
-   ar(:,j)=probability(i,j)*(1+EPSILON(j))*GRHPHI(:) + ar(:,j);
+   ar(:,j)=weight*probability(i,j)*(1+EPSILON(j))*GRHPHI(:) + ar(:,j);
   
   end
 
  end
 end
 
-
-% only do calculations where there is ice
-hidx=find(ghphi(:,2)>0);
-
-if ~isempty(hidx)
-
 for i=hidx'
- for j=2:2 %length(EPSILON)
+ for j=2:length(EPSILON)-1
 
-  % work per ridge shape M x N, where gin(1,:) is the concentration 
-  % of ice with zero porosity, and is therefore unridged
-  denominator=LK(i,j:end).*VR(i,j:end);
-  energyratio=sum(denominator(:))./denominator;
+  if ghphi(i,j)>0
 
-  % probability of a ridge forming with strain and parent ice thickness HF
-  % with discrete distribution ghphi with minimim porosity.
-  numerator=ghphi(:,j).*energyratio;
-  numerator(VR(i,j:end)==0)=0;
-  probability=numerator./sum(numerator(:));
- 
-  size(probability)
+   % work per ridge shape M x N, where gin(1,:) is the concentration 
+   % of ice with zero porosity, and is therefore unridged
 
-  disp(['Sum over probability: ',num2str(sum(probability(:)))])
+   denominator=LK(i,j:end).*VR(i,j:end);
+   energyratio=sum(denominator(:))./denominator;
 
+   % probability of a ridge forming with strain and parent ice thickness HF
+   % with discrete distribution ghphi with minimim porosity.
+   numerator=ghphi(:,j).*energyratio;
+   numerator(maskout(:,j:end))=0;
+   probability=numerator./sum(numerator(:));
 
-%  for k=j:length(EPSILON)
-%  if VR(i,j)>0
+   weight(j)=sum(ghphinormal(:,j));
 
-%   % calculate step function for an indidividual ridge of the given strain
-%   GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(j),PHI(i,j))/phincr(j);
+   %disp(['Sum over probability: ',num2str(sum(probability(:)))])
+
+   for k=j:length(EPSILON)-1
+
+    if maskin(i,k)
+
+     % calculate step function for an indidividual ridge of the given strain
+     GRHPHI=ridgepack_grhphi(HF(i),HFs(i),EPSILON(k),PHI(i,k))./phincr(k);
    
-%   % now determine total area based on strain and probability of occurrence
-%   % spread between the two closest numerical categories
-%   probability(i,k)
-%   EPSILON(j)
-%   EPSILON(k)
-%   ar(:,k)
-%   ar(:,k)=probability(i,k)*(1+EPSILON(j)-EPSILON(k))*GRHPHI(:) + ar(:,k);
-%  end
- end 
-end
+     % now determine total area based on strain and probability of occurrence
+     ar(:,k)=weight(j)*probability(i,k-j+1)*(1+EPSILON(j)-EPSILON(k))*GRHPHI(:) + ar(:,k);
+
+    end
+
+
+   end 
+
+  end
+
+ end
 
 end
 
 
-%scratch=ar.*phincrs.*hincrs;
-%disp(['Integrated g(h) after: ',num2str(sum(scratch(:)))])
+scratch=ar.*phincrs.*hincrs;
+disp(['Integrated g(h) after redistribution: ',num2str(sum(scratch(:)))])
+
+% Advect in ice of the same distribution
+scratch=ar.*phincrs.*hincrs;
+GHPHI=scratch./sum(scratch(:));
+GHPHI=GHPHI./(phincrs.*hincrs);
+
+scratch=GHPHI.*phincrs.*hincrs;
+disp(['Integrated g(h) after advection: ',num2str(sum(scratch(:)))])
 
 %GHPHI=ar;
 

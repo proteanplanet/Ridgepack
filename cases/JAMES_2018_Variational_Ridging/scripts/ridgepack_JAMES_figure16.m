@@ -15,10 +15,13 @@ if str2num(d(end-3:end))<2018
 end
 
 clear
-close all
+clf
+%close all
 
 % set resolution of Epsilon
-resolution=0.005
+resolution=0.001
+%resolution=0.005
+%resolution=0.01
 
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
@@ -66,12 +69,12 @@ disp(['Size of ghphi is ',num2str(size(ghphi))])
 % set initial thickness distribution of sea ice field (this allows for extension
 % to different initial shapes of thickness distirbutions if desired)
 gshape='delta';
-hinitial = 2.0;
+hinitial = 1.0;
 
 % Case of the initial thickness distribution as a delta function on discrete grid
 if strcmp(gshape,'delta')
  idx=find(min(abs(hgrid(:)-hinitial))==abs(hgrid(:)-hinitial));
- ghphi(idx,1)=1/(hincr(idx)*phincr(1));
+ ghphi(idx,1,1)=1/(hincr(idx)*phincr(1));
 else
  error('gshape specification not currently available')
 end
@@ -81,19 +84,43 @@ dt=10;
 
 clf
 
-for i=1:2
+% intitial condition
+ghphihist(:,:,1)=ghphi;
+
+for i=2:10
+
  i
- [ghphi]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
+
+ [ghphi(:,:)]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
                      EPSILON,PHI,VR,HK,HS,LK,LS,ghphi,epsilondot,dt);
 
+ % history
+ ghphihist(:,:,i)=ghphi;
+
+if i==0
+
+ clf
+ surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
+ shading flat
+ set(gca,'Zscale','log')
+ ylim([0 0.4])
+ xlim([0 10])
+ zlim([10^-10 10^2])
+ view(135,30)
+
+else
+
  % integrate through the porosity dimension
- gh=ghphi.*phincrs;
+ gh=squeeze(ghphihist(:,:,i)).*phincrs;
  gh=sum(gh/sum(gh(:)),2);
 
  % calculate thickness distribution
  semilogy(hgrid,gh)
  hold on
- drawnow
+
+end
+
+drawnow
 
 end
 
