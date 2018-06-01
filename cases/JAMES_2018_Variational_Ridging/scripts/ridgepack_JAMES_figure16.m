@@ -23,16 +23,18 @@ resolution=0.001
 %resolution=0.005
 %resolution=0.01
 
+% if reseting resolution, you must regenerate
+generate=false;
+%generate=true;
+
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
 writedir=[dir(1:strfind(dir,'scripts')-1),'output'];
 [status,msg]=mkdir(writedir);
 cd(writedir);
 
-generate=false;
-%generate=true;
 
-% calculate or load zetahat plane
+% calculate or load zeta-hat plane
 if generate
  disp(['Generating data in: ',char(13),' ',writedir])
  [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(resolution);
@@ -42,7 +44,7 @@ else
  try
   load ridgepack_zetahatplane
  catch
-  disp('Unable to load zeta-hat plane - switch to generate')
+  error('Unable to load zeta-hat plane - switch to generate')
  end
 end
 
@@ -79,84 +81,107 @@ else
  error('gshape specification not currently available')
 end
 
-epsilondot=-10^-6;
-dt=10;
-
 clf
 
-% intitial condition
-ghphihist(:,:,1)=ghphi;
+%integrate=false;
+integrate=true;
 
-for i=2:10
+bivariate=false;
+%bivariate=true;
 
- i
+if integrate
 
- [ghphi(:,:)]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
-                     EPSILON,PHI,VR,HK,HS,LK,LS,ghphi,epsilondot,dt);
+ % intitial condition
+ ghphihist(:,:,1)=ghphi;
 
- % history
- ghphihist(:,:,i)=ghphi;
+ for i=2:7
 
-if i==0
+  disp(['Step: ',num2str(i)]) 
 
- clf
- surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
- shading flat
- set(gca,'Zscale','log')
- ylim([0 0.4])
- xlim([0 10])
- zlim([10^-10 10^2])
- view(135,30)
+  [ghphi(:,:)]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
+                     EPSILON,PHI,VR,HK,HS,LK,LS,ghphi);
 
-else
+  % history
+  ghphihist(:,:,i)=ghphi;
+  size(ghphihist)
 
- % integrate through the porosity dimension
- gh=squeeze(ghphihist(:,:,i)).*phincrs;
- gh=sum(gh/sum(gh(:)),2);
+  if bivariate
 
- % calculate thickness distribution
- semilogy(hgrid,gh)
- hold on
+   clf
+   surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
+   shading flat
+   set(gca,'Zscale','log')
+   ylim([0 0.4])
+   xlim([0 10])
+   zlim([10^-10 10^2])
+   view(135,30)
 
-end
+  else 
 
-drawnow
+   % integrate through the porosity dimension
+   gh=squeeze(ghphihist(:,:,i)).*phincrs;
+   gh=sum(gh/sum(gh(:)),2);
+
+   % calculate thickness distribution
+   semilogy(hgrid,gh)
+   hold on
+
+  end
+
+  drawnow
+
+ end
+
+ save('ridgepack_ghphi','ghphihist')
+
+else % read file to plot
+
+ load ridgepack_ghphi
 
 end
 
 return
 
-clf
-surf(hgrid,phigrid,ghphi','FaceAlpha',0.75)
-shading flat
-set(gca,'Zscale','log')
-ylim([0 0.4])
-xlim([0 10])
-zlim([10^-7 10^5])
-view(135,30)
+if bivariate
 
+   % plot up 2D thickness distribution 
+   clf
+   i=3
+   surf(hgrid,phigrid,squeeze(ghphihist(:,:,i))','FaceAlpha',0.75)
+   shading flat
+   set(gca,'Zscale','log')
+   ylim([0 0.4])
+   xlim([0 10])
+   zlim([10^-5 10^2])
+   view(135,30)
+
+else 
+
+   % plot up thickness distribution along thickness axis
+
+   % integrate through the porosity dimension
+   
+   for i=1:size(ghphihist,3)
+
+    gh=squeeze(ghphihist(:,:,i)).*phincrs;
+    gh=sum(gh/sum(gh(:)),2);
+
+    % calculate thickness distribution
+    semilogy(hgrid,gh)
+    hold on
+
+   end
+
+   ylim([10^-7 10^-1])
+
+
+   
+
+  %legend({'initial distribution','final distribution'})
+
+end
 
 return
-
-% integrate through the porosity dimension
-gh=ghphi.*phincrs;
-gh=sum(gh/sum(gh(:)),2);
-
-% calculate thickness distribution
-clf
-semilogy(hgrid,gh)
-hold on
-drawnow
-
-semilogy(hgrid,sum(ghphi,2))
-hold on
-drawnow
-
-legend({'initial distribution','final distribution'})
-
-% plot up thickness distribution along thickness axis
-
-
 
 
 % determine directory for read/write

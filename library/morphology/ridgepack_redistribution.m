@@ -1,5 +1,5 @@
 function [GHPHI]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
-                     EPSILON,PHI,VR,HK,HS,LK,LS,ghphi,epsilondot,dt)
+                     EPSILON,PHI,VR,HK,HS,LK,LS,ghphi)
 
 % ridgepack_redistribution - Redistribution function Psi
 %
@@ -28,7 +28,7 @@ global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
 % check there are sufficient inputs
-if nargin~=14
+if nargin~=12
  error('incorrect number of inputs')
 end
 
@@ -151,37 +151,6 @@ GHPHI=GHPHI./(phincrs.*hincrs);
 scratch=GHPHI.*phincrs.*hincrs;
 disp(['Integrated g(h) after advection: ',num2str(sum(scratch(:)))])
 
-%GHPHI=ar;
-
-return
-
-% Now calculate the transform of porous ice, summing over all 
-for j=2:length(phigrid)-1
-
- % vectorize second loop for efficiency
- jdx=find(phigrid>=phigrid(j));
-
- weight(j)=sum(ghphinormal(:,j));
-
- %ar(:,j)=ar(:,j)-weight(j)*ghphi(:,j);
-
-% ar(:,j)=ar(:,j)-ghphi(:,j);
-
-% ghphinew(:,jdx)=weight(j)*ghphi(:,jdx)
-
- ar(:,jdx)=weight(j).*ghphi(:,jdx) + ar(:,jdx);
-
-end
-
-% finish determining by determining gout       
-GHPHI=ar;
-
-scratch=ar.*phincrs.*hincrs;
-disp(['Integrated g(h) after: ',num2str(sum(scratch(:)))])
-
-% normalize the distribution, which is the equivalent of advecting in ice
-% with the same distribution
-
 if debug; 
  disp(['size of ghphi is ',num2str(size(ghphi))])
  disp(['size of ar is ',num2str(size(ar))])
@@ -194,5 +163,4 @@ if debug;
  disp(['size of probability is ',num2str(size(probability))])
  disp(['...Leaving ',mfilename]); end
 end
-
 
