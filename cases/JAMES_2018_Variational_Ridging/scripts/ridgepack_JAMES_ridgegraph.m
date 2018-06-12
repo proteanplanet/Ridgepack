@@ -33,7 +33,7 @@ end
 clear
 close all
 
-fig=2;
+fig=7;
 
 if fig==1
  nrows=1;
