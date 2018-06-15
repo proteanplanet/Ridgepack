@@ -37,9 +37,9 @@ hfs=[0 0];
 % Limits and labels
 xlab='Ridge Width, $\hat{L}_K$ (m)';
 xmin=10^0;
-xmax=2*10^3;
+xmax=7*10^3;
 ylab='Probability Density';
-ymin=10^-9;
+ymin=2*10^-11;
 ymax=10^-2;
 
 % switch on to only indicate gradient once (rather than for both lines
@@ -121,8 +121,8 @@ for i=1:length(hf)
         'facecol','no',...
         'edgecol','interp',...
         'linew',2);
- ridgepack_text(x(y<2*10^-8),y(y<2*10^-8),['$h_F{=}',num2str(hf(i),...
-                 '%5.1f'),'$m'],9,cmap(end,:));
+ ridgepack_text(x(y<2*10^-9),y(y<2*10^-9),['$h_F{=}',num2str(hf(i),...
+                 '%5.1f'),'$m'],10,cmap(end,:));
 
 end
 
