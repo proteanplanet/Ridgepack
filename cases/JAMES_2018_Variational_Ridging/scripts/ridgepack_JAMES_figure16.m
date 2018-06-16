@@ -7,3 +7,8 @@
 % submitted to J. Adv. Model Earth Sy.
 %
 % Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+
+cd('/Users/aroberts/local/matlab/ridgepack16')
+
+ridgepack_JAMES_figure16
+

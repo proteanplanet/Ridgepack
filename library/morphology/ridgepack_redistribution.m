@@ -11,3 +11,8 @@ function [GHPHI]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
 
+cd('/Users/aroberts/local/matlab/ridgepack16')
+
+[GHPHI]=ridgepack_redistribution(hgrid,hincr,phigrid,phincr,...
+                     EPSILON,PHI,VR,HK,HS,LK,LS,ghphi);
+

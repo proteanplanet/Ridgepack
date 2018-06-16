@@ -85,13 +85,14 @@ nc.VRF.data(2:2:end,2:2:end)=nc.VR.data(2:2:end,2:2:end).*HSmaxfilt(2:2:end,2:2:
 figure(1)
 
 % plot the data
-ridgepack_image(nc,'hf','epsilon','VRF',{},{},[1:1:11],10^-1,10^4,'vertical','parula')
+ridgepack_image(nc,'hf','epsilon','VRF',{},{},[1:1:12],10^-1,10^4,'vertical','parula')
 set(gca,'Xscale','log','Ydir','reverse')
 xmin=min(HF);
 xmax=max(HF);
 xlim([xmin xmax])
 ymax=0;
-ymin=min(EPSILON);
+%ymin=min(EPSILON);
+ymin=-0.98;
 ylim([ymin ymax])
 hold on
 drawnow

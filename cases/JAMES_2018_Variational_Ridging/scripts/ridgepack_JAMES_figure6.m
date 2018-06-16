@@ -41,7 +41,7 @@ colormap(colmap);
 
 % read in image of Peter Wadham's paper
 fname='DavisWadhamsFig16c.png';
-floc='/Users/aroberts/Publications/2018_Morphology/Figures/Figure6';
+floc='/Users/aroberts/Publications/2018_Morphology_R1/Figures/Figure6';
 try
  foundimage=true;
  cd(floc);
