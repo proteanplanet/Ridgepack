@@ -1,16 +1,20 @@
+% ridgepack_ssmi_to_model - regrid SSM/I concentration to RASM domain
+%
+% This script regrids SSM/I-derived sea ice concentration on a polar stereographic
+% grid to the RASM ice-ocean domain grid, and writes the output in netcdf.
+% In order to use this script, you must first peel off the desired field
+% from the NOAA CDR dataset using the ridgepack_cdr_ssmi_to_nc script.
+%
+% Andrew Roberts, Naval Postgraduate School, June 2018 (afrobert@nps.edu)
 
 clear
 clf
 
+% set data home and set name here
 datahome='~/data/SATELLITE/processed';
-
-%dataset='nsidc0051_north_1978_2010';
-%dataset='nsidc0081_conc_north_2011_2012';
-%dataset='NPS_CDR_conc_1978_2010';
-%dataset='NPS_CDR_conc_1978_2010_monthly';
-
 dataset='G02202_v3_merged_conc_north_1979_2017';
 
+% specific output file name
 outfile=[dataset,'_RASM_CICE'];
 
 cd(datahome)

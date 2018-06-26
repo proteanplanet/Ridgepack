@@ -1,15 +1,27 @@
 % ridgepack_cdr_ssmi_to_nc - Generate SSM/I CDR Concentration NetCDF file
-
+%
+% This script generates a seperate netcdf timeseries from the existing dataset
+% of the NOAA Climate Data Record (CDR). In other words, it peels off
+% one of the chosen products form the CDR suite of products, and places
+% it in a local netcdf file appropriate for subsequent processing within 
+% the RASM ridgepack case scripts.
+%
+% Andrew Roberts, Naval Postgraduate School, June 2018 (afrobert@nps.edu)
+ 
 
 clear
 
+% set hemisphere
 %hemisphere='north';
 hemisphere='south';
 
+% set data location
 %datahome='~/data/SATELLITE/downloaded/G02202_v2';
 datahome='/Volumes/Promise Pegasus/data2/G02202_V3';
 
-dataset='goddard_merged_seaice_conc';
+% set dataset required from the NOAA dataset
+dataset='goddard_merged_seaice_conc'
+
 
 firstyear=1979;
 latestyear=2017;
