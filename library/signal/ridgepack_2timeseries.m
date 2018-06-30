@@ -52,16 +52,16 @@ if not(isstruct(nc1)); error([inputname(1),' is not a structure']); end
 if isempty(intersect({'time'},nc1.(name1).dimension))
  error([name1,' does not have time as a dimension']);
 else
- otherdims=ncsetdiff(nc1.(name1).dimension,{'time'});
+ otherdims=ridgepack_setdiff(nc1.(name1).dimension,{'time'});
  if isempty(otherdims)
   nc1.(name1).data=nc1.(name1).data(:);  
  else
-  nc1=ncshuffle(nc1,otherdims);
+  nc1=ridgepack_shuffle(nc1,otherdims);
  end
 end
 
 % Get data and standard units
-[z,nc1]=ncstandardunits(nc1,name1);
+[z,nc1]=ridgepack_standardunits(nc1,name1);
 clear z;
 
 % Remove general NaNs from data if dealing with 

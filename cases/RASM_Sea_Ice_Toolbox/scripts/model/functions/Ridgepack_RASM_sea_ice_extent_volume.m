@@ -141,6 +141,7 @@ for j=1:length(runcell)
  try
   cd([basedir,run,'/ice/monthly'])
  catch
+  disp(['Tried to cd to ',basedir,run,'/ice/monthly','... now trying a different dir'])
   cd([basedir,'r',run(2:end),'/ice/monthly'])
  end
 

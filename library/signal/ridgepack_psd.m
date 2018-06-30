@@ -286,11 +286,11 @@ else
 end
 
 % calculate units
-if isempty(ts.DataInfo.Unit); units=''; else; units=['{(',ncunits(ts),')$^{2}$}']; end
+if isempty(ts.DataInfo.Unit); units=''; else; units=['{(',ridgepack_units(ts),')$^{2}$}']; end
 
 % If no output arguments are specified, plot the spectrum
 if nargout==0 & ~sp 
-	ncplotpsd(faxis,psd,{},conf,cutconf,description,units);
+	ridgepack_plotpsd(faxis,psd,{},conf,cutconf,description,units);
 	title({ts.Name,ts.DataInfo.UserData},'HorizontalAlignment','center');
 	clear faxis;
 elseif nargout==0 & sp
@@ -313,7 +313,7 @@ elseif nargout==0 & sp
 	colorbar;
 	colormap jet;
 	xlabel(['Frequency (cycles {day$^{-1}$})']);
-	title(nccellcat({ts.Name,'(dB {bandwidth$^{-1}$})'}));
+	title(ridgepack_cellcat({ts.Name,'(dB {bandwidth$^{-1}$})'}));
 	clear faxis;
 end
 

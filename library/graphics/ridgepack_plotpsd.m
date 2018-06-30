@@ -75,17 +75,17 @@ if nargin<9
  fhi=min(4.5,floor(max(faxis)));
 end
 if nargin<11
- plo=5*floor(min(ncdb(psd(faxis>flo & faxis<fhi)))/5);
- phi=10*ceil(max(ncdb(psd(faxis>flo & faxis<fhi)))/10);
+ plo=5*floor(min(ridgepack_db(psd(faxis>flo & faxis<fhi)))/5);
+ phi=10*ceil(max(ridgepack_db(psd(faxis>flo & faxis<fhi)))/10);
 end
 
 % plot graph initially on a linear scale with units of dB
-psd=ncdb(psd); 
+psd=ridgepack_db(psd); 
 
 % plot one side in dB and other in semilogy. This is done this way
 % so that text and the error bar can be plotted more easily on the 
 % linear scale (with units of dB). Only plot 
-[AX,H1,H2]=plotyy(faxis,psd,faxis,ncinvdb(psd),'plot','semilogy'); hold on;
+[AX,H1,H2]=plotyy(faxis,psd,faxis,ridgepack_invdb(psd),'plot','semilogy'); hold on;
 if nargin>11
 
  nk=length(H1)-length(col)+1;
@@ -141,7 +141,7 @@ if  ~isempty(leg)
 end
 
 xlim(AX(1),[flo, fhi]); xlim(AX(2),[flo, fhi]);
-ylim(AX(1),[plo, phi]); ylim(AX(2),[ncinvdb(plo), ncinvdb(phi)]);
+ylim(AX(1),[plo, phi]); ylim(AX(2),[ridgepack_invdb(plo), ridgepack_invdb(phi)]);
 xlab=xlabel(['Frequency (cycles day$^{-1}$)'],'Interpreter','Latex');
 
 % If units are not defined, use a relative axis with dB 
@@ -178,7 +178,7 @@ end
 % provide error bar
 if nargin>4 & ~isempty(cutconf)
  disp('Plotting error bar')
- conf=ncdb(conf*ncinvdb(psd(1,1)));
+ conf=ridgepack_db(conf*ridgepack_invdb(psd(1,1)));
  errbelow=psd(1,1)-conf(1,1);
  errabove=conf(1,2)-psd(1,1);
  if flo<0; xerror=flo+(fhi-flo)*0.055; else; xerror=flo+(fhi-flo)*0.50; end
