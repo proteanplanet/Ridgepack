@@ -1,11 +1,14 @@
 
+clear
+
 
 % This script splices in a time_bounds function to the SSM/I dataset
-datadir='/Users/aroberts/data/SATELLITE/processed';
+%datadir='/Users/aroberts/data/SATELLITE/processed';
+datadir='/Volumes/RobertsRaid3/data/SATELLITE/processed';
 datafile='Pathfinder_icemotion_monthly_1979_2016_v3_RASM_CICE';
 datagrab={'u','v'};
 
-outfile=[datafile,'_time_bounds'];
+outfile=[datafile,'_time_bounds']
 
 cd(datadir)
 
@@ -36,9 +39,9 @@ for i=1:length(nc.time.data);
  ncr.time_bounds.data(2,1)=datenum(datev);
 
  if i==1
-  ridgepack_clone(ncr,outfile)
+  ridgepack_write(ncr,outfile)
  else
-  ridgepack_clone(ncr,outfile,{'time'},{0})
+  ridgepack_write(ncr,outfile,{'time'},{0})
  end
 
 end

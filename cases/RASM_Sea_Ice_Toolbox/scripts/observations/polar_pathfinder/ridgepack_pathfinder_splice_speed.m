@@ -1,6 +1,7 @@
 
 % This script splices in a time_bounds function to the SSM/I dataset
-datadir='/Users/aroberts/data/SATELLITE/processed';
+%datadir='/Users/aroberts/data/SATELLITE/processed';
+datadir='/Volumes/RobertsRaid3/data/SATELLITE/processed';
 datafile='Pathfinder_icemotion_monthly_1979_2016_v3_RASM_CICE_time_bounds';
 datagrab={'u','v'};
 
@@ -8,7 +9,7 @@ outfile=[datafile,'_speed'];
 
 cd(datadir)
 
-ncu=ncclone(datafile,'u',1);
+ncu=ridgepack_clone(datafile,'u',1);
 ncu.speed=ncu.u;
 ncu.speed.long_name='drift speed';
 

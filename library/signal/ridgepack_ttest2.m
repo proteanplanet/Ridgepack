@@ -63,7 +63,7 @@ end
 % extract standard deviation and equivalent degrees of freedom
 % from mean dataset.
 findx=0;
-[variablenames1,numbervariables1]=ncname(nc1);
+[variablenames1,numbervariables1]=ridgepack_name(nc1);
 for i=1:numbervariables1
  name=char(variablenames1{i});
  if strcmpi(name,[var1,'_std'])
@@ -83,7 +83,7 @@ if findx<3
 end
 
 findx=0;
-[variablenames2,numbervariables2]=ncname(nc2);
+[variablenames2,numbervariables2]=ridgepack_name(nc2);
 for i=1:numbervariables2
  name=char(variablenames2{i});
  if strcmpi(name,[var2,'_std'])
@@ -154,5 +154,5 @@ nc.h.long_name=['HYPOTHESIS TEST ',nc.(var1).long_name];
 
 nc=rmfield(nc,{[var1,'_std'],[var1,'_equiv'],var1});
 
-nc=ncstruct(nc);
+nc=ridgepack_struct(nc);
 
