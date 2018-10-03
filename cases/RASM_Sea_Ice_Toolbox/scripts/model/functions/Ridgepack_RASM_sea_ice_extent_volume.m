@@ -69,13 +69,13 @@ satcol=0.5*[1 1 1]; % color of Passive Microwave Obs
 
 if cesmle
  cesmcol=0.0*[1 1 1]; % color of CESM results
- cesmdir='/Users/aroberts/data/MODEL/RASM';
+ cesmdir='/Volumes/RobertsRaid3/data/MODEL/RASM';
  leg{length(leg)+1}='CESM';
 end
 
 if piomas
  piomascol=0.0*[1 1 1]; % color of CESM results
- piomasdir='/Users/aroberts/data/MODEL/PIOMAS'
+ piomasdir='/Volumes/RobertsRaid3/data/MODEL/PIOMAS'
 end
 
 lw=0.5; % linewidth
@@ -96,7 +96,7 @@ isendday=[31 31 31 30 31 30 30 30 30 30];
 isenddates=datenum(ismeanyear,isendmonth,isendday);
 
 % load in ICESat data, and add area of grid cells
-ncis=ridgepack_clone([getenv('HOME'),'/data/SATELLITE/processed/kwok_icesat.nc']);
+ncis=ridgepack_clone('/Volumes/RobertsRaid3/data/SATELLITE/processed/kwok_icesat.nc');
 
 xemax=0;
 xemin=100;
@@ -122,7 +122,7 @@ for j=1:length(runcell)
  else
   disp(['CASE: ',run]);
  end
- basedir=[getenv('HOME'),'/work/processing/'];
+ basedir=['/Volumes/RobertsRaid3/work/processing/'];
  
  rrun=run;
  %filetype1='.cice.hp.';
@@ -133,7 +133,7 @@ for j=1:length(runcell)
  sfield='hi';
  snowfield='hs';
 
- satdir=[getenv('HOME'),'/data/SATELLITE/processed'];
+ satdir=['/Volumes/RobertsRaid3/data/SATELLITE/processed'];
  filetype5='G02202_v3_merged_conc_north_1979_2017_extent_area.nc';
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

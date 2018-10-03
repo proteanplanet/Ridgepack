@@ -29,7 +29,7 @@ if length(rasmcases)~=length(quicknames)
 end
 
 % read in mask
-ridgepack_mask=ridgepack_clone('/Users/aroberts/data/MODEL/RASM/RASM_POPCICE_GRID_MASKS_AND_METRICS',...
+ridgepack_mask=ridgepack_clone('/Volumes/RobertsRaid3/data/MODEL/RASM/RASM_POPCICE_GRID_MASKS_AND_METRICS',...
                {'mask_centralarctic','latitude','longitude'});
 
 % set field names
@@ -38,7 +38,7 @@ fieldu=['uvel',meanend];
 fieldv=['vvel',meanend]; 
 
 % generate speed files if they don't yet exist
-RASM_sea_ice_make_speed(rasmcases,fieldu,fieldv);
+Ridgepack_RASM_sea_ice_make_speed(rasmcases,fieldu,fieldv);
 
 count=0;
 
@@ -54,10 +54,9 @@ for j=1:nrows
  end
 
  % set cases
- home=getenv('HOME');
- dirdata=[home,'/data'];
+ dirdata=['/Volumes/RobertsRaid3/data'];
  if j>1
-  dircase=[home,'/work/processing/',rasmcase,'/ice/monthly'];
+  dircase=['/Volumes/RobertsRaid3/work/processing/',rasmcase,'/ice/monthly'];
   cd(dircase)
  end
 

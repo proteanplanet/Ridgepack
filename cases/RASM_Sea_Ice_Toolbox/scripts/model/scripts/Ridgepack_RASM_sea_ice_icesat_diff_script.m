@@ -7,8 +7,8 @@ quicknames={'RASM 1.1','RASM 2.1'};
 pubdir='/Users/aroberts/science/publications/2018_RASM/Figures'
 
 
-%springfall={'spring','fall'};
-springfall={'fall'};
+springfall={'spring','fall'};
+%springfall={'fall'};
 columns=5;
 
 pub=false;

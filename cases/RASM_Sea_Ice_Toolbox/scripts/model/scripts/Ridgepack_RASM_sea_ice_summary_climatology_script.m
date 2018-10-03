@@ -1,15 +1,15 @@
 
 
-rasmcases={'c6G05b','consortium4','R2100aRBRcaaa01a'};
-quicknames={'RASM CICE6-G','RASM CICE6','RASM 2.1'};
+rasmcases={'R1009RBRceap01a','R2100aRBRcaaa01a'};
+quicknames={'RASM 1.1','RASM 2.1'};
 
 pubdir='/Users/aroberts/science/publications/2018_RASM/Figures'
 
 %pub=true
 pub=false
 
-startyear=1980
-endyear=1982
+startyear=1990
+endyear=2009
 
 minthick=[0.0]
 
