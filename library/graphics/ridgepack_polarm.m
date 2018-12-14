@@ -308,7 +308,8 @@ set(gca,'Ylim',[y1 y2]);
 
 % Set fontsize
 figout=get(gca,'Position');
-fontsize=max(4,min(8,10*sqrt((figout(3).^2)+(figout(4).^2))));
+%fontsize=max(4,min(8,10*sqrt((figout(3).^2)+(figout(4).^2))));
+fontsize=max(5,min(8,10*sqrt((figout(3).^2)+(figout(4).^2))));
 set(gca,'fontsize',fontsize);
 
 % Scaled degree spacing of grid dots 

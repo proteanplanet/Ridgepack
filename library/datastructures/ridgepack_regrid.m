@@ -191,7 +191,7 @@ ncnew.longitude.data=wrapTo180(ncnew.longitude.data);
 timepresent=false;
 [variablenames,numbervariables]=ridgepack_name(nc);
 for m=1:numbervariables
-	name=char(variablenames(m));
+	name=char(variablenames(m))
 	if strcmp(name,'time'); 
 	       timepresent=true;
 	       if ischar(rec1)
@@ -220,6 +220,8 @@ for m=1:numbervariables
 	       (strcmp(name,'latitude') | strcmp(name,'longitude'))
 	       dimx='latitude';
 	       dimy='longitude';
+        else
+               disp('no assignment')
 	end
 end
 
