@@ -14,7 +14,6 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 % res - resolution of the strain and porosity grid (optional)
 %       with typical values between 0.01 and 0.001.
 %
-%
 % OUTPUT:
 %
 % HF       - thickness of initial ice (m, length N)
@@ -31,9 +30,20 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 % purpose of the paper that Ridgepack Version 1.0 supports, this dependency
 % has been removed.
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% REFERENCE: 
+%
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

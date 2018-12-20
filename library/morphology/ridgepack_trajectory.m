@@ -16,7 +16,6 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
 % res - resolution of the strain and porosity grid (optional)
 %       with typical values between 0.01 and 0.001.
 %
-%
 % OUTPUT:
 %
 % EPSILON     - ridge strain along zeta-hat trajectory (dimensionless)
@@ -37,9 +36,20 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
 % d2          - dilation field on (epsplitmesh,phsplitmesh)
 %               [phi-component](J m^-2)
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% REFERENCE: 
+%
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

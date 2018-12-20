@@ -20,7 +20,6 @@ function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
 % phi   - macroporosity of ridge (dimensionless)
 % alpha - angle of repose of a ridge (degrees)
 %
-%
 % OUTPUT:
 %
 % HFD     - floe draft (m)
@@ -34,9 +33,20 @@ function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
 % L0      - original cross-sectional width of undeformed parent ice (m)
 % EPSILON - compressional strain or ridge
 % 
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% REFERENCE: 
+%
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

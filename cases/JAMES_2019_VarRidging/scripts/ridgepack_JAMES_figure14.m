@@ -2,14 +2,20 @@
 % 
 % This script generates Figure 14 from:
 %
-% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
-% submitted to J. Adv. Model Earth Sy.
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, 
+% W. Maslowski (2019), Variational Method for Sea Ice Ridging in 
+% Earth System Models, J. Adv. Model Earth Sy.
 %
 % This function generates and plots a zeta-hat plane as a test of the function 
 % ridgepack_zetahatplane in the morphology library. 
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 % version check
 [v d] = version;

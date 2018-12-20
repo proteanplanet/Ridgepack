@@ -4,6 +4,11 @@ function [GRHPHI,hgrid]=ridgepack_grhphi(hF,hFs,epsilon,phi)
 %
 % function [GRHPHI,hgrid]=ridgepack_grhphi(hF,hFs,epsilon,phi)
 %
+% This function calculates the thickness distribution step function GRHPHI on the 
+% thickness axis given the initial sea ice thickness, hF, snow thickness on 
+% top, hFs, as well as strain and porosity of the ice in the given ridge. If the 
+% step function exceeds the thickness grid, it is returned as NaNs.
+%
 % INPUT:
 % 
 % hF      - parent sheet sea ice thickness (m) 
@@ -17,14 +22,20 @@ function [GRHPHI,hgrid]=ridgepack_grhphi(hF,hFs,epsilon,phi)
 % GRHPHI - step thickness distribution on hgrid with porosity phi
 % hgrid  - thickness grid (m)
 %
-% This function calculates the thickness distribution step function GRHPHI on the 
-% thickness axis given the initial sea ice thickness, hF, snow thickness on top, hFs,
-% as well as strain and porosity of the ice in the given ridge. If the step
-% function exceeds the thickness grid, it is returned as NaNs.
+% REFERENCE: 
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

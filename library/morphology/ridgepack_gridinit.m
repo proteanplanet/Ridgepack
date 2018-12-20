@@ -1,20 +1,21 @@
 function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
-            ridgepack_gridinit(resolution)
+            ridgepack_gridinit(resolution,minstrain,maxstrain)
 
 % ridgepack_gridinit - set up the initial thickness, strain and porosity grid 
 %
 % function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
-%             ridgepack_gridinit(resolution)
+%             ridgepack_gridinit(resolution,minstrain,maxstrain)
 %
 % Initializes the numerical grid for calculating the state-space trajectory
-% of a ridge and for integrating thickness distribution changes. A thickness
+% of a ridge and for integrating thickness distribution changes. The thickness
 % distribution GHPHI is also initialized.
 %
 % INTPUT:
 %
-% resolution - resolution of the strain and porosity grid (optional)
-%              with typical values between 0.01 and 0.001.
-%
+% resolution - resolution of the strain and porosity grid with typical 
+%              values between 0.01 and 0.001 (optional)
+% minstrain  - minimum absolute strain in the epsilon grid (optional)
+% maxstrain  - maximum absolute strain on the epsilon grid (optional)
 % 
 % OUTPUT:
 %
@@ -27,9 +28,20 @@ function [HINCR,EINCR,HGRID,EPSILONGRID,PHIGRID,EPSILONSPLIT,PHISPLIT,GHPHI]=...
 % PHISPLIT     - split porosity grid (dimensionless)
 % GHPHI        - initialized thickness distribition g(h,phi)
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% REFERENCE: 
+%
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
@@ -52,11 +64,32 @@ if debug
 end
 
 % minimim abs(strain) and porosity
-%minstrain = 0.01;
-minstrain = EINCR;
+if nargin<2
+ minstrain = EINCR;
+elseif isnumeric(minstrain)
+ if maxstrain<0 | maxstrain>1
+  error('minstrain is the absolute value and has limits 0 < minstrain < 1')
+ else
+  disp(['Setting minimum strain manually to',num2str(minstrain)])
+ end
+else
+ error('minstrain is not numeric')
+end
 
 % maximim abs(strain) and porosity
-maxstrain = (1-EINCR)-EINCR-minstrain;
+if nargin<3
+ maxstrain = (1-EINCR)-EINCR-minstrain;
+elseif isnumeric(maxstrain)
+ if maxstrain<0 | maxstrain>1
+  error('maxstrain is the absolute value and has limits 0 < maxstrain < 1')
+ elseif maxstrain<=minstrain
+  error('maxstrain is less than minstrain')
+ else
+  disp(['Setting maximum strain manually to',num2str(maxstrain)])
+ end
+else
+ error('maxstrain is not numeric')
+end
 
 % minimum thickness on zeta-hat plane trajectory plane (m)
 minthick = 0.01;

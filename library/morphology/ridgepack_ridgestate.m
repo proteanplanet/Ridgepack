@@ -17,7 +17,6 @@ function [EPSILON,PHI,ALPHAHAT,HR,HRS,HK,HS,LK,LS]=...
 % hfs     - thickness of snow on parent ice (m)
 % epsilon - ridge strain (-1,0) as a single number or vector of values for 
 %           which ridge statistics are required (dimensionless; optional)
-%            
 %
 % OUTPUT:
 %
@@ -31,9 +30,20 @@ function [EPSILON,PHI,ALPHAHAT,HR,HRS,HK,HS,LK,LS]=...
 % LK          - cross-sectional width of a keel (m)
 % LS          - cross-sectional width of a sail (m)
 %
-% Ridgepack Version 1.0.
-% Andrew Roberts, Naval Postgraduate School, May 2018 (afrobert@nps.edu)
-% Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+% REFERENCE: 
+%
+% Roberts, A., E. Hunke, S. Kamal, W. Lipscomb, C. Horvat, W. Maslowski (2019),
+% A Variational Method for Sea Ice Ridging in Earth System Models, 
+% J. Adv. Model Earth Sy. 
+% 
+% VERSION/LIBRARY: Ridgepack 1.0.1/MORPHOLOGY
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Reviewed: by Samy Kamal, Naval Postgraduate School, May 2018
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end

@@ -1,11 +1,11 @@
-function ridgepack_JAMES_figure6
-% ridgepack_JAMES_figure6 - Generates Figure 6 in JAMES Variational Ridging paper
+function ridgepack_JAMES_figure06
+% ridgepack_JAMES_figure06 - Generates Figure 6 in JAMES Variational Ridging paper
 % 
 % This script generates Figure 6 from:
 %
-% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
-% submitted to J. Adv. Model Earth Sy.
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, 
+% W. Maslowski (2019), Variational Method for Sea Ice Ridging in 
+% Earth System Models, J. Adv. Model Earth Sy.
 %
 % This function requires a png version of figure 16c from:
 % 
@@ -14,9 +14,17 @@ function ridgepack_JAMES_figure6
 %
 % The png file must be cropped to the exact axis limits of that figure. The 
 % name of the file is set with 'fname', and its location is set with 'floc'.
-% The file cannot be supplied with Ridgepack due to copyright restrictions.
+% The file cannot be supplied with Ridgepack due to copyright restrictions, but
+% can easily be generated using an electronic version of the above reference
+% readily available at https://doi.org/10.1029/95JC00007.
 %
-% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+% VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 set(0,'DefaultTextInterpreter','Latex')
 

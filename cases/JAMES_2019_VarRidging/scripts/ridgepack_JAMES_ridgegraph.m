@@ -1,10 +1,10 @@
-% ridgepack_JAMES_ridgegraph - Generates ridgegraphs JAMES Variational Ridging paper
+% ridgepack_JAMES_ridgegraph - Generates ridgegraphs 
 % 
 % This script generates ridgegraphs from:
 %
-% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
-% submitted to J. Adv. Model Earth Sy.
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, 
+% W. Maslowski (2019), Variational Method for Sea Ice Ridging in 
+% Earth System Models, J. Adv. Model Earth Sy.
 %
 % The following settings generate figures in the paper:
 %
@@ -19,10 +19,13 @@
 % fig=5 - Compares form drag for different shaped sails
 % fig=7 - Plots basic ridge shapes for a single ridge
 %
-% There are additional ridgegraphs possible that are embedded in the code,
-% and were used in the development of the paper.
+% VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
 %
-% Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 % version check
 [v d] = version;

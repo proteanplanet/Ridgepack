@@ -2,8 +2,8 @@
 
 This directory contains scripts used to generate figures 3 to 16, S1 and S2 in:
 
-Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, *submitted to J. Adv. Model Earth Sy.*.
+Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2019),
+Variational Method for Sea Ice Ridging in Earth System Models, *J. Adv. Model Earth Sy.*.
 
 These scripts also test other aspects of variational ridging introduced in this paper.
 
@@ -23,12 +23,19 @@ Graphical output from these scripts is written to a directory called "output" ad
 
 help ridgepack/cases/JAMES\_2018\_Variational\_Ridging/scripts
 
-## Authors
+## Version/Cases
 
-Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+Ridgepack 1.0.1/JAMES_2019_VarRidging
 
-Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+## Contact
+
+Andrew Roberts, afroberts@lanl.gov 
+
+## History 
+
+Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
 
-Designed to be used with MATLAB 2018a or a newer version
+Designed to be used with MATLAB 2018b or a newer version

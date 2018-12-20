@@ -1,10 +1,10 @@
 % ridgepack_JAMES_figure15 - Generates Figure 15 in JAMES Variational Ridging paper
 % 
-% This script generates Figure 15 from:
+% This script generates Figure 15 and Table 2 from:
 %
-% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-% Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, 
-% submitted to J. Adv. Model Earth Sy.
+% Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, 
+% W. Maslowski (2019), Variational Method for Sea Ice Ridging in 
+% Earth System Models, J. Adv. Model Earth Sy.
 %
 % This function generates and plot a zeta-hat plane as a test of the function 
 % ridgepack_zetahatplane in the morphology library.  The script also calculates
@@ -12,7 +12,15 @@
 % and with observational limitations imposed by Peter Wadhams when interpreting
 % sea ice draft measurements from submarine SONAR.
 %
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% To switch on Table 2 output instead of Figure 15 table.
+%
+% VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
+%
+% CONTACT: Andrew Roberts, afroberts@lanl.gov 
+%
+% FILE HISTORY:
+% Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+% Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 % version check
 [v d] = version;
@@ -22,7 +30,6 @@ end
 
 clear
 close all
-
 
 % porosity color divisions along line
 cont=[0:0.05:0.40];
@@ -42,9 +49,12 @@ ylab='Probability Density';
 ymin=2*10^-11;
 ymax=10^-2;
 
-% switch on to only indicate gradient once (rather than for both lines
+% switch on to only indicate gradient once, rather than for both lines
 final=true;
 %final=false;
+
+% switch on table
+table=true;
 
 % plot probabilities of ridges forming
 for i=1:length(hf)
@@ -159,7 +169,7 @@ ridgepack_fprint('epsc',graphicsout,1,2)
 ridgepack_fprint('png',graphicsout,1,2)
 
 % Calculate mean values for table
-hf=[0.2 0.5 1.0 2.0 5.0 5.5];
+hf=[0.2 0.5 1.0 2.0 5.0 10];
 
 for i=1:length(hf)
 
@@ -196,7 +206,4 @@ disp(['$h_F$ (m) ',num2str(hf,'& %6.2f '),' \\'])
 disp(['$\alpha_{\mathrm{obs}}$ ',num2str(meanalphalim,'& %6.1f '),' \\'])
 disp(['$\phi_{\mathrm{obs}}$  ',num2str(meanphilim,'& %6.2f '),' \\'])
 disp(['----------------------------------------------------------'])
-
-
-
 
