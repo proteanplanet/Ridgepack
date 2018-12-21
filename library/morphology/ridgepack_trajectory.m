@@ -1,5 +1,5 @@
-function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
-           epsplitmesh,phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs,res)
+function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,...
+          phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs,res,minstrain,maxstrain)
 
 % ridgepack_trajectory - Calculate state-space trajectory of a ridge 
 %
@@ -11,10 +11,12 @@ function [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,...
 %
 % INPUT:
 %
-% hf  - parent ice thickness (m)
-% hfs - thickness of snow on parent ice (m)
-% res - resolution of the strain and porosity grid (optional)
-%       with typical values between 0.01 and 0.001.
+% hf         - parent ice thickness (m)
+% hfs        - thickness of snow on parent ice (m)
+% res        - resolution of the strain and porosity grid (optional)
+%              with typical values between 0.01 and 0.001.
+% minstrain  - minimum absolute strain in the epsilon grid (optional)
+% maxstrain  - maximum absolute strain on the epsilon grid (optional)
 %
 % OUTPUT:
 %
@@ -68,8 +70,17 @@ elseif res>0.01
 end
 
 % initialize grids, using split grids to calculate dilation
-[hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+if nargin<4
+ [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
    ridgepack_gridinit(res);
+elseif nargin<5
+ [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+   ridgepack_gridinit(res,minstrain);
+else
+ [hincr,eincr,hgrid,epsilongrid,phigrid,epsilonsplit,phisplit,ghphi]=...
+   ridgepack_gridinit(res,minstrain,maxstrain);
+end
+
 
 % prepare mesh and split mesh
 [epmesh,phmesh]=meshgrid(epsilongrid,phigrid);

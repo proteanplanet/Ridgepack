@@ -12,8 +12,6 @@
 % and with observational limitations imposed by Peter Wadhams when interpreting
 % sea ice draft measurements from submarine SONAR.
 %
-% To switch on Table 2 output instead of Figure 15 table.
-%
 % VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
 %
 % CONTACT: Andrew Roberts, afroberts@lanl.gov 
@@ -52,9 +50,6 @@ ymax=10^-2;
 % switch on to only indicate gradient once, rather than for both lines
 final=true;
 %final=false;
-
-% switch on table
-table=true;
 
 % plot probabilities of ridges forming
 for i=1:length(hf)
@@ -169,12 +164,13 @@ ridgepack_fprint('epsc',graphicsout,1,2)
 ridgepack_fprint('png',graphicsout,1,2)
 
 % Calculate mean values for table
-hf=[0.2 0.5 1.0 2.0 5.0 10];
+hf=[0.2 0.5 1.0 2.0 5.0 5.5];
 
 for i=1:length(hf)
 
  % calculate path for a given thickness
- [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_trajectory(hf(i),0,0.001);
+ [EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=...
+     ridgepack_trajectory(hf(i),0,0.001,0.01,0.99);
 
  % work per ridge shape
  energyratio=sum(LK(:).*VR(:))./(LK(:).*VR(:));
@@ -201,7 +197,7 @@ for i=1:length(hf)
 end
 
 disp(['----------------------------------------------------------'])
-disp('Information for published table of observable values')
+disp('Information for published Table 2 of Roberts et al. (2019)')
 disp(['$h_F$ (m) ',num2str(hf,'& %6.2f '),' \\'])
 disp(['$\alpha_{\mathrm{obs}}$ ',num2str(meanalphalim,'& %6.1f '),' \\'])
 disp(['$\phi_{\mathrm{obs}}$  ',num2str(meanphilim,'& %6.2f '),' \\'])

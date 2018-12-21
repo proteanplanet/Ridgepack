@@ -70,7 +70,7 @@ elseif isnumeric(minstrain)
  if maxstrain<0 | maxstrain>1
   error('minstrain is the absolute value and has limits 0 < minstrain < 1')
  else
-  disp(['Setting minimum strain manually to',num2str(minstrain)])
+  disp(['Setting minimum strain manually to ',num2str(-minstrain)])
  end
 else
  error('minstrain is not numeric')
@@ -85,7 +85,7 @@ elseif isnumeric(maxstrain)
  elseif maxstrain<=minstrain
   error('maxstrain is less than minstrain')
  else
-  disp(['Setting maximum strain manually to',num2str(maxstrain)])
+  disp(['Setting maximum strain manually to ',num2str(-maxstrain)])
  end
 else
  error('maxstrain is not numeric')
