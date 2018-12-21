@@ -14,12 +14,14 @@ Andrew Roberts: afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018
+
 Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
 
-Designed to be used with MATLAB 2018b or a newer version
+Designed to be used with MATLAB 2018b or a newer version and in one case, Mathematica 11.3
 
 
 
