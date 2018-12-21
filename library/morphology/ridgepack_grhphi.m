@@ -59,6 +59,7 @@ GRHPHI=zeros(size(hgrid));
 [VR,ALPHAHAT,HK,HS,LK,LS]=ridgepack_energetics(hF,hFs,epsilon,phi);
 
 % Find indices for of steps on thickness distribution grid
+% to solve for steps in Equation B.3 in Roberts et al. (2019)
 h1idx=find(hgrid>=hF & hgrid<=hF+(LK-LS)*tand(ALPHAHAT)/2);
 h2idx=find(hgrid>hF+(LK-LS)*tand(ALPHAHAT)/2 & hgrid<=hF+(LK+LS)*tand(ALPHAHAT)/2);
 
@@ -70,7 +71,7 @@ if ((hF+(LK+LS)*tand(ALPHAHAT)/2)>hgrid(end))
 
 else
 
- % Thickness distribution
+ % Thickness distribution (solves Equation B.3 in Roberts et al., 2019)
  GRHPHI(h1idx) = 2/(LK*tand(ALPHAHAT));
  GRHPHI(h2idx) = 1/(LK*tand(ALPHAHAT));
 

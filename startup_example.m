@@ -1,5 +1,7 @@
 % This is a sample MATLAB startup file to accompany Ridgepack 
-% Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
+% Author: Andrew Roberts, Naval Postgraduate School, March 2018 
+% Checked: Andrew Roberts, Los Alamos National Laboratory, December 2018
+% Contact: Andrew Roberts, afroberts@lanl.gov
 
 % Check this is a unix system
 if not(isunix); 

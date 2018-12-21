@@ -55,10 +55,11 @@ else
  [epsilonout,phiout,alphaout]=ridgepack_trajectory(hf,hfs);
 end
 
-% Get ice thickness
+% Get ice thickness (Equation A.9 in Roberts et al. 2019)
 HR=hf./(1+epsilon);
 
 % Set snow thickness to be identical to that of level ice
+% (Equation A.11 in Roberts et al. 2019)
 HRS=hfs*ones(size(epsilon));
 
 % If calculating for desired strain rates, find nearest match on 

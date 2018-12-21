@@ -1,4 +1,4 @@
-function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
+function [HFD,HFF,HRD,HRF,HK,HS,LK,LS]=...
                     ridgepack_morphology(hf,hfs,hr,hrs,phi,alpha)
 
 % ridgepack_morphology - Calculate ridge dimension and strain
@@ -30,8 +30,6 @@ function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
 % HS      - sail height (m)
 % LK      - cross-sectional keel width (m)
 % LS      - cross-sectional sail width (m)
-% L0      - original cross-sectional width of undeformed parent ice (m)
-% EPSILON - compressional strain or ridge
 % 
 % REFERENCE: 
 %
@@ -76,6 +74,7 @@ delrho=hc.rhow.const-hc.rhoi.const; % difference of water and ice densities
 ghat=hc.ghat.const; % acceleration due to gravity
 
 % calculate freeboard and draft of level ice
+% (Equations A.3 and A.4 in Roberts et al. 2019)
 HFD=(rho*hf+rhos*hfs)/rhow; % level draft
 HFF=(hf+hfs)-HFD; % level freeboard
 
@@ -87,6 +86,7 @@ elseif HFF<hfs
 end
 
 % calculate freeboard and draft of deformed ice 
+% (Equations A.1 and A.2 in Roberts et al. 2019)
 HRD=(rho*hr+rhos*hrs)/rhow; % ridged draft
 HRF=(hr+hrs)-HRD; % ridged freeboard
 
@@ -96,15 +96,18 @@ if any((HRD+HRF)~=(hr+hrs))
 end
 
 % calculate depth of keel relative to sea level
+% (Equation A.16 in Roberts et al. 2019)
 HK=(2*HRD./(1-phi))-HFD;
 
 % calculate height of ridge
+% (Equation A.15 in Roberts et al. 2019)
 HS=HFF+2*sqrt(((HRD./(1-phi))-HFD).*(((HRF./(1-phi))-HFF)));
 
 % convert alpha to radians
 alpha=alpha*pi/180;
 
 % calculate horizontal extent of keel structure 
+% (Equation A.14 in Roberts et al. 2019)
 if alpha==0
  LK=0;
 else
@@ -112,20 +115,11 @@ else
 end
 
 % calculate horizontal extent of ridge structure 
+% (Equation A.13 in Roberts et al. 2019)
 if alpha==0
  LS=0;
 else
  LS=2*(HS-HFF).*cot(alpha);
-end
-
-% initial length of sea ice in ridging
-L0=LK.*hr./hf;
-
-% strain 
-if alpha==0
- EPSILON=0;
-else
- EPSILON=(L0-LK)./L0;
 end
 
 if debug; disp(['...Leaving ',mfilename]); end

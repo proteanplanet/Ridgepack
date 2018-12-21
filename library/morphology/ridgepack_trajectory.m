@@ -89,7 +89,7 @@ end
 % get potential energy density for given ice thickness 
 [vr]=ridgepack_energetics(hf,hfs,epmesh,phmesh);
 
-% calculate dilation field
+% calculate dilation field (Equation 30 in Roberts et al. 2019)
 dVdep=(vr(:,2:end)-vr(:,1:end-1))./(epmesh(:,2:end)-epmesh(:,1:end-1));
 dVdph=(vr(2:end,:)-vr(1:end-1,:))./(phmesh(2:end,:)-phmesh(1:end-1,:));
 d1=(dVdep(1:end-1,:)+dVdep(2:end,:))/2;
@@ -100,6 +100,7 @@ EPSILON=epsilonsplit;
 PHI=zeros(size(EPSILON));
 
 % integrate streamline from initial conditions
+% (Equation 31 in Roberts et al. 2019)
 jdx=1;
 PHI(1)=phisplit(jdx); % initial condition
 for i=2:length(EPSILON)
