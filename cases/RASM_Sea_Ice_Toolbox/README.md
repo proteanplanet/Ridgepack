@@ -1,27 +1,22 @@
-#  Ridgepack Case: JAMES\_2018\_Variational\_Ridging
+#  Ridgepack Case: RASM\_Sea\_Ice\_Toolbox
 
-This is the case directory for a scripts used to generate results for the manuscript: 
+This is the case directory for a scripts used to generate results for the 
+Regional Arctic System Model (RASM).
 
-Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2018),
-Variational Method for Sea Ice Ridging in Earth System Models, Part I: Theory, *submitted to J. Adv. Model Earth Sy.*.
+Further explanation is available in the commenting lines within each script
+or function.
 
-Further explanation is available in the README file within the scripts area.  
+## Contact
 
-## Authors
+Andrew Roberts: afroberts@lanl.gov
 
-Andrew Roberts, Naval Postgraduate School, April 2018 (afrobert@nps.edu)
+## History 
 
-Reviewed by Samy Kamal, Naval Postgraduate School, May 2018
+Author: Andrew Roberts, Naval Postgraduate School, April 2018
+Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
 
-Designed to be used with MATLAB 2018a or a newer version
-
-
-
-
-
-
-
-
+Designed to be used with MATLAB 2018b or a newer version
 
