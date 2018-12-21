@@ -6,6 +6,11 @@
 % W. Maslowski (2019), Variational Method for Sea Ice Ridging in 
 % Earth System Models, J. Adv. Model Earth Sy.
 %
+% The method used to integrate g(h,phi) is the "slow" method.  A faster
+% computational method is available that uses convolusions (an FFT, in fact),
+% and an example is available in the Mathematica script for a single ridge, 
+% ridgepack_JAMES_figure13.nb
+%
 % VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
 %
 % CONTACT: Andrew Roberts, afroberts@lanl.gov 
@@ -25,12 +30,10 @@ close all
 
 % set resolution of Epsilon
 resolution=0.001
-%resolution=0.005
-%resolution=0.01
 
 % if reseting resolution, you must regenerate
-generate=false;
-%generate=true;
+%generate=false;
+generate=true;
 
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
@@ -123,6 +126,7 @@ if integrate
   else 
 
    % integrate through the porosity dimension
+   % (equation 1 in Roberts et al. 2019)
    gh=squeeze(ghphihist(:,:,i)).*phincrs;
    gh=sum(gh/sum(gh(:)),2);
 
@@ -238,6 +242,7 @@ else
 
    k=0
 
+   % (equation 1 in Roberts et al. 2019)
    for i=1:3:size(ghphihist,3)
 
     gh=squeeze(ghphihist(:,idx,i)).*phincrs(:,idx);
@@ -265,6 +270,7 @@ else
 
    ridgepack_multiplot(1,2,1,2,'b)')
    
+   % (equation 1 in Roberts et al. 2019)
    for i=1:3:size(ghphihist,3)
 
     gh=squeeze(ghphihist(:,idx,i)).*phincrs(:,idx);

@@ -7,7 +7,9 @@
 % Earth System Models, J. Adv. Model Earth Sy.
 %
 % This function generates and plots a zeta-hat plane as a test of the function 
-% ridgepack_zetahatplane in the morphology library. 
+% ridgepack_zetahatplane in the morphology library. The numerical method used
+% is the "slow" method; a faster method is demonstrated in the Mathematica 
+% script for figure 13 for calculating the ridge state space.
 %
 % VERSION/CASES: Ridgepack 1.0.1/JAMES_2019_VarRidging
 %

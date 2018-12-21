@@ -1,9 +1,11 @@
-#  Ridgepack Case: JAMES\_2018\_Variational\_Ridging
+#  Ridgepack Case: JAMES\_2019\_VarRidging
 
 This is the case directory for a scripts used to generate results for the manuscript: 
+
 Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2019), Variational Method for Sea Ice Ridging in Earth System Models, *J. Adv. Model Earth Sy.*. 
 
-Further explanation is available in the README file within the scripts area.  
+Further explanation is available in the README file within the scripts area.   All graphical output appears in the output directory.
+
 
 ## Contact
 
