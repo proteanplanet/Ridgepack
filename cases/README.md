@@ -1,6 +1,6 @@
 # Ridgepack Cases
 
-This directory is designed for cases that use the core MATLAB libraries
+This directory is for cases that use the core MATLAB libraries
 of Ridgepack for specific analysis and research papers.  All MATLAB scripts 
 within case directories use functions within the adjacent library directory. 
 Those functions are documented separately from the scripts that use them in 
@@ -26,11 +26,13 @@ Andrew Roberts: afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018
+
 Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
 
-Designed to be used with MATLAB 2018b or a newer version
+Designed to be used with MATLAB 2018b or a newer version, and in one case, Mathematica 11.3
 
 
