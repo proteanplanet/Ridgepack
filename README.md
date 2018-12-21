@@ -16,9 +16,9 @@ including the Discrete Element Model of Sea Ice (DEMSI).
 
 These libraries form the backbone of Ridgepack to read netCDF data output 
 from CICE, MPAS-Seaice and observational datasets and make vigorous use of 
-the metadata within the output to aid model analysis.  The library also 
-contains development libraries for new physics being implemented 
-in the RASM sea ice component.  There are four libraries:
+the metadata within the output to aid model analysis.  The libraries include
+extensive graphics and analysis function, as well as development libraries for 
+new physics being implemented in Icepack.  There are four libraries:
 
 | Library | Description |
 | --- | --- |
@@ -48,7 +48,9 @@ Andrew Roberts: afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018
-Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+
+Reviewer: Samy Kamal, Naval Postgraduate School, May 2018 
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 
