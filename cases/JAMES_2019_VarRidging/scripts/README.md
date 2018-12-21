@@ -15,7 +15,7 @@ These scripts also test other aspects of variational ridging introduced in this 
 | ridgepack\_JAMES\_ridgegraph.m | Produces figures 8, 9, S1, S2 |
 | ridgepack\_JAMES\_integrateg.m | Calculates redistribution in figure 16 |
 | ridgepack\_grplot.m            | Compares numeric & analytic solutions of gR(h,phi) |
-| ridgepack\_JAMES\_figure13.nb  | Mathematica script for generating thickness distribution for a single ridge in figure 13 |
+| ridgepack\_JAMES\_figure13.nb  | Mathematica note book for generating a thickness distribution for a single ridge in figure 13 |
               
 
 ## Description
@@ -35,7 +35,9 @@ Andrew Roberts, afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018 
+
 Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
