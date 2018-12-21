@@ -1,6 +1,6 @@
 # Ridgepack Libraries
 
-This directory contains a series of MATLAB libraries designed for development and analysis of the sea ice components of coupled Earth System Models. The package was developed using the CICE Consortium sea ice model (https://github.com/CICE-Consortium) as the marine cryosphere component in the Regional Arctic System Model (RASM).  Ridgepack libraries are readily applicable to other models that use CICE or its ccolumn package, called Icepack (https://github.com/CICE-Consortium/Icepack), including the Discrete Element Model of Sea Ice (DEMSI), the Energy Exascale Earth System Model (E3SM; http://www.e3sm.org) and the Community Earth System Model (CESM; http://www.cesm.ucar.edu).  
+This directory contains a series of MATLAB libraries designed for development and analysis of the sea ice components of coupled Earth System Models. The package was developed using the CICE Consortium sea ice model (https://github.com/CICE-Consortium) as the marine cryosphere component in the Regional Arctic System Model (RASM).  Ridgepack libraries are readily applicable to other models that use CICE or its column package, called Icepack (https://github.com/CICE-Consortium/Icepack), including the Discrete Element Model of Sea Ice (DEMSI), the Energy Exascale Earth System Model (E3SM; http://www.e3sm.org) and the Community Earth System Model (CESM; http://www.cesm.ucar.edu).  
 
 ## Contents
 
@@ -21,7 +21,7 @@ A repository of supporting infrastructure, currently confined to a debugger that
 
 ### morphology
 
-A library of sea ice ridging functions used to calculate statistics of ridges in the pack.  Functions in this library may be used to interpret measurements of sea ice topography from underneath and above sea ice.  However, the main purpose of this library is to act as a testbed for a new variational ridging method being implemented in RASM. Documentation is accessible through the 'help morphology' command from within this library directory in MATLAB.  A description of the science underwriting this morphology library is in a paper under review:
+A library of sea ice ridging functions used to calculate statistics of ridges in the pack.  Functions in this library may be used to interpret measurements of sea ice topography from underneath and above sea ice.  However, the main purpose of this library is to act as a testbed for a new variational ridging method being implemented in Icepack. Documentation is accessible through the 'help morphology' command from within this library directory in MATLAB.  A description of the science underwriting this morphology library is in a paper under review:
 
 Roberts, A.F., E.C. Hunke, S.M. Kamal, W.H. Lipscomb, C. Horvat, W. Maslowski (2019), A Variational Method for Sea Ice Ridging in Earth System Models, *J. Adv. Model Earth Sy.*
 
@@ -36,6 +36,7 @@ Andrew Roberts, afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
