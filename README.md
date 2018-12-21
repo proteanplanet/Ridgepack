@@ -56,6 +56,6 @@ Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
 
-Designed to be used with MATLAB 2018b or a newer version
+Designed to be used with MATLAB 2018b or a newer version, and for one script, Mathematica 11.3
 
 
