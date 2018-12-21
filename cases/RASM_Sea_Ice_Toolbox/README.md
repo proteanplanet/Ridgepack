@@ -13,7 +13,9 @@ Andrew Roberts: afroberts@lanl.gov
 ## History 
 
 Author: Andrew Roberts, Naval Postgraduate School, April 2018
+
 Reviewer: Samy Kamal, Naval Postgraduate School, May 2018
+
 Update: Andrew Roberts, Los Alamos National Laboratory, December 2018
 
 ## Required software
