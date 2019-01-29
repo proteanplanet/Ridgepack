@@ -32,8 +32,8 @@ close all
 resolution=0.001
 
 % if reseting resolution, you must regenerate
-%generate=false;
-generate=true;
+generate=false;
+%generate=true;
 
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
@@ -94,8 +94,8 @@ clf
 integrate=false;
 %integrate=true;
 
-%bivariate=false;
-bivariate=true;
+bivariate=false;
+%bivariate=true;
 
 if integrate
 
@@ -174,7 +174,7 @@ if bivariate
 
    ylabel('$\phi$','Interpreter','Latex',...
           'HorizontalAlignment','center',...
-          'Position',[13.5 0.25 10^-5],'fontsize',12,'Rotation',-08)
+          'Position',[13.5 0.25 10^-5],'fontsize',14,'Rotation',-08)
    zlabel('$g(h,\phi)$')
    set(gca,'XTick',[0:2:10])
    set(gca,'YTick',[0:0.10:0.4])
@@ -205,10 +205,10 @@ if bivariate
 
    xlabel('$h$ (m)','Interpreter','Latex',...
           'HorizontalAlignment','center',...
-          'Position',[7 0.5 10^-5],'fontsize',12,'Rotation',28)
+          'Position',[7 0.5 10^-5],'fontsize',14,'Rotation',28)
    ylabel('$\phi$','Interpreter','Latex',...
           'HorizontalAlignment','center',...
-          'Position',[13.5 0.25 10^-5],'fontsize',12,'Rotation',-08)
+          'Position',[13.5 0.25 10^-5],'fontsize',14,'Rotation',-08)
 
    %zlabel('$g(h,\phi)$')
 
@@ -259,12 +259,13 @@ else
 
    ylim([0 2.5*10^-2])
 
-   ylabel('$g(h)=\int\limits_{0}^{1} g(h,\phi)\;d\phi$')
+   ylabel('$g(h)=\int\limits_{0}^{1} g(h,\phi_R)\;d\phi_R$')
 
    xlabel('h (m)')
 
    % fix up a funky order due to corrupted history file
-   legend([h(1) h(end-1)],{'initial distribution','final distribution'})
+   legend([h(1) h(end-1)],{'initial distribution','final distribution'},...
+          'FontSize',14)
 
    legend('boxoff')
 

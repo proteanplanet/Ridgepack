@@ -36,7 +36,7 @@ end
 clear
 close all
 
-fig=6;
+fig=2;
 
 if fig==1
  nrows=1;

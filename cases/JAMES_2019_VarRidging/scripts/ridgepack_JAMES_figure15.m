@@ -46,6 +46,7 @@ xmax=7*10^3;
 ylab='Probability Density';
 ymin=2*10^-11;
 ymax=10^-2;
+fontlabel=15;
 
 % switch on to only indicate gradient once, rather than for both lines
 final=true;
@@ -107,14 +108,15 @@ for i=1:length(hf)
  sstot=sum((y2-mean(y2)).^2);
  ssres=sum((y2-f2).^2);
  rsquared2 = 1-(ssres/sstot);
- hh(i)=plot(exp(x2),exp(f2),':r');
+ hh(i)=plot(exp(x2),exp(f2),':r','LineWidth',1);
  legtext{i}=['D=',num2str(p2(1),'%5.2f'),', R^2=',num2str(rsquared2,'%5.3f')];
 
  if i==1
+  set(gca,'FontSize',fontlabel-2)
   set(gca,'Xscale','log')
   set(gca,'Yscale','log')
-  xlabel(xlab)
-  ylabel(ylab)
+  xlabel(xlab,'FontSize',fontlabel)
+  ylabel(ylab,'FontSize',fontlabel)
   xlim([xmin xmax])
   ylim([ymin ymax])
   hold on
@@ -127,7 +129,7 @@ for i=1:length(hf)
         'edgecol','interp',...
         'linew',2);
  ridgepack_text(x(y<2*10^-9),y(y<2*10^-9),['$h_F{=}',num2str(hf(i),...
-                 '%5.1f'),'$m'],10,cmap(end,:));
+                 '%5.1f'),'$m'],9,cmap(end,:),'left');
 
 end
 
@@ -136,10 +138,10 @@ disp(['----------------------------------------------------------'])
 
 % only plot first line data because they both agree
 if final
- legend(hh(1),legtext{1},'Location','northeast')
+ legend(hh(1),legtext{1},'Location','northeast','FontSize',fontlabel)
  legend('boxoff')
 else
- legend(hh,legtext,'Location','northeast')
+ legend(hh,legtext,'Location','northeast','FontSize',fontlabel)
  legend('boxoff')
 end
 

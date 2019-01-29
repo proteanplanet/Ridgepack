@@ -32,6 +32,9 @@ close all
 % Create figure
 figure(1)
 
+% font size for labels
+fontlabel=15;
+
 % switch to turn on/off the figure title 
 titleflat=false;
 
@@ -48,11 +51,12 @@ rhos=hc.rhos.const; % density of snow (kg/m^3)
 rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 % calculate trajectory for given thickness
-[EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,phsplitmesh,d1,d2]=...
-            ridgepack_trajectory(hf,hfs);
+[EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS,epmesh,phmesh,vr,epsplitmesh,...
+   phsplitmesh,d1,d2]=ridgepack_trajectory(hf,hfs);
 
 % set log color scale for potential energy density
-contourss=10.^[floor(log10(min(vr(:)))):0.25:ceil(log10(max(vr(:))))];
+%contourss=10.^[floor(log10(min(vr(:)))):0.25:ceil(log10(max(vr(:))))];
+contourss=10.^[4:0.25:10];
 cmap=colormap(parula(length(contourss)));
 [zindex,truecol]=ridgepack_colorindex(vr,contourss,0);
 
@@ -78,7 +82,8 @@ plot3(EPSILON,PHI,0.001*ones(size(VR)),'r','LineStyle','-','LineWidth',1.0)
 text(EPSILON(end)+0.025,PHI(end),0.9,...
            ['$\hat{\zeta}$'],...
             'Color','r',...
-            'Fontsize',10,...
+            'Fontsize',fontlabel,...
+            'FontWeight','bold',...
             'Rotation',10,...
             'Margin',0.5,...
             'VerticalAlignment','bottom',...
@@ -90,6 +95,7 @@ text(EPSILON(end)+0.008,PHI(end),0.9,...
                  ['$\bigtriangleup$'],...
                  'Color','r',...
                  'Fontsize',9,...
+                 'FontWeight','bold',...
                  'Margin',0.0001,...
                  'Rotation',90,...
                  'VerticalAlignment','bottom',...
@@ -109,6 +115,9 @@ grid
 grid off
 grid on
 
+% set font size
+set(gca,'FontSize',fontlabel-2)
+
 % set log scale for z-axis 
 set(gca,'Box','on','TickLabelInterpreter','Latex','Layer','top')
 
@@ -117,9 +126,8 @@ set(gca,'Xtick',[-0.9:0.1:0])
 set(gca,'Ytick',[0:0.1:0.9])
 
 % axis labels
-xlabel('Strain, $\epsilon_{R_I}$','Interpreter','Latex','fontsize',12)
-ylabel('Porosity, $\phi_R$','Interpreter','Latex','fontsize',12)
-zlabel('Potential Energy Density, $\mathcal{V}_R$ (J m$^{-2}$)','Interpreter','Latex','fontsize',12)
+xlabel('Strain, $\epsilon_{R_I}$','Interpreter','Latex','fontsize',fontlabel)
+ylabel('Porosity, $\phi_R$','Interpreter','Latex','fontsize',fontlabel)
 
 if titleflat
 
@@ -133,7 +141,7 @@ if titleflat
 else
 
  % changes the position
- set(gca,'Position',[0.1 0.08 0.7 0.9])
+ set(gca,'Position',[0.15 0.09 0.7 0.9])
 
 end
 

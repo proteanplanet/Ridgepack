@@ -32,7 +32,7 @@ rhow=hc.rhow.const; % density of seawater (kg/m^3)
 
 cols=lines(10); % colors
 
-fontsize=12;
+fontsize=14;
 
 maxy=0;
 

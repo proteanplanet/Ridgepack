@@ -279,7 +279,6 @@ elseif isnumeric(loglin)
 
 end
 
-
 % remove data below or above ref, then draw data
 blankout=false;
 if min(cont)==ref 
@@ -289,7 +288,6 @@ elseif max(cont)==ref
  z(z>ref)=NaN;
  blankout=true;
 end
-
 
 % build the colormap with this information
 if strcmp(loglin,'linear')
@@ -340,6 +338,7 @@ if debug;
  disp(['      Size of b: ',num2str(size(b))])
  disp(['Size of truecol: ',num2str(size(truecol))])
 end
+
 
 % stripe the figure with patches
 for j=1:size(c,2)-1
@@ -397,7 +396,6 @@ if (isfield(nc.(X),'units') & isfield(nc.(Y),'units') && ...
 else
   axis normal;
 end
-
 
 hold off;
 
