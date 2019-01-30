@@ -28,8 +28,9 @@ end
 clear
 close all
 
-% set resolution of Epsilon
-resolution=0.001
+% set resolution of Epsilon (resolution 0.005 require for JAMES paper)
+%resolution=0.001
+resolution=0.005
 
 % if reseting resolution, you must regenerate
 generate=false;
@@ -102,7 +103,8 @@ if integrate
  % intitial condition
  ghphihist(:,:,1)=ghphi;
 
- for i=2:7
+ %for i=2:7
+ for i=2:15
 
   disp(['Step: ',num2str(i)]) 
 
@@ -240,17 +242,35 @@ else
 
    ridgepack_multiplot(1,2,1,1,'a)')
 
+   set(gca,'FontSize',12')
+
    k=0
 
+   % pick of lines to use for JAMES paper
+   if size(ghphihist,3)<9
+    error('not enough to replicate JAMES paper')
+   else
+    % pick of lines to show
+    yourpick=[1 4 6 7 9];
+
+    % set colors of lines
+    colines=colormap(lines(length(yourpick)));
+    cols(1,:)=colines(1,:);
+    cols(2,:)=colines(2,:);
+    cols(3,:)=colines(end,:);
+    cols(4,:)=colines(3,:);
+    cols(5,:)=colines(end-1,:);
+   end
+   
    % (equation 1 in Roberts et al. 2019)
-   for i=1:3:size(ghphihist,3)
+   for i=yourpick
 
     gh=squeeze(ghphihist(:,idx,i)).*phincrs(:,idx);
     gh=sum(gh/sum(gh(:)),2);
 
     % calculate thickness distribution
     k=k+1
-    h(k)=plot(hgrid,gh)
+    h(k)=plot(hgrid,gh,'Color',cols(k,:))
     hold on
 
    end
@@ -264,21 +284,28 @@ else
    xlabel('h (m)')
 
    % fix up a funky order due to corrupted history file
-   legend([h(1) h(end-1)],{'initial distribution','final distribution'},...
-          'FontSize',14)
+   legend([h(1) h(end)],{'initial distribution','final distribution'},...
+          'FontSize',12)
 
    legend('boxoff')
 
    ridgepack_multiplot(1,2,1,2,'b)')
+
+   set(gca,'FontSize',12')
+
+   k=0
    
    % (equation 1 in Roberts et al. 2019)
-   for i=1:3:size(ghphihist,3)
+   for i=yourpick
+   %for i=1:3:size(ghphihist,3)
 
     gh=squeeze(ghphihist(:,idx,i)).*phincrs(:,idx);
     gh=sum(gh/sum(gh(:)),2);
 
     % calculate thickness distribution
-    plot(hgrid,gh)
+    k=k+1;
+    plot(hgrid,gh,'Color',cols(k,:))
+
     hold on
 
    end
