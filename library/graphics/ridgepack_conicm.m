@@ -23,6 +23,8 @@ function ridgepack_conicm(varargin)
 %
 % 'gulfofalaska' - Conic projection of the Gulf of Alaska.
 %
+% 'mertz'     - mertz glacier polynya
+%
 %
 % OUTPUT:
 %
@@ -44,6 +46,7 @@ beaufort=0;
 beaufort2=0;
 greenland=0;
 gulfofalaska=0;
+mertz=0;
 centralmeridian=0 ; 
 equatorextent=60 ; 
 parallelstop=80;
@@ -76,6 +79,8 @@ else
 	greenland=1;
    case 'gulfofalaska'
 	gulfofalaska=1;
+   case 'mertz'
+	mertz=1;
    case 'noland'
         land=0;
    case 'labeloff'
@@ -130,6 +135,13 @@ elseif beaufort2
  maxlon=-130;
  MLabelLocation=[-160:10:-120];
  PLabelLocation=[70:5:85];
+elseif mertz
+ minlat=-69;
+ maxlat=-63;
+ minlon=136;
+ maxlon=150;
+ MLabelLocation=[minlon:5:maxlon];
+ PLabelLocation=[minlat:5:maxlat];
 else
  error('Error: Please define the area of the conic map')
 end
@@ -137,6 +149,7 @@ end
 % map projection
 maph=axesm('MapProjection','eqaconic',...
   'AngleUnits','degrees',...
+  'MapParallels',[minlat maxlat], ...
   'Aspect','normal',...
   'FalseNorthing',0,...
   'FalseEasting',0,...
@@ -201,6 +214,7 @@ end
 
 % fit map tightly to axes
 axis off
+framem on
 tightmap
 
 % Remove meridians and parallels from the legend (if one is used)
