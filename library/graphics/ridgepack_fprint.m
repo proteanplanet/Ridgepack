@@ -31,7 +31,7 @@ function ridgepack_fprint(form,name,fig,movie)
 %
 % movie - changes dots per inch to 300 for movies.  Set to 1 for
 %         this option to work, otherwise set to 0 (default is 0).
-%         To Set to 1200DPI, set movie to 2.
+%         For 600DPI, set to 2, and for 1200DPI, set movie to 3.
 %
 %
 % OUTPUT:
@@ -66,6 +66,9 @@ elseif movie==1
 elseif movie==2
 	disp(['Printing 600 DPI resolution ''',name,''' in ',upper(form),' format'])
 	form=[form,' -r600'];
+elseif movie==3
+	disp(['Printing 1200 DPI resolution ''',name,''' in ',upper(form),' format'])
+	form=[form,' -r1200'];
 else
 	disp(['Printing 150 DPI resolution ''',name,''' in ',upper(form),' format'])
 	form=[form,' -r150'];

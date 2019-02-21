@@ -11,6 +11,8 @@ function [maph]=ridgepack_worldm(varargin)
 % center - Central meridian of the plot east from
 %          the Greenwich Median (between 0 and 360)
 %
+% noland - switch off land
+%
 % This function generates a handle for the map:  maph
 %
 % A Miller Cylindrical Projection is used.  Typing 
@@ -29,6 +31,7 @@ if debug; disp(['Entering ',mfilename,'...']); end
 
 % defaults 
 center=180.0;
+noland=0;
 
 % obtain input arguments
 if nargin == 0
@@ -44,6 +47,8 @@ else
       error('Center must be one number')
     end
     center=varargin{i};
+   case 'noland'
+    noland=1;
    otherwise
     error(['Option ',char(varargin{i}),' is incorrect'])
   end
@@ -112,14 +117,16 @@ setm(maph,'Fontangle','normal',...
   'PLabelMeridian',-187+center,...
   'PLabelRound',0);
 
-% land mask outline
-landm = shaperead('landareas.shp', 'UseGeoCoords', true);
+if noland==0
+ % land mask outline
+ landm = shaperead('landareas.shp', 'UseGeoCoords', true);
 
-% land mask set just below the surface
-patchm([landm.Lat],[landm.Lon],-0.00001,0.96*[1 1 1],'EdgeColor','none');
+ % land mask set just below the surface
+ patchm([landm.Lat],[landm.Lon],-0.00001,0.96*[1 1 1],'EdgeColor','none');
 
-% land outline (positioned at a slight altitude to remain visible)
-linem([landm.Lat],[landm.Lon],0.00001,'Color',0.45*[1 1 1],'LineWidth',0.25);
+ % land outline (positioned at a slight altitude to remain visible)
+ linem([landm.Lat],[landm.Lon],0.00001,'Color',0.45*[1 1 1],'LineWidth',0.25);
+end
 
 % maximum plot size
 tightmap 
