@@ -11,6 +11,10 @@ function ridgepack_conicm(varargin)
 %
 % 'noland'    - Stop land mask being plotted.
 %
+% 'nogrid'    - Stop grid being plotted.
+%
+% 'nolabel'   - Stop grid labels.
+%
 % 'labeloff'   - Stop printing axis labels.
 %
 % 'beaufort'  -	Provides a conic projection centered over the Beaufort Sea,
@@ -55,6 +59,7 @@ label=0;
 mult=1;
 land=1;
 nolabel=false;
+nogrid=false;
 
 % edge, grid and label color
 gridcolor=[0.400 0.400 0.400] ; 
@@ -83,8 +88,10 @@ else
 	mertz=1;
    case 'noland'
         land=0;
-   case 'labeloff'
+   case 'nolabel'
         nolabel=true;
+   case 'nogrid'
+        nogrid=true;
    otherwise
 	error(['Option ',varargin{i},' is incorrect'])
   end
@@ -180,7 +187,8 @@ if (land==1)
 end
 
 % draw grid
-setm(maph,'Grid','on',...
+if ~nogrid
+ setm(maph,'Grid','on',...
   'Galtitude',1,...
   'GColor',gridcolor,...
   'GLinestyle',':',...
@@ -195,6 +203,7 @@ setm(maph,'Grid','on',...
   'PLineLimit',[-360 360],...
   'PLineLocation',[gridseperation],...
   'PLineVisible','on');
+end
 
 % draw grid labels
 if ~nolabel
@@ -217,8 +226,13 @@ if ~nolabel
 end
 
 % fit map tightly to axes
-axis off
-framem on
+if mertz
+ axis on
+ framem off
+else
+ axis off
+ framem on
+end
 tightmap
 
 % Remove meridians and parallels from the legend (if one is used)
