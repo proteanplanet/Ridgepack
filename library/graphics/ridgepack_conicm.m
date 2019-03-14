@@ -15,7 +15,7 @@ function ridgepack_conicm(varargin)
 %
 % 'nolabel'   - Stop grid labels.
 %
-% 'labeloff'   - Stop printing axis labels.
+% 'labeloff'  - Stop printing axis labels.
 %
 % 'beaufort'  -	Provides a conic projection centered over the Beaufort Sea,
 %		which includes a grid labelled with latitudes and longitudes.
@@ -24,6 +24,8 @@ function ridgepack_conicm(varargin)
 % 'beaufort2' -	Zoomed in section of the beaufort sea.
 %
 % 'greenland' - Conic projection of Greenland and surrounding seas.
+%
+% 'labrador'  - Conic projection of the Labrador and surrounding seas.
 %
 % 'gulfofalaska' - Conic projection of the Gulf of Alaska.
 %
@@ -49,6 +51,7 @@ if length(h)==0 ; error('Mapping toolbox not installed') ; end
 beaufort=0;
 beaufort2=0;
 greenland=0;
+labrador=0;
 gulfofalaska=0;
 mertz=0;
 centralmeridian=0 ; 
@@ -82,6 +85,8 @@ else
 	beaufort2=1;
    case 'greenland'
 	greenland=1;
+   case 'labrador'
+	labrador=1;
    case 'gulfofalaska'
 	gulfofalaska=1;
    case 'mertz'
@@ -103,27 +108,18 @@ gridseperation=5;
 
 if greenland
  minlat=56;
- maxlat=89;
+ maxlat=85;
  minlon=-75;
  maxlon=-5;
  MLabelLocation=[-70:10:-10];
  PLabelLocation=[60:5:85];
-elseif gulfofalaska
- minlat=28;
- maxlat=65;
- minlon=170;
- maxlon=250;
- MLabelLocation=[-360:10:360];
- PLabelLocation=[30:5:65];
-end
-
-if greenland
- minlat=56;
- maxlat=89;
- minlon=-75;
- maxlon=-5;
- MLabelLocation=[-70:10:-10];
- PLabelLocation=[60:5:85];
+elseif labrador
+ minlat=50;
+ maxlat=75;
+ minlon=-70;
+ maxlon=-30;
+ MLabelLocation=[-70:10:-30];
+ PLabelLocation=[50:5:75];
 elseif gulfofalaska
  minlat=28;
  maxlat=65;
@@ -226,7 +222,7 @@ if ~nolabel
 end
 
 % fit map tightly to axes
-if mertz
+if mertz | labrador
  axis on
  framem off
 else
