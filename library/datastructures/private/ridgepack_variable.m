@@ -322,7 +322,6 @@ for m = 1:numbervariables
    end
   end
 
-
   varid=netcdf.defVar(ncid,name,netcdf.getConstant(nc.(name).type),dimid);
   gatt=fieldnames(nc.(name));
   for i=1:length(gatt)
@@ -343,18 +342,25 @@ for m = 1:numbervariables
   tcharvarid=[];
   if ~isempty(findstr(name,'time'));
 
-   if length(dimid)==1 & ~strcmpi(nc.(name).type,'NC_CHAR') & timestamp
+   if length(dimid)==1 & ...
+      ~strcmpi(nc.(name).type,'NC_CHAR') & ... % removes character time variable
+      ~strcmpi(char(nc.(name).dimension{1}),'nCells') & ... % removes MPAS grid 
+      ~strcmpi(char(nc.(name).dimension{1}),'nVertices') & ... % removes MPAS grid 
+      timestamp
 
     % create character dimension for time stamp if it does not already exist
     try
      tchardimid=netcdf.inqDimID(ncid,'tchar_len');
     catch
-     if debug; disp(['Setting tchar_len as a dimension with length ',num2str(tlen)]); end
+     if debug; disp(['Setting tchar_len as a dimension with length ',...
+                     num2str(tlen)]); end
      tchardimid=netcdf.defDim(ncid,'tchar_len',tlen);
     end
     [tdimname,tdimlen]=netcdf.inqDim(ncid,tchardimid);
+
     if tdimlen~=tlen 
-     error(['tchar_len is being used by an existing variable with length ',num2str(tlen)])
+     error(['tchar_len is being used by an existing variable with length ',...
+           num2str(tlen)])
     end
 
     % set up the time string variable for name or overwrite existing variable

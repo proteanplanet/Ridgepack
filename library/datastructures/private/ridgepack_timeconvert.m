@@ -240,7 +240,7 @@ if any(strcmpi(CFcalendar,{'standard','gregorian','proleptic_gregorian','noleap'
                      ' but the calendar is ',CFcalendar])
              end
              x=datevec(time(j));
-             if leapyear(x(1))
+             if eomday(x(1),2)==29 % determines if this is a leap year
               leapday=datenum(x(1),2,29);
               if j>1 & time(j)>leapday & time(j-1)<leapday
                time(j:end)=time(j:end)-1;

@@ -17,7 +17,7 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 % INPUT:
 %
 % ncfile    - character variable giving the name of the netcdf file to be sampled.
-% ncvar     - character variable of variable for which seasonal means are required.
+% ncvar     - character variable or variables for which seasonal means are required.
 % months    - vector of numbers 1 through 12 for January through December indicating
 %             months to be extracted.
 % yearstart - first year of timeseries to be analyzed.

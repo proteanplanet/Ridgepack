@@ -147,6 +147,7 @@ oldtimename='time';
 % Extract data from netCDF file 
 
 % Open the netCDF file
+
 try
  ncid=netcdf.open(ncfile,'NC_NOWRITE');
 catch

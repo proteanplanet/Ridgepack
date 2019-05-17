@@ -15,7 +15,7 @@ function [time]=ridgepack_cftimeextern(time,units,CFcalendar)
 %
 % time       - time given in Matlab serial time units
 %
-% This function invokes the system's version of ridgepack_dump for listing 
+% This function invokes the system's version of ncdump for listing 
 % time output in CF convention using any available calendar information.
 %
 % Ridgepack Version 1.0
@@ -51,7 +51,7 @@ fprintf(fid,'%s\n',[' time = ',timechar,' ;']);
 fprintf(fid,'%s\n','}');
 fclose(fid);
 
-% Now read that dummy netcdf file using ridgepack_dump -v time -t to interpret calendar
+% Now read that dummy netcdf file using ncdump -v time -t to interpret calendar
 if isunix;
 
    [h,t]=unix('which ncgen');
@@ -65,12 +65,12 @@ if isunix;
      error(['Could not create a netcdf file from ',ncfile,'.cdl: error ',num2str(h)]);
    end
         
-   [h,t]=unix('which ridgepack_dump');
+   [h,t]=unix('which ncdump');
    if h ~= 0; 
-     error(['Could not find ridgepack_dump on the system: Install netcdf libraries, or check the path']);
+     error(['Could not find ncdump on the system: Install netcdf libraries, or check the path']);
    end 
         
-   [h,t]=unix(['ridgepack_dump -v time -t ',ncfile,'.nc | sed -e :a -e''$!N;s/\n//;ta'' | sed -e''s/\(.*\)\(time = \"\)/\2/g'' | sed -e''s/\(\"\, *\"\)/',delim,'/g'' | sed -e''s/\(time = \"\)\(.*\)\(\" \;\}\)/\2/g''']);
+   [h,t]=unix(['ncdump -v time -t ',ncfile,'.nc | sed -e :a -e''$!N;s/\n//;ta'' | sed -e''s/\(.*\)\(time = \"\)/\2/g'' | sed -e''s/\(\"\, *\"\)/',delim,'/g'' | sed -e''s/\(time = \"\)\(.*\)\(\" \;\}\)/\2/g''']);
 
    if h ~= 0; 
      disp(['CHECK YOU ARE USING VERSION 4 OR HIGHER NETCDF LIBRARIES'])
