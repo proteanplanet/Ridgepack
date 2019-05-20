@@ -173,7 +173,11 @@ nc.stereographic_mesh.standard_parallel=SLAT;
 nc.stereographic_mesh.type='NC_CHAR';
 nc.stereographic_mesh.dimension={};
 
-nc.turn.data=SGN*(90+nc.longitude.data+lonrotation);
+if SGN>0
+ nc.turn.data=SGN*(90+nc.longitude.data+lonrotation);
+else
+ nc.turn.data=SGN*(nc.longitude.data+lonrotation);
+end
 nc.turn.units='degrees';
 nc.turn.long_name='vector turning angle to lat-long (u,v) grid from polar stereographic';
 nc.turn.dimension={'x','y'};
