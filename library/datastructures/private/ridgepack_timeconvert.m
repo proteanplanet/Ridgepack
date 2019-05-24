@@ -319,7 +319,8 @@ if any(strcmpi(CFcalendar,{'standard','gregorian','proleptic_gregorian','noleap'
 
              % find leap years between on within two consecutive time records
              yearrange=[x1(1):1:x2(1)];
-             leapflag=leapyear(yearrange);
+             %leapflag=leapyear(yearrange);
+             leapflag=find(eomday(yearrange,2)==29);
 
              % data in the same leap year
              if length(yearrange(leapflag))==1 
