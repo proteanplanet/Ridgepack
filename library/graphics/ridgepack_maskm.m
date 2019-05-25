@@ -1,6 +1,6 @@
 function [h]=ridgepack_maskm(a,b,zi,co,wi,li,alt)
 
-% ridgepack_maskM - Adds a border between 1s and 0s on a mask
+% ridgepack_maskm - Adds a border between 1s and 0s on a mask
 %
 % function [h]=ridgepack_maskm(a,b,zi,co,wi,li,alt)
 % 
