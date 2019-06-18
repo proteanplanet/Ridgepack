@@ -395,7 +395,17 @@ if(label==1)
   %end
   rot=0;
 
-  ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
+  if seaicerasm
+   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
+      'HorizontalAlignment','center',...
+      'VerticalAlignment','middle',...
+      'Interpreter','latex',...
+      'FontSize',fontsize,...
+      'Margin',1,...
+      'Rotation',rot,...
+      'Color',0*[1 1 1]);
+  else
+   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...
@@ -403,6 +413,7 @@ if(label==1)
       'Margin',1,...
       'Rotation',rot,...
       'Color',gridcolor);
+  end
   for k=1:5
    extent=get(ht,'extent');
    if extent(1)<x1 | extent(2)<y1
@@ -442,13 +453,23 @@ if(label==1)
   else
    tstring=['$',num2str(plat(i)),'^{\circ}$'];
   end
-  ht=text(x(i),y(i),tstring,...
+  if seaicerasm
+   ht=text(x(i),y(i),tstring,...
+      'HorizontalAlignment','center',...
+      'VerticalAlignment','middle',...
+      'Interpreter','latex',...
+      'Margin',1,...
+      'FontSize',fontsize,...
+      'Color',0*[1 1 1]);
+  else
+   ht=text(x(i),y(i),tstring,...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...
       'Margin',1,...
       'FontSize',fontsize,...
       'Color',gridcolor);
+  end
   for k=1:5
    extent=get(ht,'extent');
    if extent(1)<x1 | extent(2)<y1
@@ -487,14 +508,24 @@ if(grid==1)
    x(idx)=NaN;
    y(idx)=NaN;
   end
-  plot(x,y,'.','Color',gridcolor,'MarkerSize',markersize)
+  z=0.001*ones(size(x));
+  if seaicerasm
+   plot3(x,y,z,'k.','MarkerSize',markersize)
+  else
+   plot3(x,y,z,'.','Color',gridcolor,'MarkerSize',markersize)
+  end
  end
 
  for i=[30 60 120 150 -30 -60 -120 -150]
   lat=[-80:ddeg:80];
   lon=i*ones(size(lat));
   [x,y]=mfwdtran(lat,lon);
-  plot(x,y,'.','Color',gridcolor,'MarkerSize',markersize)
+  z=0.001*ones(size(x));
+  if seaicerasm
+   plot3(x,y,z,'k.','MarkerSize',markersize)
+  else
+   plot3(x,y,z,'.','Color',gridcolor,'MarkerSize',markersize)
+  end
  end
 
  for j=[-80:10:80]
@@ -507,7 +538,12 @@ if(grid==1)
    x(idx)=NaN;
    y(idx)=NaN;
   end
-  plot(x,y,'.','Color',gridcolor,'MarkerSize',markersize)
+  z=0.001*ones(size(x));
+  if seaicerasm
+   plot3(x,y,z,'k.','MarkerSize',markersize)
+  else
+   plot3(x,y,z,'.','Color',gridcolor,'MarkerSize',markersize)
+  end
  end
 end
 
