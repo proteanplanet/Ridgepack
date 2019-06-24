@@ -1,8 +1,8 @@
-function [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centerlat,centerlon,horizon,altitude)
+function [x,y,z,phi,theta]=ridgepack_satmap(lats,lons,centerlat,centerlon,horizon,altitude)
 
 % assign lats and lons
-c=lats;
-d=lons;
+c=deg2rad(lats);
+d=deg2rad(lons);
 
 % Rodrigues' Rotation Formula
 R = altitude*ones(size(c)); % should be your R(theta,phi) surface in general
