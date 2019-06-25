@@ -1,6 +1,6 @@
 function [h]=ridgepack_satview(centlat,centlon,horizon,surface)
 
-% input error checking
+% first pass input error checking 
 if nargin<3
  error('missing input variables')
 elseif nargin==3
@@ -15,6 +15,13 @@ elseif nargin==4
  end
 end
 
+% second pass error checking
+if centlat>90 | centlat<-90 
+ error('latitude must be between -90 and 90')
+elseif centlon>180 | centlon<-180
+ error('latitude must be between -180 and 180')
+end
+
 % set paramater space
 surfh=0.999 % altiude of underlying surface
 gridheight=1.01 % height of grid superimposed on plot
@@ -27,13 +34,14 @@ if surface>0 & surface<=1
  thetavec = linspace(0,deg2rad(horizon),N);
  phivec = linspace(0,2*pi,N);
  [th, ph] = meshgrid(thetavec,phivec);
- R = surfh*ones(size(th)); % should be your R(theta,phi) surface in general
+ R = surfh*ones(size(th)); % should be R(theta,phi) surface in general
  cx = R.*sin(th).*cos(ph);
  cy = R.*sin(th).*sin(ph);
  cz = R.*cos(th);
  theta=abs(th);
  maxtheta=max(theta(:));
- c1=cos(theta/max(1,horizon/45)); % 3D shading (halved fade-off a 90 deg)
+ %c1=cos(theta/max(1,horizon/45)); % 3D shading (halved fade-off a 90 deg)
+ c1=cos(theta/2); % 3D shading (halved fade-off a 90 deg)
  cc(:,:,1)=c1;
  cc(:,:,2)=c1;
  cc(:,:,3)=c1;
@@ -76,24 +84,47 @@ for lon=-180:30:180
 
   labellat=35;
 
-  [x,y,z]=ridgepack_satmap(labellat,lon,centlat,centlon,horizon,1);
+  if labellat>88 | labellat<-88
+   error('labellat should be less than abs(89)')
+  end
 
-  rotation=lon-centlon;
-  if rotation<91 & rotation>-91
-   text(x,y,1.05*z,[num2str(abs(lon)),ending],...
-         'HorizontalAlignment','center',...
-         'VerticalAlignment','base',...
-         'FontSize',8,...
-	 'Color',0.5*[1 1 1],...
-         'Rotation',rotation-90);
+  % get coordinates of meredian label near frame edge
+  lats=[-75:10:75];
+  lons=lon*ones(size(lats));
+  [x,y,z,ph,th]=ridgepack_satmap(lats,lons,centlat,centlon,horizon,1);
+  idx=find(min(abs(rad2deg(th)-50))==abs(rad2deg(th)-50));
+
+  if ~isempty(idx) & rad2deg(th(idx))<60
+
+   rad2deg(th(idx))
+
+   % find local angle of labels
+   [xl,yl,zl]=ridgepack_satmap([lats(idx)-2 lats(idx)+2],[lon lon],...
+                               centlat,centlon,horizon,1);
+
+   % find angle of grid label and rotate to readable angle
+   rotation=atan2d(diff(yl),diff(xl));
+   if rotation>91 | rotation<-91
+    rotation=mod(rotation+180,0)
+   end
+ 
+   % add grid label
+   if ~isnan(rotation)
+    text(x(idx),y(idx),1.02*z(idx),[num2str(abs(lon)),ending],...
+               'HorizontalAlignment','center',...
+               'VerticalAlignment','bottom',...
+               'FontSize',7,...
+	       'Color',0.5*[1 1 1],...
+               'Rotation',rotation);
+   end
+
   end
 
  end
-
 end
 
 % plot frame
-ph = deg2rad([0:0.01:360]); 
+ph = deg2rad([0:0.001:361]); 
 th = deg2rad(horizon*ones(size(ph)));
 x = sin(th).*cos(ph);
 y = sin(th).*sin(ph);
