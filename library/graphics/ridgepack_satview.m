@@ -1,5 +1,9 @@
 function [h]=ridgepack_satview(centlat,centlon,horizon,surface,gridon)
 
+% set paramater space
+surfh=0.999; % altiude of underlying surface
+gridheight=1.01; % height of grid superimposed on plot
+
 % first pass input error checking 
 if nargin<3
  error('missing input variables')
@@ -8,7 +12,7 @@ elseif nargin==3
  gridon=2;
 elseif nargin==4
  if surface<=1
-  disp('Adding an underlying surface at a given altitude')
+  disp(['Adding an underlying surface at altitude ',num2str(surfh)])
  elseif surface==0
   disp('Not including underlying surface')
  elseif (surface>1 | surface<0)
@@ -17,17 +21,19 @@ elseif nargin==4
  gridon=2;
 end
 
+% check for grid options
 if nargin==5
  if gridon~=0 & gridon~=1 & gridon~=2
   error('gridon must be equal to zero, one or two')
  end
- if gridon==0
-  disp('no grid')
- elseif gridon==1
-  disp('grid on but grid labeling off')
- elseif gridon==2
-  disp('grid on and grid labeling on')
- end
+end
+
+if gridon==0
+ disp('No grid')
+elseif gridon==1
+ disp('Grid on but grid labeling off')
+elseif gridon==2
+ disp('Grid on and grid labeling on')
 end
 
 % second pass error checking
@@ -36,10 +42,6 @@ if centlat>90 | centlat<-90
 elseif centlon>180 | centlon<-180
  error('latitude must be between -180 and 180')
 end
-
-% set paramater space
-surfh=0.999 % altiude of underlying surface
-gridheight=1.01 % height of grid superimposed on plot
 
 clf
 
@@ -71,7 +73,7 @@ if gridon>0
   % plot grid lines
   lons=[0:0.01:360];
   lats=lat.*ones(size(lons));
-  [x,y,z]=ridgepack_satmap(lats,lons,centlat,centlon,horizon,1);
+  [x,y,z]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
   plot3(x,y,gridheight*z,':','Color',0.5*[1 1 1])
   hold on
 
@@ -81,7 +83,7 @@ if gridon>0
    lons=centlon-mod(centlon-30,30)-15;
    lats=lat;
 
-   [x,y,z,ph,th]=ridgepack_satmap(lats,lons,centlat,centlon,horizon,1);
+   [x,y,z,ph,th]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
    diffhoriz=(0.8*horizon)-rad2deg(th);
    idx=find(diffhoriz>0);
  
@@ -90,7 +92,7 @@ if gridon>0
     idx=idx(1);
 
     % find local angle of labels
-    [xl,yl,zl,phl,thl]=ridgepack_satmap([lats lats],...
+    [xl,yl,zl,phl,thl]=ridgepack_satfwd([lats lats],...
                                        [lons(idx)-2 lons(idx)+2],...
                                        centlat,centlon,horizon,1);
     if max(rad2deg(thl))<horizon
@@ -98,7 +100,7 @@ if gridon>0
      % find angle of grid label and rotate to readable angle
      rotation=atan2d(diff(yl),diff(xl));
      if rotation>91 | rotation<-91
-      rotation=mod(rotation+180,0)
+      rotation=mod(rotation+180,0);
      end
 
      % add grid label
@@ -140,7 +142,7 @@ if gridon>0
    lats=[-80:0.01:80];
   end
   lons=lon.*ones(size(lats));
-  [x,y,z,phi,theta]=ridgepack_satmap(lats,lons,centlat,centlon,horizon,1);
+  [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
   plot3(x,y,gridheight*z,':','Color',0.5*[1 1 1])
   hold on
 
@@ -155,14 +157,14 @@ if gridon>0
    end
    lons=lon*ones(size(lats));
 
-   [x,y,z,ph,th]=ridgepack_satmap(lats,lons,centlat,centlon,horizon,1);
+   [x,y,z,ph,th]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
    diffhoriz=(0.8*horizon)-rad2deg(th);
    idx=find(diffhoriz>0);
 
    if ~isempty(idx) 
     idx=idx(1);
     % find local angle of labels
-    [xl,yl,zl,phl,thl]=ridgepack_satmap([lats(idx)-2 lats(idx)+2],...
+    [xl,yl,zl,phl,thl]=ridgepack_satfwd([lats(idx)-2 lats(idx)+2],...
                                        [lon lon],...
                                        centlat,centlon,horizon,1);
     if max(rad2deg(thl))<horizon
@@ -170,7 +172,7 @@ if gridon>0
      % find angle of grid label and rotate to readable angle
      rotation=atan2d(diff(yl),diff(xl));
      if rotation>91 | rotation<-91
-      rotation=mod(rotation+180,0)
+      rotation=mod(rotation+180,0);
      end
  
      % add grid label
@@ -197,7 +199,6 @@ if gridon>0
   end
  end
 end
-
 
 % plot frame
 ph = deg2rad([0:0.001:361]); 
