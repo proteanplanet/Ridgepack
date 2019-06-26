@@ -1,4 +1,8 @@
-function [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centerlat,centerlon,horizon,altitude)
+function [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centerlat,centerlon,horizon,altitude,removepoints)
+
+if nargin<7
+ removepoints=true;
+end
 
 % assign lats and lons
 c=deg2rad(lats);
@@ -41,10 +45,11 @@ phi=atan2(cy,cx);
 theta=atan2(sqrt(cx.^2+cy.^2),cz);
 
 % limit the satellite horizon
-sillynumber=10000000000;
-idx=find(theta>deg2rad(horizon));
-phi(idx)=NaN;
-theta(idx)=NaN;
+if removepoints
+ idx=find(theta>deg2rad(horizon));
+ phi(idx)=NaN;
+ theta(idx)=NaN;
+end
 
 % calculate final x, y and z
 x = r.*sin(theta).*cos(phi);
