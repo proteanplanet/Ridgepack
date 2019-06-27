@@ -13,7 +13,8 @@ cont=[5 10:1:31];
 ref=20;
 
 % grid location
-gridloc='/Users/afroberts/SIhMSatArray/E3SM/ARRM/grid';
+%gridloc='/Users/afroberts/SIhMSatArray/E3SM/ARRM/grid';
+gridloc='/Users/afroberts/data/E3SM/ARRM/grid';
 
 % obtain grid information
 cd(gridloc)
@@ -30,7 +31,10 @@ nccell.areaCell.data=sqrt(nccell.areaCell.data)/1000;
 
 ridgepack_satview(centlat,centlon,horizon,1,2)
 
-ridgepack_psatcole3sm(nccell,'areaCell',ncvert,nccell,cont,ref,...
+%ridgepack_psatcole3sm(nccell,'areaCell',ncvert,nccell,cont,ref,...
+%                      centlat,centlon,horizon,altitude);
+
+ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,nccell,cont,ref,...
                       centlat,centlon,horizon,altitude);
 
 % obtain coastal outline

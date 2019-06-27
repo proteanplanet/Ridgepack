@@ -3,6 +3,8 @@ function [h]=ridgepack_satview(centlat,centlon,horizon,surface,gridon)
 % set paramater space
 surfh=0.999; % altiude of underlying surface
 gridheight=1.01; % height of grid superimposed on plot
+gridcolor=0.45*[1 1 1]; % color of grid lines and labels
+labelfontsize=6; % font size of labels
 
 % first pass input error checking 
 if nargin<3
@@ -74,7 +76,7 @@ if gridon>0
   lons=[0:0.01:360];
   lats=lat.*ones(size(lons));
   [x,y,z]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
-  plot3(x,y,gridheight*z,':','Color',0.5*[1 1 1])
+  plot3(x,y,gridheight*z,':','Color',gridcolor)
   hold on
 
   % label parallels
@@ -119,8 +121,8 @@ if gridon>0
                [num2str(abs(lats)),ending],...
                'HorizontalAlignment','center',...
                'VerticalAlignment','bottom',...
-               'FontSize',7,...
-               'Color',0.5*[1 1 1],...
+               'FontSize',labelfontsize,...
+               'Color',gridcolor,...
                'Rotation',rotation);
      end
 
@@ -143,7 +145,7 @@ if gridon>0
   end
   lons=lon.*ones(size(lats));
   [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centlat,centlon,horizon,1);
-  plot3(x,y,gridheight*z,':','Color',0.5*[1 1 1])
+  plot3(x,y,gridheight*z,':','Color',gridcolor)
   hold on
 
   % label grid lines
@@ -190,8 +192,8 @@ if gridon>0
                [num2str(abs(lon)),ending],...
                'HorizontalAlignment','center',...
                'VerticalAlignment','bottom',...
-               'FontSize',7,...
-	       'Color',0.5*[1 1 1],...
+               'FontSize',labelfontsize,...
+	       'Color',gridcolor,...
                'Rotation',rotation);
      end
     end
