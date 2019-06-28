@@ -3,8 +3,8 @@ function [h]=ridgepack_satview(centlat,centlon,horizon,surface,gridon)
 % set paramater space
 surfh=0.999; % altiude of underlying surface
 gridheight=1.01; % height of grid superimposed on plot
-gridcolor=0.45*[1 1 1]; % color of grid lines and labels
-labelfontsize=6; % font size of labels
+gridcolor=0.85*[1 1 1]; % color of grid lines and labels
+labelfontsize=4; % font size of labels
 
 % first pass input error checking 
 if nargin<3
@@ -45,7 +45,7 @@ elseif centlon>180 | centlon<-180
  error('latitude must be between -180 and 180')
 end
 
-clf
+%clf
 
 % plot underlying surface
 if surface>0 & surface<=1

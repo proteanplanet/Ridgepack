@@ -1,10 +1,12 @@
-function ridgepack_psatmeshe3sm(nc,var,ncvert,nccell,cont,ref,...
-                               centlat,centlon,horizon,altitude)
+function [cells]=ridgepack_psatmeshe3sm(nc,var,ncvert,...
+                      cont,ref,centlat,centlon,horizon,altitude)
+
+gridheight=1.01; % height of grid superimposed on plot
 
 % reduce the data use to the plotting area to speed things up
-% and fine plotting edge limit of cells
+% and find plotting edge limit of cells
 maxth=deg2rad(horizon);
-for i=1:length(nccell.latitude.data)
+for i=1:length(ncvert.nCells.data)
 
  maxidx=ncvert.nEdgesOnCell.data(i);
 
@@ -24,6 +26,13 @@ for i=1:length(nccell.latitude.data)
   maxth=max(maxth,maxt);
  end
 
+end
+
+% allocate cell indices included in the horizon
+if nargout==1
+ disp('Outputing cells within the satellite view')
+ cells=find(~isnan(nc.(var).data));
+ return
 end
 
 % now draw the grid
@@ -58,8 +67,10 @@ for j=1:length(cont)-1
 
   end
 
+  % find values within twice the horizon since we've already
+  % weeded out cells that only fall within the horizon
   [dx,dy,dz,phi,theta]=ridgepack_satfwd(rad2deg(c),rad2deg(d),...
-                                        centlat,centlon,1.03*horizon,1);
+                                  centlat,centlon,2*horizon,1);
 
   % draw grid
   plot3(dx,dy,dz,'b','LineWidth',0.5)
@@ -77,7 +88,7 @@ phivec = linspace(0,2*pi,N);
 R = ones(size(th)); % should be your R(theta,phi) surface in general
 cx = R.*sin(th).*cos(ph);
 cy = R.*sin(th).*sin(ph);
-cz = 1.09*R.*cos(th);
+cz = gridheight*R.*cos(th);
 c1 = ones(size(cx));
 clear cc
 cc(:,:,1)=c1;
@@ -91,7 +102,7 @@ th=deg2rad(horizon*ones(size(ph)));
 R = ones(size(th)); % should be your R(theta,phi) surface in general
 cx = R.*sin(th).*cos(ph);
 cy = R.*sin(th).*sin(ph);
-cz = 1.095*R.*cos(th);
+cz = gridheight*R.*cos(th);
 plot3(cx,cy,cz,'k')
 
 % make axes equal and tight, set viewing angle
@@ -101,7 +112,7 @@ axis tight
 axis off
 
 % add lighting from infinite sources directly overhead
-hl=light('Position',[0 0 10000],'Style','local')
+light('Position',[0 0 10000],'Style','local')
 material dull
 
 

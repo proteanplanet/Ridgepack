@@ -1,4 +1,4 @@
-function ridgepack_psatcole3sm(nc,var,ncvert,nccell,cont,ref,...
+function ridgepack_psatcole3sm(nc,var,ncvert,cont,ref,...
                                centlat,centlon,horizon,altitude)
 
 % define colormap
@@ -7,7 +7,7 @@ function ridgepack_psatcole3sm(nc,var,ncvert,nccell,cont,ref,...
 % reduce the data use to the plotting area to speed things up
 % and fine plotting edge limit of cells
 maxth=deg2rad(horizon);
-for i=1:length(nccell.latitude.data)
+for i=1:length(ncvert.nCells.data)
 
  maxidx=ncvert.nEdgesOnCell.data(i);
 
