@@ -1,4 +1,5 @@
-function [lats,lons]=ridgepack_satinv(phi,theta,centerlat,centerlon,horizon,altitude)
+function [lats,lons]=ridgepack_satinv(phi,theta,centerlat,...
+                                      centerlon,horizon,altitude)
 
 % Rodrigues' Rotation Formula
 R = altitude*ones(size(phi)); 
@@ -9,7 +10,7 @@ az = R.*cos(theta);
 % Rotate back to correct latitude
 latcenter=deg2rad(0);
 loncenter=deg2rad(0);
-beta=deg2rad(centerlat-90);
+beta=deg2rad(centerlat+90);
 r=altitude;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
@@ -22,7 +23,7 @@ cz=cos(beta).*az+sin(beta)*(kx.*ay-ky.*ax)+kdota.*(1-cos(beta))*kz;
 % rotate back to correct longitude
 latcenter=deg2rad(90);
 loncenter=deg2rad(0);
-beta=deg2rad(-centerlon+90);
+beta=deg2rad(centerlon+90);
 r=altitude;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
@@ -37,6 +38,6 @@ phi=atan2(by,bx);
 theta=atan2(sqrt(bx.^2+by.^2),bz);
 
 % calculate lats and lons 
-lats=rad2deg(theta+(pi/2));
+lats=rad2deg(theta-(pi/2));
 lons=rad2deg(phi);
 
