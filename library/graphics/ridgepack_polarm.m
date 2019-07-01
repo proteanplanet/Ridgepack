@@ -61,6 +61,8 @@ function [maph]=ridgepack_polarm(varargin)
 %
 % 'rasmmask' - Plot of central arctic that includes the central arctic RASM mask.
 %
+% 'shipping' - Map of central Arctic applicable to shipping
+%
 % 'antarctic' - Map for Antarctic sea ice zone.
 %
 %
@@ -105,6 +107,7 @@ asm=0;
 rasm=0;
 rasmshort=0;
 rasmlong=0;
+shipping=0;
 centralarctic=0;
 centralarctic2=0;
 rasmmask=0;
@@ -126,6 +129,8 @@ else
 	   seaice=1;
    case 'seaicerasm'
 	   seaicerasm=1;
+   case 'shipping'
+	   shipping=1;
    case 'asm'
 	   asm=1;
    case 'rasm'
@@ -144,13 +149,13 @@ else
 	   antarctic=1;
    case 'lat'
   	   if(i+1>nargin || ischar(varargin{i+1}))
-		   error(['Missing latitude argument for ',varargin{i}])
+	    error(['Missing latitude argument for ',varargin{i}])
   	   end
 	   i=i+1;
 	   equatorextent=varargin{i};
    case 'lon'
   	   if(i+1>nargin || ischar(varargin{i+1}))
-		   error(['Missing longitiude argument for ',varargin{i}])
+	    error(['Missing longitiude argument for ',varargin{i}])
   	   end
 	   i=i+1;
 	   centralmeridian=varargin{i};
@@ -174,6 +179,9 @@ elseif seaice % create preset arctic system map
  centralmeridian=-45;
 elseif seaicerasm
  equatorextent=40;
+ centralmeridian=-114;
+elseif shipping
+ equatorextent=51;
  centralmeridian=-114;
 elseif rasm
  equatorextent=30;
@@ -255,6 +263,11 @@ elseif seaicerasm
  [x2,y] = mfwdtran(equatorextent+10,rightlon);
  [x,y1] = mfwdtran(equatorextent+16,bottomlon);
  [x,y2] = mfwdtran(equatorextent+23,toplon);
+elseif shipping
+ [x1,y] = mfwdtran(equatorextent+12,leftlon);
+ [x2,y] = mfwdtran(equatorextent+10,rightlon);
+ [x,y1] = mfwdtran(equatorextent+16,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+17,toplon);
 elseif rasm
  [x1,y] = mfwdtran(equatorextent-4.5,leftlon);
  [x2,y] = mfwdtran(equatorextent+10.3,rightlon);
