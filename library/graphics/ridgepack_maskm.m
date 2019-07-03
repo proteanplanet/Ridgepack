@@ -101,7 +101,7 @@ if strmatch(mapobj.mapprojection,'globe')
 
  % set altitude before transforming data
  alt=0*ones(size(x));
- [x,y,e] = mfwdtran(x,y,alt,h);
+ [x,y,e]=mfwdtran(x,y,alt,h);
 
 else
 
@@ -126,7 +126,8 @@ for j=2:size(zi,2)+1;
     lx2=mean(reshape(x(i-1:i,j:j+1),4,1));
     ly2=mean(reshape(y(i-1:i,j:j+1),4,1));
     lz2=mean(reshape(e(i-1:i,j:j+1),4,1));
-    line([lx1 lx2],[ly1 ly2],[lz1 lz2],'LineStyle',li,'Color',co,'linewidth',wi);
+    line([lx1 lx2],[ly1 ly2],[lz1 lz2],...
+         'LineStyle',li,'Color',co,'linewidth',wi);
   end
 
   if z(i,j)==0 && z(i+1,j)==1;
@@ -136,7 +137,8 @@ for j=2:size(zi,2)+1;
     lx2=mean(reshape(x(i:i+1,j:j+1),4,1));
     ly2=mean(reshape(y(i:i+1,j:j+1),4,1));
     lz2=mean(reshape(e(i:i+1,j:j+1),4,1));
-    line([lx1 lx2],[ly1 ly2],[lz1 lz2],'LineStyle',li,'Color',co,'linewidth',wi);
+    line([lx1 lx2],[ly1 ly2],[lz1 lz2],...
+         'LineStyle',li,'Color',co,'linewidth',wi);
   end
 
   if z(i,j)==0 && z(i,j-1)==1;
@@ -146,7 +148,8 @@ for j=2:size(zi,2)+1;
     lx2=mean(reshape(x(i:i+1,j-1:j),4,1));
     ly2=mean(reshape(y(i:i+1,j-1:j),4,1));
     lz2=mean(reshape(e(i:i+1,j-1:j),4,1));
-    line([lx1 lx2],[ly1 ly2],[lz1 lz2],'LineStyle',li,'Color',co,'linewidth',wi);
+    line([lx1 lx2],[ly1 ly2],[lz1 lz2],...
+         'LineStyle',li,'Color',co,'linewidth',wi);
   end
 
   if z(i,j)==0 && z(i,j+1)==1;
@@ -156,7 +159,8 @@ for j=2:size(zi,2)+1;
     lx2=mean(reshape(x(i:i+1,j:j+1),4,1));
     ly2=mean(reshape(y(i:i+1,j:j+1),4,1));
     lz2=mean(reshape(e(i:i+1,j:j+1),4,1));
-    h=line([lx1 lx2],[ly1 ly2],[lz1 lz2],'LineStyle',li,'Color',co,'linewidth',wi);
+    h=line([lx1 lx2],[ly1 ly2],[lz1 lz2],...
+         'LineStyle',li,'Color',co,'linewidth',wi);
   end
 
 end
