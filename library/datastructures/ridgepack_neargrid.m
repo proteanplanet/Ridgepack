@@ -90,30 +90,30 @@ else
  alms=almanac('earth','wgs84');
 end
 
-% set xmin and xmax
-xmin=1;
-xmax=size(latmat,1);
-ymin=1;
-ymax=size(latmat,2);
-
 if nargin==6 & lastrow>0 & lastcol>0
 
  lr=lastrow;
  lc=lastcol;
 
+ % set xmin and xmax
+ xmin=max(lr-4,1);
+ xmax=min(lr+4,size(latmat,1));
+ ymin=max(lc-4,1);
+ ymax=min(lc+4,size(latmat,2));
+
  dist=distance(lat,lon,...
-               latmat(max(lr-4,xmin):min(lr+4,xmax),...
-                      max(lc-4,ymin):min(lc+4,ymax)),...
-               longmat(max(lr-4,xmin):min(lr+4,xmax),...
-                       max(lc-4,ymin):min(lc+4,ymax)),...
+               latmat(xmin:xmax,ymin:ymax),...
+               longmat(xmin:xmax,ymin:ymax),...
                alms);
 
  newdist=sort(dist(:));
 
  [row,col]=find(dist(:,:)==newdist(1));
 
- if (row==max(lr-4,xmin) | row==min(lr+4,xmax) | ...
-     col==max(lc-4,ymin) | col==min(lc+4,ymax))
+ row=xmin+row-1;
+ col=ymin+col-1;
+
+ if (row==xmin | row==xmax | col==ymin | col==ymax)
   widesearch=true;
  else
   widesearch=false;
