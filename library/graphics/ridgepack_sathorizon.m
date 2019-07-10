@@ -13,5 +13,5 @@ altitude=1;
 [x,y,z]=ridgepack_satfwd(lats,lons,centlat,centlon,90,altitude);
 
 % plot the horizon
-h=plot3(x,y,z,'Color',color)
+h=plot3(x,y,1.01*z,'Color',color)
 

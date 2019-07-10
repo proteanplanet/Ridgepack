@@ -42,13 +42,15 @@ for j=1:length(cont)-1
 
  if length(id)>0
 
-  lat=zeros([1 8]);
-  lon=zeros([1 8]);
-  xl=zeros(length(id),8);
-  yl=zeros(length(id),8);
-  zl=zeros(length(id),8);
-  phl=zeros(length(id),8);
-  thl=zeros(length(id),8);
+  idmax=ncvert.maxEdges.data(end);
+
+  lat=zeros([1 idmax]);
+  lon=zeros([1 idmax]);
+  xl=zeros(length(id),idmax);
+  yl=zeros(length(id),idmax);
+  zl=zeros(length(id),idmax);
+  phl=zeros(length(id),idmax);
+  thl=zeros(length(id),idmax);
   cl=zeros(3,length(id));
 
   for i=1:1:length(id)
@@ -61,8 +63,8 @@ for j=1:length(cont)-1
    lat(1:maxidx)=la;
    lon(1:maxidx)=lo;
 
-   lat(maxidx+1:8)=la(1);
-   lon(maxidx+1:8)=lo(1);
+   lat(maxidx+1:idmax)=la(1);
+   lon(maxidx+1:idmax)=lo(1);
 
    [xl(i,:),yl(i,:),zl(i,:),phl(i,:),thl(i,:)]=...
     ridgepack_satfwd(rad2deg(squeeze(lat(:))),...

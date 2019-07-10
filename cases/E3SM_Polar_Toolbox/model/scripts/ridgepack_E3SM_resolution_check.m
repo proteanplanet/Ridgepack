@@ -4,10 +4,11 @@ function ridgepack_E3SM_resolution_check(centlat,centlon,...
 close all
 
 % Arctic Center
-%centlat=79; % degrees north
-%centlon=-100; % degrees east
-%horizon=3; % degrees of satellite horizon (0-90)
-%coastname='ARRM'; % grid name
+%centlat=50; % degrees north
+%centlon=-20; % degrees east
+%horizon=10; % degrees of satellite horizon (0-90)
+%coastname='Greenland'; % grid name
+%cont=[10:5:60];
 
 % set constants
 altitude=1; % Mean Earth radius multiple
@@ -21,6 +22,9 @@ if strcmp(coastname,'ARRM')
  %gridloc='/Users/afroberts/SIhMSatArray/E3SM/ARRM/grid';
  gridloc='/Users/afroberts/data/E3SM/ARRM/grid';
  gridfile='ocean.ARRM60to10.180715.nc';
+elseif strcmp(coastname,'Greenland')
+ gridloc='/Users/afroberts/data/E3SM/Greenland/grid';
+ gridfile='greenland_grid.nc';
 elseif strcmp(coastname,'CONUS')
  gridloc='/Users/afroberts/data/E3SM/CONUS/grid';
  gridfile='initial_state.nc';
@@ -48,7 +52,7 @@ nccell=ridgepack_clone(gridfile,{'latCell',...
 nccell.areaCell.data=sqrt(nccell.areaCell.data)/1000;
 
 % plot cell resolution
-ridgepack_multiplot(1,3,1,1,'a')
+ridgepack_multiplot(2,2,1,1,'a')
 ridgepack_satview(centlat,centlon,90,1,0)
 ridgepack_psatcole3sm(nccell,'areaCell',ncvert,cont,ref,...
                       centlat,centlon,90,1.001*altitude);
@@ -60,7 +64,7 @@ ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
 title([coastname,' $\sqrt{\textrm(areaCell)}$'],'FontSize',10)
 
 % plot mesh
-ridgepack_multiplot(1,3,1,2,'b')
+ridgepack_multiplot(2,2,1,2,'b')
 ridgepack_satview(centlat,centlon,horizon,1,0);
 ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
            cont,ref,centlat,centlon,horizon,altitude);
@@ -69,11 +73,11 @@ ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
 title('Analysis Region','FontSize',10)
 
 % get resolution statistics for the grid cells
-ridgepack_multiplot(1,3,1,3,'c')
+ridgepack_multiplot(2,2,2,1,'c')
 [cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
                    cont,ref,centlat,centlon,horizon,altitude);
 idx=ncvert.edgesOnCell.data(:,cells);
-id=unique(sort(idx(:)));
+id=unique(sort(idx(idx(:)>0)));
 dc=ncvert.dcEdge.data(id);
 [X,Y]=hist(dc,100); % obtain histogram
 X=X(:)./sum(X(:));
@@ -92,6 +96,39 @@ else
  lonunits='E';
 end
 title(['Edges on cells within ',num2str(horizon),...
+        '$^{\circ}$'],'FontSize',10)
+
+% get resolution statistics for the grid cells
+ridgepack_multiplot(2,2,2,2,'d')
+[cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
+                   cont,ref,centlat,centlon,horizon,altitude);
+
+diffc=NaN*zeros(size(cells));
+
+for i=1:length(cells)
+ idx=find(ncvert.edgesOnCell.data(:,i)>0);  
+ edgeidx=ncvert.edgesOnCell.data(idx,i);
+ diffc(i)=1-(min(ncvert.dcEdge.data(edgeidx))./...
+             max(ncvert.dcEdge.data(edgeidx)));
+end
+
+[X,Y]=hist(diffc,50); % obtain histogram
+X=X(:)./sum(X(:));
+Y=Y(:).*100; % convert to km
+stairs(Y,X)
+xlim([0 max(Y)])
+xlabel('Cell-to-Cell Resolution Gradient (\%)','FontSize',10)
+if centlat<0
+ latunits='S';
+else
+ latunits='N';
+end
+if centlon<0
+ lonunits='W';
+else
+ lonunits='E';
+end
+title(['Cells within ',num2str(horizon),...
         '$^{\circ}$ of ',...
         num2str(abs(centlat)),latunits,' ',...
         num2str(abs(centlon)),lonunits],'FontSize',10)
