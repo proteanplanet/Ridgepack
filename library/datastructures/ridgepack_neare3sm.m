@@ -29,7 +29,7 @@ else
  alms=almanac('earth','wgs84');
 end
 
-if lastcell==0
+%if lastcell==0
 
  dist=distance(searchlat,searchlon,...
                nc.latCell.data(nc.nhsicells.data),...
@@ -45,6 +45,6 @@ if lastcell==0
  lat=nc.latCell.data(cell);
  lon=nc.lonCell.data(cell);
 
-end
+%end
 
 
