@@ -8,11 +8,10 @@ altitude=1; % Mean Earth radius multiple
 cgrid=true; % plot c-grid coastline
 
 % define contours
-ref=0;
+ref=30;
 
 % grid location
 if strcmp(coastname,'ARRM')
- %gridloc='/Users/afroberts/SIhMSatArray/E3SM/ARRM/grid';
  gridloc='/Users/afroberts/data/E3SM/ARRM/grid';
  gridfile='ocean.ARRM60to10.180715.nc';
  titlename='ARRM';
@@ -25,25 +24,27 @@ elseif strcmp(coastname,'CONUS')
  gridfile='initial_state.nc';
  titlename='Greenland';
 elseif strcmp(coastname,'CONUS_modified')
- gridloc='/Users/afroberts/SIhMSatArray/E3SM/Modified_CONUS/grid';
+ gridloc='/Users/afroberts/data/E3SM/Modified_CONUS/grid';
  gridfile='initial_state.nc';
  titlename='Modified CONUS';
 elseif strcmp(coastname,'EC_60_30')
- gridloc='/Users/afroberts/SIhMSatArray/E3SM/EC_60_30/grid';
+ gridloc='/Users/afroberts/data/E3SM/EC_60_30/grid';
  gridfile='initial_state.nc';
  titlename='EC60to30';
 elseif strcmp(coastname,'EC_60_30_Degraded')
- gridloc='/Users/afroberts/SIhMSatArray/E3SM/EC_60_30_Degraded/grid';
+ gridloc='/Users/afroberts/data/E3SM/EC_60_30_Degraded/grid';
  gridfile='initial_state.nc';
  titlename='Degraded EC60to30';
 elseif strcmp(coastname,'EC_60_30_Old')
- gridloc='/Users/afroberts/SIhMSatArray/E3SM/EC_60_30_Old/grid';
+ gridloc='/Users/afroberts/data/E3SM/EC_60_30_Old/grid';
  gridfile='init.nc';
  titlename='Old EC60to30';
 elseif strcmp(coastname,'DECK')
  gridloc='/Users/afroberts/data/E3SM/DECK/grid';
  gridfile='oEC60to30v3_60layer.restartFrom_anvil0926.171101.nc';
  titlename='DECK';
+else
+ error('coastname not recognized')
 end
 
 % obtain grid information
@@ -80,7 +81,7 @@ title([titlename,' $\sqrt{\textrm(Cell Area)}$'],'FontSize',10)
 ridgepack_multiplot(2,2,1,2,'b')
 ridgepack_satview(centlat,centlon,horizon,1,0);
 ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-           cont,ref,centlat,centlon,horizon,altitude);
+           centlat,centlon,horizon,altitude);
 ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
                         centlat,centlon,horizon);
 title('Analysis Region','FontSize',10)
@@ -88,7 +89,7 @@ title('Analysis Region','FontSize',10)
 % get resolution statistics for the grid cells
 ridgepack_multiplot(2,2,2,1,'c')
 [cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-                   cont,ref,centlat,centlon,horizon,altitude);
+                   centlat,centlon,horizon,altitude);
 
 dc=[];
 for i=1:length(cells)
@@ -118,7 +119,7 @@ title(['Edges on cells within ',num2str(horizon),...
 % get resolution statistics for the grid cells
 ridgepack_multiplot(2,2,2,2,'d')
 [cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-                   cont,ref,centlat,centlon,horizon,altitude);
+                   centlat,centlon,horizon,altitude);
 
 diffc=NaN*zeros(size(cells));
 

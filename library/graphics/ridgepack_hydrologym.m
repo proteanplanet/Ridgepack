@@ -1,4 +1,4 @@
-function ridgepack_hydrologym(colorindex)
+function [nc]=ridgepack_hydrologym(colorindex)
 
 % ridgepack_hydrologym - Colors location of lakes on a map.
 %
@@ -45,6 +45,41 @@ geoshow(gca,lakes, 'FaceColor',truecolor,'EdgeColor',truecolor,'FaceAlpha',0.25)
 
 rivers = shaperead('worldrivers','UseGeoCoords',true);
 geoshow(gca,rivers, 'Color',truecolor,'LineWidth',0.4,'DisplayType','line')
+
+nc.attributes.title='Global River Tracks';
+nrivers=length(rivers);
+maxlength=0;
+for i=1:nrivers
+ maxlength=max(maxlength,length(rivers(i).Lat));
+end
+
+nc.nrivers.data=[1:nrivers];
+nc.nrivers.long_name='River Number Index';
+nc.nrivers.dimension={'nrivers'};
+nr.nrivers.units='';
+
+nc.points.data=[1:maxlength];
+nc.points.long_name='Point on trace';
+nc.points.dimension={'points'};
+nr.points.units='';
+
+nc.latitude.data=NaN*zeros([nrivers maxlength]);
+nc.longitude.data=NaN*zeros([nrivers maxlength]);
+for i=1:nrivers
+ riverlength=length(rivers(i).Lat);
+ nc.latitude.data(i,1:riverlength)=rivers(i).Lat;
+ nc.longitude.data(i,1:riverlength)=rivers(i).Lon;
+end
+
+nc.latitude.long_name='Latitude of Rivers';
+nc.latitude.dimension={'nrivers','points'};
+nc.latitude.units='degrees_north';
+
+nc.longitude.long_name='Longitude of Rivers';
+nc.longitude.dimension={'nrivers','points'};
+nc.longitude.units='degrees_east';
+
+nc=ridgepack_struct(nc);
 
 drawnow
 

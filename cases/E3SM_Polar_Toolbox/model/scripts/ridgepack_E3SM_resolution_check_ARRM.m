@@ -1,6 +1,6 @@
 
 cont=[5:5:65];
-coastname='Greenland'; % grid name
+coastname='ARRM'; % grid name
 
 centlat=-40; % degrees north
 centlon=180; % degrees east

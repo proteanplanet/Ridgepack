@@ -1,5 +1,5 @@
 function [cells]=ridgepack_psatmeshe3sm(nc,var,ncvert,...
-                      cont,ref,centlat,centlon,horizon,altitude)
+                         centlat,centlon,horizon,altitude)
 
 gridheight=1.01; % height of grid superimposed on plot
 

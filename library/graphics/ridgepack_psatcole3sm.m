@@ -2,7 +2,7 @@ function ridgepack_psatcole3sm(nc,var,ncvert,cont,ref,...
                                centlat,centlon,horizon,altitude)
 
 % define colormap
-[cmap]=ridgepack_colormap(cont,20);
+[cmap]=ridgepack_colormap(cont,ref);
 
 % reduce the data use to the plotting area to speed things up
 % and fine plotting edge limit of cells
@@ -30,14 +30,14 @@ for i=1:length(ncvert.nCells.data)
 end
 
 % now shade the regions
-for j=1:length(cont)+1
+for j=1:length(cont)
 
  if j==1
-  id=find(nc.(var).data<cont(1));
- elseif j==length(cont)+1
-  id=find(nc.(var).data>cont(j-1));
+  id=find(nc.(var).data<cont(2));
+ elseif j==length(cont)
+  id=find(nc.(var).data>=cont(j-1));
  else
-  id=find(nc.(var).data>cont(j-1) & nc.(var).data<=cont(j));
+  id=find(nc.(var).data>=cont(j) & nc.(var).data<cont(j+1));
  end
 
  [zindex,truecol]=ridgepack_colorindex(nc.(var).data(id),cont,20);
