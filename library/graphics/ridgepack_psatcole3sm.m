@@ -30,12 +30,14 @@ for i=1:length(ncvert.nCells.data)
 end
 
 % now shade the regions
-for j=1:length(cont)-1
+for j=1:length(cont)+1
 
- if j<length(cont)-1
-  id=find(nc.(var).data>cont(j) & nc.(var).data<=cont(j+1));
+ if j==1
+  id=find(nc.(var).data<cont(1));
+ elseif j==length(cont)+1
+  id=find(nc.(var).data>cont(j-1));
  else
-  id=find(nc.(var).data>cont(j));
+  id=find(nc.(var).data>cont(j-1) & nc.(var).data<=cont(j));
  end
 
  [zindex,truecol]=ridgepack_colorindex(nc.(var).data(id),cont,20);

@@ -16,7 +16,7 @@ for i=1:length(ncvert.nCells.data)
  [x,y,z,ph,th]=ridgepack_satfwd(rad2deg(la),rad2deg(lo),...
                                 centlat,centlon,horizon,altitude);
 
- % filter cells no in frame, and find cropping limit
+ % filter cells not in frame, and find cropping limit
  if all(isnan(x)) 
   nc.(var).data(i)=NaN;
  elseif any(isnan(x)) & ~all(isnan(x))
@@ -29,54 +29,44 @@ for i=1:length(ncvert.nCells.data)
 end
 
 % allocate cell indices included in the horizon
+cells=find(~isnan(nc.(var).data));
 if nargout==1
  disp('Outputing cells within the satellite view')
- cells=find(~isnan(nc.(var).data));
  return
 end
 
 % now draw the grid
-for j=1:length(cont)-1
+c=[];
+d=[];
 
- if j<length(cont)-1
-  id=find(nc.(var).data>cont(j) & nc.(var).data<=cont(j+1));
- else
-  id=find(nc.(var).data>cont(j));
+if length(cells)>0
+
+ for i=1:1:length(cells)
+
+  maxidx=ncvert.nEdgesOnCell.data(cells(i));
+
+  la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,cells(i)));
+  lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,cells(i)));
+
+  la(end+1)=la(1);
+  lo(end+1)=lo(1);
+
+  la(end+1)=NaN;
+  lo(end+1)=NaN;
+
+  c=[c;la];
+  d=[d;lo];
+
  end
 
- c=[];
- d=[];
-
- if length(id)>0
-
-  for i=1:1:length(id)
-
-   maxidx=ncvert.nEdgesOnCell.data(id(i));
-
-   la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,id(i)));
-   lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,id(i)));
-
-   la(end+1)=la(1);
-   lo(end+1)=lo(1);
-
-   la(end+1)=NaN;
-   lo(end+1)=NaN;
-
-   c=[c;la];
-   d=[d;lo];
-
-  end
-
-  % find values within twice the horizon since we've already
-  % weeded out cells that only fall within the horizon
-  [dx,dy,dz,phi,theta]=ridgepack_satfwd(rad2deg(c),rad2deg(d),...
+ % find values within twice the horizon since we've already
+ % weeded out cells that only fall within the horizon
+ [dx,dy,dz,phi,theta]=ridgepack_satfwd(rad2deg(c),rad2deg(d),...
                                   centlat,centlon,2*horizon,1);
 
-  % draw grid
-  plot3(dx,dy,dz,'b','LineWidth',0.5)
-  hold on
-
- end
+ % draw grid
+ plot3(dx,dy,dz,'b','LineWidth',0.5)
+ hold on
 
 end
 
