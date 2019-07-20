@@ -52,4 +52,8 @@ centlon=-166; % degrees east
 horizon=5; % degrees of satellite horizon (0-90)
 ridgepack_E3SM_resolution_check(centlat,centlon,horizon,coastname,cont)
 
+centlat=68; % degrees north
+centlon=-112; % degrees east
+horizon=2; % degrees of satellite horizon (0-90)
+ridgepack_E3SM_resolution_check(centlat,centlon,horizon,coastname,cont)
 
