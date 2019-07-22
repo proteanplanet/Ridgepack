@@ -44,7 +44,7 @@ lakes = shaperead('worldlakes','UseGeoCoords',true);
 geoshow(gca,lakes, 'FaceColor',truecolor,'EdgeColor',truecolor,'FaceAlpha',0.25)
 
 rivers = shaperead('worldrivers','UseGeoCoords',true);
-geoshow(gca,rivers, 'Color',truecolor,'LineWidth',0.4,'DisplayType','line')
+geoshow(gca,rivers, 'Color',truecolor,'LineWidth',0.8,'DisplayType','line')
 
 nc.attributes.title='Global River Tracks';
 nrivers=length(rivers);
