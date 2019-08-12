@@ -59,6 +59,8 @@ function [maph]=ridgepack_polarm(varargin)
 %
 % 'centralarctic2' - A zoomed out version of centralarctic.
 %
+% 'centralarctic3' - A zoomed out version of centralarctic2.
+%
 % 'rasmmask' - Plot of central arctic that includes the central arctic RASM mask.
 %
 % 'shipping' - Map of central Arctic applicable to shipping
@@ -110,6 +112,7 @@ rasmlong=0;
 shipping=0;
 centralarctic=0;
 centralarctic2=0;
+centralarctic3=0;
 rasmmask=0;
 seaice=0;
 seaicerasm=0;
@@ -143,6 +146,8 @@ else
 	   centralarctic=1;
    case 'centralarctic2'
 	   centralarctic2=1;
+   case 'centralarctic3'
+	   centralarctic3=1;
    case 'rasmmask'
 	   rasmmask=1;
    case 'antarctic'
@@ -196,6 +201,9 @@ elseif centralarctic
  equatorextent=60;
  centralmeridian=-58;
 elseif centralarctic2
+ equatorextent=60;
+ centralmeridian=-58;
+elseif centralarctic3
  equatorextent=60;
  centralmeridian=-58;
 elseif rasmmask
@@ -293,6 +301,11 @@ elseif centralarctic2
  [x2,y] = mfwdtran(equatorextent+19,rightlon);
  [x,y1] = mfwdtran(equatorextent+21,bottomlon);
  [x,y2] = mfwdtran(equatorextent+10,toplon);
+elseif centralarctic3
+ [x1,y] = mfwdtran(equatorextent+3,leftlon);
+ [x2,y] = mfwdtran(equatorextent+16,rightlon);
+ [x,y1] = mfwdtran(equatorextent+18,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+10,toplon);
 elseif rasmmask
  [x1,y] = mfwdtran(equatorextent+6.5,leftlon);
  [x2,y] = mfwdtran(equatorextent+19.8,rightlon);
@@ -350,7 +363,7 @@ end
 if(label==1)
 
  % meridians of latitude and longitude labels
- if centralarctic | centralarctic2 | rasmmask
+ if centralarctic | centralarctic2 | centralarctic3 | rasmmask
   MLabelLocation=[90];
   PLabelMeridian=100;
  elseif(mult>0)
@@ -367,7 +380,7 @@ if(label==1)
  % parallels to be labelled 
  if abs(equatorextent)<20
   PLabelLocation=mult*[0 30 60];
- elseif centralarctic | centralarctic2 | rasmmask
+ elseif centralarctic | centralarctic2 | centralarctic3 | rasmmask
   PLabelLocation=[70];
  else
   PLabelLocation=mult*[30 40 50 60 70];
@@ -375,7 +388,7 @@ if(label==1)
 
  for i=1:length(MLabelLocation)
   mlon(i)=MLabelLocation(i);
-  lat=mult*[5:10:85];
+  lat=mult*[3:10:83];
   clear x y xdiff1 xdiff2 ydiff1 ydiff2
   for j=1:length(lat)
    [x(j),y(j)]=mfwdtran(lat(j),mlon(i));
@@ -408,8 +421,14 @@ if(label==1)
   %end
   rot=0;
 
+  if mlon(i)<0 & mlon(i)>-180;
+   signe='W';
+  else
+   signe='E';
+  end
+  
   if seaicerasm
-   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
+   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$',signe,' '],...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...
@@ -418,7 +437,7 @@ if(label==1)
       'Rotation',rot,...
       'Color',0*[1 1 1]);
   else
-   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$ '],...
+   ht=text(x(li),y(li),['$\;',num2str(mlon(i)),'^{\circ}$',signe,' '],...
       'HorizontalAlignment','center',...
       'VerticalAlignment','middle',...
       'Interpreter','latex',...

@@ -1,6 +1,6 @@
 function [row,col,lat,lon,rowmat,colmat]=...
-           ridgepack_neargrid(nc,lat,lon,switchd,disthreshold,...
-                              lastrow,lastcol)
+           ridgepack_neargrid(nc,lat,lon,switchd,lastrow,lastcol,...
+                              disthreshold)
 
 % ridgepack_neargrid - Finds the nearest grid point to a latitude and longitude position
 %
@@ -131,14 +131,93 @@ end
 % grid-wide search
 if widesearch
 
+ % find step in latmat and lonmat for accelerated search
+ sl=max(1,floor(min(size(lonmat,1),size(lonmat,2))/10));
+ if size(latmat,1)>sl+1 & size(latmat,2)>sl+1
+  el=1;
+ else
+  sl=1;
+ end
+
+ sl=1;
+
  % search every sl grid point
  dist=distance(lat,lon,...
-               latmat(1:1:end,1:1:end),...
-               lonmat(1:1:end,1:1:end),alms);
+               latmat(1:sl:end,1:sl:end),...
+               lonmat(1:sl:end,1:sl:end),alms);
  newdist=sort(dist(:));
 
- % row and column of nearest point
- [row,col]=find(dist(:,:)==newdist(1));
+ % This loop is for accelerated searches over large grids
+ if sl>1
+
+  % first pass on sl grid point leap grid
+  [row,col]=find(dist(:,:)==newdist(1));
+
+  row=max(1,min(1+sl*(row-1),size(latmat,1)));
+  col=max(1,min(1+sl*(col-1),size(latmat,2)));
+
+  xmin=max(1,row-ceil(sl/2));
+  xmax=min(row+ceil(sl/2),size(latmat,1));
+  ymin=max(1,col-ceil(sl/2));
+  ymax=min(col+ceil(sl/2),size(latmat,2));
+
+  %el=max(1,floor(min(xmax-xmin,ymax-ymin)/10));
+  el=1;
+
+  % second pass on zoomed-in area
+  dist=distance(lat,...
+                lon,...
+                latmat(xmin:el:xmax,ymin:el:ymax),...
+                lonmat(xmin:el:xmax,ymin:el:ymax),...
+                alms);
+
+  newdist=sort(dist(:));
+
+  % second pass on el grid point leap grid
+  [row,col]=find(dist(:,:)==newdist(1));
+
+  row=max(1,min(xmin+el*(row-1),size(latmat,1)));
+  col=max(1,min(ymin+el*(col-1),size(latmat,2)));
+
+  xmin=max(1,row-ceil(el/2));
+  xmax=min(row+ceil(el/2),size(latmat,1));
+  ymin=max(1,col-ceil(el/2));
+  ymax=min(col+ceil(el/2),size(latmat,2));
+
+  % third pass on zoomed-in area
+  dist=distance(lat,lon,...
+                latmat(xmin:xmax,ymin:ymax),...
+                lonmat(xmin:xmax,ymin:ymax),alms);
+  newdist=sort(dist(:));
+ 
+  % set final row
+  [row,col]=find(dist(:,:)==newdist(1));
+
+  row=max(1,min(xmin+(row-1),size(latmat,1)));
+  col=max(1,min(ymin+(col-1),size(latmat,2)));
+
+  if debug % check that zooming in works
+
+   dist=distance(lat,lon,latmat,lonmat,alms);
+
+   [rowcheck,colcheck]=find(dist(:,:)==newdist(1));
+
+   if rowcheck~=row | colcheck~=col
+    disp(['rowcheck: ',num2str(rowcheck)]);
+    disp(['     row: ',num2str(row)]);
+    disp(['colcheck: ',num2str(colcheck)]);
+    disp(['     col: ',num2str(col)]);
+    error('failed index check')
+   end
+
+  end % debug
+
+ else
+
+  % row and column of nearest point
+  [row,col]=find(dist(:,:)==newdist(1));
+
+ end
 
 elseif debug
 
