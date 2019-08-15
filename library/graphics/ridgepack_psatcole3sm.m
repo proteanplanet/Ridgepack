@@ -40,7 +40,7 @@ for j=1:length(cont)
   id=find(nc.(var).data>=cont(j) & nc.(var).data<cont(j+1));
  end
 
- [zindex,truecol]=ridgepack_colorindex(nc.(var).data(id),cont,20);
+ [zindex,truecol]=ridgepack_colorindex(nc.(var).data(id),cont,ref);
 
  if length(id)>0
 
