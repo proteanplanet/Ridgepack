@@ -17,8 +17,8 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 %          calculation options are possible for Z, including _std for 
 %          the standard deviation over the bounds provide, or _samp for 
 %          the number of samples used in these calculations. See
-%          ridgepack_reduce or ridgepack_select for more information.  If Z is set
-%          to 'mask' and a mask field exists in the nc structure, the
+%          ridgepack_reduce or ridgepack_select for more information. If Z 
+%          is set to 'mask' and a mask field exists in the nc structure, the
 %          function shades the mask light gray instead of color rendering
 %          a field.  No colorbar is added in this case, but this 
 %          can be used to over plot an existing field with a gray mask.
@@ -88,7 +88,7 @@ function [nc]=ridgepack_pcolorm(nc,Z,dimnames,bounds,cont,loglin,ref,horiz,color
 % OUTPUT:
 %
 %
-% nc - nc structure with information added ont he position of 
+% nc - nc structure with information added on the position of 
 %      grid cells' centers if the data is plotted as pixelated grid cells.
 %      By outputing this information, it can be re-used in future
 %      plotting of the data, drastically reducing the time it takes
