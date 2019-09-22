@@ -567,3 +567,8 @@ else
        'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
 end
 
+if nargout==0
+ clear nc
+end
+
+
