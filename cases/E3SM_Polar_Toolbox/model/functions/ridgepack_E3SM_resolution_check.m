@@ -80,16 +80,16 @@ title([titlename,' $\sqrt{\textrm(Cell Area)}$'],'FontSize',10)
 % plot mesh
 ridgepack_multiplot(2,2,1,2,'b')
 ridgepack_satview(centlat,centlon,horizon,1,0);
-ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-           centlat,centlon,horizon,altitude);
+ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+                       horizon,altitude,nccell,'areaCell');
 ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
                         centlat,centlon,horizon);
 title('Analysis Region','FontSize',10)
 
 % get resolution statistics for the grid cells
 ridgepack_multiplot(2,2,2,1,'c')
-[cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-                   centlat,centlon,horizon,altitude);
+[cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+                       horizon,altitude,nccell,'areaCell');
 
 dc=[];
 for i=1:length(cells)
@@ -118,8 +118,8 @@ title(['Edges on cells within ',num2str(horizon),...
 
 % get resolution statistics for the grid cells
 ridgepack_multiplot(2,2,2,2,'d')
-[cells]=ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
-                   centlat,centlon,horizon,altitude);
+[cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+                               horizon,altitude,nccell,'areaCell');
 
 diffc=NaN*zeros(size(cells));
 
