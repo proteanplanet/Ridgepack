@@ -19,6 +19,10 @@ elseif strcmp(coastname,'Greenland')
  gridloc='/Users/afroberts/data/E3SM/Greenland/grid';
  gridfile='greenland_grid.nc';
  titlename='Greenland';
+elseif strcmp(coastname,'HighRes')
+ gridloc='/Users/afroberts/data/E3SM/highres/grid';
+ gridfile='mpascice.rst.nc';
+ titlename='High Resolution';
 elseif strcmp(coastname,'CONUS')
  gridloc='/Users/afroberts/data/E3SM/CONUS/grid';
  gridfile='initial_state.nc';
@@ -27,6 +31,14 @@ elseif strcmp(coastname,'CONUS_modified')
  gridloc='/Users/afroberts/data/E3SM/Modified_CONUS/grid';
  gridfile='initial_state.nc';
  titlename='Modified CONUS';
+elseif strcmp(coastname,'CONUS_modified')
+ gridloc='/Users/afroberts/data/E3SM/Modified_CONUS/grid';
+ gridfile='initial_state.nc';
+ titlename='Modified CONUS';
+elseif strcmp(coastname,'CUSP12')
+ gridloc='/Users/afroberts/data/E3SM/CUSP/grid';
+ gridfile='initial_state.nc';
+ titlename='CUSP';
 elseif strcmp(coastname,'EC_60_30')
  gridloc='/Users/afroberts/data/E3SM/EC_60_30/grid';
  gridfile='initial_state.nc';
@@ -75,7 +87,8 @@ ridgepack_sathorizon(centlat,centlon,90,...
                      centlat,centlon,horizon,[0 0.8 0]);
 ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
                         centlat,centlon,90);
-title([titlename,' $\sqrt{\textrm(Cell Area)}$'],'FontSize',10)
+%title([titlename,' $\sqrt{\textrm(Cell Area)}$'],'FontSize',10)
+title(' ','FontSize',10)
 
 % plot mesh
 ridgepack_multiplot(2,2,1,2,'b')
@@ -84,7 +97,8 @@ ridgepack_psatmeshe3sm(nccell,'areaCell',ncvert,...
            centlat,centlon,horizon,altitude);
 ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
                         centlat,centlon,horizon);
-title('Analysis Region','FontSize',10)
+%title('Analysis Region','FontSize',10)
+title(' ','FontSize',10)
 
 % get resolution statistics for the grid cells
 ridgepack_multiplot(2,2,2,1,'c')
@@ -156,14 +170,14 @@ title(['Cells within ',num2str(horizon),...
         num2str(abs(centlat)),latunits,' ',...
         num2str(abs(centlon)),lonunits],'FontSize',10)
 
-ridgepack_multialign(gcf)
+ridgepack_multialign(gcf,titlename)
 
 cd ~/Work
 plotname=[coastname,'_',num2str(horizon),'_',...
          num2str(abs(centlat)),latunits,'_',...
          num2str(abs(centlon)),lonunits,'_gridcheck'];
 
-ridgepack_fprint('png',plotname,1,1)
-ridgepack_fprint('epsc',plotname,1,1)
+ridgepack_fprint('png',plotname,1,2)
+ridgepack_fprint('epsc',plotname,1,2)
 
 

@@ -264,6 +264,21 @@ set(get(get(hSGroup,'Annotation'),'LegendInformation'),'IconDisplayStyle','off')
 
 drawnow
 
+limsx=xlim;
+limsy=ylim;
+x1=limsx(1);
+x2=limsx(2);
+y1=limsy(1);
+y2=limsy(2);
+
+if labrador==1
+ z=0.002;
+ plotbox=plot3([x1 x2 x2 x1 x1],[y1 y1 y2 y2 y1],[z z z z z],...
+               'Color','k');
+ uistack(plotbox,'top')
+ drawnow
+end
+
 if debug; disp(['...Leaving ',mfilename]); end
 
 
