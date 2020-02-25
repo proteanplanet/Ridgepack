@@ -1,5 +1,19 @@
-function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
-                                      centlat,centlon,horizon)
+function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,centlat,centlon,horizon)
+
+% ridgepack_psatcoaste3sm - Extracts and plots a coastline from E3SM/MPAS data 
+%
+% function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,centlat,centlon,horizon)
+%
+% INPUTS:
+%
+% ncvert - Netcdf structure containing grid information from E3SM, including:
+%          nCells, nEdgesOnCell, verticesOnCell, latVertex, lonVertex, where 
+%          the latter two are ingested into Ridgepack with names of straight
+%          :w
+
+
+
+
 
 if nargin<2
  cgrid=true;

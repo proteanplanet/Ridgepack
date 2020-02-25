@@ -1,10 +1,10 @@
 function ridgepack_pcole3sm(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
 
-% ridgepack_pcole3sm - Color fills data from E3SM on an unstructured mesh
+% ridgepack_pcole3sm - Color fills data from E3SM/MPAS on an unstructured mesh
 %
-% ridgepack_pcole3sm(nc,var,ncvert,cont,mask,loglin,ref,horiz,colors,colvals)
+% function ridgepack_pcole3sm(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
 %
-% This function generates color shaded maps of E3SM fields
+% This function generates color shaded maps of E3SM fields from MPAS components
 % 
 % INPUTS:
 %

@@ -1,7 +1,15 @@
-function [cells]=ridgepack_psatmeshe3sm(nc,var,ncvert,...
-                         centlat,centlon,horizon,altitude)
+function [cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+                                        horizon,altitude,ncmask,var)
 
-gridheight=1.01; % height of grid superimposed on plot
+% apply universal mask if non supplied
+if nargin<6
+ disp 'here'
+ ncmask=ncvert
+ var='nCells';
+end
+
+% height of grid superimposed on plot
+gridheight=1.01; 
 
 % reduce the data use to the plotting area to speed things up
 % and find plotting edge limit of cells
@@ -18,7 +26,7 @@ for i=1:length(ncvert.nCells.data)
 
  % filter cells not in frame, and find cropping limit
  if all(isnan(x)) 
-  nc.(var).data(i)=NaN;
+  ncmask.(var).data(i)=NaN;
  elseif any(isnan(x)) & ~all(isnan(x))
   [x,y,z,ph,th]=ridgepack_satfwd(rad2deg(la),rad2deg(lo),...
                      centlat,centlon,horizon,altitude,false);
@@ -29,7 +37,7 @@ for i=1:length(ncvert.nCells.data)
 end
 
 % allocate cell indices included in the horizon
-cells=find(~isnan(nc.(var).data));
+cells=find(~isnan(ncmask.(var).data));
 if nargout==1
  disp('Outputing cells within the satellite view')
  return
@@ -104,5 +112,9 @@ axis off
 % add lighting from infinite sources directly overhead
 light('Position',[0 0 10000],'Style','local')
 material dull
+
+if nargout<1
+ clear cells
+end
 
 
