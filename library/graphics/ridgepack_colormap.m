@@ -89,7 +89,8 @@ yp=zp;
 for i=2:length(cmap);
  if cont(i)>ref & cont(i-1)<ref
    if logscale
-    zp=i-1;  
+    %zp=i-1; Line commented out - causing problems
+    zp=i;  
    else
     zp=i;    
    end
