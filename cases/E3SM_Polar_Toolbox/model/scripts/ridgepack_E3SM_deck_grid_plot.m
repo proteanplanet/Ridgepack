@@ -13,6 +13,7 @@ plotmesh=true;
 
 % location of grid file
 gridloc='/Users/aroberts/data/MODEL/E3SM/DECK/monthly/h1';
+gridfile='E3SM_LR_V1_grid.nc';
 
 % plot location
 plotloc='/Users/aroberts/work';
@@ -21,7 +22,6 @@ plotloc='/Users/aroberts/work';
 
 % obtain grid information
 cd(gridloc)
-gridfile='E3SM_LR_V1_grid.nc';
 ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex','dcEdge',...
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
