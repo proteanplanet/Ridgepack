@@ -7,6 +7,7 @@ function ridgepack_psatcole3sm(nc,var,ncvert,cont,ref,...
 % reduce the data use to the plotting area to speed things up
 % and fine plotting edge limit of cells
 maxth=deg2rad(horizon);
+length(ncvert.nCells.data)
 for i=1:length(ncvert.nCells.data)
 
  maxidx=ncvert.nEdgesOnCell.data(i);
