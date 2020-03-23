@@ -3,8 +3,7 @@ function [cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
 
 % apply universal mask if non supplied
 if nargin<6
- disp 'here'
- ncmask=ncvert
+ ncmask=ncvert;
  var='nCells';
 end
 
@@ -67,8 +66,9 @@ if length(cells)>0
 
  end
 
- % find values within twice the horizon since we've already
- % weeded out cells that only fall within the horizon
+ % find values within twice the horizon since we've already wedded
+ % out cells that only fall within the horizon so as to plot entire 
+ % cells, not just the vertices within the horizon.
  [dx,dy,dz,phi,theta]=ridgepack_satfwd(rad2deg(c),rad2deg(d),...
                                   centlat,centlon,2*horizon,1);
 

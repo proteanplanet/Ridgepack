@@ -43,25 +43,29 @@ for j=1:length(cont)
 
  [zindex,truecol]=ridgepack_colorindex(nc.(var).data(id),cont,ref);
 
- if length(id)>0
+ % find indices only within the plotting contour range 
+ idx=id(~isnan(zindex));
+ zind=find(~isnan(zindex));
+
+ if length(idx)>0
 
   idmax=ncvert.maxEdges.data(end);
 
   lat=zeros([1 idmax]);
   lon=zeros([1 idmax]);
-  xl=zeros(length(id),idmax);
-  yl=zeros(length(id),idmax);
-  zl=zeros(length(id),idmax);
-  phl=zeros(length(id),idmax);
-  thl=zeros(length(id),idmax);
-  cl=zeros(3,length(id));
+  xl=zeros(length(idx),idmax);
+  yl=zeros(length(idx),idmax);
+  zl=zeros(length(idx),idmax);
+  phl=zeros(length(idx),idmax);
+  thl=zeros(length(idx),idmax);
+  cl=zeros(3,length(idx));
 
-  for i=1:1:length(id)
+  for i=1:1:length(idx)
 
-   maxidx=ncvert.nEdgesOnCell.data(id(i));
+   maxidx=ncvert.nEdgesOnCell.data(idx(i));
 
-   la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,id(i)));
-   lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,id(i)));
+   la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,idx(i)));
+   lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,idx(i)));
 
    lat(1:maxidx)=la;
    lon(1:maxidx)=lo;
@@ -76,7 +80,7 @@ for j=1:length(cont)
 
   end
 
-  patch(xl',yl',zl',truecol(1,:),'EdgeColor','none')
+  patch(xl',yl',zl',truecol(zind(1),:),'EdgeColor','none')
   hold on
   drawnow
 

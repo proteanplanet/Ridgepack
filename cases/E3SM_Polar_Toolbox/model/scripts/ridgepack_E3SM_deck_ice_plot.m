@@ -2,12 +2,10 @@
 clf
 clear
 
-% plot model grid and resolution
-
 % Arctic Center
-centlat=69; % degrees north
-centlon=-100; % degrees east
-horizon=10; % degrees of satellite horizon (0-90)
+centlat=80; % degrees north
+centlon=-150; % degrees east
+horizon=30; % degrees of satellite horizon (0-90)
 altitude=1; % Mean Earth radius multiple
 cgrid=true; % plot c-grid coastline
 coastname='DECK'; % grid name
@@ -16,6 +14,14 @@ plotmesh=true;
 % location of grid file
 gridloc='/Users/afroberts/data/MODEL/E3SM/DECK/grid';
 gridfile='E3SM_LR_V1_grid.nc';
+
+% location of sea ice data
+dataloc='/Users/afroberts/data/MODEL/E3SM/DECK/monthly/h1/archive/ice/reduced';
+datafile='mpascice.hist.am.timeSeriesStatsMonthly.1980-03-01.nc';
+
+field='timeMonthly_avg_iceVolumeCell';
+cont=[0:0.25:5.25];
+ref=0;
 
 % plot location
 plotloc='/Users/afroberts/work';
@@ -27,42 +33,29 @@ cd(gridloc)
 ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex','dcEdge',...
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
-                                 'cellsOnEdge','areaCell'});
+                                 'cellsOnEdge'});
 
-nccell=ridgepack_clone(gridfile,{'latCell','lonCell','areaCell'});
+% obtain field data
+cd(dataloc)
+ncdata=ridgepack_clone(datafile,field);
 
-nccell.areaCell.data=sqrt(nccell.areaCell.data)/1000;
-
+% set up satellite view
 ridgepack_satview(centlat,centlon,horizon,1,2);
 
-if ~plotmesh
-
- % define contours
- cont=[26:2:62];
- ref=min(cont);
-
- % plot cell resolution
- ridgepack_psatcole3sm(nccell,'areaCell',ncvert,cont,ref,...
-                       centlat,centlon,horizon,altitude);
-
- ridgepack_colorbar(cont,'km')
-
- title('Resolution')
-
-else
-
- % plot mesh
- ridgepack_psatmeshe3sm(ncvert,centlat,centlon,horizon,altitude);
-
- title('Grid Outline')
-
-end
+% plot cell resolution
+ridgepack_psatcole3sm(ncdata,field,ncvert,cont,ref,...
+                      centlat,centlon,horizon,altitude);
 
 % plot coastal outline
 ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
                              centlat,centlon,horizon);
 
+% add colorbar
+ridgepack_colorbar(cont,'km');
+
+title('Grid Outline')
+
 cd(plotloc)
-ridgepack_fprint('png','DECK_mesh',1,1)
+ridgepack_fprint('png','Outfile',1,1)
 
 

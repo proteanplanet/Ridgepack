@@ -36,14 +36,12 @@ end
 % sort cont in ascending numerical order
 cont=sort(cont);
 
-
 % turn shown array into indexed colors
 zindex=ones(size(z));
 for i=2:(length(cont)-1)
  zindex(z>=cont(i) & z<cont(i+1))=i;
 end
 zindex(z>=cont(end-1))=length(cont)-1;
-
 
 % set NaNs in zindex, including where ref
 % is the minimum or maximum contour value
@@ -55,12 +53,10 @@ elseif ref>=cont(end)
  zindex(z>ref)=NaN;
 end
 
-
 % set zindex where there is a mask and no data
 if nargin==4 && all(size(mask)==size(zindex))
  zindex(mask==0 & isnan(z))=-1;
 end
-
 
 % find true color array
 xsize=size(zindex);
@@ -87,7 +83,6 @@ else
  zindex=reshape(zindex,xsize(1:2));
  truecol=reshape(truecol,xsize(1:3));
 end
-
 
 if debug; disp(['...Leaving ',mfilename]); end
 
