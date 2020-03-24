@@ -1,5 +1,6 @@
 function ridgepack_psatcole3sm(nc,var,ncvert,cont,ref,...
-                               centlat,centlon,horizon,altitude)
+                               centlat,centlon,horizon,altitude,...
+                               lighting)
 
 % define colormap
 [cmap]=ridgepack_colormap(cont,ref);
@@ -7,7 +8,6 @@ function ridgepack_psatcole3sm(nc,var,ncvert,cont,ref,...
 % reduce the data use to the plotting area to speed things up
 % and fine plotting edge limit of cells
 maxth=deg2rad(horizon);
-length(ncvert.nCells.data)
 for i=1:length(ncvert.nCells.data)
 
  maxidx=ncvert.nEdgesOnCell.data(i);
@@ -122,7 +122,8 @@ axis tight
 axis off
 
 % add lighting from infinite sources directly overhead
-hl=light('Position',[0 0 10000],'Style','local')
-material dull
-
+if lighting
+ hl=light('Position',[0 0 10000],'Style','local')
+ material dull
+end
 
