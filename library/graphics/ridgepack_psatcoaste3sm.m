@@ -1,4 +1,4 @@
-function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
+function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,...
                                       centlat,centlon,horizon)
 
 if nargin<2
@@ -8,12 +8,6 @@ elseif ~islogical(cgrid)
 end
 
 if nargin<3
- coastname='E3SM_ice_ocean_coast';
-elseif ~ischar(coastname)
- error('local must be either true or false')
-end
-
-if nargin<4
  centlat=90;
 elseif nargin>3 & nargout==1
  error('you are asking to both plot and produce coastal data')
@@ -23,7 +17,7 @@ elseif centlat>90 | centlat<-90
  error('centlat should be between -90 and 90')
 end
 
-if nargin<5
+if nargin<4
  centlon=0;
 elseif ~isnumeric(centlon)
  error('centlon should be a real number between -90 and 90')
@@ -31,13 +25,16 @@ elseif centlat>180 | centlat<-180
  error('centlon should be between -180 and 180')
 end
 
-if nargin<6
+if nargin<5
  horizon=90;
 elseif ~isnumeric(horizon)
  error('horizon must be a real number between 0 and 90')
 elseif horizon<0 | horizon>90
  error('horizon must be between 0 and 90')
 end
+
+% set coast description
+coastname='E3SM_ice_ocean_coast';
 
 % get size of total vertices in cells
 nlength=sum(ncvert.nEdgesOnCell.data(:));

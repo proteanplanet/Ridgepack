@@ -75,6 +75,6 @@ ridgepack_colorbar(cont,units);
 title([datatitle,' (',ncdata.(field).long_name,')'])
 
 cd(plotloc)
-ridgepack_fprint('png','Outfile',1,1)
+ridgepack_fprint('png','Outfile_Sea_Ice_Scalar',1,1)
 
 

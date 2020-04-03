@@ -1,6 +1,6 @@
 function [h]=ridgepack_plotm(latitude,longitude,marker,linestyle,color,markersize)
 
-% ridgepack_plotM - Plot points on a map axes 
+% ridgepack_plotm - Plot points on a map axes 
 %
 % function [h]=ridgepack_plotm(latitude,longitude,marker,linestyle,color,markersize)
 %
