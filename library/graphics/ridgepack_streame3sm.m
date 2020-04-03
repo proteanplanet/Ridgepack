@@ -181,6 +181,11 @@ for i=1:length(arrowvertices)
  end
 end
 
+% plot ice edge
+%nc=ridgepack_pthresholde3sm(ncc,varc,0.15,ncvert);
+%[c,d]=mfwdtran(gcm,nc.latitude.data,nc.longitude.data,gca,'surface');
+%plot(c,d,'Color','m')
+
 % colorbar
 if speedcolor 
  ridgepack_colorbar(cont,{'\times 10^{-2}','m~s^{-1}'});

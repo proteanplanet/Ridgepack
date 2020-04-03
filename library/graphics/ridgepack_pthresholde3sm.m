@@ -811,7 +811,7 @@ if nargout==0
 
 else
 
- nc=ncstruct(nc);
+ nc=ridgepack_struct(nc);
 
 end
 
