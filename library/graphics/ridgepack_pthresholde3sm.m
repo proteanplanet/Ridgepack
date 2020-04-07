@@ -4,6 +4,8 @@ function [nc]=ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
 % ridgepack_pthresholde3sm - generate a threshold on an unstructured mesh
 %
 % function [nc]=ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,centlat,centlon,horizon)
+%
+% This function .... description
 %  
 % INPUT:
 %
@@ -14,6 +16,9 @@ function [nc]=ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
 % centlat   - center latitude of plotted satellite view (optional)
 % centlon   - center longitude if plotted in satellite view (optional)
 % horizon   - horizon, in degrees of satellite view (optional)
+%
+% Note that centlat, centlon and horizon should not be provided
+% if nc is specificied.
 %
 % 
 % OUTPUT:
@@ -746,16 +751,26 @@ else
 
 end
 
+% now pass sequence of vertices to sperate only 
+% by one NaN
 tpverts(isnan(tpx))=NaN;
 tpcells(isnan(tpx))=NaN;
 
-vlats(1)=tpx(1);
-vlons(1)=tpy(1);
-verts(1)=tpverts(1);
-cells(1)=tpcells(1);
-k=2;
+vlats=[];
+vlons=[];
+verts=[];
+cells=[];
+k=1;
+if ~isnan(tpx(1))
+ vlats(k)=tpx(1);
+ vlons(k)=tpy(1);
+ verts(k)=tpverts(1);
+ cells(k)=tpcells(1);
+ k=k+1;
+end
 for i=2:length(tpx)-1
- if ~(isnan(tpx(i-1)) & isnan(tpx(i)))
+ if ~(isnan(tpx(i-1)) & isnan(tpx(i)))  & ...
+    ~(isnan(tpx(i-1)) & ~isnan(tpx(i)) & isnan(tpx(i+1)))
   vlats(k)=tpx(i);
   vlons(k)=tpy(i);
   verts(k)=tpverts(i);
@@ -763,35 +778,61 @@ for i=2:length(tpx)-1
   k=k+1;
  end
 end
-if ~isnan(tpx(end-1))
+if ~isnan(tpx(end))
  vlats(k)=tpx(end);
  vlons(k)=tpy(end);
  verts(k)=tpverts(end);
  cells(k)=tpcells(end);
 end
 
+tpx=vlats;
+tpy=vlons;
+tpverts=verts;
+tpcells=cells;
+
+clear vlats vlons verts cells;
+
+k=1;
+for i=2:length(tpx)
+ if ~(isnan(tpx(i-1)) & isnan(tpx(i))) 
+  vlats(k)=tpx(i);
+  vlons(k)=tpy(i);
+  verts(k)=tpverts(i);
+  cells(k)=tpcells(i);
+  k=k+1;
+ end
+end
+
+tpx=[NaN vlats NaN];
+tpy=[NaN vlons NaN];
+tpverts=[NaN verts NaN];
+tpcells=[NaN cells NaN];
+
+% create netcdf structure
+
 nc.attributes.title='Threshold Edge Definition';
 
-nc.npoints.data=[1:length(vlats)];
+nc.npoints.data=[1:length(tpx)];
 nc.npoints.long_name='number of points on threshold';
 nc.npoints.dimension={'npoints'};
 
-nc.latitude.data=vlats;
+nc.latitude.data=tpx;
 nc.latitude.long_name='latitude of threshold';
 nc.latitude.dimension={'npoints'};
 
-nc.longitude.data=vlons;
+nc.longitude.data=tpy;
 nc.longitude.long_name='longitude of threshold';
 nc.longitude.dimension={'npoints'};
 
-nc.cells.data=cells;
+nc.cells.data=tpcells;
 nc.cells.long_name='cell indices';
 nc.cells.dimension={'npoints'};
 
-nc.vertices.data=verts;
+nc.vertices.data=tpverts;
 nc.vertices.long_name='vertex indices';
 nc.vertices.dimension={'npoints'};
 
+% plot data if no output argument is specified
 if nargout==0
 
  [x,y,z,phi,theta]=ridgepack_satfwd(nc.latitude.data,...

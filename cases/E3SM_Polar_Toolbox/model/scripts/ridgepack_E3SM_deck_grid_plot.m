@@ -7,7 +7,7 @@ clear
 % Arctic Center
 centlat=69; % degrees north
 centlon=-100; % degrees east
-horizon=10; % degrees of satellite horizon (0-90)
+horizon=15; % degrees of satellite horizon (0-90)
 altitude=1; % Mean Earth radius multiple
 cgrid=true; % plot c-grid coastline
 coastname='DECK'; % grid name
@@ -59,8 +59,7 @@ else
 end
 
 % plot coastal outline
-ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
-                             centlat,centlon,horizon);
+ridgepack_psatcoaste3sm(ncvert,cgrid,centlat,centlon,horizon);
 
 cd(plotloc)
 ridgepack_fprint('png','DECK_mesh',1,1)

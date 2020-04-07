@@ -5,7 +5,7 @@ clear
 % Arctic Center
 centlat=80; % degrees north
 centlon=-150; % degrees east
-horizon=30; % degrees of satellite horizon (0-90)
+horizon=90; % degrees of satellite horizon (0-90)
 altitude=1; % Mean Earth radius multiple
 cgrid=true; % plot c-grid coastline
 coastname='DECK'; % grid name
@@ -17,7 +17,7 @@ gridfile='E3SM_LR_V1_grid.nc';
 % location of sea ice data
 dataloc='/Users/afroberts/data/MODEL/E3SM/DECK/monthly/h1/archive/ice/reduced';
 datafile='mpascice.hist.am.timeSeriesStatsMonthly.1980-03-01.nc';
-choice=3;
+choice=1;
 
 % choices for sea ice model
 if choice==1
@@ -66,8 +66,7 @@ ridgepack_psatcole3sm(ncdata,field,ncvert,cont,ref,...
                       centlat,centlon,horizon,altitude,false);
 
 % plot coastal outline
-ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
-                             centlat,centlon,horizon);
+ridgepack_psatcoaste3sm(ncvert,cgrid,centlat,centlon,horizon);
 
 % add colorbar
 ridgepack_colorbar(cont,units);

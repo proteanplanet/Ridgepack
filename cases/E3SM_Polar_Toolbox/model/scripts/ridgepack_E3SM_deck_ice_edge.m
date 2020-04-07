@@ -44,8 +44,7 @@ ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
                          centlat,centlon,horizon)
 
 % plot coastal outline
-ridgepack_psatcoaste3sm(ncvert,cgrid,...
-                        centlat,centlon,horizon);
+ridgepack_psatcoaste3sm(ncvert,cgrid,centlat,centlon,horizon);
 
 % add title
 title([datatitle])
