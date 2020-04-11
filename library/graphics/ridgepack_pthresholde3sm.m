@@ -1,4 +1,4 @@
-function [nc]=ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
+function [nc]=ridgepack_pthresholde3sm(ncvert,ncc,varc,threshold,...
                                        centlat,centlon,horizon)
 
 % ridgepack_pthresholde3sm - generate a threshold on an unstructured mesh
@@ -801,6 +801,14 @@ for i=2:length(tpx)
   cells(k)=tpcells(i);
   k=k+1;
  end
+end
+
+% boundary condition on previous loop
+if isnan(vlats(end-1)) & ~isnan(vlats(end))
+ vlats=vlats(1:end-2);
+ vlons=vlons(1:end-2);
+ verts=verts(1:end-2);
+ cells=cells(1:end-2);
 end
 
 tpx=[NaN vlats NaN];

@@ -1,15 +1,16 @@
 
-%regenerate=true;
-regenerate=false;
-
-if regenerate
-
 clf
 clear
 
+regenerate=true;
+%regenerate=false;
+
+debug=false;
+%debug=true;
+
 centlat=80; % degrees north
 centlon=-150; % degrees east
-horizon=60; % degrees of satellite horizon (0-90)
+horizon=90; % degrees of satellite horizon (0-90)
 
 % location of grid file
 gridloc='/Users/afroberts/data/MODEL/E3SM/DECK/grid';
@@ -28,129 +29,74 @@ plotloc='/Users/afroberts/work';
 
 % %%%%%%%%%%%%%%% CHANGE ABOVE THIS LINE %%%%%%%%%%%%%%%%%% %
 
+
 % obtain grid information (vertices, cell centers)
-cd(gridloc)
-ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex','dcEdge',...
+if regenerate
+
+ cd(gridloc)
+ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex','dcEdge',...
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
                                  'cellsOnEdge'});
 
-nccell=ridgepack_clone(gridfile,{'latCell','lonCell'});
+ nccell=ridgepack_clone(gridfile,{'latCell','lonCell'});
 
-% obtain data
-cd(dataloc)
-ncc=ridgepack_clone(datafile,varc);
+ % obtain data
+ cd(dataloc)
+ ncc=ridgepack_clone(datafile,varc);
 
-% put up satview
-%ridgepack_satview(centlat,centlon,horizon,1,2);
+ % put up satview
+ %ridgepack_satview(centlat,centlon,horizon,1,2);
 
-% plot ice edge 
-if 1==0
- ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
-                                centlat,centlon,horizon);
+ % plot ice edge 
+ if 1==0
+  ridgepack_pmeshbounde3sm(ncvert,ncc,varc,threshold,...
+                         centlat,centlon,horizon);
+ else
+  nc=ridgepack_pmeshbounde3sm(ncvert,ncc,varc,threshold);
+
+  cd(plotloc)
+  save('testdata','nc','ncvert')
+ end
+
 else
- nc=ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert);
-end
+
+ cd(plotloc)
+ load testdata
 
 end
 
-% find line segments - they are seperated by NaNs
-idx=find(isnan(nc.vertices.data));
 
-% account for case where first is a NaN
-if idx(1)==1
- idx=idx(2:end);
-end
+S=geoshape(nc.latitude.data,nc.longitude.data,...
+            'MPAS_Threshold','Sea Ice Threshold');
 
-% break into line segments and number them
-segment=zeros(size(nc.vertices.data));
-segment(1:idx(1))=1;
-k=2;
-for i=[idx(1)+1:length(nc.vertices.data)];
- segment(i)=k;
- if ~isempty(find(idx(:)==i)) 
-  k=k+1;
- end
-end
+kmlwrite('MPAS_Threshold',S,'Color','m','Name','Extent',...
+         'Description','Sea Ice Threshold');
 
-% search check
-segmentfound=zeros(size(nc.vertices.data));
-segmentfound(1:idx(1))=1;
+clf
 
-% now hunt for vertex not in the segment
+ridgepack_satview(centlat,centlon,horizon,1,2);
 
-vert=nc.vertices.data(2:idx(1)-1);
+[x,y,z,phi,theta]=ridgepack_satfwd(nc.latitude.data,...
+                                   nc.longitude.data,...
+                      centlat,centlon,2*horizon,1.0001);
+plot3(x,y,z,'Color','m',...
+       'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
 
-startidx=2;
-startvertex=nc.vertices.data(startidx);
+hold on
 
-%for i=idx
+[x,y,z,phi,theta]=ridgepack_satfwd(nc.clatitude.data,...
+                                   nc.clongitude.data,...
+                      centlat,centlon,2*horizon,1.0001);
+plot3(x,y,z,'Color','k',...
+       'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
 
-for i=idx(1)
+hold on
+hold on
 
- endidx=i-1;
- endvertex=nc.vertices.data(endidx);
-
- jdx=find(nc.vertices.data==endvertex);
- jdx=jdx(jdx~=endidx);
-
- kdx=find(nc.vertices.data==startvertex);
- kdx=kdx(kdx~=startidx);
-
- while ~isempty(jdx) & ~isempty(kdx)
-
-  % check for intersections
-  if length(jdx)>1
-   error('Found intersection that should not exist: 1')
-  elseif length(kdx)>1
-   error('Found intersection that should not exist: 2')
-  end
-
-  % case of sequential-order vertices
-  if isnan(nc.vertices.data(jdx+1));
-
-   disp('sequential')
-
-   startex=find(isnan(nc.vertices.data(1:jdx)));
-   vert=[vert nc.vertices.data(jdx:-1:startex(end)+1)];
-   segmentfound(startex(end):jdx+1)=1;
-   endidx=startex(end)+1;
-   endvertex=vert(end);
-
-  % case of reversed-order vertices
-  elseif isnan(nc.vertices.data(jdx-1));
-
-   disp('reversed')
-
-   endx=find(isnan(nc.vertices.data(jdx:end)));
-   vert=[vert nc.vertices.data(jdx+1:jdx+endx(1)-2)];
-   segmentfound(jdx+1:jdx+endx(1)-2)=1;
-   endidx=jdx+endx(1)-2;
-   endvertex=vert(end);
-
-  % have found the middle of a segment, which 
-  % theoretically should not exist
-  else
-   error('Found intersection that should not exist: 3')
-
-  end
- 
-  jdx=find(nc.vertices.data==endvertex);
-  jdx=jdx(jdx~=endidx & segmentfound(jdx)~=1);
-
- end
-
- if isempty(jdx) & ~isempty(kdx)
-  error('Cant find matching start or end index: 4')
- elseif isempty(jdx) & isempty(kdx)
-  error('Cant find matching start or end index: 5')
- end
-
-end
- 
  
 % add title
-title([datatitle])
+%title([datatitle])
 
 cd(plotloc)
 ridgepack_fprint('png','Outfile_Sea_Ice_GeoTif',1,1)

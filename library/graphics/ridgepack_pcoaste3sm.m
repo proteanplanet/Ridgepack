@@ -13,8 +13,6 @@ function [nc]=ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,centlat,centlon,hor
 
 
 
-
-
 if nargin<2
  cgrid=true;
 elseif ~islogical(cgrid)

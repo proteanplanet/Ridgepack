@@ -40,7 +40,7 @@ ncc=ridgepack_clone(datafile,varc);
 ridgepack_satview(centlat,centlon,horizon,1,2);
 
 % plot ice edge 
-ridgepack_pthresholde3sm(ncc,varc,threshold,ncvert,...
+ridgepack_pthresholde3sm(ncvert,ncc,varc,threshold,...
                          centlat,centlon,horizon)
 
 % plot coastal outline
