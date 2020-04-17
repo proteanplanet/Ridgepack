@@ -1,8 +1,16 @@
-function [vlats,vlons,verts]=ridgepack_findE3SMedges(ncvert,cidx)
+function [vlats,vlons,verts]=ridgepack_findE3SMedges(ncvert,cidx,infill)
+
+
+if nargin<3
+ infill=false;
+end
+
+if nargin<2
+ error('Not enough inputs')
+end
 
 debug=false;
 %debug=true;
-
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -372,6 +380,7 @@ if length(cidxn)>0
         xxp1=sort([idx1 idx2]);
         xxp2=sort([idx3 idx4]);
 
+
         idx1=xxp1(1);
         idx2=xxp1(2);
         idx3=xxp2(1);
@@ -463,7 +472,6 @@ if length(cidxn)>0
 
         end
 
-        % append to string of points
         px1=[px1; NaN; lat(:)];
         py1=[py1; NaN; lon(:)];
         pverts1=[pverts1; NaN; verts(:)];
@@ -540,7 +548,6 @@ if length(cidxn)>0
          py2=[py2; NaN; lon(:)];
          pverts2=[pverts2; NaN; verts(:)];
 
-
         end
 
        end
@@ -586,48 +593,69 @@ else
 end
 
 % now pass sequence of vertices to sperate by one NaN
-tpverts(isnan(tpx))=NaN;
 
+% initialize
+tpverts(isnan(tpx))=NaN;
 vlats=[];
 vlons=[];
 verts=[];
-k=1;
+k=0;
+
+% initial condition
 if ~isnan(tpx(1))
+ k=k+1;
  vlats(k)=tpx(1);
  vlons(k)=tpy(1);
  verts(k)=tpverts(1);
- k=k+1;
 end
+
+% cycle through all cases
 for i=2:length(tpx)-1
- if ~(isnan(tpx(i-1)) & isnan(tpx(i)))  & ...
-   ~(isnan(tpx(i-1)) & ~isnan(tpx(i)) & isnan(tpx(i+1)))
+ if ~(isnan(tpx(i-1)) & isnan(tpx(i))) & ...
+    ~(isnan(tpx(i-1)) & ~isnan(tpx(i)) & isnan(tpx(i+1)))
+  k=k+1;
   vlats(k)=tpx(i);
   vlons(k)=tpy(i);
   verts(k)=tpverts(i);
-  k=k+1;
  end
 end
+
+% boundary condition
 if ~isnan(tpx(end))
+ k=k+1;
  vlats(k)=tpx(end);
  vlons(k)=tpy(end);
  verts(k)=tpverts(end);
 end
 
+% finalize
 tpx=vlats;
 tpy=vlons;
 tpverts=verts;
 
+% Now remove cases of multiple NaNs
+
+% initialize
 vlats=[];
 vlons=[];
 verts=[];
+k=0;
 
-k=1;
+% Initial condition
+if ~isnan(tpx(1))
+ k=k+1;
+ vlats(k)=tpx(1);
+ vlons(k)=tpy(1);
+ verts(k)=tpverts(1);
+end
+
+% cycle through looking for consecutive NaNs
 for i=2:length(tpx)
  if ~(isnan(tpx(i-1)) & isnan(tpx(i))) 
+  k=k+1;
   vlats(k)=tpx(i);
   vlons(k)=tpy(i);
   verts(k)=tpverts(i);
-  k=k+1;
  end
 end
 
@@ -643,6 +671,8 @@ vlats=[NaN vlats NaN];
 vlons=[NaN vlons NaN];
 verts=[NaN verts NaN];
 npoin=length(verts);
+
+% BUG IS SOMEWHERE IN HERE (ABOVE)
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -710,8 +740,9 @@ for i=idx
   while ~isempty(jdx) & ~isempty(kdx)
 
    % check for intersections, first looking for 'false'
-   % vertices where only a single vertex is seperated by a NaN
-   % and then just plain crashing.
+   % vertices where only a single vertex is seperated by a 
+   % a NaN and then exit gracefully if such a case exists. 
+
    if length(jdx)>1
     if all(verts(jdx)==vert(end))
      for isdf=1:length(jdx)
@@ -729,7 +760,6 @@ for i=idx
 
     if debug; disp('sequential'); end
     %disp('sequential')
-
 
     startx=find(isnan(verts(1:jdx)));
     vert=[vert verts(jdx:-1:startx(end)+1)];
@@ -795,6 +825,62 @@ for i=idx
 
   elseif isempty(jdx) & ~isempty(kdx)
 
+   disp('ERROR-----------------')
+
+   disp(['startvertex: ',num2str(startvertex)])
+   disp(['endvertex: ',num2str(endvertex)])
+   disp(['startidx: ',num2str(startidx)])
+   disp(['endidx: ',num2str(endidx)])
+
+   centlat=mean(vlats(vidx));
+   centlon=mean(vlons(vidx));
+   horizon=5;
+
+   ridgepack_satview(centlat,centlon,horizon,1,2); 
+ 
+   [x,y,z,phi,theta]=ridgepack_satfwd(vlats(vidx),...
+                                       vlons(vidx),...
+                                       centlat,centlon,...
+                                       2*horizon,1.0001);
+   plot3(x,y,z,'Color','k',...
+          'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+
+   [x,y,z,phi,theta]=ridgepack_satfwd(sdlat,...
+                                       sdlon,...
+                                       centlat,centlon,...
+                                       2*horizon,1.0001);
+   plot3(x,y,z,'Color','g',...
+          'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+
+   [x,y,z,phi,theta]=ridgepack_satfwd(sdlat2,...
+                                       sdlon2,...
+                                       centlat,centlon,...
+                                       2*horizon,1.0001);
+   plot3(x,y,z,'Color','b',...
+          'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+
+   [x,y,z,phi,theta]=ridgepack_satfwd(vlats(vidx(end)),...
+                                       vlons(vidx(end)),...
+                                       centlat,centlon,...
+                                       2*horizon,1.0001);
+ 
+   plot3(x,y,z,'o','Color','r')
+
+   [x,y,z,phi,theta]=ridgepack_satfwd(ttpx,...
+                                       ttpy,...
+                                       centlat,centlon,...
+                                       2*horizon,1.0001);
+   plot3(x,y,z,'Color','b',...
+          'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+
+   disp(['vidx(end): ',num2str(verts(vidx(end)))])
+
+   axis off
+
+   axis equal
+   view([0 0 0.4])
+   axis tight
+
    error('The contour is not closed')
 
   elseif isempty(jdx) & isempty(kdx)
@@ -815,7 +901,7 @@ for i=idx
 
  if all(segmentfound(:)==1)
 
-  disp(['Found ',num2str(linecount),' closed contours'])
+  disp(['Found ',num2str(linecount-1),' closed contours'])
   break
 
  else
@@ -827,7 +913,7 @@ for i=idx
 
 end
 
-vlats=alllats;
-vlons=alllons;
-verts=allvert;
+vlats=alllats(end:-1:1);
+vlons=alllons(end:-1:1);
+verts=allvert(end:-1:1);
 

@@ -8,8 +8,8 @@ regenerate=true;
 debug=false;
 %debug=true;
 
-centlat=80; % degrees north
-centlon=-150; % degrees east
+centlat=90; % degrees north
+centlon=0; % degrees east
 horizon=90; % degrees of satellite horizon (0-90)
 
 % location of grid file
@@ -34,7 +34,8 @@ plotloc='/Users/afroberts/work';
 if regenerate
 
  cd(gridloc)
- ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex','dcEdge',...
+ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
+                                 'dcEdge',...
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
                                  'cellsOnEdge'});
@@ -66,11 +67,30 @@ else
 
 end
 
-
 S=geoshape(nc.latitude.data,nc.longitude.data,...
             'MPAS_Threshold','Sea Ice Threshold');
 
-kmlwrite('MPAS_Threshold',S,'Color','m','Name','Extent',...
+SP=geoshape(nc.latitude.data,nc.longitude.data,...
+            'MPAS_Threshold','Sea Ice Threshold',...
+            'Geometry','polygon');
+
+ST=geoshape(nc.latitude.data,nc.longitude.data,...
+            'MPAS','Sea Ice Threshold',...
+            'Geometry','polygon');
+
+SC=geoshape(nc.clatitude.data,nc.clongitude.data,...
+            'MPAS','Sea Ice Threshold',...
+            'Geometry','polygon');
+
+kmlwrite('MPAS_Threshold',ST,...
+         'Color',[1 1 1],...
+         'Name','Extent',...
+         'Description','Sea Ice Threshold');
+
+kmlwrite('MPAS_Land',SC,...
+         'FaceColor',0.9*[1 1 1],...
+         'EdgeColor',0.5*[1 1 1],...
+         'Name','Land',...
          'Description','Sea Ice Threshold');
 
 clf
@@ -81,7 +101,16 @@ ridgepack_satview(centlat,centlon,horizon,1,2);
                                    nc.longitude.data,...
                       centlat,centlon,2*horizon,1.0001);
 plot3(x,y,z,'Color','m',...
-       'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+       'LineWidth',0.5)
+
+hold on
+
+
+[x,y,z,phi,theta]=ridgepack_satfwd(nc.xlatitude.data,...
+                                   nc.xlongitude.data,...
+                      centlat,centlon,2*horizon,1.0001);
+plot3(x,y,z,'Color','g',...
+       'LineWidth',0.5)
 
 hold on
 
@@ -89,17 +118,15 @@ hold on
                                    nc.clongitude.data,...
                       centlat,centlon,2*horizon,1.0001);
 plot3(x,y,z,'Color','k',...
-       'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+       'LineWidth',0.1)
 
 hold on
-hold on
-
  
 % add title
 %title([datatitle])
 
 cd(plotloc)
-ridgepack_fprint('png','Outfile_Sea_Ice_GeoTif',1,1)
+ridgepack_fprint('png','Outfile_Sea_Ice_GeoTif',1,2)
 
 
 
