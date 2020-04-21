@@ -1,4 +1,4 @@
-function [vlats,vlons,verts]=ridgepack_findE3SMedges(ncvert,cidx,infill)
+function [vlats,vlons,verts]=ridgepack_e3smperimeter(ncvert,cidx,infill)
 
 
 if nargin<3
@@ -734,7 +734,7 @@ for i=idx
   vidx=[startidx:i-1];
 
   if length(kdx)>1
-    error('Found line-start intersection that should not exist')
+   error('Found line-start intersection that should not exist')
   end
 
   while ~isempty(jdx) & ~isempty(kdx)
@@ -913,7 +913,17 @@ for i=idx
 
 end
 
-vlats=alllats(end:-1:1);
-vlons=alllons(end:-1:1);
-verts=allvert(end:-1:1);
+if infill
+
+ vlats=alllats(end:-1:1);
+ vlons=alllons(end:-1:1);
+ verts=allvert(end:-1:1);
+
+else
+
+ vlats=alllats(1:1:end);
+ vlons=alllons(1:1:end);
+ verts=allvert(1:1:end);
+
+end
 

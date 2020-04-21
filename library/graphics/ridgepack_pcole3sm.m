@@ -16,6 +16,8 @@ function ridgepack_pcole3sm(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colv
 % ncvert - Netcdf grid structure from E3SM. It must include the vectors:
 %          nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
 %
+% mask   - mask of cell indices to be plotted.
+%
 % cont   - contour range entered as a vector [C1,C2,...,CX]. This may
 %          be entered as an empty vector [] to get ncpcolor to choose
 %          the contour interval for you, or it may be omitted if
