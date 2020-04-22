@@ -666,10 +666,21 @@ if isnan(vlats(end-1)) & ~isnan(vlats(end))
  verts=verts(1:end-2);
 end
 
-% finalize lats, lons and vertices
-vlats=[NaN vlats NaN];
-vlons=[NaN vlons NaN];
-verts=[NaN verts NaN];
+% finalize lats, lons and vertices, buttressing
+% the string of vertices with start and finishe NaNs
+if ~isnan(verts(1)) & ~isnan(verts(end))
+ vlats=[NaN vlats NaN];
+ vlons=[NaN vlons NaN];
+ verts=[NaN verts NaN];
+elseif ~isnan(verts(1))
+ vlats=[NaN vlats];
+ vlons=[NaN vlons];
+ verts=[NaN verts];
+elseif ~isnan(verts(end))
+ vlats=[vlats NaN];
+ vlons=[vlons NaN];
+ verts=[verts NaN];
+end
 npoin=length(verts);
 
 % BUG IS SOMEWHERE IN HERE (ABOVE)
@@ -836,6 +847,8 @@ for i=idx
    centlon=mean(vlons(vidx));
    horizon=5;
 
+   clf
+
    ridgepack_satview(centlat,centlon,horizon,1,2); 
  
    [x,y,z,phi,theta]=ridgepack_satfwd(vlats(vidx),...
@@ -884,6 +897,12 @@ for i=idx
    error('The contour is not closed')
 
   elseif isempty(jdx) & isempty(kdx)
+
+   disp(['i: ',num2str(i)])
+   disp(['startvertex: ',num2str(startvertex)])
+   disp(['endvertex: ',num2str(endvertex)])
+   disp(['startidx: ',num2str(startidx)])
+   disp(['endidx: ',num2str(endidx)])
 
    error('Cannot find matching start or end index')
 

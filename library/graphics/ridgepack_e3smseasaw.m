@@ -1,5 +1,5 @@
-function [nc,SCP,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,threshold,...
-                                       centlat,centlon,horizon)
+function [nc,SCP,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
+                                 threshold,centlat,centlon,horizon)
 
 % ridgepack_e3smseasaw - generate a threshold on an unstructured mesh
 %
@@ -27,6 +27,9 @@ function [nc,SCP,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,threshold,...
 %
 % Ridgepack Version 1.1
 % Andrew Roberts, Los Alamos National Laboratory, April 3, 2020 (afroberts@lanl.gov)
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 if nargin<4
  error('There is no threshold value set, and possibly more')
@@ -159,5 +162,6 @@ else
 
 end
 
-
+% debug stuff
+if debug; disp(['...Leaving ',mfilename]); end
 

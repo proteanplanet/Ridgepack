@@ -1,8 +1,8 @@
-function ridgepack_pcole3sm(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
+function ridgepack_e3smcolors(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
 
-% ridgepack_pcole3sm - Color fills data from E3SM/MPAS on an unstructured mesh
+% ridgepack_e3smcolors - Color fills scalar data from E3SM/MPAS on an unstructured mesh 
 %
-% function ridgepack_pcole3sm(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
+% function ridgepack_e3smcolors(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
 %
 % This function generates color shaded maps of E3SM fields from MPAS components
 % 
@@ -95,7 +95,7 @@ end
 
 % check for mask
 if (nargin>=4 & isempty(mask)) | nargin<4
- mask=ncvert.nCells.data;
+ mask=ncvert.nCells.data(:);
 end
 
 % check for contour interval
@@ -137,6 +137,14 @@ end
 hmap=get(gcf,'CurrentAxes');
 if ~ismap(hmap)
  error('Current axes must be a map')
+else
+ maphandle=gcm;
+ latextrem=maphandle.maplatlimit;
+ minlat=max(-90,latextrem(1)-5)*pi/180;
+ maxlat=min(90,latextrem(2)+5)*pi/180;
+ lidx=find(ncvert.latitude.data>maxlat | ncvert.latitude.data<minlat);
+ ncvert.longitude.data(lidx)=NaN;
+ ncvert.latitude.data(lidx)=NaN;
 end
 figout=get(hmap,'OuterPosition');
 fontsize=min(11,max(9,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
@@ -230,9 +238,9 @@ end
 
 % set colorscheme
 if strcmp(loglin,'linear')
- ridgepack_colormap(cont,ref,colors);
+ cmap=ridgepack_colormap(cont,ref,colors);
 else
- ridgepack_colormap(cont,ref,colors,true);
+ cmap=ridgepack_colormap(cont,ref,colors,true);
 end
 
 % plot patches for each contour interval
@@ -251,8 +259,10 @@ for j=1:length(cont)
 
  if length(idxn)>0
 
-      lat=zeros(length(idxn),8);
-      lon=zeros(length(idxn),8);
+      maxsize=ncvert.maxEdges.data(end)+1;
+
+      lat=NaN*zeros(length(idxn),maxsize);
+      lon=NaN*zeros(length(idxn),maxsize);
 
       for i=1:length(idxn)
 
@@ -265,9 +275,9 @@ for j=1:length(cont)
                ncvert.verticesOnCell.data(...
                 1:maxidx,idxn(i)))*180/pi;
        
-       lon(i,maxidx+1:8)=lon(i,1);
-       lat(i,maxidx+1:8)=lat(i,1);
-
+       lon(i,maxidx+1:maxsize)=lon(i,1);
+       lat(i,maxidx+1:maxsize)=lat(i,1);
+   
       end
 
       [cc,dd] = mfwdtran(gcm,lat(:,:),lon(:,:));

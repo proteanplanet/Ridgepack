@@ -313,14 +313,11 @@ else
  ridgepack_colormap(cont,ref,colors,true);
 end
 
-
 % get true color array
 [zindex,truecolor]=ridgepack_colorindex(z',cont,ref,mask');
 
-
 % get map object
 mapobj=gcm;
-
 
 % generate patch arrays
 imax=size(c,1)-1;
@@ -328,7 +325,6 @@ px=ones(4,imax);
 py=ones(4,imax);
 pz=ones(4,imax);
 pc=ones(1,imax,3);
-
 
 % for 3D plot, need to get altitude of data (set to zero)
 if strmatch(mapobj.mapprojection,'globe') 
