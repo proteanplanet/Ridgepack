@@ -257,6 +257,8 @@ for j=1:length(cont)
 
  [zindex,truecolor]=ridgepack_colorindex(nc.(var).data(idxn),cont,ref);
 
+ idxn=idxn(~isnan(truecolor(:,1)));
+
  if length(idxn)>0
 
       maxsize=ncvert.maxEdges.data(end)+1;
@@ -282,7 +284,10 @@ for j=1:length(cont)
 
       [cc,dd] = mfwdtran(gcm,lat(:,:),lon(:,:));
 
-      patch(cc',dd',truecolor(1,:),'EdgeColor','none')
+      % find non-NaN occurrence of the color for this contour
+      m=find(~isnan(truecolor(:,1)));
+
+      patch(cc',dd',truecolor(m(1),:),'EdgeColor','none')
 
  end
 
@@ -303,9 +308,6 @@ end
 
 % add title, removing previous title
 ridgepack_title(nc,['Shading: ',char(nc.(var).long_name)],1);
-
-% clear output if none requested
-if nargout==0; clear nc; end
 
 if debug; disp(['...Leaving ',mfilename]); end
 

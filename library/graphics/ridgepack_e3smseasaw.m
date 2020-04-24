@@ -31,7 +31,9 @@ function [nc,SCP,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
 
-if nargin<4
+if nargin==1
+ ncc=[];
+elseif nargin<4
  error('There is no threshold value set, and possibly more')
 end
 

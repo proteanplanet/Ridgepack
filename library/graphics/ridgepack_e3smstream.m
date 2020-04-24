@@ -1,5 +1,5 @@
 function ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
-                              ncvert,nccell,hemisphere,density,...
+                              ncvert,hemisphere,density,...
                               cont,ref)
 
 % switch on ice speed colors
@@ -11,12 +11,12 @@ speedcolor=true;
 
 u=ncu.(varu).data;
 v=ncv.(varv).data;
-lat=nccell.latitude.data;
-lon=nccell.longitude.data;
+lat=ncvert.latCell.data;
+lon=ncvert.lonCell.data;
 
 % create masks to use only all area north of 40N (or south of 40S)
 % mask at 10% concentration for calculating streamlines
-maskc=find(hemisphere*nccell.latitude.data>40*pi/180 & ...
+maskc=find(hemisphere*ncvert.latCell.data>40*pi/180 & ...
            ncc.(varc).data>0.01);
 maskv=NaN*zeros([ncvert.maxEdges.data(end) length(maskc)]);
 for i=1:length(maskc)
@@ -30,8 +30,8 @@ maskv=unique(sort(maskv(~isnan(maskv(:)))));
 [X,Y]=ridgepack_geodetictoxy(ncvert.latitude.data(maskv)*180/pi,...
                              ncvert.longitude.data(maskv)*180/pi,...
                              hemisphere);
-[Xc,Yc]=ridgepack_geodetictoxy(nccell.latitude.data(maskc)*180/pi,...
-                               nccell.longitude.data(maskc)*180/pi,...
+[Xc,Yc]=ridgepack_geodetictoxy(ncvert.latCell.data(maskc)*180/pi,...
+                               ncvert.lonCell.data(maskc)*180/pi,...
                                hemisphere);
 Xi=Xc; Yi=Yc;
 
@@ -41,7 +41,7 @@ CONC=ncc.(varc).data(maskc);
 Speed=sqrt(ncu.(varu).data.^2+ncv.(varv).data.^2);
 
 % change mask to 15% concentration for speed 
-maskc=find(hemisphere*nccell.latitude.data>40*pi/180 & ...
+maskc=find(hemisphere*ncvert.latCell.data>40*pi/180 & ...
            ncc.(varc).data>0.15);
 
 % generate speed on native grid, interpolating from vertices
@@ -97,40 +97,30 @@ v(conc<0.15)=0;
 [vertices arrowvertices]=streamslice(x,y,ui,vi,density);
 
 if hemisphere==1
-
  ridgepack_polarm('seaice','grid','label','noland')
-
 elseif hemisphere==-1
-
  ridgepack_polarm('antarctic','grid','label','noland')
-
 else
-
  error('hemisphere needs to be either 1 (north) or -1 (south)')
-
 end
 
+% add informational label about median speed
 xlabel(['Median: ',...
        num2str(0.01*median(Speedc(~isnan(Speedc))),'%4.2f'),...
        '~m~s$^{-1}$'],'FontSize',10,'Color',0.25*[1 1 1])
 
 % color the speed of the ice drift
 if speedcolor
- for j=1:length(cont)
-  if j<length(cont)
-   idxn=find(Speedc(:)>cont(j) & Speedc(:)<=cont(j+1));
-  else
-   idxn=find(Speedc(:)>cont(j));
-  end
-  if length(idxn)>0
-   [zindex,truecolor]=ridgepack_colorindex(Speedc(idxn),cont,5);
-   [c,d] = mfwdtran(gcm,Latc(idxn,:),Lonc(idxn,:));
-   patch(c',d',truecolor(1,:),'EdgeColor','none')
-   drawnow
-  else
-   disp(['No contours for ',num2str(cont(j))])
-  end
- end
+ ncu.speed=ncu.(varu);
+ ncu.speed.data=sqrt(ncu.(varu).data.^2 + ncv.(varv).data.^2);
+ nccell=ncvert;
+ nccell.latVertex=nccell.latitude;
+ nccell.lonVertex=nccell.longitude;
+ nccell.latitude=nccell.latCell;
+ nccell.longitude=nccell.lonCell;
+ nccell.latitude.data(ncc.(varc).data<0.15)=NaN;
+ nccell.longitude.data(ncc.(varc).data<0.15)=NaN;
+ ridgepack_e3smcolorv(ncu,'speed',nccell,[],cont,'linear',0)
 end
 
 % draw the native model coast
@@ -165,9 +155,9 @@ end
 %plot(c,d,'Color','m')
 
 % colorbar
-if speedcolor 
- ridgepack_colorbar(cont,{'\times 10^{-2}','m~s^{-1}'});
-end
+%if speedcolor 
+% ridgepack_colorbar(cont,{'\times 10^{-2}','m~s^{-1}'});
+%end
 
 
 

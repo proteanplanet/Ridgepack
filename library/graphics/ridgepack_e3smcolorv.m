@@ -265,15 +265,16 @@ for j=1:length(cont)
  % pass through vertices within this contour band
  if length(idxn)>0
 
-      % grab maximum number of cells per vertex
-      maxsize=nccell.vertexDegree.data(end);
+      % grab maximum possible points on polygon
+      maxsize=5;
+      vertexDegree=nccell.vertexDegree.data(end);
 
       lat=NaN*zeros(length(idxn),maxsize+1);
       lon=NaN*zeros(length(idxn),maxsize+1);
 
       for i=1:length(idxn)
 
-       xsdf=nccell.cellsOnVertex.data(1:maxsize,idxn(i));
+       xsdf=nccell.cellsOnVertex.data(1:vertexDegree,idxn(i));
 
        if all(xsdf>0) % triangle falls within mesh
 
@@ -318,8 +319,8 @@ for j=1:length(cont)
          lon(i,lxsdf+2)=nccell.lonVertex.data(idxn(i))*180/pi;
          lat(i,lxsdf+3)=nccell.latEdge.data(edges(1))*180/pi;
          lon(i,lxsdf+3)=nccell.lonEdge.data(edges(1))*180/pi;
-         lat(i,lxsdf+4)=lat(i,1);
-         lon(i,lxsdf+4)=lon(i,1);
+         lat(i,lxsdf+4:maxsize+1)=lat(i,1);
+         lon(i,lxsdf+4:maxsize+1)=lon(i,1);
         else
          error('Too many cell centers/edges for coastal edge')
         end
@@ -357,9 +358,6 @@ end
 
 % add title, removing previous title
 ridgepack_title(nc,['Shading: ',char(nc.(var).long_name)],1);
-
-% clear output if none requested
-if nargout==0; clear nc; end
 
 % debug stuff
 if debug; disp(['...Leaving ',mfilename]); end
