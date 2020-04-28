@@ -41,7 +41,7 @@ h=[];
 h=ridgepack_addc(h,'omega','Angular velocity of Earth''s rotation',...
                    'per second',0.00007292115);
 
-h=ridgepack_addc(h,'r','mean radius of the Earth','m',earthRadius);
+h=ridgepack_addc(h,'r','mean radius of the Earth','m',6371229.0);
 
 h=ridgepack_addc(h,'ghat','acceleration due to gravity','m s^{-2}',9.8);
 

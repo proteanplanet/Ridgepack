@@ -10,7 +10,8 @@ az = R.*cos(theta);
 % Rotate back to correct latitude
 latcenter=deg2rad(0);
 loncenter=deg2rad(0);
-beta=deg2rad(centerlat+90);
+beta=deg2rad(-centerlat+90);
+
 r=altitude;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
@@ -38,6 +39,6 @@ phi=atan2(by,bx);
 theta=atan2(sqrt(bx.^2+by.^2),bz);
 
 % calculate lats and lons 
-lats=rad2deg(theta-(pi/2));
+lats=rad2deg((pi/2)-theta);
 lons=rad2deg(phi);
 

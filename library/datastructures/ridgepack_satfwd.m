@@ -31,6 +31,7 @@ bz=cos(beta).*az + sin(beta)*(kx*ay-ky*ax) + kdota*(1-cos(beta))*kz;
 latcenter=deg2rad(0);
 loncenter=deg2rad(0);
 beta=deg2rad(centerlat-90);
+
 r=altitude;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);

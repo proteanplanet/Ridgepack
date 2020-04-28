@@ -1,4 +1,4 @@
-function ridgepack_e3smeshs(ncvert,mask,color)
+function ridgepack_e3smeshs(ncvert,mask,col)
 
 % ridgepack_e3smcolors - Color fills scalar data from E3SM/MPAS on an unstructured mesh 
 %
@@ -8,12 +8,15 @@ function ridgepack_e3smeshs(ncvert,mask,color)
 % 
 % INPUTS:
 %
-% ncvert - Netcdf grid structure from E3SM. It must include the vectors:
-%          nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
+% ncvert  - Netcdf grid structure from E3SM. It must include the 
+%           vectors:
+%           nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
 %
-% mask   - mask of cell indices to be plotted.
+% mask    - mask of cell indices to be plotted, given as a vector of 
+%           cell indices from nCells that are to be plotted. This 
+% 
 %
-% color - This sets the color scheme required:
+% col     - This sets the color of the lines [optional]
 %
 % Ridgepack Version 1.2
 % Andrew Roberts, LANL, 2019 (afroberts@lanl.gov) 
@@ -27,10 +30,9 @@ if (nargin>=2 & isempty(mask)) | nargin<2
 end
 
 % check for contour interval
-if nargin>=3 & isempty(cont) | nargin<3
+if nargin>=3 & isempty(col) | nargin<3
  col='b';
 end
-
 
 % get current axes
 hmap=get(gcf,'CurrentAxes');
@@ -85,7 +87,7 @@ if length(idxn)>0
 
       plot(cc',dd','Color',col,'Linewidth',0.25)
 
- clear cc dd lon lat idxn idx
+      clear cc dd lon lat idxn idx
 
 end
 
@@ -93,6 +95,5 @@ drawnow
 
 title(['MPAS S-Mesh']);
 
-% debug stuff
 if debug; disp(['...Leaving ',mfilename]); end
 
