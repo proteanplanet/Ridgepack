@@ -29,6 +29,8 @@ function [dist,angl,phi,tracklat,tracklon,tracklen]=...
 % tracklen - length along track starting from the lat1-lon1 pair
 %            in the units of earthradius between the lat-lon pairs.
 %            This has the same length as tracklat and tracklon
+%
+% Andrew Roberts, LANL, Ridgpack V2, 2020
 
 global debug;
 %debug=true;
@@ -79,7 +81,7 @@ if nargout>3
   [lat,lon]=ridgepack_satinv(phi,theta,lat1,lon1,90,1);
   tracklat=[lat1 lat lat2];
   tracklon=[lon1 lon lon2];
-  tracklen=[0 earthradius.*atan2(r,z) distance];
+  tracklen=[0 earthradius.*atan2(r,z) dist];
  end
 end
 

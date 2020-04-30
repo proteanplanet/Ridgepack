@@ -2,15 +2,35 @@ function [STS]=ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
                               ncvert,hemisphere,density,...
                               cont,ref)
 
-% ridgepack_e3smstream - plots sea ice streamlines on a map
+% ridgepack_e3smstream - Plots sea ice streamlines on a map
 %
 % function [STS]=ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
 %                              ncvert,hemisphere,density,...
 %                              cont,ref)
 %
-% This function plots streamlnes
+% This function plots streamlines on a polar stereographic
+% mesh for either hemisphere. 
 %
-
+% INPUT
+%
+% ncu     - netcdf structure containing u vector component
+% varu    - u-variable in ncu to use (character)  
+% ncv     - netcdf structure containing v vector component
+% varv    - v-variable in ncv to use (character)
+% ncc     - nc structure containing scalar variable mask velocity 
+% varc    - scalar variable, such as concentration, 
+%           in ncc to use (character)
+% ncvert  - netcdf structure containing E3SM grid information
+% hemisphere - This is 1 for the north, and -1 for the south
+% density - density of streamlines (tyically set to about 7)
+% cont    - vector of contour intervals for vector magnitudes
+% ref     - reference value colored magnitudes
+%
+% OUTPUT
+%
+% STS - geoshape containing the streamlines
+%
+% Andrew Roberts, LANL, Ridgepack V2, 2020
 
 % switch on ice speed colors
 speedcolor=true;
@@ -176,7 +196,5 @@ if nargout>0
             'MPAS_SeaIce','Drift',...
             'Geometry','line');
 end
-
-
 
 

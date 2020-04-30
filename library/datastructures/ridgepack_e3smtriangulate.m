@@ -1,12 +1,35 @@
 function [cell,vert,tvert,incell,cdist,vdist,cidx,vidx,tidx]=...
-               ridgepack_e3smtriangulate(ncvert,searchlat,searchlon)
+               ridgepack_e3smtriangulate(ncvert,searchlat,searchlon,idx)
 
-% ridgepack_e3smtriangulate - 
+% ridgepack_e3smtriangulate - Determine nearest grid point.
 %
 % function [cell,vert,tvert,incell,cdist,vdist,cidx,vidx,tidx]=...
-%              ridgepack_e3smtriangulate(ncvert,searchlat,searchlon)
+%             ridgepack_e3smtriangulate(ncvert,searchlat,searchlon,idx)
 %
+% This function finds the nearest cell center and vertex on an 
+% E3SM unstructered mesh, and also determines whether a search
+% position is within or outside a grid cell.
 %
+% INPUT
+%
+% ncvert    - netcdf structure with mesh information
+% searchlat - latitude search location
+% searchlon - longitude seartch location
+% idx      - cell indices to be considered in the search (optional)
+%
+% OUTPUT
+%
+% cell - Nearest cell
+% vert - Nearest vertex
+% tvert - Vertex of sector within a cell in which the point exists
+% incell - Logical determining if the point is in a cell
+% cdist - Distance from cell in unites of meters
+% vdist - Distance from vertex in unites of meters
+% cidx - Vector index of cell for supplied cells in ncvert
+% vidx - Vector index of vert for supplied vertices in ncvert
+% tidx - Vector index of tvert for supplied vertices in ncvert
+%
+% Andrew Roberts, LANL, Ridgepack V2, 2020
 
 global debug;
 %debug=true;
@@ -17,6 +40,12 @@ if nargin<3
 else
  searchlon=wrapTo180(searchlon);
 end
+
+if nargin<4
+ all cells
+ cidx=[1:length(ncvert.nCells.data)]'; %coast
+end
+ 
 
 if ~isstruct(ncvert)
  error('nccell is not a structure')
