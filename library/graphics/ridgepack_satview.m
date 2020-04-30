@@ -1,5 +1,12 @@
 function [h]=ridgepack_satview(centlat,centlon,horizon,surface,gridon)
 
+
+global debug;
+%debug=true;
+if debug; disp(['Entering ',mfilename,'...']); end
+
+
+
 % set paramater space
 surfh=0.999; % altiude of underlying surface
 gridheight=1.01; % height of grid superimposed on plot
@@ -216,4 +223,6 @@ axis off
 axis equal
 view([0 0 0.4])
 axis tight
+
+if debug; disp(['Leaving ',mfilename,'...']); end
 

@@ -1,6 +1,29 @@
 function [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centerlat,centerlon,horizon,altitude,removepoints)
 
-if nargin<7
+% theta - polar angle
+% phi - azimuthal angle
+
+global debug;
+%debug=true;
+if debug; disp(['Entering ',mfilename,'...']); end
+
+if nargin<4
+ error('missing inputs')
+elseif length(centerlat)>1 | length(centerlon)>1
+ error('centerlat and centerlon are too long')
+elseif length(lats)~=length(lons)
+ error('lats and lons have unequal lengths')
+end
+
+if nargin<5 | isempty(horizon)
+ horizon=90;
+end
+
+if nargin<6 | isempty(altitude)
+ altitude=1;
+end
+
+if nargin<7 | ~islogical(removepoints) 
  removepoints=true;
 end
 
@@ -56,4 +79,6 @@ end
 x = r.*sin(theta).*cos(phi);
 y = r.*sin(theta).*sin(phi);
 z = r.*cos(theta);
+
+if debug; disp(['Leaving ',mfilename,'...']); end
 

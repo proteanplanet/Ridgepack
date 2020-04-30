@@ -119,7 +119,7 @@ for i=1:length(cvflag1)
 end
 
 % only pass through threshold cells
-disp('Calculating the extent line')
+disp('Calculating the threshold line')
 if length(cidxn)>0
 
      px0=[];

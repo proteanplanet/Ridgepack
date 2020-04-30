@@ -1,6 +1,14 @@
 function [h]=ridgepack_sathorizon(centlat,centlon,horizon,...
                                   satlat,satlon,sathorizon,color)
 
+% ridgepack_sathorizon - Draw a satellite horizon on a map
+%
+% function [h]=ridgepack_sathorizon(centlat,centlon,horizon,...
+%
+%                                  satlat,satlon,sathorizon,color)
+% 
+% Can be used for creating search horizon
+
 % generate horizon in local coordinates
 phi=deg2rad([0:0.001:361]);
 theta=deg2rad(sathorizon*ones(size(phi)));

@@ -1,4 +1,4 @@
-function [nc,SCP,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
+function [nc,SCP,SCL,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
                                  threshold,centlat,centlon,horizon)
 
 % ridgepack_e3smseasaw - generate a threshold on an unstructured mesh
@@ -85,41 +85,41 @@ nc.attributes.title='E3SM-MPAS Edge Definition';
 
 nc.attributes.coastal_segments=length(isnan(cverts))+1;
 
-nc.cnpoints.data=[1:length(cverts)];
-nc.cnpoints.long_name='number of points on coastal outline';
-nc.cnpoints.dimension={'cnpoints'};
+nc.npoints.data=[1:length(cverts)];
+nc.npoints.long_name='number of points on coastal outline';
+nc.npoints.dimension={'npoints'};
 
-nc.clatitude.data=clats;
-nc.clatitude.long_name='latitude of coast vertices';
-nc.clatitude.dimension={'cnpoints'};
+nc.latitude.data=clats;
+nc.latitude.long_name='latitude of coast vertices';
+nc.latitude.dimension={'npoints'};
 
-nc.clongitude.data=clons;
-nc.clongitude.long_name='longitude of coast vertices';
-nc.clongitude.dimension={'cnpoints'};
+nc.longitude.data=clons;
+nc.longitude.long_name='longitude of coast vertices';
+nc.longitude.dimension={'npoints'};
 
-nc.cvertices.data=cverts;
-nc.cvertices.long_name='MPAS vertices on coast';
-nc.cvertices.dimension={'cnpoints'};
+nc.vertices.data=cverts;
+nc.vertices.long_name='MPAS vertices on coast';
+nc.vertices.dimension={'npoints'};
 
 if ~isempty(ncc)
 
  nc.attributes.threshold_segments=length(isnan(tverts))+1;
 
- nc.npoints.data=[1:length(tverts)];
- nc.npoints.long_name='number of points on threshold shapes';
- nc.npoints.dimension={'npoints'};
+ nc.tnpoints.data=[1:length(tverts)];
+ nc.tnpoints.long_name='number of points on threshold shapes';
+ nc.tnpoints.dimension={'tnpoints'};
 
- nc.latitude.data=tlats;
- nc.latitude.long_name='latitude of threshold shapes';
- nc.latitude.dimension={'npoints'};
+ nc.tlatitude.data=tlats;
+ nc.tlatitude.long_name='latitude of threshold shapes';
+ nc.tlatitude.dimension={'tnpoints'};
 
- nc.longitude.data=tlons;
- nc.longitude.long_name='longitude of threshold shapes';
- nc.longitude.dimension={'npoints'};
+ nc.tlongitude.data=tlons;
+ nc.tlongitude.long_name='longitude of threshold shapes';
+ nc.tlongitude.dimension={'tnpoints'};
 
- nc.vertices.data=tverts;
- nc.vertices.long_name='vertex indices on threshold shapes';
- nc.vertices.dimension={'npoints'};
+ nc.tvertices.data=tverts;
+ nc.tvertices.long_name='vertex indices on threshold shapes';
+ nc.tvertices.dimension={'tnpoints'};
 
  nc.attributes.contour_segments=length(isnan(xverts))+1;
 
@@ -141,18 +141,30 @@ if ~isempty(ncc)
 
 end
 
+% run checks on structure
+nc=ridgepack_struct(nc);
+
 % create geoshapes
-SCP=geoshape(nc.clatitude.data,nc.clongitude.data,...
+% coastal line
+SCL=geoshape(nc.latitude.data,nc.longitude.data,...
+            'MPAS_Ocean','Coastal Definition',...
+            'Geometry','line');
+
+% coastal polygon
+SCP=geoshape(nc.latitude.data,nc.longitude.data,...
             'MPAS_Ocean','Coastal Definition',...
             'Geometry','polygon');
 
 if ~isempty(ncc)
 
+
+ % contour line
  STL=geoshape(nc.xlatitude.data,nc.xlongitude.data,...
              'MPAS_SeaIce',[varc,'>',num2str(threshold),' contour'],...
              'Geometry','line');
 
- STP=geoshape(nc.latitude.data,nc.longitude.data,...
+ % polygon
+ STP=geoshape(nc.tlatitude.data,nc.tlongitude.data,...
              'MPAS_SeaIce',[varc,'>',num2str(threshold)],...
              'Geometry','polygon');
 
