@@ -58,7 +58,7 @@ end
 % create netcdf structure
 nc.attributes.title='E3SM-MPAS Edge Definition';
 
-nc.attributes.coastal_segments=length(isnan(cverts))+1;
+nc.attributes.coastal_segments=num2str(length(isnan(cverts))+1);
 
 nc.npoints.data=[1:length(cverts)];
 nc.npoints.long_name='number of points on coastal outline';
@@ -78,7 +78,7 @@ nc.vertices.dimension={'npoints'};
 
 if ~isempty(ncc)
 
- nc.attributes.threshold_segments=length(isnan(tverts))+1;
+ nc.attributes.threshold_segments=num2str(length(isnan(tverts))+1);
 
  nc.tnpoints.data=[1:length(tverts)];
  nc.tnpoints.long_name='number of points on threshold shapes';
@@ -96,7 +96,7 @@ if ~isempty(ncc)
  nc.tvertices.long_name='vertex indices on threshold shapes';
  nc.tvertices.dimension={'tnpoints'};
 
- nc.attributes.contour_segments=length(isnan(xverts))+1;
+ nc.attributes.contour_segments=num2str(length(isnan(xverts))+1);
 
  nc.xnpoints.data=[1:length(xverts)];
  nc.xnpoints.long_name='number of points on threshold contours';

@@ -1,6 +1,16 @@
-function ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
+function [STS]=ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
                               ncvert,hemisphere,density,...
                               cont,ref)
+
+% ridgepack_e3smstream - plots sea ice streamlines on a map
+%
+% function [STS]=ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
+%                              ncvert,hemisphere,density,...
+%                              cont,ref)
+%
+% This function plots streamlnes
+%
+
 
 % switch on ice speed colors
 speedcolor=true;
@@ -96,6 +106,7 @@ v(conc<0.15)=0;
 % generate streamlines on x-y grid
 [vertices arrowvertices]=streamslice(x,y,ui,vi,density);
 
+% generate underlying map
 if hemisphere==1
  ridgepack_polarm('seaice','grid','label','noland')
 elseif hemisphere==-1
@@ -130,34 +141,42 @@ h1=line(c,d,'Color',0.5*[1 1 1]);
 clear c d 
 
 % plot streamlines on the map
+latitude=[];
+longitude=[];
 for i=1:length(vertices)
  if ~isempty(vertices{i})
   xy=vertices{i};
   [lat,lon]=ridgepack_xytogeodetic(xy(:,1),xy(:,2),hemisphere);
   [c,d]=mfwdtran(gcm,lat,lon,gca,'surface');
   plot(c,d,'Color',0*[1 1 1])
+  latitude=[latitude NaN lat'];
+  longitude=[longitude NaN lon'];
  end
 end
 
 % plot streamline arrow on the map
+latitudev=[];
+longitudev=[];
 for i=1:length(arrowvertices)
  if ~isempty(arrowvertices{i})
   xy=arrowvertices{i};
   [lat,lon]=ridgepack_xytogeodetic(xy(:,1),xy(:,2),hemisphere);
   [c,d]=mfwdtran(gcm,lat,lon,gca,'surface');
   plot(c,d,'Color',0*[1 1 1])
+  latitudev=[latitudev NaN lat'];
+  longitudev=[longitudev NaN lon'];
  end
 end
 
-% plot ice edge
-%nc=ridgepack_pthresholde3sm(ncc,varc,0.15,ncvert);
-%[c,d]=mfwdtran(gcm,nc.latitude.data,nc.longitude.data,gca,'surface');
-%plot(c,d,'Color','m')
+% generate shapefile
+if nargout>0
+ latitude=[latitude latitudev];
+ longitude=[longitude longitudev];
+ STS=geoshape(latitude,longitude,...
+            'MPAS_SeaIce','Drift',...
+            'Geometry','line');
+end
 
-% colorbar
-%if speedcolor 
-% ridgepack_colorbar(cont,{'\times 10^{-2}','m~s^{-1}'});
-%end
 
 
 

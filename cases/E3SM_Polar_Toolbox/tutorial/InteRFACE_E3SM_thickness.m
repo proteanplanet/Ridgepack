@@ -24,7 +24,7 @@ datafile='mpascice.hist.am.timeSeriesStatsMonthly.2000-03-01.nc';
 
 % EVERYTHING BELOW THIS LINE SHOULD JUST WORK
 
-
+% get the mesh data
 cd(gridloc)
 ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'verticesOnCell','indexToCellID',...
@@ -32,11 +32,7 @@ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'cellsOnEdge','cellsOnVertex',...
                                 'edgesOnVertex'});
 
-nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
-                                'verticesOnCell','indexToCellID',...
-                                'nEdgesOnCell','edgesOnCell',...
-                                'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+nccell=ridgepack_clone(gridfile,{'latCell','lonCell'});
 
 ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
 
@@ -45,15 +41,11 @@ ncvert.lonCell=nccell.longitude;
 ncvert.latEdge=ncedge.latitude;
 ncvert.lonEdge=ncedge.longitude;
 
-nccell.latVertex=ncvert.latitude;
-nccell.lonVertex=ncvert.longitude;
-nccell.latEdge=ncedge.latitude;
-nccell.lonEdge=ncedge.longitude;
-
 % grab a large chunk of different sea ice data, for demonstration
 cd(dataloc)
 
-% fields to be gathered
+% fields to be gathered - we don't use many of these, but this 
+% is the type of information easily grabbed from a datafile
 fields={'timeMonthly_avg_iceAreaCell',...
         'timeMonthly_avg_iceVolumeCell',...
         'timeMonthly_avg_snowVolumeCell',...
@@ -93,25 +85,6 @@ nc=ridgepack_reduce(ridgepack_clone(datafile,fields),{'time'});
                        'timeMonthly_avg_iceAreaCell',...
                         0.15);
 
-
-if 1==0
-
-ridgepack_polarm('arctic','noland','grid','label');
-geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
-mask=find(nc.timeMonthly_avg_iceAreaCell.data>0.15);
-ridgepack_e3smcolors(nc,...
-                  'timeMonthly_avg_iceAreaCell',...
-                   ncvert,mask,[0:0.05:1]);
-h=geoshow(STC,'Color','m','LineWidth',1)
-legend(h,'Extent','Location','SouthEast')
-legend boxoff
-title('September DECK PI Years 0400-0499 Mean Concentration')
-ridgepack_fprint('png','Antarctic_Sept_0400_0499_PI_DECK_Concentration',1,2)
-
-end
-
-clf
-
 % create an Arctic base map
 ridgepack_polarm('seaice','noland','grid','label');
 
@@ -123,7 +96,6 @@ mask=find(nc.timeMonthly_avg_iceAreaCell.data>0.15);
 ridgepack_e3smcolors(nc,...
                   'timeMonthly_avg_iceVolumeCell',...
                    ncvert,mask,[0:0.25:3.25]);
-
 
 % Show mesh below the 85% concentration 
 mask=find(nc.timeMonthly_avg_iceVolumeCell.data>3);
