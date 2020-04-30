@@ -1,0 +1,162 @@
+% InteRFACE_E3SM_thickness: Tutorial Script
+% 
+% This script demonstrates how to plot thickness, extent and coast 
+% from a model history file.
+%
+% InteRFACE Tutorial, April 2020
+% Andrew Roberts, LANL, afroberts@lanl.gov
+
+clf
+clear 
+
+% CHANGE THESE THINGS TO MAKE THIS WORK FOR YOU: 
+
+% plot location
+plotloc='/Users/afroberts/work/tutorial';
+
+% grid data location
+gridloc='/Users/afroberts/data/MODEL/E3SM/DECK/grid';
+gridfile='E3SM_LR_V1_grid.nc';
+
+% data file location
+dataloc='/Users/afroberts/data/MODEL/E3SM/DECK/monthly/h1/archive/ice/hist';
+datafile='mpascice.hist.am.timeSeriesStatsMonthly.2000-03-01.nc';
+
+% EVERYTHING BELOW THIS LINE SHOULD JUST WORK
+
+
+cd(gridloc)
+ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
+                                'verticesOnCell','indexToCellID',...
+                                'nEdgesOnCell','edgesOnCell',...
+                                'cellsOnEdge','cellsOnVertex',...
+                                'edgesOnVertex'});
+
+nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
+                                'verticesOnCell','indexToCellID',...
+                                'nEdgesOnCell','edgesOnCell',...
+                                'cellsOnEdge','cellsOnVertex',...
+                                'edgesOnVertex'});
+
+ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
+
+ncvert.latCell=nccell.latitude;
+ncvert.lonCell=nccell.longitude;
+ncvert.latEdge=ncedge.latitude;
+ncvert.lonEdge=ncedge.longitude;
+
+nccell.latVertex=ncvert.latitude;
+nccell.lonVertex=ncvert.longitude;
+nccell.latEdge=ncedge.latitude;
+nccell.lonEdge=ncedge.longitude;
+
+% grab a large chunk of different sea ice data, for demonstration
+cd(dataloc)
+
+% fields to be gathered
+fields={'timeMonthly_avg_iceAreaCell',...
+        'timeMonthly_avg_iceVolumeCell',...
+        'timeMonthly_avg_snowVolumeCell',...
+        'timeMonthly_avg_uVelocityGeo',...
+        'timeMonthly_avg_vVelocityGeo',...
+        'timeMonthly_avg_uOceanVelocityVertexGeo',...
+        'timeMonthly_avg_vOceanVelocityVertexGeo',...
+        'timeMonthly_avg_airStressVertexUGeo',...
+        'timeMonthly_avg_airStressVertexVGeo',...
+        'timeMonthly_avg_divergence',...
+        'timeMonthly_avg_frazilFormation',...
+        'timeMonthly_avg_snowiceFormation',...
+        'timeMonthly_avg_snowMelt',...
+        'timeMonthly_avg_congelation',...
+        'timeMonthly_avg_divergence',...
+        'timeMonthly_avg_shear',...
+        'timeMonthly_avg_oceanHeatFlux',...
+        'timeMonthly_avg_oceanShortwaveFlux',...
+        'timeMonthly_avg_oceanFreshWaterFlux',...
+        'timeMonthly_avg_oceanSaltFlux',...
+        'timeMonthly_avg_surfaceIceMelt',...
+        'timeMonthly_avg_basalIceMelt',...
+        'timeMonthly_avg_lateralIceMelt',...
+        'timeMonthly_avg_freezingMeltingPotential',...
+        'timeMonthly_avg_seaSurfaceSalinity',...
+        'timeMonthly_avg_seaSurfaceTemperature',...
+        'timeMonthly_avg_surfaceTemperatureCell',...
+        'timeMonthly_avg_icePresent',...
+        'timeMonthly_avg_iceVolumeTendencyTransport',...
+        'timeMonthly_avg_iceVolumeTendencyThermodynamics'};
+
+% ingest the data, and remove the time dimension immediately
+nc=ridgepack_reduce(ridgepack_clone(datafile,fields),{'time'});
+
+% generate the coast as well as the extent at 15% concentration
+[nccoast,SCP,SCL,STP,STC]=ridgepack_e3smseasaw(ncvert,nc,...
+                       'timeMonthly_avg_iceAreaCell',...
+                        0.15);
+
+
+if 1==0
+
+ridgepack_polarm('arctic','noland','grid','label');
+geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
+mask=find(nc.timeMonthly_avg_iceAreaCell.data>0.15);
+ridgepack_e3smcolors(nc,...
+                  'timeMonthly_avg_iceAreaCell',...
+                   ncvert,mask,[0:0.05:1]);
+h=geoshow(STC,'Color','m','LineWidth',1)
+legend(h,'Extent','Location','SouthEast')
+legend boxoff
+title('September DECK PI Years 0400-0499 Mean Concentration')
+ridgepack_fprint('png','Antarctic_Sept_0400_0499_PI_DECK_Concentration',1,2)
+
+end
+
+clf
+
+% create an Arctic base map
+ridgepack_polarm('seaice','noland','grid','label');
+
+% Add in the coast
+geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
+
+% Plot sea ice thickness, masked at 15% concentration
+mask=find(nc.timeMonthly_avg_iceAreaCell.data>0.15);
+ridgepack_e3smcolors(nc,...
+                  'timeMonthly_avg_iceVolumeCell',...
+                   ncvert,mask,[0:0.25:3.25]);
+
+
+% Show mesh below the 85% concentration 
+mask=find(nc.timeMonthly_avg_iceVolumeCell.data>3);
+SML=ridgepack_e3smeshs(ncvert,mask,'w')
+
+% Overlay extent line
+h=geoshow(STC,'Color','m','LineWidth',1);
+
+% add in legend
+legend(h,'Extent','Location','SouthEast')
+legend boxoff
+
+% add title
+title('March 200 DECK h1 Thickness and Extent')
+
+% print it
+cd(plotloc)
+ridgepack_fprint('png',mfilename,1,2)
+
+% also save sea ice extent,coast and grid shapes and files
+kmlwrite('Extent',STC,'Color','m','LineWidth',1, ...
+         'Description','Sea Ice Extent','Name','MPAS Sea Ice');
+
+kmlwrite('Coast_Polygon',SCP,'Color',0.8*[1 1 1],'LineWidth',1, ...
+         'Description','Coastal Definition','Name','MPAS Sea Ice');
+
+kmlwrite('Coast_Line',SCL,'Color','k','LineWidth',1, ...
+         'Description','Coastal Line','Name','MPAS Sea Ice');
+
+kmlwrite('Mesh_Line',SML,'Color','w','LineWidth',1, ...
+         'Description','MeshArea','Name','MPAS Sea Ice');
+
+
+
+
+

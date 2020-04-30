@@ -1,6 +1,6 @@
 function ridgepack_e3smcolorv(nc,var,nccell,mask,cont,loglin,ref,horiz,colors,colvals)
 
-% ridgepack_e3smcolors - Color fills vertex data from E3SM/MPAS on an unstructured mesh 
+% ridgepack_e3smcolorv - Color fills vertex data from E3SM/MPAS on an unstructured mesh 
 %
 % function ridgepack_e3smcolors(nc,var,nccell,mask,cont,loglin,ref,horiz,colors,colvals)
 %
@@ -64,7 +64,7 @@ function ridgepack_e3smcolorv(nc,var,nccell,mask,cont,loglin,ref,horiz,colors,co
 %          be different from the supplied contour values. (optional)
 %          See ridgepack_colorbar if further explanation is required.
 %
-% Ridgepack Version 1.2
+% Ridgepack Version 2.0
 % Andrew Roberts, LANL, 2019 (afroberts@lanl.gov) 
 
 global debug;

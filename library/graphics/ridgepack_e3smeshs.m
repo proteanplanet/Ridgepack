@@ -1,25 +1,27 @@
-function ridgepack_e3smeshs(ncvert,mask,col)
+function [SML]=ridgepack_e3smeshs(ncvert,mask,col)
 
-% ridgepack_e3smcolors - Color fills scalar data from E3SM/MPAS on an unstructured mesh 
+% ridgepack_e3smeshs - Draws an E3SM scalar mesh 
 %
-% function ridgepack_e3smcolors(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,colvals)
+% function ridgepack_e3smeshs(ncvert,mask,col)
 %
-% This function generates color shaded maps of E3SM fields from MPAS components
+% This function generates a mesh for a given masked area in a 
+% color shaded maps of E3SM fields from MPAS components
 % 
-% INPUTS:
+% INPUT:
 %
-% ncvert  - Netcdf grid structure from E3SM. It must include the 
-%           vectors:
-%           nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
+% ncvert - Netcdf grid structure from E3SM. It must include the 
+%          vectors:
+%          nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
+% mask   - mask of cell indices to be plotted, given as a vector of 
+%          cell indices from nCells that are to be plotted.[optional] 
+% col    - This sets the color of the lines [optional]
 %
-% mask    - mask of cell indices to be plotted, given as a vector of 
-%           cell indices from nCells that are to be plotted. This 
-% 
+% OUTPUT:
 %
-% col     - This sets the color of the lines [optional]
+% SML - Geoshape of mesh.
 %
-% Ridgepack Version 1.2
-% Andrew Roberts, LANL, 2019 (afroberts@lanl.gov) 
+% Ridgepack Version 2.0
+% Andrew Roberts, LANL, 2020 (afroberts@lanl.gov) 
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
@@ -93,7 +95,14 @@ end
 
 drawnow
 
-title(['MPAS S-Mesh']);
+if nargout>0
+ 
+ % grid line
+ SML=geoshape(latitude,longitude,...
+             'MPAS_SeaIce','Mesh',...
+             'Geometry','line');
+ 
+end
 
 if debug; disp(['...Leaving ',mfilename]); end
 

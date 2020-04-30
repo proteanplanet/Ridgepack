@@ -64,7 +64,7 @@ function ridgepack_e3smcolors(nc,var,ncvert,mask,cont,loglin,ref,horiz,colors,co
 %          be different from the supplied contour values. (optional)
 %          See ridgepack_colorbar if further explanation is required.
 %
-% Ridgepack Version 1.2
+% Ridgepack Version 2.0
 % Andrew Roberts, LANL, 2019 (afroberts@lanl.gov) 
 
 global debug;

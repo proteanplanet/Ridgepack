@@ -142,6 +142,7 @@ legend boxoff
 
 title('Example of Triangulation of Random Locations on Unstructured E3SM Ice-Ocean 30-60km Mesh')
 
+% print it
 cd(plotloc)
 ridgepack_fprint('png',mfilename,1,2)
 

@@ -1,11 +1,14 @@
-function [nc,SCP,SCL,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
-                                 threshold,centlat,centlon,horizon)
+function [nc,SCP,SCL,STP,STL]=...
+             ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
 
 % ridgepack_e3smseasaw - generate a threshold on an unstructured mesh
 %
-% function [nc]=ridgepack_e3smseasaw(ncc,varc,threshold,ncvert,centlat,centlon,horizon)
+% function [nc,SCP,SCL,STP,STL]=...
+%             ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
 %
-% This function .... description
+% This function generates a coastline as well as a threshold on an 
+% unstructured mesh given a scalar field varc in the netcdf 
+% structure ncc.
 %  
 % INPUT:
 %
@@ -13,20 +16,18 @@ function [nc,SCP,SCL,STP,STL]=ridgepack_e3smseasaw(ncvert,ncc,varc,...
 % varc      - variable in ncc to be used
 % threshold - threshold value used as a boundary on unstructured mesh
 % ncvert    - vertices on the unstructed mesh
-% centlat   - center latitude of plotted satellite view (optional)
-% centlon   - center longitude if plotted in satellite view (optional)
-% horizon   - horizon, in degrees of satellite view (optional)
-%
-% Note that centlat, centlon and horizon should not be provided
-% if nc is specificied.
 % 
 % OUTPUT:
 % 
-% nc - netcdf structure with lats, longs, mesh cell and vertex
-%      indices
+% nc  - netcdf structure with lats, longs, mesh cell and vertex
+%       indices of the coast, contour and shapes of areas
+% SCP - Polygons of the E3SM coastline as a geoshape.
+% SCL - Line of the E3SM coastline as a geoshape.
+% STP - Polygons of the E3SM threshold as a geoshape.
+% STL - Line of the E3SM threshold contours as a geoshape.
 %
-% Ridgepack Version 1.1
-% Andrew Roberts, Los Alamos National Laboratory, April 3, 2020 (afroberts@lanl.gov)
+% Ridgepack Version 2.0
+% Andrew Roberts, Los Alamos National Laboratory, 2020 
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
@@ -35,32 +36,6 @@ if nargin==1
  ncc=[];
 elseif nargin<4
  error('There is no threshold value set, and possibly more')
-end
-
-if nargin<5
- centlat=90;
-elseif nargin>3 & nargout==1
- error('you are asking to both plot and produce coastal data')
-elseif ~isnumeric(centlat)
- error('centlat should be a real number between -90 and 90')
-elseif centlat>90 | centlat<-90
- error('centlat should be between -90 and 90')
-end
-
-if nargin<6
- centlon=0;
-elseif ~isnumeric(centlon)
- error('centlon should be a real number between -90 and 90')
-elseif centlat>180 | centlat<-180
- error('centlon should be between -180 and 180')
-end
-
-if nargin<7
- horizon=90;
-elseif ~isnumeric(horizon)
- error('horizon must be a real number between 0 and 90')
-elseif horizon<0 | horizon>90
- error('horizon must be between 0 and 90')
 end
 
 % Generate a coastline
