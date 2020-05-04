@@ -1,5 +1,59 @@
-function [vlats,vlons,verts]=ridgepack_e3smperimeter(ncvert,cidx,infill)
+function [vlats,vlons,verts]=...
+              ridgepack_e3smperimeter(ncvert,cidx,infill)
 
+% ridgepack_e3smperimeter - Generates a permimeter on MPAS mesh
+%
+% function [vlats,vlons,verts]=...
+%             ridgepack_e3smperimeter(ncvert,cidx,infill)
+%
+% This function generates perimeters around defined areas
+% on an MPAS ocean mesh.  It requires three inputs, two of 
+% which are optional.  First it requires the basic definition
+% of an MPAS-Ocean mesh from the nc structure ncvert. Then,
+% if required, a list of cell indices can be provided to 
+% limit the regions around which a perimeter is computed.
+% The output is in the form of a list of closed contours
+% defined by latitudes and longitudes, and the associated 
+% vertex indices. Each closed contour is separated in the 
+% latitude and longitude lists with a single NaN.
+%
+% Calculations are performed in two stages. First all cell
+% sides are extracted that connect vertices that are shared
+% by only two cells, or is the vertex on only on cell within
+% the defined region. Then, closed contours are formed by 
+% adjoining adjacent vertices.  The total number of closed
+% contours are announced when running this function.
+%
+% INPUT:
+%
+% ncvert - netcdf structure of mesh information from MPAS-Ocean
+% cidx   - List of vertices around which closed contours are
+%          formed. If not specificed, the perimeters are the 
+%          coasts on the mesh. [optional]
+% infill - This decides whether the direction around each contour
+%          is clockwise or anticlockwise, which determines whether
+%          closed geoshapes are filled inside or ourside the 
+%          contour.  If infill is left out, then contours are 
+%          filled in, otherwise, the areas outside the mesh
+%          are filled in, which is good for plotting coasts.
+%          This is a logical - set to true or false [optional]j
+%
+% OUTPUT:
+%
+% vlat  - latitude of vertices for each contour, seperated 
+%         by NaNs for each close contour.
+% vlon  - longitude of vertices for each contour, seperated 
+%         by NaNs for each close contour.
+% verts - vertex indices corresponding to each point in the 
+%         vlat and vlon lists, also seperated by NaNs between
+%         close contours.
+%
+% Ridgepack Version 2.0
+% Andrew Roberts, Los Alamos National Laboratory, 2020 
+% afroberts@lanl.gov
+
+global debug;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 if nargin<3
  infill=false;
@@ -8,9 +62,6 @@ end
 if nargin<2
  error('Not enough inputs')
 end
-
-debug=false;
-%debug=true;
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -683,9 +734,6 @@ elseif ~isnan(verts(end))
 end
 npoin=length(verts);
 
-% BUG IS SOMEWHERE IN HERE (ABOVE)
-
-
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Now order vertices into closed loops by joining together
@@ -946,3 +994,5 @@ else
 
 end
 
+% debug stuff
+if debug; disp(['...Leaving ',mfilename]); end

@@ -118,7 +118,7 @@ if cello==cell & tverto==tvert
   disp('Outside Cell')
  end
 else
- error('no match')
+ disp('NO MATCH')
 end
 
 % Now plot Utqiagvik (previously Barrow) for reference

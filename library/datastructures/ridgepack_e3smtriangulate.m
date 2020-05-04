@@ -1,5 +1,5 @@
 function [cell,vert,tvert,incell,cdist,vdist,cidx,vidx,tidx]=...
-               ridgepack_e3smtriangulate(ncvert,searchlat,searchlon,idx)
+          ridgepack_e3smtriangulate(ncvert,searchlat,searchlon,idx)
 
 % ridgepack_e3smtriangulate - Determine nearest grid point.
 %
@@ -41,9 +41,9 @@ else
  searchlon=wrapTo180(searchlon);
 end
 
-if nargin<4
- all cells
- cidx=[1:length(ncvert.nCells.data)]'; %coast
+% all cells
+if nargin<4 | isempty(idx)
+ idx=[1:length(ncvert.nCells.data)]'; %coast
 end
  
 
@@ -56,12 +56,8 @@ end
 if isfield(ncvert,'latCell')
 
  [cdist,cangl,cphi]=ridgepack_greatcircle(searchlat,searchlon,...
-                                   ncvert.latCell.data*180/pi,...
-                                   ncvert.lonCell.data*180/pi);
-
- [vdist,vangl,vphi]=ridgepack_greatcircle(searchlat,searchlon,...
-                                  ncvert.latitude.data*180/pi,...
-                                  ncvert.longitude.data*180/pi);
+                              ncvert.latCell.data(idx)*180/pi,...
+                              ncvert.lonCell.data(idx)*180/pi);
 
 else
 
@@ -73,12 +69,28 @@ end
 % and calculate phi - the azimuthal angle
 [cnewdist,I] = sort(cdist);
 cdist=cnewdist(1);
-cidx=I(1);
+cidx=idx(I(1));
 cell=ncvert.nCells.data(cidx);
+
+% find nearest vertex on the cell
+if isfield(ncvert,'latCell')
+
+ jdx=ncvert.verticesOnCell.data(...
+                   1:ncvert.nEdgesOnCell.data(cidx),cidx);
+
+ [vdist,vangl,vphi]=ridgepack_greatcircle(searchlat,searchlon,...
+                             ncvert.latitude.data(jdx)*180/pi,...
+                             ncvert.longitude.data(jdx)*180/pi);
+
+else
+
+ error('There is a problem with ncvert') 
+
+end
 
 [vnewdist,I] = sort(vdist);
 vdist=vnewdist(1);
-vidx=I(1);
+vidx=jdx(I(1));
 vert=ncvert.nVertices.data(vidx);
 
 % Vertex angle: At the vertex from search point to center
@@ -86,8 +98,8 @@ slat=searchlat;
 slon=searchlon;
 clat=ncvert.latCell.data(cidx)*180/pi;
 clon=ncvert.lonCell.data(cidx)*180/pi;
-vlat=ncvert.latitude.data(vert)*180/pi;
-vlon=ncvert.longitude.data(vert)*180/pi;
+vlat=ncvert.latitude.data(vidx)*180/pi;
+vlon=ncvert.longitude.data(vidx)*180/pi;
 [x,y,z,phi]=ridgepack_satfwd([slat clat],[slon clon],vlat,vlon);
 vphi=wrapTo180((diff(phi))*180/pi);
 
@@ -95,19 +107,21 @@ vphi=wrapTo180((diff(phi))*180/pi);
 % In plain language, this determins the triangle relavant to 
 % working out if the point falls within cell or not.
 maxidx=ncvert.nEdgesOnCell.data(cell);
-idx=find(ncvert.verticesOnCell.data(1:maxidx,cell)==vert);
+midx=find(ncvert.verticesOnCell.data(1:maxidx,cell)==vert);
 if vphi<=0
- if idx==1
+ if midx==1
   tvert=ncvert.verticesOnCell.data(maxidx,cell);
  else
-  tvert=ncvert.verticesOnCell.data(idx-1,cell);
+  tvert=ncvert.verticesOnCell.data(midx-1,cell);
  end
 elseif vphi>0
- if idx==maxidx
+ if midx==maxidx
   tvert=ncvert.verticesOnCell.data(1,cell);
  else
-  tvert=ncvert.verticesOnCell.data(idx+1,cell);
+  tvert=ncvert.verticesOnCell.data(midx+1,cell);
  end
+else
+ error('vphi is some strange value')
 end
 tidx=find(ncvert.nVertices.data(tvert));
 

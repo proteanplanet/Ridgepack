@@ -1,26 +1,33 @@
 function [nc,SCP,SCL,STP,STL]=...
              ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
 
-% ridgepack_e3smseasaw - generate a threshold on an unstructured mesh
+% ridgepack_e3smseasaw - Generate a threshold on an unstructured mesh
 %
 % function [nc,SCP,SCL,STP,STL]=...
 %             ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
 %
-% This function generates a coastline as well as a threshold on an 
-% unstructured mesh given a scalar field varc in the netcdf 
-% structure ncc.
+% This function generates a coastline from an MPAS-Ocean unstructured
+% mesh, and, in addition, also generates a region defined by a 
+% threshold on a scalar field. Output is in the form of an nc
+% structure and as geoshapes for the coast and threshold region.
 %  
 % INPUT:
 %
-% ncc       - netcdf structure including
-% varc      - variable in ncc to be used
-% threshold - threshold value used as a boundary on unstructured mesh
-% ncvert    - vertices on the unstructed mesh
+% ncvert    - netcdf structure of mesh information from MPAS-Ocean.
+%             If only ncvert is specified, this generates only a
+%             coastline, formed of closed contours.
+% ncc       - netcdf structure for variable varc on ncvert 
+%             mesh [optional]
+% varc      - variable in ncc to be used [optional]
+% threshold - scalar threshold value on an unstructured mesh 
+%             [optional]
 % 
 % OUTPUT:
 % 
 % nc  - netcdf structure with lats, longs, mesh cell and vertex
-%       indices of the coast, contour and shapes of areas
+%       indices of the coast, contour and shapes of areas.
+%       Included in the metadata is the length of the perimeter
+%       for each defined region, and the area within.
 % SCP - Polygons of the E3SM coastline as a geoshape.
 % SCL - Line of the E3SM coastline as a geoshape.
 % STP - Polygons of the E3SM threshold as a geoshape.
@@ -28,6 +35,7 @@ function [nc,SCP,SCL,STP,STL]=...
 %
 % Ridgepack Version 2.0
 % Andrew Roberts, Los Alamos National Laboratory, 2020 
+% afroberts@lanl.gov
 
 global debug;
 if debug; disp(['Entering ',mfilename,'...']); end
@@ -48,6 +56,7 @@ if ~isempty(ncc)
  infill=true;
 
  cidx=find(ncc.(varc).data>threshold); 
+
  [tlats,tlons,tverts]=ridgepack_e3smperimeter(ncvert,cidx,infill);
 
  [xlats,xlons,xverts]=...
