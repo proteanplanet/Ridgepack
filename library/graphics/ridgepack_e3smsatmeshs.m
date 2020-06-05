@@ -1,5 +1,33 @@
-function [cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+function [cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
                                         horizon,altitude,ncmask,var)
+
+% ridgepack_e3smsatmeshs - plot a tesselated E3SM MPAS mesh on the globe
+%
+% function [cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
+%                                         horizon,altitude,ncmask,var)
+%
+% This function plots the tesselation of an MPAS E3SM mesh on the globe
+% for a chosen horizon specified in degrees from tthe center latitude
+% and longitude of the center of the plot.
+% 
+% INPUT:
+%
+% ncvert   - A netcdf structure containing all of the necessesary grid
+%            information from MPAS
+% centlat  - The central latitude of the plot
+% centlon  - The central longitude of the plot
+% horizon  - The reach of the plot, expressed as a polar angle from the
+%            central latitude and longitude.
+% altitude - Altitude of the points to be plotted on the sphere
+% ncmask   - Cell indices of cells to be plotted [optional]
+% var      - variable in ncmask used for masking [optional]
+%
+% OUTPUT:
+%
+% cells - indices plotted within the horizon of the figure
+%
+% Ridgepack Version 2.0
+% Andrew Roberts, LANL, 2020 (afroberts@lanl.gov) 
 
 % apply universal mask if non supplied
 if nargin<6
@@ -17,8 +45,8 @@ for i=1:length(ncvert.nCells.data)
 
  maxidx=ncvert.nEdgesOnCell.data(i);
 
- la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,i));
- lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,i));
+ la=ncvert.latVertex.data(ncvert.verticesOnCell.data(1:maxidx,i));
+ lo=ncvert.lonVertex.data(ncvert.verticesOnCell.data(1:maxidx,i));
 
  [x,y,z,ph,th]=ridgepack_satfwd(rad2deg(la),rad2deg(lo),...
                                 centlat,centlon,horizon,altitude);
@@ -43,37 +71,20 @@ if nargout==1
 end
 
 % now draw the grid
-c=[];
-d=[];
-
 if length(cells)>0
 
- for i=1:1:length(cells)
+ % Mesh triangulation
+ SHA=ridgepack_e3smeshs(ncvert,cells);
 
-  maxidx=ncvert.nEdgesOnCell.data(cells(i));
-
-  la=ncvert.latitude.data(ncvert.verticesOnCell.data(1:maxidx,cells(i)));
-  lo=ncvert.longitude.data(ncvert.verticesOnCell.data(1:maxidx,cells(i)));
-
-  la(end+1)=la(1);
-  lo(end+1)=lo(1);
-
-  la(end+1)=NaN;
-  lo(end+1)=NaN;
-
-  c=[c;la];
-  d=[d;lo];
-
- end
-
- % find values within twice the horizon since we've already wedded
+ % Find values within twice the horizon since we've already weeded
  % out cells that only fall within the horizon so as to plot entire 
  % cells, not just the vertices within the horizon.
- [dx,dy,dz,phi,theta]=ridgepack_satfwd(rad2deg(c),rad2deg(d),...
-                                  centlat,centlon,2*horizon,1);
+ [dx,dy,dz,phi,theta]=ridgepack_satfwd([SHA.Latitude],...
+                                       [SHA.Longitude],...
+                                       centlat,centlon,2*horizon,1);
 
  % draw grid
- plot3(dx,dy,dz,'b','LineWidth',0.5)
+ plot3(dx,dy,dz,'b','LineWidth',0.2)
  hold on
 
 end

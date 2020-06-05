@@ -1,8 +1,14 @@
 function [lats,lons]=ridgepack_satinv(phi,theta,centerlat,...
-                                      centerlon,horizon,altitude)
+                                      centerlon)
+
+global debug;
+%debug=true;
+if debug; disp(['Entering ',mfilename,'...']); end
 
 % Rodrigues' Rotation Formula
-R = altitude*ones(size(phi)); 
+% Calculations are performed on a unit sphere
+%R = altitude*ones(size(phi)); 
+R = ones(size(phi));
 ax = R.*sin(theta).*cos(phi);
 ay = R.*sin(theta).*sin(phi);
 az = R.*cos(theta);
@@ -12,7 +18,8 @@ latcenter=deg2rad(0);
 loncenter=deg2rad(0);
 beta=deg2rad(-centerlat+90);
 
-r=altitude;
+%r=altitude;
+r=1;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
 kz=r.*cos((pi/2)-latcenter);
@@ -25,7 +32,8 @@ cz=cos(beta).*az+sin(beta)*(kx.*ay-ky.*ax)+kdota.*(1-cos(beta))*kz;
 latcenter=deg2rad(90);
 loncenter=deg2rad(0);
 beta=deg2rad(centerlon+90);
-r=altitude;
+%r=altitude;
+r=1;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
 kz=r.*cos((pi/2)-latcenter);
@@ -41,4 +49,6 @@ theta=atan2(sqrt(bx.^2+by.^2),bz);
 % calculate lats and lons 
 lats=rad2deg((pi/2)-theta);
 lons=rad2deg(phi);
+
+if debug; disp(['Leaving ',mfilename,'...']); end
 

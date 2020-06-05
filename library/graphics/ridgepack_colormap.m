@@ -1,4 +1,4 @@
-function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
+function [cmap,cont]=ridgepack_colormap(cont,ref,colors,logscale,reversed)
 
 % ridgepack_colormap - Generates indexed color scheme and a colorbar for contourf, pcolor etc
 %
@@ -37,10 +37,14 @@ function [cmap]=ridgepack_colormap(cont,ref,colors,logscale)
 %
 % logscale - set to true if log scale is being used (optional).
 %
+% reversed  - reverse colormap logical (optional).
+%
 %
 % OUTPUT:
 %
-% cmap   - colormap output
+% cmap - colormap output
+%
+% cont - contour that is changed if reversed.
 %
 % The only two inputs that are compulsory are cont and units, the
 % others can be eliminated if need be.
@@ -64,6 +68,7 @@ if nargin<1; error('cont not specified'); end
 if nargin<2; ref=0.0; end
 if nargin<3; colors='bluered' ; end
 if nargin<4; logscale=false ; end
+if nargin<5; reversed=false ; end
 
 % sort cont in ascending numerical order, taking into account a single value
 if isempty(cont)
@@ -77,6 +82,11 @@ elseif length(cont)<2
   cont(3)=c1+eps;
 end
 cont=sort(cont);
+
+% reverse contours
+if reversed
+ cont=-cont(end:-1:1);
+end
 
 % set tick marks
 Ytick=zeros(1, length(cont));
@@ -236,7 +246,6 @@ if zp~=yp && any(strcmpi(colors,{'bluered','greenred','bluegreen','jet','cool','
  end
  colormap(cmap);
 end
-
 
 % get final colormap
 cmap=colormap;

@@ -118,7 +118,7 @@ else
  SML=ridgepack_e3smeshs(ncvert,mask,[0.88 0.3 0])
 
  % Plot cells along track
- ridgepack_e3smeshs(ncvert,oncelllist,'m')
+ ridgepack_e3smeshs(ncvert,oncelllist,'c',true)
 
  % Plot the great circle ship path
  [x,y]= mfwdtran(gcm,tracklat,tracklon);

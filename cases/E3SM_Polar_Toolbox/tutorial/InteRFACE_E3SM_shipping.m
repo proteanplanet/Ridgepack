@@ -67,8 +67,8 @@ lon2=3;
 [dist,angl,phi,tracklat,tracklon,tracklen]=...
           ridgepack_greatcircle(lat1,lon1,lat2,lon2);
 
-globeplot=false;
-%globeplot=true;
+%globeplot=false;
+globeplot=true;
 
 if globeplot
 

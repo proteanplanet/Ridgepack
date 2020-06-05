@@ -1,4 +1,4 @@
-function [STL]=ridgepack_e3smeshv(nccell,mask,col)
+function [STL]=ridgepack_e3smeshv(nccell,mask,col,fill)
 
 % ridgepack_e3smeshv - Draws an E3SM vector mesh 
 %
@@ -12,9 +12,12 @@ function [STL]=ridgepack_e3smeshv(nccell,mask,col)
 % nccell - Netcdf grid structure from E3SM. It must include the 
 %          vectors:
 %          nCells, nEdgesOnCell, verticesOnCell, latitude, longitude
-% mask   - mask of cell indices to be plotted, given as a vector of 
-%          cell indices from nCells that are to be plotted.[optional] 
+% mask   - mask of vertex indices to be plotted, given as a vector of 
+%          cell indices from nVertices that are to be plotted.
+%          [optional] 
 % col    - This sets the color of the lines [optional]
+% fill   - Logical set to true if the patch is to be filled 
+%          The default is not to fill. [optional]
 %
 % OUTPUT:
 %
@@ -32,26 +35,33 @@ if (nargin>=2 & isempty(mask)) | nargin<2
 end
 
 % set color
-if nargin<3
- col=0.25*[1 1 1];
+if nargin>=3 & isempty(col) | nargin<3
+ col=[0.7 0.2 0];
+end
+
+% check for contour interval
+if nargin>=4 & isempty(fill) | nargin<4
+ fill=false;
 end
 
 % get current axes
-hmap=get(gcf,'CurrentAxes');
-if ~ismap(hmap)
- error('Current axes must be a map')
-else
- maphandle=gcm;
- latextrem=maphandle.maplatlimit;
- minlat=max(-90,latextrem(1)-5)*pi/180;
- maxlat=min(90,latextrem(2)+5)*pi/180;
- lidx=find(nccell.latitude.data>maxlat | nccell.latitude.data<minlat);
- nccell.longitude.data(lidx)=NaN;
- nccell.latitude.data(lidx)=NaN;
+if nargout==0
+ hmap=get(gcf,'CurrentAxes');
+ if ~ismap(hmap)
+  error('Current axes must be a map')
+ else
+  maphandle=gcm;
+  latextrem=maphandle.maplatlimit;
+  minlat=max(-90,latextrem(1)-5)*pi/180;
+  maxlat=min(90,latextrem(2)+5)*pi/180;
+  lidx=find(nccell.latitude.data>maxlat | nccell.latitude.data<minlat);
+  nccell.longitude.data(lidx)=NaN;
+  nccell.latitude.data(lidx)=NaN;
+ end
+ figout=get(hmap,'OuterPosition');
+ fontsize=min(11,max(9,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
+ set(hmap,'fontsize',fontsize);
 end
-figout=get(hmap,'OuterPosition');
-fontsize=min(11,max(9,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
-set(hmap,'fontsize',fontsize);
 
 idx=nccell.nVertices.data;
 idxn=intersect(idx,mask);
@@ -129,18 +139,24 @@ if length(idxn)>0
 
       end
 
-      % translate las and longs in to cartesian coords
-      [cc,dd] = mfwdtran(gcm,latitude,longitude);
+      if nargout==0
 
-      % draw one long continuous patch
-      plot(cc,dd,'Color',col,'Linewidth',0.1)
+       % translate las and longs into cartesian coords
+       [cc,dd] = mfwdtran(gcm,lat(:,:),lon(:,:)); 
+ 
+       if fill
+        patch(cc',dd',col,...
+             'EdgeColor',[0.5 0.5 1],'LineWidth',0.2)
+       else
+        patch(cc',dd',col,'FaceColor','none',...
+             'EdgeColor',col,'LineWidth',0.2)
+       end
 
+      end
+ 
  clear cc dd lon lat idxn idx
 
 end
-
-% force the thing to draw
-drawnow
 
 if nargout>0
 
@@ -148,6 +164,10 @@ if nargout>0
  STL=geoshape(latitude,longitude,...
              'MPAS_SeaIce','Triangulation',...
              'Geometry','line');
+else
+
+ drawnow
+
 end
 
 % debug stuff

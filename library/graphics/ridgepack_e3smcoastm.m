@@ -2,7 +2,7 @@ function [nc,SCP,SCL]=ridgepack_e3smcoastm(ncvert,shape);
 
 % ridgepack_e3smcoastm - draw or generate an E3SM coastline
 %
-% function [nc,SCP,SCL]=ridgepack_e3smcoastm(ncvert) 
+% function [nc,SCP,SCL]=ridgepack_e3smcoastm(ncvert,shape) 
 %
 % This function generates a coast given an MPAS mesh in an
 % nc structure.  If output arguments are provided, then the 
@@ -62,10 +62,10 @@ if nargout==0
  end
 
  if shape
-  geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1]);
+  geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.25*[0 0 1]);
  else
   [c,d] = mfwdtran(gcm,[SCP.Latitude],[SCP.Longitude]);
-  plot(c,d,'Color',0.5*[1 1 1],'Linewidth',0.75);
+  plot(c,d,'Color',0.25*[0 0 1],'Linewidth',0.5);
  end
 
 end

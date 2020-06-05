@@ -1,4 +1,4 @@
-function [SML]=ridgepack_e3smeshs(ncvert,mask,col)
+function [SML]=ridgepack_e3smeshs(ncvert,mask,col,fill)
 
 % ridgepack_e3smeshs - Draws an E3SM scalar mesh 
 %
@@ -15,6 +15,8 @@ function [SML]=ridgepack_e3smeshs(ncvert,mask,col)
 % mask   - mask of cell indices to be plotted, given as a vector of 
 %          cell indices from nCells that are to be plotted.[optional] 
 % col    - This sets the color of the lines [optional]
+% fill   - Logical set to true if the patch is to be filled 
+%          The default is not to fill. [optional]
 %
 % OUTPUT:
 %
@@ -36,22 +38,29 @@ if nargin>=3 & isempty(col) | nargin<3
  col='b';
 end
 
-% get current axes
-hmap=get(gcf,'CurrentAxes');
-if ~ismap(hmap)
- error('Current axes must be a map')
-else
- maphandle=gcm;
- latextrem=maphandle.maplatlimit;
- minlat=max(-90,latextrem(1)-5)*pi/180;
- maxlat=min(90,latextrem(2)+5)*pi/180;
- lidx=find(ncvert.latitude.data>maxlat | ncvert.latitude.data<minlat);
- ncvert.longitude.data(lidx)=NaN;
- ncvert.latitude.data(lidx)=NaN;
+% check for contour interval
+if nargin>=4 & isempty(fill) | nargin<4
+ fill=false;
 end
-figout=get(hmap,'OuterPosition');
-fontsize=min(11,max(9,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
-set(hmap,'fontsize',fontsize);
+
+% get current axes
+if nargout==0
+ hmap=get(gcf,'CurrentAxes');
+ if ~ismap(hmap)
+  error('Current axes must be a map')
+ else
+  maphandle=gcm;
+  latextrem=maphandle.maplatlimit;
+  minlat=max(-90,latextrem(1)-5)*pi/180;
+  maxlat=min(90,latextrem(2)+5)*pi/180;
+  lidx=find(ncvert.latitude.data>maxlat | ncvert.latitude.data<minlat);
+  ncvert.longitude.data(lidx)=NaN;
+  ncvert.latitude.data(lidx)=NaN;
+ end
+ figout=get(hmap,'OuterPosition');
+ fontsize=min(11,max(9,10*sqrt((figout(3).^2)+(figout(4).^2))/sqrt(2)));
+ set(hmap,'fontsize',fontsize);
+end
 
 idx=ncvert.nCells.data;
 idxn=intersect(idx,mask);
@@ -60,9 +69,11 @@ if length(idxn)>0
 
       maxsize=ncvert.maxEdges.data(end)+1;
 
+      % These lats and longs are for drawing the patch
       lat=NaN*zeros(length(idxn),maxsize);
       lon=NaN*zeros(length(idxn),maxsize);
 
+      % This series is for generating a geoshape
       latitude=[];
       longitude=[];
 
@@ -85,15 +96,25 @@ if length(idxn)>0
 
       end
 
-      [cc,dd] = mfwdtran(gcm,latitude,longitude);
+      if nargout==0
 
-      plot(cc',dd','Color',col,'Linewidth',0.25)
+       % translate las and longs into cartesian coords
+       [cc,dd] = mfwdtran(gcm,lat(:,:),lon(:,:));
 
-      clear cc dd lon lat idxn idx
+       if fill
+        patch(cc',dd',col,...
+             'EdgeColor',[0.5 0.5 1],'LineWidth',0.2)
+       else
+        patch(cc',dd',col,'FaceColor','none',...
+             'EdgeColor',col,'LineWidth',0.2)
+       end
+
+       clear cc dd lon lat idxn idx
+
+      end
 
 end
 
-drawnow
 
 if nargout>0
  
@@ -101,8 +122,13 @@ if nargout>0
  SML=geoshape(latitude,longitude,...
              'MPAS_SeaIce','Mesh',...
              'Geometry','line');
+
+else
+
+ drawnow
  
 end
 
+% debug stuff
 if debug; disp(['...Leaving ',mfilename]); end
 

@@ -28,7 +28,9 @@ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+                                'edgesOnVertex',...
+                                'areaCell',...
+                                'dvEdge','dcEdge'});
 
 % splice in cell and edge latitude and longitude
 nccell=ridgepack_clone(gridfile,{'latCell','lonCell'});
@@ -56,10 +58,77 @@ searchlon=156.27;
           ridgepack_e3smtriangulate(ncvert,searchlat,searchlon);
 
 if incell
- disp('Inside Cell')
+ disp('Point is inside cell')
 else
- disp('Outside Cell')
+ disp('Point is outside cell')
 end
+
+% Have a quick look at a single coast-line and explore
+% some functions
+
+% grab edges
+edges1=ncvert.edgesOnVertex.data(:,vert);
+edges2=ncvert.edgesOnVertex.data(:,tvert);
+edge=intersect(edges1,edges2);
+
+% display mesh distance along the coastal edge
+disp(['Great circle distance along edge (mesh): ',...
+                   num2str(ncvert.dvEdge.data(edge))])
+
+% grab the earth's radius according to MPAS
+h=ridgepack_astroconstants;
+earthradius=h.r.const-0.5;
+
+%earthradius=6371000;
+
+% calculate the distance along the edge
+dist=ridgepack_greatcircle(ncvert.latitude.data(vert)*180/pi,...
+                           ncvert.longitude.data(vert)*180/pi,...
+                           ncvert.latitude.data(tvert)*180/pi,...
+                           ncvert.longitude.data(tvert)*180/pi,...,
+                           earthradius);
+
+% display the edge distance (should be very similar to previous)
+disp(['Great circle distance along edge (ridgepack): ',...
+                   num2str(dist)])
+
+% Check against vanilla MATLAB function for great circle
+[arclen,az] = distance(ncvert.latitude.data(vert)*180/pi,...
+                       ncvert.longitude.data(vert)*180/pi,...
+                       ncvert.latitude.data(tvert)*180/pi,...
+                       ncvert.longitude.data(tvert)*180/pi,...,
+                       earthradius);
+
+disp(['Great circle distance along edge (MATLAB): ',...
+                   num2str(arclen)])
+
+% calculate the chord distance
+[x,y,z,phi,theta]=ridgepack_satfwd(...
+                       ncvert.latitude.data(vert)*180/pi,...
+                       ncvert.longitude.data(vert)*180/pi,...
+                       ncvert.latitude.data(tvert)*180/pi,...
+                       ncvert.longitude.data(tvert)*180/pi,...
+                       180,earthradius);
+chorddist=sqrt(x.^2+y.^2+(earthradius-z).^2);
+
+% display the cord distance
+disp(['Chord distance along edge (ridgepack): ',...
+                   num2str(chorddist)])
+
+% now invert that operation, checking 
+[lats,lons]=ridgepack_satinv(phi,theta,...
+                       ncvert.latitude.data(tvert)*180/pi,...
+                       ncvert.longitude.data(tvert)*180/pi,...
+                       180,1);
+
+% display inverted answers (should be identical)
+disp(['Vertex latitude: ',...
+      num2str(ncvert.latitude.data(vert)*180/pi),...
+     ',  Inverted latitude: ',num2str(lats)])
+disp(['Vertex longitude: ',...
+      num2str(ncvert.longitude.data(vert)*180/pi),...
+     ',  Inverted longitude: ',num2str(lons)])
+
 
 % plot grid cell
 plot(...
@@ -113,9 +182,9 @@ text(wrapTo360(searchlon),searchlat,...
 
 if cello==cell & tverto==tvert
  if incell
-  disp('Inside Cell')
+  disp('Point is inside cell')
  else
-  disp('Outside Cell')
+  disp('Point is outside cell')
  end
 else
  disp('NO MATCH')

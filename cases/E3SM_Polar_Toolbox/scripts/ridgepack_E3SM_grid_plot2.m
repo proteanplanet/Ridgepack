@@ -13,7 +13,7 @@ else
  plotchoice=[3 5]
 end
 
-plotchoice=5;
+plotchoice=1;
 
 for setting=plotchoice
 
@@ -98,13 +98,13 @@ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+                                'edgesOnVertex','bottomDepth'});
 
 nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+                                'edgesOnVertex','bottomDepth'});
 
 ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
 
@@ -127,26 +127,42 @@ cd(plotloc)
 
 if setting<7
 
- ridgepack_satview(centlat,centlon,horizon)
+% ridgepack_satview(centlat,centlon,horizon)
 
- if tesselation
+% if tesselation
 
-  ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
+%  ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
 
- else
+% else
 
-  ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
+%  ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
 
- end
+% end
 
- if setting==2 | setting==3
+% if setting==2 | setting==3
 
-   ridgepack_sathorizon(centlat,centlon,horizon,...
-                        satlat,satlon,sathorizon,[0.83 0.5 0])
+%   ridgepack_sathorizon(centlat,centlon,horizon,...
+%                        satlat,satlon,sathorizon,[0.83 0.5 0])
 
- end
+% end
+
+ %cont=[-10 0 10 25 50 100 250 500:500:5000];
+ cont=[-8000:500:-1500 -1000:100:-200 -100:10:-10 0 10];
+ ref=0;
+ lighting=true;
+ ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
+
+% ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
+%                              centlat,centlon,horizon,altitude,...
+%                              lighting);
+
+ ridgepack_e3smsatrough(ncvert,'bottomDepth',ncvert,cont,0,...
+                              centlat,centlon,horizon,altitude,...
+                              lighting);
 
  ridgepack_e3smsatcoast(ncvert,centlat,centlon,horizon)
+
+ 
 
 elseif setting==7
 

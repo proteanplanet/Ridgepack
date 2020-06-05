@@ -1,4 +1,17 @@
-function [x,y,z,phi,theta]=ridgepack_satfwd(lats,lons,centerlat,centerlon,horizon,altitude,removepoints)
+function [x,y,z,phi,theta]=...
+          ridgepack_satfwd(lats,lons,centerlat,centerlon,...
+                           horizon,altitude,removepoints)
+
+% ridgepack_satfwd - convert lat-lon coordinates to local spherical
+%
+% function [x,y,z,phi,theta]=...
+%             ridgepack_satfwd(lats,lons,centerlat,centerlon,...
+%                                 horizon,altitude,removepoints)
+%
+% This function convets latitude-longitude coordinates to spherical
+% and three dimensional cartesian coordinates 
+
+
 
 % theta - polar angle
 % phi - azimuthal angle
@@ -32,7 +45,10 @@ c=deg2rad(lats);
 d=deg2rad(lons);
 
 % Rodrigues' Rotation Formula
-R = altitude*ones(size(c)); 
+
+% Calculations are performed on a unit sphere
+%R = altitude*ones(size(c)); 
+R = ones(size(c));  
 ax = R.*sin((pi/2)-c).*cos(d);
 ay = R.*sin((pi/2)-c).*sin(d);
 az = R.*cos((pi/2)-c);
@@ -41,7 +57,8 @@ az = R.*cos((pi/2)-c);
 latcenter=deg2rad(90);
 loncenter=deg2rad(0);
 beta=deg2rad(-centerlon-90);
-r=altitude;
+%r=altitude;
+r=1;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
 kz=r.*cos((pi/2)-latcenter);
@@ -55,7 +72,8 @@ latcenter=deg2rad(0);
 loncenter=deg2rad(0);
 beta=deg2rad(centerlat-90);
 
-r=altitude;
+%r=altitude;
+r=1;
 kx=r.*sin((pi/2)-latcenter).*cos(loncenter);
 ky=r.*sin((pi/2)-latcenter).*sin(loncenter);
 kz=r.*cos((pi/2)-latcenter);
@@ -76,6 +94,7 @@ if removepoints
 end
 
 % calculate final x, y and z
+r=altitude;
 x = r.*sin(theta).*cos(phi);
 y = r.*sin(theta).*sin(phi);
 z = r.*cos(theta);

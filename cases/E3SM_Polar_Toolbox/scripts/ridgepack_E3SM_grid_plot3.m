@@ -4,8 +4,8 @@ clear
 
 fileg='CUSP14'
 
-%tesselation=true;
-tesselation=false;
+tesselation=true;
+%tesselation=false;
 
 if tesselation
  plotchoice=[1:7]
@@ -98,13 +98,13 @@ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+                                'edgesOnVertex','bottomDepth'});
 
 nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex'});
+                                'edgesOnVertex','bottomDepth'});
 
 ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
 
@@ -145,8 +145,6 @@ if setting<7
                         satlat,satlon,sathorizon,[0.83 0.5 0])
 
  end
-
- ridgepack_e3smsatcoast(ncvert,centlat,centlon,horizon)
 
 elseif setting==7
 

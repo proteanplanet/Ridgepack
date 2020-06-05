@@ -30,7 +30,9 @@ function [dist,angl,phi,tracklat,tracklon,tracklen]=...
 %            in the units of earthradius between the lat-lon pairs.
 %            This has the same length as tracklat and tracklon
 %
-% Andrew Roberts, LANL, Ridgpack V2, 2020
+% Ridgepack Version 2.0
+% Andrew Roberts, Los Alamos National Laboratory, 2020 
+% afroberts@lanl.gov
 
 global debug;
 %debug=true;
@@ -54,7 +56,7 @@ if nargin<5 | isempty(earthradius)
  h=ridgepack_astroconstants;
  earthradius=h.r.const;
  if debug
-  disp(['Earth Radius Units: ',h.r.units])
+  disp(['Earth Radius: ',num2str(earthradius),' ',h.r.units])
  end
 end
 
@@ -78,7 +80,7 @@ if nargout>3
   x=earthradius.*sin(theta).*cos(phi);
   y=earthradius.*sin(theta).*sin(phi);
   r=sqrt(x.^2+y.^2);
-  [lat,lon]=ridgepack_satinv(phi,theta,lat1,lon1,90,1);
+  [lat,lon]=ridgepack_satinv(phi,theta,lat1,lon1);
   tracklat=[lat1 lat lat2];
   tracklon=[lon1 lon lon2];
   tracklen=[0 earthradius.*atan2(r,z) dist];
