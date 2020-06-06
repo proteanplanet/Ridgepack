@@ -153,7 +153,7 @@ for m = 1:numbervariables
   name=char(variablenames(m));
   coords=ridgepack_varcoords(nc,name);
   allcoords=union(coords,allcoords);
-  if ~isempty(strfind(name,'lon')) | ~isempty(strfind(name,'Lon')) | ~isempty(strfind(name,'LON')) 
+  if (~isempty(strfind(name,'lon')) | ~isempty(strfind(name,'Lon')) | ~isempty(strfind(name,'LON'))) & isempty(strfind(name,'longwave')) & isempty(strfind(name,'Longwave'))
    lonname=union(lonname,{name});
    if ~isempty(strfind(nc.(name).long_name,'longitude')) | ~isempty(strfind(nc.(name).long_name,'Longitude'))
     lonlongname=union(lonlongname,{name});
