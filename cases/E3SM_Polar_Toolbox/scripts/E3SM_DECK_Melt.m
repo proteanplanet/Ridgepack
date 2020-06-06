@@ -1,5 +1,8 @@
 
-clf
+close all
+
+if 1==0
+
 clear 
 
 % grab out the grid data
@@ -34,13 +37,16 @@ nccell.lonEdge=ncedge.longitude;
 % grab data
 dataloc='/Users/afroberts/Work';
 
-timeslice=31;
+%timeslice=31;
+timeslice=1;
 
-timetype='Daily';
+%timetype='Daily';
+timetype='Monthly';
 
 titletag='E3SM-HR';
 
-projtag='antarctic';
+%projtag='antarctic';
+projtag='seaice';
 
 datafile=['mpascice.hist.am.timeSeriesStats',...
           timetype,'.1950-01-01.nc'];
@@ -53,15 +59,17 @@ nca=ridgepack_reduce(ridgepack_clone(datafile,...
                      {iceareacell},timeslice),{'time'});
 
 nct=ridgepack_clone(datafile,...
-                    {'timeDaily_counter',...
-                     'xtime_startDaily',...
-                     'xtime_endDaily'});
+                    {['time',timetype,'_counter'],...
+                     ['xtime_start',timetype],...
+                     ['xtime_end',timetype]});
 
-stime=nct.xtime_startDaily.data(timeslice,1:10);
+stime=eval(['nct.xtime_start',timetype,'.data(timeslice,1:10)']);
 timestamp=[stime,'_',timetype];
 
 [nccoast,SCP,SCL,STP,STC]=ridgepack_e3smseasaw(ncvert,[nca],...
                        iceareacell,0.15);
+
+end
 
 plotloc='/Users/afroberts/work';
 cd(plotloc)
@@ -70,6 +78,7 @@ ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_freezingMeltingPotential'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -82,13 +91,15 @@ filetag='FreezeMeltPotential';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
-clf
+close all
 
 ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_basalIceMelt'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -101,15 +112,17 @@ filetag='BasalIceMelt';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_lateralIceMelt'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -122,14 +135,16 @@ filetag='Lateral_Ice_Melt';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_snowMelt'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -142,14 +157,16 @@ filetag='Snow_Melt';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_surfaceIceMelt'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -162,14 +179,16 @@ filetag='Surface_Ice_Melt';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_frazilFormation'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -182,14 +201,16 @@ filetag='Frazil_Formation';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>=0.0);
 field=['time',timetype,'_avg_seaSurfaceSalinity'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -202,14 +223,16 @@ filetag='Sea_Surface_Salinity';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>=0.0);
 field=['time',timetype,'_avg_seaSurfaceTemperature'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -222,14 +245,16 @@ filetag='Sea_Surface_Temperature';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_surfaceTemperatureCell'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -242,14 +267,16 @@ filetag='Surface_Temperature_Cell';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_oceanHeatFlux'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -262,14 +289,16 @@ filetag='Ocean_Heat_Flux';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.001);
 field=['time',timetype,'_avg_congelation'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -282,13 +311,15 @@ filetag='Congelation';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.15);
 field=['time',timetype,'_avg_iceAreaCell'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -301,14 +332,16 @@ filetag='Ice_Area';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
-clf
+close all
 
-ridgepack_polarm('antarctic','noland','grid','label');
+ridgepack_polarm(projtag,'noland','grid','label');
 geoshow(SCP,'FaceColor',0.95*[1 1 1],'EdgeColor',0.5*[1 1 1])
 mask=find(nca.(iceareacell).data>0.15);
 field=['time',timetype,'_avg_iceVolumeCell'];
+try
 nc=ridgepack_reduce(ridgepack_clone(datafile,...
                     {field},timeslice),{'time'});
 ridgepack_e3smcolors(nc,field,ncvert,mask,...
@@ -321,5 +354,6 @@ filetag='Ice_Volume';
 title([titletag,' ',stime,' ',timetype,' ',titlefield])
 ridgepack_fprint('png',[projtag,'_',titletag,'_',...
                         stime,'_',timetype,'_',filetag],1,2)
+end
 
 
