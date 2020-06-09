@@ -45,6 +45,7 @@ if nwp
  % NW passage second ship route
 
  % Search for start and and end of segment, split for efficiency
+ clear dists diste
  dists(1:length(sectornw{1}.lat))=100000000000;
  diste(1:length(sectornw{1}.lat))=100000000000;
  for i=1:100:length(sectornw{1}.lat)
@@ -127,6 +128,7 @@ if nwp
  sectornw{2}.lon=sectornwa{4}.lon;
 
  % Search for start and and end of segment, split for efficiency
+ clear dists diste
  dists(1:length(sectornw{1}.lat))=100000000000;
  diste(1:length(sectornw{1}.lat))=100000000000;
  for i=1:100:length(sectornw{1}.lat)
@@ -184,8 +186,8 @@ if nwp
  sectornw{3}.lon=shiptrack{1}.lon';
 
  % Search for start and and end of segment, split for efficiency
+ clear dists diste
  dists(1:length(sectornw{1}.lat))=100000000000;
- diste(1:length(sectornw{1}.lat))=100000000000;
  for i=1:100:length(sectornw{1}.lat)
   dists(i)=ridgepack_greatcircle(sectornw{2}.lat(1),...
                                  sectornw{2}.lon(1),...
@@ -205,7 +207,6 @@ if nwp
  [distmins,sdx]=min(dists);
 
  % Search for start and and end of segment, split for efficiency
- dists(1:length(sectornw{1}.lat))=100000000000;
  diste(1:length(sectornw{1}.lat))=100000000000;
  for i=1:100:length(sectornw{3}.lat)
   diste(i)=ridgepack_greatcircle(sectornw{2}.lat(end),...
@@ -265,8 +266,8 @@ if nsr
 
  % now join these together to a single track, one segment ata time
  for j=1:length(sectorns)-2
+  clear dists
   dists(1:length(sectorns{j}.lat))=100000000000;
-  diste(1:length(sectorns{j}.lat))=100000000000;
   for i=1:100:length(sectorns{j}.lat)
    dists(i)=ridgepack_greatcircle(sectorns{j+1}.lat(1),...
                                   sectorns{j+1}.lon(1),...
@@ -296,7 +297,7 @@ if nsr
                    sectorns{3}.lon(1:end)'];
  
  % plot northern sea route
- [x,y]=mfwdtran(shiptrack{3}.lat,shiptrack{3}.lon);
+ [x,y]=mfwdtran(shiptrack{5}.lat,shiptrack{5}.lon);
  plot(x,y,'Color','b','LineStyle','--')
 
  % netcdf northern
@@ -322,17 +323,21 @@ if nsr
   sectornsa{k}.lon=sectornsa{k}.lon(~isnan(sectornsa{k}.lon));
  end
 
+
+ % generate sixth ship track
  clear sectorns
 
- sectorns{1}.lat=shiptrack{3}.lat;
- sectorns{1}.lon=shiptrack{3}.lon;
+ sectorns{1}.lat=shiptrack{5}.lat;
+ sectorns{1}.lon=shiptrack{5}.lon;
 
  sectorns{2}.lat=[sectornsa{5}.lat' sectornsa{6}.lat'];
  sectorns{2}.lon=[sectornsa{5}.lon' sectornsa{6}.lon'];
 
  % Search for start and and end of segment, split for efficiency
+ clear dists diste
  dists(1:length(sectorns{1}.lat))=100000000000;
  diste(1:length(sectorns{1}.lat))=100000000000;
+
  for i=1:100:length(sectorns{1}.lat)
   dists(i)=ridgepack_greatcircle(sectorns{2}.lat(1),...
                                  sectorns{2}.lon(1),...
@@ -346,6 +351,14 @@ if nsr
 
  [distmins,sdx]=min(dists);
  [distmine,edx]=min(diste);
+
+ find(dists==min(dists))
+
+ sdx
+
+ find(diste==min(diste))
+
+ edx
 
  for i=max(sdx-100,1):min(sdx+100,length(sectorns{1}.lat))
   dists(i)=ridgepack_greatcircle(sectorns{2}.lat(1),...
@@ -364,17 +377,28 @@ if nsr
  [distmins,sdx]=min(dists);
  [distmine,edx]=min(diste);
 
- shiptrack{6}.lat=[sectorns{1}.lat(1:min(sdx,edx)) ...
-                   sectorns{2}.lat(end:-1:1) ...
-                   sectorns{1}.lat(max(sdx,edx):end)];
+ sdx
+ edx
+ length(sectorns{1}.lon)
 
- shiptrack{6}.lon=[sectorns{1}.lon(1:min(sdx,edx)) ...
+ shiptrack{6}.lat=[sectorns{1}.lat(1:edx) ...
+                   sectorns{2}.lat(end:-1:1) ...
+                   sectorns{1}.lat(sdx:end)];
+
+ shiptrack{6}.lon=[sectorns{1}.lon(1:edx) ...
                    sectorns{2}.lon(end:-1:1) ...
-                   sectorns{1}.lon(max(sdx,edx):end)];
+                   sectorns{1}.lon(sdx:end)];
+
+% shiptrack{6}.lat=[sectorns{1}.lat(sdx:end)];
+
+% shiptrack{6}.lon=[sectorns{1}.lon(sdx:end)];
 
  % plot northern sea route
- [x,y]=mfwdtran(shiptrack{4}.lat,shiptrack{4}.lon);
+ [x,y]=mfwdtran(shiptrack{6}.lat,shiptrack{6}.lon);
  plot(x,y,'Color','r','LineStyle',':')
 
 end
+
+save('total_tracks','shiptrack')
+
 
