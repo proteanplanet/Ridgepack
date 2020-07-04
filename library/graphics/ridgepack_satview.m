@@ -10,8 +10,8 @@ if debug; disp(['Entering ',mfilename,'...']); end
 surfh=0.999; % altiude of underlying surface
 gridheight=1.01; % height of grid superimposed on plot
 gridcolor=0.80*[1 1 1]; % color of grid lines and labels
-labelcolor=0.80*[1 1 1]; % color of grid lines and labels
-scalecolor=0.70*[1 1 1]; % color of 
+labelcolor=0.60*[1 1 1]; % color of grid lines and labels
+scalecolor=0.60*[1 1 1]; % color of 
 labelfontsize=5; % font size of labels
 scalefontsize=8; % font size of labels
 

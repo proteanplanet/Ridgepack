@@ -45,7 +45,6 @@ end
 if nargin<4 | isempty(idx)
  idx=[1:length(ncvert.nCells.data)]'; %coast
 end
- 
 
 if ~isstruct(ncvert)
  error('nccell is not a structure')

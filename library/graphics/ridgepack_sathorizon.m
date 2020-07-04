@@ -25,7 +25,7 @@ altitude=1;
 h=plot3(x,y,1.01*z,'Color',color);
 
 % plot annotation in center of ring if desired
-if nargin>6
+if nargin>7
  [x,y,z]=ridgepack_satfwd(satlat,satlon,...
          centlat,centlon,horizon,1.01);
  text(x,y,1.05*z,annotation,'Color',color,...
