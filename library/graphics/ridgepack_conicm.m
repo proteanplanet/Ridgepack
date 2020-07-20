@@ -23,6 +23,8 @@ function ridgepack_conicm(varargin)
 %
 % 'beaufort2' -	Zoomed in section of the beaufort sea.
 %
+% 'bering'    -	Bering Strait.
+%
 % 'greenland' - Conic projection of Greenland and surrounding seas.
 %
 % 'labrador'  - Conic projection of the Labrador and surrounding seas.
@@ -50,6 +52,7 @@ if length(h)==0 ; error('Mapping toolbox not installed') ; end
 % defaults
 beaufort=0;
 beaufort2=0;
+bering=0;
 greenland=0;
 labrador=0;
 gulfofalaska=0;
@@ -83,6 +86,8 @@ else
 	beaufort=1;
    case 'beaufort2'
 	beaufort2=1;
+   case 'bering'
+	bering=1;
    case 'greenland'
 	greenland=1;
    case 'labrador'
@@ -141,6 +146,13 @@ elseif beaufort2
  maxlon=-130;
  MLabelLocation=[-160:10:-120];
  PLabelLocation=[70:5:85];
+elseif bering
+ minlat=60;
+ maxlat=70;
+ minlon=-180;
+ maxlon=-155;
+ MLabelLocation=[-180:5:-155];
+ PLabelLocation=[60:5:70];
 elseif mertz
  minlat=-68;
  maxlat=-64;
