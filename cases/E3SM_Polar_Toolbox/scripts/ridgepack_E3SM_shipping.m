@@ -9,8 +9,8 @@ generate=false;
 %discretize=true;
 discretize=false;
 
-newnw=true;
-%newnw=false;
+%newnw=true;
+newnw=false;
 
 %e3sm=true;
 e3sm=false;
@@ -140,16 +140,18 @@ if generate
  [distmins,sdx]=min(dists);
  [distmine,edx]=min(diste);
 
+ max(sdx,edx)
+
  shiptrack{2}.lat=[sectornw{1}.lat(1:min(sdx,edx)) ...
-                   sectornw{2}.lat' ...
-                   sectornw{1}.lat(max(sdx,edx):end)];
+                   sectornw{2}.lat' NaN ...
+                   sectornw{1}.lat(219000:end)];
  
  shiptrack{2}.lon=[sectornw{1}.lon(1:min(sdx,edx)) ...
-                   sectornw{2}.lon' ...
-                   sectornw{1}.lon(max(sdx,edx):end)];
+                   sectornw{2}.lon' NaN ...
+                   sectornw{1}.lon(219000:end)];
  
  [x,y]=mfwdtran(shiptrack{2}.lat,shiptrack{2}.lon);
- plot(x,y,'Color',xcols(2,:),'LineStyle','--')
+ %plot(x,y,'Color',xcols(2,:),'LineStyle','-')
  shiptrack{2}.name='Northwest Passage: M''Clure Strait Variant';
 
  % netcdf northwest
@@ -282,9 +284,7 @@ if generate
 
  [distmine,edx]=min(diste);
 
- size(sectornw{1}.lat(1:sdx))
- size(sectornw{2}.lat)
- size(sectornw{3}.lat(edx:end))
+ edx=213404;
 
  shiptrack{4}.lat=[sectornw{1}.lat(1:sdx) ...
                    sectornw{2}.lat ...
@@ -577,6 +577,12 @@ elseif newnw
   
  end
 
+ [x,y,z,phi,theta]=ridgepack_satfwd(track{7}.lat(end),...
+                                    track{7}.lon(end),...
+                                    latsa(1995),...
+                                    lonsa(1995),...
+                                    90,1,0);
+
  [lat(1),lon(1)]=ridgepack_satinv(0.82*phi,0.02*theta,...
                                   latsa(2000),lonsa(2000));
  for i=2:26
@@ -594,7 +600,6 @@ elseif newnw
  shiptrack{10}.name='Arctic Ocean Route: Franz Josef Land Detour';
 
  clear lat lon
- 
 
  % clean up second made-up track 
  [x,y,z,phi,theta]=ridgepack_satfwd(track{7}.lat(end),...
@@ -663,11 +668,11 @@ elseif newnw
                                     track{6}.lon(2350),...
                                     90,1,0);
 
- [lat(1),lon(1)]=ridgepack_satinv(1.17*phi,0.01*theta,...
+ [lat(1),lon(1)]=ridgepack_satinv(1.15*phi,0.01*theta,...
                                   track{6}.lat(2350),...
                                   track{6}.lon(2350));
  for i=2:20
-  [lat(i),lon(i)]=ridgepack_satinv(1.17*phi,0.01*theta,...
+  [lat(i),lon(i)]=ridgepack_satinv(1.15*phi,0.01*theta,...
                                   lat(i-1),lon(i-1));
  end
 
@@ -696,11 +701,11 @@ elseif newnw
                                     track{5}.lon(2350),...
                                     90,1,0);
 
- [lat(1),lon(1)]=ridgepack_satinv(1.17*phi,0.01*theta,...
+ [lat(1),lon(1)]=ridgepack_satinv(1.15*phi,0.01*theta,...
                                   track{5}.lat(2350),...
                                   track{5}.lon(2350));
  for i=2:20
-  [lat(i),lon(i)]=ridgepack_satinv(1.17*phi,0.01*theta,...
+  [lat(i),lon(i)]=ridgepack_satinv(1.15*phi,0.01*theta,...
                                   lat(i-1),lon(i-1));
  end
 
@@ -809,8 +814,8 @@ elseif newnw
  % plot up the tracks and seperate by 1nm
  ridgepack_polarm('shipping') 
 
- %xdf=[10 19];
- xdf=10;
+ xdf=[8:19];
+ %xdf=10;
  
  for i=xdf
 

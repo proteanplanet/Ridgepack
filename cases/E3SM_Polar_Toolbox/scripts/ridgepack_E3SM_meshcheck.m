@@ -2,8 +2,8 @@
 clf
 clear
 
-largescale=true;
-%largescale=false;
+%largescale=true;
+largescale=false;
 
 bathymetry=true;
 %bathymetry=false;
@@ -353,11 +353,11 @@ zoom{42}.annotation=0; % no annotation
 
 if largescale
  plotchoice=[1:length(sector)];
+ plotchoice=1;
 else
  plotchoice=[1:length(zoom)];
+ plotchoice=[1 3 4 5 7 37 38];
 end
-
-%plotchoice=14;
 
 % plot location
 plotloc='/Users/afroberts/work';
@@ -424,6 +424,20 @@ cd(gridlochr)
 coastnamehr='E3SM_HR_V1_Coast';
 nccoasthr=ridgepack_clone(coastnamehr);
 
+% load in shipping data
+shiploc='/Users/afroberts/data/SHIPPING';
+cd(shiploc)
+ncship1=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track01_longitude','track01_latitude'});
+ncship2=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track02_longitude','track02_latitude'});
+ncship3=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track03_longitude','track03_latitude'});
+ncship4=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track04_longitude','track04_latitude'});
+ncship6=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track06_longitude','track06_latitude'});
+
 % move to plot location
 cd(plotloc)
 
@@ -442,10 +456,14 @@ for setting=plotchoice
   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-  if sector{setting}.annotation==1
-
-    
-
+  if sector{setting}.annotation==1 
+   for shipi=[1 2 3 4 6]
+    [x,y,z,phi,theta]=...
+      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
+                       eval(['ncship',num2str(shipi),'.longitude.data']),...
+                       centlat,centlon,horizon,1.001*altitude);
+    hship=plot3(x,y,z,'c-');
+   end
   end
 
   for j=1:length(zoom)
@@ -477,15 +495,27 @@ for setting=plotchoice
   ridgepack_satview(centlat,centlon,horizon)
   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
-  ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
+  h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
 
   ridgepack_multiplot(1,2,1,2)
   ridgepack_satview(centlat,centlon,horizon)
   ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
-  h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0]);
+  %h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0]);
 
-  ridgepack_multilegend(h,{'E3SM-HR V1 coastline'},'South')
+  if zoom{setting}.annotation==1 
+   for shipi=[1 2 3 4 6]
+    [x,y,z,phi,theta]=...
+      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
+                       eval(['ncship',num2str(shipi),'.longitude.data']),...
+                       centlat,centlon,horizon,1.001*altitude);
+    hship=plot3(x,y,z,'-','Color','k');
+   end
+   ridgepack_multilegend([h hship],{'E3SM-HR V1 coastline',...
+                          'Arctic Coast Shipping Channels'},'South') 
+  else
+   ridgepack_multilegend(h,{'E3SM-HR V1 coastline'},'South')
+  end
 
   ridgepack_multialign(gcf,...
              [num2str(setting),': ',...
@@ -498,8 +528,6 @@ for setting=plotchoice
    ridgepack_fprint('png',[fileg{gridchoice}.outname,...
                           '_zoom_mesh_',num2str(setting)],1,2)
   end
-
- else
 
  end
 
