@@ -18,7 +18,7 @@ function [nc,SCP,SCL,STP,STL]=...
 %             coastline, formed of closed contours.
 % ncc       - netcdf structure for variable varc on ncvert 
 %             mesh [optional]
-% varc      - variable in ncc to be used [optional]
+% varc      - variable in ncc to be used [character variable, optional]
 % threshold - scalar threshold value on an unstructured mesh 
 %             [optional]
 % 

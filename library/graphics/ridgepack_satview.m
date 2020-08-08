@@ -5,13 +5,12 @@ global debug;
 %debug=true;
 if debug; disp(['Entering ',mfilename,'...']); end
 
-
 % set paramater space
 surfh=0.999; % altiude of underlying surface
 gridheight=1.01; % height of grid superimposed on plot
 gridcolor=0.80*[1 1 1]; % color of grid lines and labels
 labelcolor=0.60*[1 1 1]; % color of grid lines and labels
-scalecolor=0.60*[1 1 1]; % color of 
+scalecolor=0.60*[1 1 1]; % color of scale
 labelfontsize=5; % font size of labels
 scalefontsize=8; % font size of labels
 

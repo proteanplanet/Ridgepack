@@ -20,7 +20,6 @@ fileg{3}.name='DECK';
 fileg{3}.outname='DECK';
 fileg{3}.title=' DECK 30-60~km standard mesh';
 
-
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
 sector{1}.horizon=60; % degrees of satellite horizon (0-90)
@@ -63,6 +62,7 @@ zoom{1}.horizon=10;
 zoom{1}.altitude=1;
 zoom{1}.name='Canadian Archipelago';
 zoom{1}.annotation=1; % Arctic Ship Tracks
+zoom{1}.polar=1; % plot 20m bathygraph
 
 zoom{2}.centlat=62;
 zoom{2}.centlon=23;
@@ -70,6 +70,7 @@ zoom{2}.horizon=10.5;
 zoom{2}.altitude=1;
 zoom{2}.name='North Sea, Norwegian Sea, Baltic Sea, and White Sea';
 zoom{2}.annotation=0; % no annotation
+zoom{2}.polar=0; 
 
 zoom{3}.centlat=74;
 zoom{3}.centlon=71;
@@ -77,6 +78,7 @@ zoom{3}.horizon=9;
 zoom{3}.altitude=1;
 zoom{3}.name='Kara Sea and Gulf of Ob''';
 zoom{3}.annotation=1; % Arctic Ship Tracks
+zoom{3}.polar=1; 
 
 zoom{4}.centlat=72;
 zoom{4}.centlon=-145;
@@ -84,6 +86,7 @@ zoom{4}.horizon=7;
 zoom{4}.altitude=1;
 zoom{4}.name='Beaufort Sea';
 zoom{4}.annotation=1; % Arctic Ship Tracks
+zoom{4}.polar=1; 
 
 zoom{5}.centlat=64;
 zoom{5}.centlon=-172;
@@ -91,6 +94,7 @@ zoom{5}.horizon=6;
 zoom{5}.altitude=1;
 zoom{5}.name='Bering Sea and Chukchi Sea';
 zoom{5}.annotation=1; % Arctic Ship Tracks
+zoom{5}.polar=1; 
 
 zoom{6}.centlat=55;
 zoom{6}.centlon=148;
@@ -98,6 +102,7 @@ zoom{6}.horizon=11.5;
 zoom{6}.altitude=1;
 zoom{6}.name='Sea of Okhotsk';
 zoom{6}.annotation=0; % no annotation
+zoom{6}.polar=1; 
 
 zoom{7}.centlat=75;
 zoom{7}.centlon=135;
@@ -105,6 +110,7 @@ zoom{7}.horizon=8;
 zoom{7}.altitude=1;
 zoom{7}.name='Laptev Sea';
 zoom{7}.annotation=1; % Arctic Ship Tracks
+zoom{7}.polar=1; 
 
 zoom{8}.centlat=43.5;
 zoom{8}.centlon=135;
@@ -112,6 +118,7 @@ zoom{8}.horizon=12.5;
 zoom{8}.altitude=1;
 zoom{8}.name='Sea of Japan';
 zoom{8}.annotation=0; % no annotation
+zoom{8}.polar=0; 
 
 zoom{9}.centlat=60.75;
 zoom{9}.centlon=-76.5;
@@ -119,6 +126,7 @@ zoom{9}.horizon=10;
 zoom{9}.altitude=1;
 zoom{9}.name='Hudson Bay';
 zoom{9}.annotation=0; % no annotation
+zoom{9}.polar=1; 
 
 zoom{10}.centlat=56;
 zoom{10}.centlon=-145;
@@ -126,6 +134,7 @@ zoom{10}.horizon=7;
 zoom{10}.altitude=1;
 zoom{10}.name='Gulf of Alaska';
 zoom{10}.annotation=0; % no annotation
+zoom{10}.polar=0; 
 
 zoom{11}.centlat=49;
 zoom{11}.centlon=-62;
@@ -133,6 +142,7 @@ zoom{11}.horizon=7;
 zoom{11}.altitude=1;
 zoom{11}.name='Gulf of St.Lawrence';
 zoom{11}.annotation=0; % no annotation
+zoom{11}.polar=0; 
 
 zoom{12}.centlat=53;
 zoom{12}.centlon=-175;
@@ -140,6 +150,7 @@ zoom{12}.horizon=12;
 zoom{12}.altitude=1;
 zoom{12}.name='North Pacific';
 zoom{12}.annotation=0; % no annotation
+zoom{12}.polar=0; 
 
 zoom{13}.centlat=32;
 zoom{13}.centlon=-120;
@@ -147,6 +158,7 @@ zoom{13}.horizon=8;
 zoom{13}.altitude=1;
 zoom{13}.name='California Coast';
 zoom{13}.annotation=0; % no annotation
+zoom{13}.polar=0; 
 
 zoom{14}.centlat=47;
 zoom{14}.centlon=-128;
@@ -154,6 +166,7 @@ zoom{14}.horizon=8;
 zoom{14}.altitude=1;
 zoom{14}.name='North Pacific Coast';
 zoom{14}.annotation=0; % no annotation
+zoom{14}.polar=0; 
 
 zoom{15}.centlat=65;
 zoom{15}.centlon=-40;
@@ -161,6 +174,7 @@ zoom{15}.horizon=6.5;
 zoom{15}.altitude=1;
 zoom{15}.name='South Greenland';
 zoom{15}.annotation=0; % no annotation
+zoom{15}.polar=0; 
 
 zoom{16}.centlat=76;
 zoom{16}.centlon=-40;
@@ -168,6 +182,7 @@ zoom{16}.horizon=8;
 zoom{16}.altitude=1;
 zoom{16}.name='North Greenland';
 zoom{16}.annotation=0; % no annotation
+zoom{16}.polar=1; 
 
 zoom{17}.centlat=54;
 zoom{17}.centlon=-4;
@@ -175,6 +190,7 @@ zoom{17}.horizon=5.5;
 zoom{17}.altitude=1;
 zoom{17}.name='British Isles';
 zoom{17}.annotation=0; % no annotation
+zoom{17}.polar=0; 
 
 zoom{18}.centlat=40;
 zoom{18}.centlon=0;
@@ -182,6 +198,7 @@ zoom{18}.horizon=9;
 zoom{18}.altitude=1;
 zoom{18}.name='West Mediterranean and Bay of Biscay'; 
 zoom{18}.annotation=0; % no annotation
+zoom{18}.polar=0; 
 
 zoom{19}.centlat=36;
 zoom{19}.centlon=22;
@@ -189,6 +206,7 @@ zoom{19}.horizon=12.5;
 zoom{19}.altitude=1;
 zoom{19}.name='East Mediterranean';
 zoom{19}.annotation=0; % no annotation
+zoom{19}.polar=0; 
 
 zoom{20}.centlat=37.5;
 zoom{20}.centlon=-75.5;
@@ -196,6 +214,7 @@ zoom{20}.horizon=2.5;
 zoom{20}.altitude=1;
 zoom{20}.name='Chesapeake Bay and Delaware Bay';
 zoom{20}.annotation=0; % no annotation
+zoom{20}.polar=0; 
 
 zoom{21}.centlat=34.5;
 zoom{21}.centlon=-73;
@@ -203,6 +222,7 @@ zoom{21}.horizon=9.8;
 zoom{21}.altitude=1;
 zoom{21}.name='Atlantic Coast';
 zoom{21}.annotation=0; % no annotation
+zoom{21}.polar=0; 
 
 zoom{22}.centlat=22;
 zoom{22}.centlon=-107;
@@ -210,6 +230,7 @@ zoom{22}.horizon=8;
 zoom{22}.altitude=1;
 zoom{22}.name='Mexican Pacific';
 zoom{22}.annotation=0; % no annotation
+zoom{22}.polar=0; 
 
 zoom{23}.centlat=24;
 zoom{23}.centlon=-90;
@@ -217,6 +238,7 @@ zoom{23}.horizon=8.5;
 zoom{23}.altitude=1;
 zoom{23}.name='Gulf of Mexico';
 zoom{23}.annotation=0; % no annotation
+zoom{23}.polar=0; 
 
 zoom{24}.centlat=12;
 zoom{24}.centlon=47;
@@ -224,6 +246,7 @@ zoom{24}.horizon=8;
 zoom{24}.altitude=1;
 zoom{24}.name='Gulf of Aden';
 zoom{24}.annotation=0; % no annotation
+zoom{24}.polar=0; 
 
 zoom{25}.centlat=27;
 zoom{25}.centlon=55;
@@ -231,6 +254,7 @@ zoom{25}.horizon=8;
 zoom{25}.altitude=1;
 zoom{25}.name='Persian Gulf';
 zoom{25}.annotation=0; % no annotation
+zoom{25}.polar=0; 
 
 zoom{26}.centlat=9;
 zoom{26}.centlon=100;
@@ -238,6 +262,7 @@ zoom{26}.horizon=8;
 zoom{26}.altitude=1;
 zoom{26}.name='Andaman Sea, Strait of Malacca, and Gulf of Thailand';
 zoom{26}.annotation=0; % no annotation
+zoom{26}.polar=0; 
 
 zoom{27}.centlat=-4;
 zoom{27}.centlon=107;
@@ -245,6 +270,7 @@ zoom{27}.horizon=7;
 zoom{27}.altitude=1;
 zoom{27}.name='Java Sea';
 zoom{27}.annotation=0; % no annotation
+zoom{27}.polar=0; 
 
 zoom{28}.centlat=-5;
 zoom{28}.centlon=124;
@@ -252,6 +278,7 @@ zoom{28}.horizon=12;
 zoom{28}.altitude=1;
 zoom{28}.name='Indonesian Throughflow: Celebes Sea, Banda Sea and Timor Sea';
 zoom{28}.annotation=0; % no annotation
+zoom{28}.polar=0; 
 
 zoom{29}.centlat=-33;
 zoom{29}.centlon=28;
@@ -259,6 +286,7 @@ zoom{29}.horizon=10;
 zoom{29}.altitude=1;
 zoom{29}.name='Agulhas Bank and Plateau';
 zoom{29}.annotation=0; % no annotation
+zoom{29}.polar=0; 
 
 zoom{30}.centlat=-58;
 zoom{30}.centlon=-63;
@@ -266,6 +294,7 @@ zoom{30}.horizon=8;
 zoom{30}.altitude=1;
 zoom{30}.name='Drake Passage';
 zoom{30}.annotation=0; % no annotation
+zoom{30}.polar=0; 
 
 zoom{31}.centlat=-70;
 zoom{31}.centlon=-43;
@@ -273,6 +302,7 @@ zoom{31}.horizon=10;
 zoom{31}.altitude=1;
 zoom{31}.name='Weddell Sea';
 zoom{31}.annotation=0; % no annotation
+zoom{31}.polar=1; 
 
 zoom{32}.centlat=-67;
 zoom{32}.centlon=-85;
@@ -280,6 +310,7 @@ zoom{32}.horizon=8;
 zoom{32}.altitude=1;
 zoom{32}.name='Bellingshausen Sea';
 zoom{32}.annotation=0; % no annotation
+zoom{32}.polar=1; 
 
 zoom{33}.centlat=-70;
 zoom{33}.centlon=-120;
@@ -287,6 +318,7 @@ zoom{33}.horizon=8;
 zoom{33}.altitude=1;
 zoom{33}.name='Amundsen Sea';
 zoom{33}.annotation=0; % no annotation
+zoom{33}.polar=1; 
 
 zoom{34}.centlat=-75;
 zoom{34}.centlon=-170;
@@ -294,6 +326,7 @@ zoom{34}.horizon=8;
 zoom{34}.altitude=1;
 zoom{34}.name='Ross Sea';
 zoom{34}.annotation=0; % no annotation
+zoom{34}.polar=1; 
 
 zoom{35}.centlat=-66;
 zoom{35}.centlon=2;
@@ -301,6 +334,7 @@ zoom{35}.horizon=8;
 zoom{35}.altitude=1;
 zoom{35}.name='Maud Rise';
 zoom{35}.annotation=0; % no annotation
+zoom{35}.polar=1; 
 
 zoom{36}.centlat=-79;
 zoom{36}.centlon=94;
@@ -308,6 +342,7 @@ zoom{36}.horizon=20;
 zoom{36}.altitude=1;
 zoom{36}.name='East Antarctic Coast';
 zoom{36}.annotation=0; % no annotation
+zoom{36}.polar=1; 
 
 zoom{37}.centlat=71;
 zoom{37}.centlon=-114;
@@ -315,6 +350,7 @@ zoom{37}.horizon=5;
 zoom{37}.altitude=1;
 zoom{37}.name='Northwest Passsage: Victoria Island';
 zoom{37}.annotation=1; % Arctic Ship Tracks
+zoom{37}.polar=1; 
 
 zoom{38}.centlat=71;
 zoom{38}.centlon=-156.5;
@@ -322,6 +358,7 @@ zoom{38}.horizon=2;
 zoom{38}.altitude=1;
 zoom{38}.name='Utqiagvik';
 zoom{38}.annotation=1; % Arctic Ship Tracks
+zoom{38}.polar=1; 
 
 zoom{39}.centlat=20;
 zoom{39}.centlon=-75;
@@ -329,6 +366,7 @@ zoom{39}.horizon=8;
 zoom{39}.altitude=1;
 zoom{39}.name='Caribbean Sea';
 zoom{39}.annotation=0; % no annotation
+zoom{39}.polar=0; 
 
 zoom{40}.centlat=16;
 zoom{40}.centlon=115;
@@ -336,6 +374,7 @@ zoom{40}.horizon=11;
 zoom{40}.altitude=1;
 zoom{40}.name='South China Sea';
 zoom{40}.annotation=0; % no annotation
+zoom{40}.polar=0; 
 
 zoom{41}.centlat=21;
 zoom{41}.centlon=-158;
@@ -343,6 +382,7 @@ zoom{41}.horizon=4;
 zoom{41}.altitude=1;
 zoom{41}.name='Hawaii';
 zoom{41}.annotation=0; % no annotation
+zoom{41}.polar=0; 
 
 zoom{42}.centlat=12;
 zoom{42}.centlon=165;
@@ -350,13 +390,64 @@ zoom{42}.horizon=5;
 zoom{42}.altitude=1;
 zoom{42}.name='Marshall Islands';
 zoom{42}.annotation=0; % no annotation
+zoom{42}.polar=0; 
+
+zoom{43}.centlat=-41;
+zoom{43}.centlon=173;
+zoom{43}.horizon=15;
+zoom{43}.altitude=1;
+zoom{43}.name='New Zealand';
+zoom{43}.annotation=0; % no annotation
+zoom{43}.polar=0; 
+
+zoom{44}.centlat=-40;
+zoom{44}.centlon=146;
+zoom{44}.horizon=10;
+zoom{44}.altitude=1;
+zoom{44}.name='Tasmania';
+zoom{44}.annotation=0; % no annotation
+zoom{44}.polar=0; 
+
+zoom{45}.centlat=-72;
+zoom{45}.centlon=-30;
+zoom{45}.horizon=8;
+zoom{45}.altitude=1;
+zoom{45}.name='Filchner-Ronne Coupling';
+zoom{45}.annotation=0; % no annotation
+zoom{45}.polar=0; 
+
+zoom{46}.centlat=-66;
+zoom{46}.centlon=144;
+zoom{46}.horizon=5;
+zoom{46}.altitude=1;
+zoom{46}.name='Mertz Polynya';
+zoom{46}.annotation=0; % no annotation
+zoom{46}.polar=0; 
+
+zoom{47}.centlat=-72;
+zoom{47}.centlon=174;
+zoom{47}.horizon=5;
+zoom{47}.altitude=1;
+zoom{47}.name='Terra Nova Polynya';
+zoom{47}.annotation=0; % no annotation
+zoom{47}.polar=0; 
+
+zoom{48}.centlat=3;
+zoom{48}.centlon=-47;
+zoom{48}.horizon=8;
+zoom{48}.altitude=1;
+zoom{48}.name='Amazon Outflow';
+zoom{48}.annotation=0; % no annotation
+zoom{48}.polar=0; 
+
 
 if largescale
  plotchoice=[1:length(sector)];
- plotchoice=1;
+ %plotchoice=2;
 else
  plotchoice=[1:length(zoom)];
- plotchoice=[1 3 4 5 7 37 38];
+ %plotchoice=[1 3 4 5 7 37 38];
+ plotchoice=[43:48];
 end
 
 % plot location
@@ -410,7 +501,7 @@ nccell.latCell=nccell.latitude;
 nccell.lonCell=nccell.longitude;
 
 % read in coast or else generate coast and write it out
-coastname=[char(fileg{1}.outname),'_Coast'];
+coastname=[char(fileg{gridchoice}.outname),'_Coast.nc'];
 x=dir(coastname);
 if isempty(x)
  nccoast=ridgepack_e3smcoastm(ncvert);
@@ -418,6 +509,21 @@ if isempty(x)
 else
  nccoast=ridgepack_clone(coastname);
 end
+
+% create 20m isobath
+if bathymetry
+ bathname=[char(fileg{gridchoice}.outname),'_20mIsobath.nc'];
+ x=dir(bathname);
+ if isempty(x)
+  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',20);
+  ridgepack_write(ncisobath20,bathname)
+ else
+  ncisobath20=ridgepack_clone(bathname);
+ end
+end
+
+% invert bathymetry
+ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
 
 % load high-resolution coast
 cd(gridlochr)
@@ -453,25 +559,63 @@ for setting=plotchoice
   altitude=sector{setting}.altitude; % Mean Earth radius multiple
 
   ridgepack_satview(centlat,centlon,horizon)
-  ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
-  ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-  if sector{setting}.annotation==1 
-   for shipi=[1 2 3 4 6]
-    [x,y,z,phi,theta]=...
-      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
-                       eval(['ncship',num2str(shipi),'.longitude.data']),...
-                       centlat,centlon,horizon,1.001*altitude);
-    hship=plot3(x,y,z,'c-');
+  if bathymetry
+
+   % reverse colorbar
+   cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
+   colbarcont{1}='\downarrow';
+   for i=2:length(cont)-1;
+    colbarcont{i}=num2str(-cont(i));
    end
-  end
+   colbarcont{length(cont)}='\uparrow';
 
-  for j=1:length(zoom)
-   satlat=zoom{j}.centlat;   % degrees north
-   satlon=zoom{j}.centlon;   % degrees east
-   sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
-   ridgepack_sathorizon(centlat,centlon,horizon,...
-                        satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
+   % render colors
+   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
+                        centlat,centlon,horizon,altitude,...
+                        true,false,'linear','bluered');
+
+   % make top color grey
+   cmap=colormap;
+   cmap(end,:)=0.95*[1 1 1];
+   colormap(cmap)
+
+   % add colormap
+   ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
+   clear colbarcont
+
+
+   % add 20m isobath
+   hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+                                 [0.9290 0.6940 0.1250]);
+
+   % plot coast
+   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+   if sector{setting}.annotation==1 
+    for shipi=[1 2 3 4 6]
+     [x,y,z,phi,theta]=...
+      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
+                      eval(['ncship',num2str(shipi),'.longitude.data']),...
+                       centlat,centlon,horizon,1.001*altitude);
+     hship=plot3(x,y,z,'r-');
+    end
+   end
+
+  else
+
+   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
+  
+   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+   for j=1:length(zoom)
+    satlat=zoom{j}.centlat;   % degrees north
+    satlon=zoom{j}.centlon;   % degrees east
+    sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
+    ridgepack_sathorizon(centlat,centlon,horizon,...
+                         satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
+   end
+ 
   end
 
   title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])
@@ -494,27 +638,75 @@ for setting=plotchoice
   ridgepack_multiplot(1,2,1,1)
   ridgepack_satview(centlat,centlon,horizon)
   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
+
+  % add 20m isobath
+  hk=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+                                 [0 0 1]);
+  set(hk,'LineWidth',0.5)
+
+  % add in coastline
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+  % add in high resolution coastline
   h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
 
   ridgepack_multiplot(1,2,1,2)
-  ridgepack_satview(centlat,centlon,horizon)
-  ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
-  ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
-  %h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0]);
 
-  if zoom{setting}.annotation==1 
-   for shipi=[1 2 3 4 6]
-    [x,y,z,phi,theta]=...
+  if bathymetry
+
+   ridgepack_satview(centlat,centlon,horizon,1,1)
+
+   % reverse colorbar
+   cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:10];
+   colbarcont{1}='\downarrow';
+   for i=2:length(cont)-1;
+    colbarcont{i}=num2str(-cont(i));
+   end
+   colbarcont{length(cont)}='\uparrow';
+   cmap=colormap;
+
+   % render colors
+   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
+                        centlat,centlon,horizon,altitude,...
+                        true,false,'linear','bluered');
+
+   % make top color grey
+   cmap=colormap;
+   cmap(end,:)=0.95*[1 1 1];
+   colormap(cmap)
+
+   % add colormap
+   ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
+   clear cmap colbarcont
+
+   % add 20m isobath
+   hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+                                 [0.9290 0.6940 0.1250]);
+
+   % add coast
+   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   ridgepack_multilegend([h hb],...
+        {'E3SM-HR V1 coastline','20 m isobath'},'South')
+  else
+
+   ridgepack_satview(centlat,centlon,horizon)
+   ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
+   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+   if zoom{setting}.annotation==1 
+    for shipi=[1 2 3 4 6]
+     [x,y,z,phi,theta]=...
       ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
                        eval(['ncship',num2str(shipi),'.longitude.data']),...
                        centlat,centlon,horizon,1.001*altitude);
-    hship=plot3(x,y,z,'-','Color','k');
-   end
-   ridgepack_multilegend([h hship],{'E3SM-HR V1 coastline',...
+     hship=plot3(x,y,z,'-','Color','k');
+    end
+    ridgepack_multilegend([h hship],{'E3SM-HR V1 coastline',...
                           'Arctic Coast Shipping Channels'},'South') 
-  else
-   ridgepack_multilegend(h,{'E3SM-HR V1 coastline'},'South')
+   else
+    ridgepack_multilegend(h,{'E3SM-HR V1 coastline'},'South')
+   end
+
   end
 
   ridgepack_multialign(gcf,...

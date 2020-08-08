@@ -639,7 +639,7 @@ if length(cidxn)>0
 
 else
 
- error('no coast found')
+ error('no threshold found')
 
 end
 

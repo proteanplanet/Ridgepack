@@ -2,22 +2,51 @@
 clear
 clf
 
+
+selection=1 % scotland
+
 % plot location
-centlat=40;
-centlon=18;
-horizon=10.0;
-altitude=1;
-name='Italy';
+if selection==1
 
-% add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
-track{1}.name='Sicily';
-track{1}.tag='Critical_Land_Blockage';
+ centlat=57;
+ centlon=-5;
+ horizon=2;
+ altitude=1;
+ name='Scotland';
 
-track{2}.name='Calabria';
-track{2}.tag='Critical_Land_Blockage';
+ % add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
+ track{1}.name='Islay';
+ track{1}.tag='Critical_Land_Blockage';
+ 
+ track{2}.name='Jura';
+ track{2}.tag='Critical_Land_Blockage';
+ 
+ track{3}.name='FirthOfLorn';
+ track{3}.tag='Critical_Passage';
 
-track{3}.name='Salento';
-track{3}.tag='Critical_Land_Blockage';
+elseif selection==2
+
+ % plot location
+ centlat=40;
+ centlon=18;
+ horizon=10.0;
+ altitude=1;
+ name='Italy';
+
+ % add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
+ track{1}.name='Sicily';
+ track{1}.tag='Critical_Land_Blockage';
+
+ track{2}.name='Calabria';
+ track{2}.tag='Critical_Land_Blockage';
+
+ track{3}.name='Salento';
+ track{3}.tag='Critical_Land_Blockage';
+
+elseif selection==3
+
+end
+
 
 % added grid
 gridchoice=2;
@@ -156,18 +185,11 @@ ridgepack_multiplot(1,2,1,1)
 ridgepack_satview(centlat,centlon,horizon)
 ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
 
-if land & ocean
- for k=1:length(track)
-  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-');
-  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-');
- end
-elseif land
- for k=1:length(track)
-  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-');
- end
-elseif ocean
- for k=1:length(track)
-  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-');
+for k=1:length(track)
+ if strcmp(char(track{k}.tag),'Critical_Land_Blockage')
+  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-','LineWidth',1.2);
+ elseif strcmp(char(track{k}.tag),'Critical_Passage')
+  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-','LineWidth',1.2);
  end
 end
 
@@ -217,25 +239,24 @@ hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
 ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
 % added transects
+for k=1:length(track)
+ if strcmp(char(track{k}.tag),'Critical_Land_Blockage')
+  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-','LineWidth',1.2);
+ elseif strcmp(char(track{k}.tag),'Critical_Passage')
+  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-','LineWidth',1.2);
+ end
+end
+
+
 if land & ocean
- for k=1:length(track)
-  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-');
-  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-');
- end
  ridgepack_multilegend([h hb hland hocean],...
-   {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land','New Enforced Passage'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land','New Enforced Passage'},'South')
 elseif land 
- for k=1:length(track)
-  hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-');
- end
  ridgepack_multilegend([h hb hland],...
-   {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land'},'South')
 elseif ocean 
- for k=1:length(track)
-  hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-');
- end
  ridgepack_multilegend([h hb hocean],...
-   {'E3SM-HR V1 coastline','20 m isobath','New Enforced Passage'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Passage'},'South')
 end
 
 

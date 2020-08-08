@@ -1,9 +1,11 @@
 function ridgepack_e3smsatcol(nc,var,ncvert,cont,ref,...
                               centlat,centlon,horizon,altitude,...
-                              lighting)
+                              lighting,reversed,logscale,colors)
+
+
 
 % define colormap
-[cmap]=ridgepack_colormap(cont,ref);
+[cmap]=ridgepack_colormap(cont,ref,colors,logscale,reversed);
 
 % reduce the data use to the plotting area to speed things up
 % and fine plotting edge limit of cells
@@ -75,17 +77,17 @@ for j=1:length(cont)
    lat(maxidx+1:idmax)=la(1);
    lon(maxidx+1:idmax)=lo(1);
 
-%   [xl(i,:),yl(i,:),zl(i,:),phl(i,:),thl(i,:)]=...
-%    ridgepack_satfwd(rad2deg(squeeze(lat(:))),...
-%                     rad2deg(squeeze(lon(:))),...
-%                     centlat,centlon,2*horizon,altitude);
-
-   thealtitude=(1-0.05*(nc.(var).data(idx(i))./mavar))*altitude;
-
    [xl(i,:),yl(i,:),zl(i,:),phl(i,:),thl(i,:)]=...
     ridgepack_satfwd(rad2deg(squeeze(lat(:))),...
                      rad2deg(squeeze(lon(:))),...
-                     centlat,centlon,2*horizon,thealtitude);
+                     centlat,centlon,2*horizon,altitude);
+
+%   thealtitude=(1-0.05*(nc.(var).data(idx(i))./mavar))*altitude;
+%
+%   [xl(i,:),yl(i,:),zl(i,:),phl(i,:),thl(i,:)]=...
+%    ridgepack_satfwd(rad2deg(squeeze(lat(:))),...
+%                     rad2deg(squeeze(lon(:))),...
+%                     centlat,centlon,2*horizon,thealtitude);
 %                     centlat,centlon,2*horizon,altitude);
 
   end
@@ -99,8 +101,6 @@ for j=1:length(cont)
  clear zindex truecolor xl yl zl phl thl lon lat
 
 end
-
-return
 
 % crop by overlaying a white ring
 N = 100;
