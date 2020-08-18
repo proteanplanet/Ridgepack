@@ -8,17 +8,23 @@ largescale=false;
 bathymetry=true;
 %bathymetry=false;
 
-gridchoice=2;
+gridchoice=4;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
 fileg{1}.title=' WC 12-60~km mesh';
+
 fileg{2}.name='WC14r03';
 fileg{2}.outname='WC14r03';
 fileg{2}.title=' WC 14-60~km mesh';
+
 fileg{3}.name='DECK';
 fileg{3}.outname='DECK';
 fileg{3}.title=' DECK 30-60~km standard mesh';
+
+fileg{4}.name='ECwISC30to60E1r02';
+fileg{4}.outname='ECwISC30to60E1r02';
+fileg{4}.title='EC wISC 30-60km E1 r02';
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -465,6 +471,9 @@ elseif strcmp(char(fileg{gridchoice}.name),'WC12')
 elseif strcmp(char(fileg{gridchoice}.name),'WC14r03')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/WC14/r03'];
  gridfile='initial_state.nc';
+elseif strcmp(char(fileg{gridchoice}.name),'ECwISC30to60E1r02')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/ECwISC30to60E1r02'];
+ gridfile='ocean.ECwISC30to60E1r02.200408.nc';
 end
 
 gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];
