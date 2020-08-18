@@ -2,8 +2,7 @@
 clear
 clf
 
-
-selection=1 % scotland
+selection=4 % scotland
 
 % plot location
 if selection==1
@@ -12,19 +11,38 @@ if selection==1
  centlon=-5;
  horizon=2;
  altitude=1;
- name='Scotland';
+ name='Inner_Hebrides';
 
  % add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
  track{1}.name='Islay';
  track{1}.tag='Critical_Land_Blockage';
+ track{1}.height='100.0';
  
  track{2}.name='Jura';
  track{2}.tag='Critical_Land_Blockage';
+ track{2}.height='100.0';
  
  track{3}.name='FirthOfLorn';
  track{3}.tag='Critical_Passage';
 
 elseif selection==2
+
+ % plot location
+ centlat=50;
+ centlon=-1.8;
+ horizon=3.5;
+ altitude=1;
+ name='English_Channel_Deepen';
+
+ % add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
+ track{1}.name='English_Channel_Deepen';
+ track{1}.tag='Critical_Passage';
+ track{1}.depth='100.0';
+
+ track{2}.name='Old_English_Channel_Deepen';
+ track{2}.tag='Old_Version';
+
+elseif selection==3
 
  % plot location
  centlat=40;
@@ -36,14 +54,43 @@ elseif selection==2
  % add info including tag 'Critical_Passage' or 'Critical_Land_Blockage'
  track{1}.name='Sicily';
  track{1}.tag='Critical_Land_Blockage';
+ track{1}.height='100.0';
 
  track{2}.name='Calabria';
  track{2}.tag='Critical_Land_Blockage';
+ track{2}.height='100.0';
 
  track{3}.name='Salento';
  track{3}.tag='Critical_Land_Blockage';
+ track{3}.height='100.0';
 
-elseif selection==3
+elseif selection==4
+
+ centlat=21;
+ centlon=-158;
+ horizon=4;
+ altitude=1;
+ name='Hawaii';
+
+ track{1}.name='Hawaii';
+ track{1}.tag='Critical_Land_Blockage';
+ track{1}.height='100.0';
+
+ track{2}.name='Maui';
+ track{2}.tag='Critical_Land_Blockage';
+ track{2}.height='100.0';
+
+ track{3}.name='Molokai';
+ track{3}.tag='Critical_Land_Blockage';
+ track{3}.height='100.0';
+
+ track{4}.name='Kauai';
+ track{4}.tag='Critical_Land_Blockage';
+ track{4}.height='100.0';
+
+ track{5}.name='Oahu';
+ track{5}.tag='Critical_Land_Blockage';
+ track{5}.height='100.0';
 
 end
 
@@ -141,38 +188,44 @@ cd(shiploc)
 
 ocean=false;
 land=false;
+old=false;
 
 for k=1:length(track)
 
  if strcmp(char(track{k}.tag),'Critical_Land_Blockage')
   land=true;
-  thisland=true;
  elseif strcmp(char(track{k}.tag),'Critical_Passage')
   ocean=true;
- else
-  thisland=false;
+ elseif strcmp(char(track{k}.tag),'Old_Version')
+  old=true;
  end
 
  kmlStruct=kml2struct([char(track{k}.name),'.kml']);
  coords{k}.lats=kmlStruct.Lat;
  coords{k}.lons=kmlStruct.Lon;
 
- % write out GeoJSON
- filename=[char(track{k}.name),'.geojson'];
- fileID = fopen(filename,'w');
- if thisland
-  fprintf(fileID,['{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"',char(track{k}.name),'","tags":"',char(track{k}.tag),'","component":"ocean","author":"Andrew Roberts","object":"transect","height":"100.0"},"geometry":{"type":"LineString","coordinates":[']);
- else
-  fprintf(fileID,['{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"',char(track{k}.name),'","tags":"',char(track{k}.tag),'","component":"ocean","author":"Andrew Roberts","object":"transect"},"geometry":{"type":"LineString","coordinates":[']);
+ if ~strcmp(char(track{k}.tag),'Old_Version')
+
+  % write out GeoJSON
+  filename=[char(track{k}.name),'.geojson'];
+  fileID = fopen(filename,'w');
+  if isfield(track{k},'height')
+   fprintf(fileID,['{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"',char(track{k}.name),'","tags":"',char(track{k}.tag),'","component":"ocean","author":"Andrew Roberts","object":"transect","height":',char(track{k}.height),'},"geometry":{"type":"LineString","coordinates":[']);
+  elseif isfield(track{k},'depth')
+   fprintf(fileID,['{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"',char(track{k}.name),'","tags":"',char(track{k}.tag),'","component":"ocean","author":"Andrew Roberts","object":"transect","height":',char(track{k}.depth),'},"geometry":{"type":"LineString","coordinates":[']);
+  else
+   fprintf(fileID,['{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"',char(track{k}.name),'","tags":"',char(track{k}.tag),'","component":"ocean","author":"Andrew Roberts","object":"transect"},"geometry":{"type":"LineString","coordinates":[']);
  end
- for j=1:length(coords{k}.lats)-1
-  fprintf(fileID,['[',num2str(coords{k}.lons(j),'%2.10f'),',',...
+  for j=1:length(coords{k}.lats)-1
+   fprintf(fileID,['[',num2str(coords{k}.lons(j),'%2.10f'),',',...
                       num2str(coords{k}.lats(j),'%2.10f'),'],']);
- end
- fprintf(fileID,['[',num2str(coords{k}.lons(j),'%2.10f'),',',...
+  end
+  fprintf(fileID,['[',num2str(coords{k}.lons(j),'%2.10f'),',',...
                        num2str(coords{k}.lats(j),'%2.10f'),']']);
- fprintf(fileID,']}}]}');
- fclose(fileID);
+  fprintf(fileID,']}}]}');
+  fclose(fileID);
+
+ end
 
  [coords{k}.x,coords{k}.y,coords{k}.z]=...
                           ridgepack_satfwd(coords{k}.lats,...
@@ -190,6 +243,9 @@ for k=1:length(track)
   hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-','LineWidth',1.2);
  elseif strcmp(char(track{k}.tag),'Critical_Passage')
   hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-','LineWidth',1.2);
+ elseif strcmp(char(track{k}.tag),'Old_Version')
+  hold=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'-',...
+             'LineWidth',1.2,'Color',0.5*[1 1 1]);
  end
 end
 
@@ -244,25 +300,39 @@ for k=1:length(track)
   hland=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'r-','LineWidth',1.2);
  elseif strcmp(char(track{k}.tag),'Critical_Passage')
   hocean=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'m-','LineWidth',1.2);
+ elseif strcmp(char(track{k}.tag),'Old_Version')
+  hold=plot3(coords{k}.x,coords{k}.y,coords{k}.z,'-',...
+             'LineWidth',1.2,'Color',0.5*[1 1 1]);
  end
 end
 
 
-if land & ocean
+if land & ocean & old
+ ridgepack_multilegend([h hb hland hocean hold],...
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced land to be addded','Enforced passage to be added','Old Version'},'South')
+elseif old & ocean
+ ridgepack_multilegend([h hb hocean hold],...
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced passage to be added','Old Version'},'South')
+elseif old & land 
+ ridgepack_multilegend([h hb hland hold],...
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced land to be addded','Old Version'},'South')
+elseif land & ocean
  ridgepack_multilegend([h hb hland hocean],...
-  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land','New Enforced Passage'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced land to be addded','Enforced passage to be added'},'South')
 elseif land 
  ridgepack_multilegend([h hb hland],...
-  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Land'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced land to be added'},'South')
 elseif ocean 
  ridgepack_multilegend([h hb hocean],...
-  {'E3SM-HR V1 coastline','20 m isobath','New Enforced Passage'},'South')
+  {'E3SM-HR V1 coastline','20 m isobath','Enforced passage to be added'},'South')
 end
 
-
+idx=strfind(name,'_');
+named=name;
+named(idx)=' ';
 
 ridgepack_multialign(gcf,...
-             [name,' ',char(fileg{gridchoice}.title)]);
+             [named,' ',char(fileg{gridchoice}.title)]);
 
 ridgepack_fprint('png',[name,'_',char(fileg{gridchoice}.name),'_fix'],1,2)
 
