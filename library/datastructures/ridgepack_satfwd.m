@@ -1,12 +1,32 @@
 function [x,y,z,phi,theta]=...
-          ridgepack_satfwd(lats,lons,centerlat,centerlon,...
+              ridgepack_satfwd(lats,lons,centerlat,centerlon,...
                            horizon,altitude,removepoints)
-
 % ridgepack_satfwd - convert lat-lon coordinates to local spherical
 %
 % function [x,y,z,phi,theta]=...
 %             ridgepack_satfwd(lats,lons,centerlat,centerlon,...
 %                                 horizon,altitude,removepoints)
+%
+% This function translates latitude (lats) and longitude (lons) to 
+% a polar angle (theta) and azimuthal angle (phi) in spherical 
+% coordinates positioned so that the center latitude and longitudes 
+% specified are at the north pole of the translated coordinate.  
+% Cartesian coordinates x, y, and z correspond to the translated 
+% projection. Horizon provides a filter so that all areas outside
+% of the maximum polar angle it specifies are set as NaNs if 
+% removepoints is true.  Altitude is revealed in the Cartesian 
+% coordinates.
+%
+% INPUT
+%
+% lats
+% lons
+% centerlat
+% centerlon
+% horizon      - Maximum azim
+% altitude     - Altitude required for the Cartesian coordinates
+% removepoints - Logical to make points NaNs outside of horizon
+%
 %
 % This function convets latitude-longitude coordinates to spherical
 % and three dimensional cartesian coordinates 

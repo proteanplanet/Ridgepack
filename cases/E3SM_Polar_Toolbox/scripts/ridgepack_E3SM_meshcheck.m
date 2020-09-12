@@ -5,10 +5,13 @@ clear
 %largescale=true;
 largescale=false;
 
-bathymetry=true;
-%bathymetry=false;
+%bathymetry=true;
+bathymetry=false;
 
-gridchoice=4;
+%zoomedareas=true;
+zoomedareas=false;
+
+gridchoice=2;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
@@ -62,6 +65,13 @@ sector{6}.horizon=60; % degrees of satellite horizon (0-90)
 sector{6}.altitude=1; % Mean Earth radius multiple
 sector{6}.annotation=0; % no annotation
 
+sector{7}.centlat=50; % degrees north
+sector{7}.centlon=-90; % degrees east
+sector{7}.horizon=60; % degrees of satellite horizon (0-90)
+sector{7}.altitude=1; % Mean Earth radius multiple
+sector{7}.annotation=0; % no annotation
+
+zoom{1}.centlat=75;
 zoom{1}.centlat=75;
 zoom{1}.centlon=-94;
 zoom{1}.horizon=10;
@@ -446,14 +456,29 @@ zoom{48}.name='Amazon Outflow';
 zoom{48}.annotation=0; % no annotation
 zoom{48}.polar=0; 
 
+zoom{49}.centlat=-12;
+zoom{49}.centlon=138;
+zoom{49}.horizon=8;
+zoom{49}.altitude=1;
+zoom{49}.name='Arafura Sea';
+zoom{49}.annotation=0; % no annotation
+zoom{49}.polar=0; 
+
+zoom{50}.centlat=-49;
+zoom{50}.centlon=-70;
+zoom{50}.horizon=8;
+zoom{50}.altitude=1;
+zoom{50}.name='Patagonia';
+zoom{50}.annotation=0; % no annotation
+zoom{50}.polar=0; 
 
 if largescale
  plotchoice=[1:length(sector)];
- %plotchoice=2;
+ plotchoice=7;
 else
  plotchoice=[1:length(zoom)];
  %plotchoice=[1 3 4 5 7 37 38];
- plotchoice=[43:48];
+ plotchoice=[21];
 end
 
 % plot location
@@ -595,8 +620,10 @@ for setting=plotchoice
 
 
    % add 20m isobath
-   hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+   if bathymetry
+    hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
                                  [0.9290 0.6940 0.1250]);
+   end
 
    % plot coast
    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
@@ -617,12 +644,16 @@ for setting=plotchoice
   
    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-   for j=1:length(zoom)
-    satlat=zoom{j}.centlat;   % degrees north
-    satlon=zoom{j}.centlon;   % degrees east
-    sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
-    ridgepack_sathorizon(centlat,centlon,horizon,...
-                         satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
+   if zoomedareas;
+
+    for j=1:length(zoom)
+     satlat=zoom{j}.centlat;   % degrees north
+     satlon=zoom{j}.centlon;   % degrees east
+     sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
+     ridgepack_sathorizon(centlat,centlon,horizon,...
+                          satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
+    end
+
    end
  
   end
@@ -649,9 +680,11 @@ for setting=plotchoice
   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
 
   % add 20m isobath
-  hk=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+  if bathymetry
+   hk=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
                                  [0 0 1]);
-  set(hk,'LineWidth',0.5)
+   set(hk,'LineWidth',0.5)
+  end
 
   % add in coastline
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)

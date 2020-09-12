@@ -192,9 +192,9 @@ CBPosition=get(hcb,'Position');
 
 % Set fontsize
 if strcmp(orientation,'vertical')
- fontsize=min(max(8,12*CBPosition(4).^(1/3)),10);
+ fontsize=min(max(5,12*CBPosition(4).^(1/3)),10);
 elseif strcmp(orientation,'horizontal')
- fontsize=min(max(8,12*CBPosition(3).^(1/3)),10);
+ fontsize=min(max(5,12*CBPosition(3).^(1/3)),10);
 end
 fontsize=max(fontsize,get(h,'FontSize')*0.975);
 set(hcb,'FontSize',fontsize);
