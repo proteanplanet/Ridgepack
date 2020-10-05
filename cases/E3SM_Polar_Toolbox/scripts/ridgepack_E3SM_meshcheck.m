@@ -2,16 +2,16 @@
 clf
 clear
 
-%largescale=true;
-largescale=false;
+largescale=true;
+%largescale=false;
 
-%bathymetry=true;
-bathymetry=false;
+bathymetry=true;
+%bathymetry=false;
 
 %zoomedareas=true;
 zoomedareas=false;
 
-gridchoice=2;
+gridchoice=3;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
@@ -28,6 +28,11 @@ fileg{3}.title=' DECK 30-60~km standard mesh';
 fileg{4}.name='ECwISC30to60E1r02';
 fileg{4}.outname='ECwISC30to60E1r02';
 fileg{4}.title='EC wISC 30-60km E1 r02';
+
+fileg{5}.name='EC30to60E2r2';
+fileg{5}.outname='EC30to60E2r2';
+fileg{5}.title='EC 30-60km E2 r2';
+
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -474,11 +479,11 @@ zoom{50}.polar=0;
 
 if largescale
  plotchoice=[1:length(sector)];
- plotchoice=7;
+ %plotchoice=7;
 else
  plotchoice=[1:length(zoom)];
  %plotchoice=[1 3 4 5 7 37 38];
- plotchoice=[21];
+ %plotchoice=[21];
 end
 
 % plot location
@@ -486,19 +491,26 @@ plotloc='/Users/afroberts/work';
 
 % grid location
 if strcmp(char(fileg{gridchoice}.name),'DECK')
- gridloc=['/Users/afroberts/data/MODEL/E3SM/',...
-          char(fileg{gridchoice}.name),'/grid'];
- gridfile='E3SM_LR_V1_grid.nc';
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/EC_60_30_Old/grid'];
+ gridfile='init.nc';
+ shiplocs=[2 6];
 elseif strcmp(char(fileg{gridchoice}.name),'WC12')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/WC12/',...
           char(fileg{gridchoice}.name)];
  gridfile='initial_state.nc';
+ shiplocs=[1 2 3 4 6];
 elseif strcmp(char(fileg{gridchoice}.name),'WC14r03')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/WC14/r03'];
  gridfile='initial_state.nc';
+ shiplocs=[1 2 3 4 6];
 elseif strcmp(char(fileg{gridchoice}.name),'ECwISC30to60E1r02')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/ECwISC30to60E1r02'];
  gridfile='ocean.ECwISC30to60E1r02.200408.nc';
+ shiplocs=[1 2 3 4 6];
+elseif strcmp(char(fileg{gridchoice}.name),'EC30to60E2r2')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/PIControlSI/grid'];
+ gridfile='mpaso.rst.0002-01-01_00000.nc';
+ shiplocs=[1 2 3 4 6];
 end
 
 gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];
@@ -629,7 +641,7 @@ for setting=plotchoice
    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
    if sector{setting}.annotation==1 
-    for shipi=[1 2 3 4 6]
+    for shipi=shiplocs
      [x,y,z,phi,theta]=...
       ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
                       eval(['ncship',num2str(shipi),'.longitude.data']),...
