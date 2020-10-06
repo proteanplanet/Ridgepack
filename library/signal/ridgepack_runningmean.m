@@ -92,7 +92,9 @@ end
 % Add information to new variable
 nc.(newvar).long_name=[num2str(windowsize),' sample running mean ',nc.(var).long_name];
 nc.(newvar).dimension=nc.(var).dimension;
-nc.(newvar).units=nc.(var).units;
+if isfield(nc.(var),'units')
+ nc.(newvar).units=nc.(var).units;
+end
 nc.(newvar).type=nc.(var).type;
 
 % Put dimension order back to the original
