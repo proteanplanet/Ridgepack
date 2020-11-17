@@ -8,10 +8,10 @@ largescale=false;
 bathymetry=true;
 %bathymetry=false;
 
-%zoomedareas=true;
-zoomedareas=false;
+zoomedareas=true;
+%zoomedareas=false;
 
-gridchoice=6;
+gridchoice=2;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
@@ -32,11 +32,6 @@ fileg{4}.title='EC wISC 30-60km E1 r02';
 fileg{5}.name='EC30to60E2r2';
 fileg{5}.outname='EC30to60E2r2';
 fileg{5}.title='EC 30-60km E2 r2';
-
-fileg{6}.name='EC15to60E2r4';
-fileg{6}.outname='EC15to60E2r4';
-fileg{6}.title='EC 15-60km E2 r4';
-
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -74,11 +69,11 @@ sector{6}.horizon=60; % degrees of satellite horizon (0-90)
 sector{6}.altitude=1; % Mean Earth radius multiple
 sector{6}.annotation=0; % no annotation
 
-sector{7}.centlat=50; % degrees north
+sector{7}.centlat=60; % degrees north
 sector{7}.centlon=-90; % degrees east
 sector{7}.horizon=60; % degrees of satellite horizon (0-90)
 sector{7}.altitude=1; % Mean Earth radius multiple
-sector{7}.annotation=0; % no annotation
+sector{7}.annotation=1; % no annotation
 
 zoom{1}.centlat=75;
 zoom{1}.centlat=75;
@@ -483,15 +478,16 @@ zoom{50}.polar=0;
 
 if largescale
  plotchoice=[1:length(sector)];
- %plotchoice=7;
+ plotchoice=[1 7];
 else
  plotchoice=[1:length(zoom)];
+ plotchoice=[1 4];
  %plotchoice=[1 3 4 5 7 37 38];
  %plotchoice=[21];
 end
 
 % plot location
-plotloc='/Users/afroberts/work';
+plotloc='/Users/afroberts/Colloquia/2020_ESMD_PI/Mesh';
 
 % grid location
 if strcmp(char(fileg{gridchoice}.name),'DECK')
@@ -506,7 +502,7 @@ elseif strcmp(char(fileg{gridchoice}.name),'WC12')
 elseif strcmp(char(fileg{gridchoice}.name),'WC14r03')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/WC14/r03'];
  gridfile='initial_state.nc';
- shiplocs=[1 2 3 4 6];
+ shiplocs=[1 2 3 4 5 6 7 8 9 10];
 elseif strcmp(char(fileg{gridchoice}.name),'ECwISC30to60E1r02')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/ECwISC30to60E1r02'];
  gridfile='ocean.ECwISC30to60E1r02.200408.nc';
@@ -514,10 +510,6 @@ elseif strcmp(char(fileg{gridchoice}.name),'ECwISC30to60E1r02')
 elseif strcmp(char(fileg{gridchoice}.name),'EC30to60E2r2')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/PIControlSI/grid'];
  gridfile='mpaso.rst.0002-01-01_00000.nc';
- shiplocs=[1 2 3 4 6];
-elseif strcmp(char(fileg{gridchoice}.name),'EC15to60E2r4')
- gridloc=['/Users/afroberts/data/MODEL/E3SM/EC15to60E2r4/grid'];
- gridfile='initial_state.nc';
  shiplocs=[1 2 3 4 6];
 end
 
@@ -567,12 +559,16 @@ end
 % create 20m isobath
 if bathymetry
  bathname=[char(fileg{gridchoice}.outname),'_20mIsobath.nc'];
+ greename=[char(fileg{gridchoice}.outname),'_50mIsobath.nc'];
  x=dir(bathname);
  if isempty(x)
   ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',20);
   ridgepack_write(ncisobath20,bathname)
+  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',50);
+  ridgepack_write(ncisobath50,bathname)
  else
   ncisobath20=ridgepack_clone(bathname);
+  ncisobath50=ridgepack_clone(greename);
  end
 end
 
@@ -595,8 +591,20 @@ ncship3=ridgepack_clone('InteRFACE_Shiptracks',...
                {'track03_longitude','track03_latitude'});
 ncship4=ridgepack_clone('InteRFACE_Shiptracks',...
                {'track04_longitude','track04_latitude'});
+ncship5=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track05_longitude','track05_latitude'});
 ncship6=ridgepack_clone('InteRFACE_Shiptracks',...
                {'track06_longitude','track06_latitude'});
+ncship7=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track07_longitude','track07_latitude'});
+ncship8=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track08_longitude','track08_latitude'});
+ncship9=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track09_longitude','track09_latitude'});
+ncship10=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track10_longitude','track10_latitude'});
+ncship11=ridgepack_clone('InteRFACE_Shiptracks',...
+               {'track11_longitude','track11_latitude'});
 
 % move to plot location
 cd(plotloc)
@@ -638,11 +646,12 @@ for setting=plotchoice
    ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
    clear colbarcont
 
-
-   % add 20m isobath
+   % add 20m and 50m isobath
    if bathymetry
     hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
                                  [0.9290 0.6940 0.1250]);
+    hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+                                 [0 0.70 0]);
    end
 
    % plot coast
@@ -654,9 +663,14 @@ for setting=plotchoice
       ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
                       eval(['ncship',num2str(shipi),'.longitude.data']),...
                        centlat,centlon,horizon,1.001*altitude);
-     hship=plot3(x,y,z,'r-');
+     hship=plot3(x,y,z,'r:');
     end
    end
+
+   legend([hb hg hship],...
+        {'Landfast Ice','Benthic Green Zone','Shipping'},...
+         'Location','SouthOutside','Orientation','Horizontal')
+   legend('boxoff')
 
   else
 
@@ -666,7 +680,8 @@ for setting=plotchoice
 
    if zoomedareas;
 
-    for j=1:length(zoom)
+    %for j=1:length(zoom)
+    for j=[1 4]
      satlat=zoom{j}.centlat;   % degrees north
      satlon=zoom{j}.centlon;   % degrees east
      sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
@@ -678,7 +693,8 @@ for setting=plotchoice
  
   end
 
-  title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])
+  %title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])
+  title([char(fileg{gridchoice}.title)])
 
   if bathymetry
    ridgepack_fprint('png',[fileg{gridchoice}.outname,...
@@ -703,6 +719,8 @@ for setting=plotchoice
   if bathymetry
    hk=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
                                  [0 0 1]);
+   hk=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+                                 [0 0 1]);
    set(hk,'LineWidth',0.5)
   end
 
@@ -710,7 +728,7 @@ for setting=plotchoice
   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
   % add in high resolution coastline
-  h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
+  h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0.9 0 0])
 
   ridgepack_multiplot(1,2,1,2)
 
@@ -745,10 +763,13 @@ for setting=plotchoice
    hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
                                  [0.9290 0.6940 0.1250]);
 
+   hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+                                 [0 0.9 0]);
+
    % add coast
    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
-   ridgepack_multilegend([h hb],...
-        {'E3SM-HR V1 coastline','20 m isobath'},'South')
+   ridgepack_multilegend([h hb hg],...
+        {'E3SM-HR V1 coastline','20 m','50 m'},'South')
   else
 
    ridgepack_satview(centlat,centlon,horizon)
