@@ -312,10 +312,10 @@ elseif rasmmask
  [x,y1] = mfwdtran(equatorextent+22.5,bottomlon);
  [x,y2] = mfwdtran(equatorextent+11,toplon);
 elseif antarctic
- [x1,y] = mfwdtran(equatorextent-7,leftlon);
- [x2,y] = mfwdtran(equatorextent-1,rightlon);
- [x,y1] = mfwdtran(equatorextent-2.5,bottomlon);
- [x,y2] = mfwdtran(equatorextent+2.5,toplon);
+ [x1,y] = mfwdtran(equatorextent-5,leftlon);
+ [x2,y] = mfwdtran(equatorextent+1,rightlon);
+ [x,y1] = mfwdtran(equatorextent-4.0,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+4.0,toplon);
 else
  [x1,y] = mfwdtran(equatorextent,leftlon);
  [x2,y] = mfwdtran(equatorextent,rightlon);
@@ -371,7 +371,7 @@ if(label==1)
   PLabelMeridian=105;
  elseif antarctic
   MLabelLocation=[0];
-  PLabelMeridian=45;
+  PLabelMeridian=47;
  else
   MLabelLocation=[-90 90];
   PLabelMeridian=135;

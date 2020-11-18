@@ -62,6 +62,10 @@ if ~isempty(ncc)
  [xlats,xlons,xverts]=...
                  ridgepack_e3smcontour(tlats,tlons,tverts,cverts);
 
+ if isempty(xverts)
+  error(['There is no contour for threshold ',num2str(threshold)])
+ end
+
 end
 
 % create netcdf structure
