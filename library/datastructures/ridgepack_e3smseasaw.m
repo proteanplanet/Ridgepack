@@ -1,5 +1,5 @@
 function [nc,SCP,SCL,STP,STL]=...
-             ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
+          ridgepack_e3smseasaw(ncvert,ncc,varc,threshold)
 
 % ridgepack_e3smseasaw - Generate a threshold on an unstructured mesh
 %
