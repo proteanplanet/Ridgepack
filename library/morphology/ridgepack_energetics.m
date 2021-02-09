@@ -64,9 +64,8 @@ ghat=hc.ghat.const; % acceleration due to gravity
 % (equation A.9, Roberts et al. 2019)
 hr=hf./(1+epsilon);
 
-% set snow thickness on ridge same as on level ice 
-% (equation A.11, Roberts et al. 2019)
-hrs=hfs;
+% prepare snow cover
+[hfs,hrs]=ridgepack_snowcover(hf,hfs);
 
 % calculate angle of repose of the ridge
 % (Appendix D, Roberts et al. 2019)

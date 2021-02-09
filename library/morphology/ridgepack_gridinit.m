@@ -98,8 +98,8 @@ minthick = 0.01;
 maxthick = 100;
 
 % flag for logarithmic thickness grid
-%logthickness=false;
-logthickness=true;
+logthickness=false;
+%logthickness=true;
 
 if logthickness
  % set initial log thickness resolution on zeta-hat plane (m)
@@ -109,7 +109,7 @@ if logthickness
  HGRID = [10.^[log10(minthick):HINCR:log10(maxthick)]];
 else
  % set linear thickness resolution on zeta-hat plane (m)
- HINCR = 0.1;
+ HINCR = 0.001;
 
  HGRID = [minthick:HINCR:maxthick];
 end

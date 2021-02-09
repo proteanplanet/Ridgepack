@@ -3,7 +3,7 @@ function [HFD,HFF,HRD,HRF,HK,HS,LK,LS]=...
 
 % ridgepack_morphology - Calculate ridge dimension and strain
 %
-% function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON]=...
+% function [HFD,HFF,HRD,HRF,HK,HS,LK,LS,L0,EPSILON,hfs]=...
 %                    ridgepack_morphology(hf,hfs,hr,hrs,phi,alpha)
 %
 % This calculates the floe draft and freeboard, mean ridge draft and freeboard,
@@ -73,27 +73,18 @@ rhow=hc.rhow.const; % density of seawater (kg/m^3)
 delrho=hc.rhow.const-hc.rhoi.const; % difference of water and ice densities
 ghat=hc.ghat.const; % acceleration due to gravity
 
+% prepare snow cover
+[hfs,hrs]=ridgepack_snowcover(hf,hfs);
+
 % calculate freeboard and draft of level ice
 % (Equations A.3 and A.4 in Roberts et al. 2019)
 HFD=(rho*hf+rhos*hfs)/rhow; % level draft
 HFF=(hf+hfs)-HFD; % level freeboard
 
-% check that answers add up for floe ice
-if any((HFD+HFF)~=(hf+hfs))
- error('HFD+HFF is not equal fo hf+hfs')
-elseif HFF<hfs
- error('snow is submerged on parent ice!')
-end
-
 % calculate freeboard and draft of deformed ice 
 % (Equations A.1 and A.2 in Roberts et al. 2019)
 HRD=(rho*hr+rhos*hrs)/rhow; % ridged draft
 HRF=(hr+hrs)-HRD; % ridged freeboard
-
-% check that answers add up for ridged ice
-if any((HRD+HRF)~=(hr+hrs))
- error('HRD+HRF is not equal fo hr+hrs')
-end
 
 % calculate depth of keel relative to sea level
 % (Equation A.16 in Roberts et al. 2019)

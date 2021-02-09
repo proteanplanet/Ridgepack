@@ -81,10 +81,12 @@ else
    ridgepack_gridinit(res,minstrain,maxstrain);
 end
 
-
 % prepare mesh and split mesh
 [epmesh,phmesh]=meshgrid(epsilongrid,phigrid);
 [epsplitmesh,phsplitmesh]=meshgrid(epsilonsplit,phisplit);
+
+% prepare snow cover
+[hfs,hrs]=ridgepack_snowcover(hf,hfs);
 
 % get potential energy density for given ice thickness 
 [vr]=ridgepack_energetics(hf,hfs,epmesh,phmesh);

@@ -33,8 +33,8 @@ close all
 resolution=0.005
 
 % if reseting resolution, you must regenerate
-generate=false;
-%generate=true;
+%generate=false;
+generate=true;
 
 % determine directory for read/write of zeta-hat plane data
 dir=fileparts(which(mfilename));
@@ -80,7 +80,7 @@ disp(['Size of ghphi is ',num2str(size(ghphi))])
 % set initial thickness distribution of sea ice field (this allows for extension
 % to different initial shapes of thickness distirbutions if desired)
 gshape='delta';
-hinitial = 1.0;
+hinitial = 5.0;
 
 % Case of the initial thickness distribution as a delta function on discrete grid
 if strcmp(gshape,'delta')
@@ -92,8 +92,8 @@ end
 
 clf
 
-integrate=false;
-%integrate=true;
+%integrate=false;
+integrate=true;
 
 bivariate=false;
 %bivariate=true;

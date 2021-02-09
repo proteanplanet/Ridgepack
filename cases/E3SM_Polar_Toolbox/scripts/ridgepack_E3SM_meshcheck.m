@@ -8,10 +8,10 @@ largescale=false;
 bathymetry=true;
 %bathymetry=false;
 
-%zoomedareas=true;
-zoomedareas=false;
+zoomedareas=true;
+%zoomedareas=false;
 
-gridchoice=6;
+gridchoice=7;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
@@ -36,6 +36,10 @@ fileg{5}.title='EC 30-60km E2 r2';
 fileg{6}.name='EC15to60E2r4';
 fileg{6}.outname='EC15to60E2r4';
 fileg{6}.title='EC 15-60km E2 r4';
+
+fileg{7}.name='SOwISC12to60E2r4';
+fileg{7}.outname='SOwISC12to60E2r4';
+fileg{7}.title='Southern Ocean w/Ice Shelves 12-60km E2 r4';
 
 
 sector{1}.centlat=90; % degrees north
@@ -517,6 +521,10 @@ elseif strcmp(char(fileg{gridchoice}.name),'EC30to60E2r2')
  shiplocs=[1 2 3 4 6];
 elseif strcmp(char(fileg{gridchoice}.name),'EC15to60E2r4')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/EC15to60E2r4/grid'];
+ gridfile='initial_state.nc';
+ shiplocs=[1 2 3 4 6];
+elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to60E2r4')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/SOwISC12to60E2r4/grid'];
  gridfile='initial_state.nc';
  shiplocs=[1 2 3 4 6];
 end

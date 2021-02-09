@@ -478,16 +478,16 @@ zoom{50}.polar=0;
 
 if largescale
  plotchoice=[1:length(sector)];
- plotchoice=[1 7];
+ plotchoice=[7];
 else
  plotchoice=[1:length(zoom)];
- plotchoice=[1 4];
+ plotchoice=[37];
  %plotchoice=[1 3 4 5 7 37 38];
  %plotchoice=[21];
 end
 
 % plot location
-plotloc='/Users/afroberts/Colloquia/2020_ESMD_PI/Mesh';
+plotloc='/Users/afroberts/Colloquia/2020_AGU/Mesh';
 
 % grid location
 if strcmp(char(fileg{gridchoice}.name),'DECK')
@@ -681,17 +681,35 @@ for setting=plotchoice
    if zoomedareas;
 
     %for j=1:length(zoom)
-    for j=[1 4]
+    for j=[37]
      satlat=zoom{j}.centlat;   % degrees north
      satlon=zoom{j}.centlon;   % degrees east
      sathor=zoom{j}.horizon;   % degrees of satellite horizon (0-90)
+     %ridgepack_sathorizon(centlat,centlon,horizon,...
+     %                     satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
      ridgepack_sathorizon(centlat,centlon,horizon,...
-                          satlat,satlon,sathor,[0.83 0.5 0],num2str(j));
+                          satlat,satlon,sathor,[0.83 0.5 0]);
     end
 
    end
  
   end
+
+  if sector{setting}.annotation==1
+    for shipi=shiplocs
+     [x,y,z,phi,theta]=...
+      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
+                      eval(['ncship',num2str(shipi),'.longitude.data']),...
+                       centlat,centlon,horizon,1.001*altitude);
+     hship=plot3(x,y,z,'c');
+    end
+   end
+
+   legend([hship],...
+        {'Ship Routes'},...
+         'Location','SouthOutside','Orientation','Horizontal')
+   legend('boxoff')
+
 
   %title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])
   title([char(fileg{gridchoice}.title)])

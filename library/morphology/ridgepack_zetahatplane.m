@@ -1,4 +1,4 @@
-function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
+function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res,hfs)
 
 % ridgepack_zetahatplane - Calculate ridge state on zeta-hat plane
 %
@@ -13,6 +13,8 @@ function [HF,EPSILON,PHI,ALPHAHAT,VR,HK,HS,LK,LS]=ridgepack_zetahatplane(res)
 %
 % res - resolution of the strain and porosity grid (optional)
 %       with typical values between 0.01 and 0.001.
+% hfs - snow cover on ice set as a constant (optional) with 
+%       default of zero
 %
 % OUTPUT:
 %
@@ -58,7 +60,7 @@ end
 [hincr,eincr,HF]=ridgepack_gridinit(res);
 
 % remove snow for Version 1.0 (this step can be removed in future versions)
-HFs=zeros(size(HF));
+HFs=hfs.*ones(size(HF));
 
 % step through initial ice thicknesses
 tic;
