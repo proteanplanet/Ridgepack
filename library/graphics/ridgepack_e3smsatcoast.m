@@ -1,4 +1,4 @@
-function [h,nc]=ridgepack_e3smsatcoast(ncvert,centlat,centlon,horizon,color)
+function [h,nc]=ridgepack_e3smsatcoast(ncvert,centlat,centlon,horizon,color,linewidth)
 
 if nargin<2
  centlat=90;
@@ -84,8 +84,12 @@ for k=1:length(sidx)
                                     centlat,centlon,...
                                     horizon,altitude);
 
- plot3(x,y,z,'Color',color,...
+ if nargin<6
+  plot3(x,y,z,'Color',color,...
        'LineWidth',0.5-sin(deg2rad(horizon))*0.4)
+ else
+  plot3(x,y,z,'Color',color,'LineWidth',linewidth)
+ end
 
 end
 

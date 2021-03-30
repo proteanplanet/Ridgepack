@@ -1,4 +1,4 @@
-function [cell,oncell,celllist,oncelllist,celldist,cellarea]=...
+function [cell,oncell,celllist,oncelllist,celldist]=...
               ridgepack_e3smontrack(ncvert,tracklat,tracklon)
 
 idx=find(ncvert.latCell.data*180/pi>60);
@@ -33,6 +33,4 @@ for i=2:length(oncell)
   oncelllist(k)=oncell(i);
  end
 end
-
-cellarea=ncvert.areaCell.data(cell);
 

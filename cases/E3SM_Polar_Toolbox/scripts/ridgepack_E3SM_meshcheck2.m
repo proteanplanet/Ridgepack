@@ -13,9 +13,9 @@ zoomedareas=true;
 
 gridchoice=2;
 
-fileg{1}.name='WC12r01';
-fileg{1}.outname='WC12';
-fileg{1}.title=' WC 12-60~km mesh';
+fileg{1}.name='WC14L64';
+fileg{1}.outname='WC14L64';
+fileg{1}.title=' WC 14-60~km mesh, L64';
 
 fileg{2}.name='WC14r03';
 fileg{2}.outname='WC14r03';
@@ -481,7 +481,7 @@ if largescale
  plotchoice=[7];
 else
  plotchoice=[1:length(zoom)];
- plotchoice=[37];
+ %plotchoice=[37];
  %plotchoice=[1 3 4 5 7 37 38];
  %plotchoice=[21];
 end
@@ -494,11 +494,11 @@ if strcmp(char(fileg{gridchoice}.name),'DECK')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/EC_60_30_Old/grid'];
  gridfile='init.nc';
  shiplocs=[2 6];
-elseif strcmp(char(fileg{gridchoice}.name),'WC12')
- gridloc=['/Users/afroberts/data/MODEL/E3SM/WC12/',...
-          char(fileg{gridchoice}.name)];
+elseif strcmp(char(fileg{gridchoice}.name),'WC14L64')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/WC14-64L/grid'];
  gridfile='initial_state.nc';
- shiplocs=[1 2 3 4 6];
+ shiplocs=[1 2 3 4 5 6 7 8 9 10];
+ %shiplocs=[1 2 3 4 6];
 elseif strcmp(char(fileg{gridchoice}.name),'WC14r03')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/WC14/r03'];
  gridfile='initial_state.nc';
@@ -522,13 +522,13 @@ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex','bottomDepth'});
+                                'edgesOnVertex','refBottomDepth'});
 
 nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
                                 'verticesOnCell','indexToCellID',...
                                 'nEdgesOnCell','edgesOnCell',...
                                 'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex','bottomDepth'});
+                                'edgesOnVertex','refBottomDepth'});
 
 ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
 
@@ -560,11 +560,11 @@ end
 if bathymetry
  bathname=[char(fileg{gridchoice}.outname),'_20mIsobath.nc'];
  greename=[char(fileg{gridchoice}.outname),'_50mIsobath.nc'];
- x=dir(bathname);
- if isempty(x)
-  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',20);
+ x=dir(greename);
+ if isempty(x) 
+  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'refBottomDepth',20);
   ridgepack_write(ncisobath20,bathname)
-  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',50);
+  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'refBottomDepth',50);
   ridgepack_write(ncisobath50,bathname)
  else
   ncisobath20=ridgepack_clone(bathname);
@@ -573,7 +573,7 @@ if bathymetry
 end
 
 % invert bathymetry
-ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
+ncvert.refBottomDepth.data=-ncvert.refBottomDepth.data;
 
 % load high-resolution coast
 cd(gridlochr)
@@ -633,7 +633,7 @@ for setting=plotchoice
    colbarcont{length(cont)}='\uparrow';
 
    % render colors
-   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
+   ridgepack_e3smsatcol(ncvert,'refBottomDepth',ncvert,cont,0,...
                         centlat,centlon,horizon,altitude,...
                         true,false,'linear','bluered');
 
@@ -764,7 +764,7 @@ for setting=plotchoice
    cmap=colormap;
 
    % render colors
-   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
+   ridgepack_e3smsatcol(ncvert,'refBottomDepth',ncvert,cont,0,...
                         centlat,centlon,horizon,altitude,...
                         true,false,'linear','bluered');
 
