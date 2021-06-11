@@ -94,7 +94,7 @@ for i=1:length(csortexvertex)
 end
 
 % now calculate mask of vertices at land border noting that 
-% a only a vertex bording 1 or 2 cells sits on the coast.
+% only a vertex bording 1 or 2 cells sits on the coast.
 cpassx=NaN*zeros([length(ncvert.nVertices.data) 1]);
 cpassx(cdixv==1 | cdixv==2)=1;
 
@@ -168,6 +168,8 @@ for i=1:length(cvflag1)
   end
  end
 end
+
+cidxn
 
 % only pass through threshold cells
 disp('Calculating the threshold line')
@@ -639,7 +641,11 @@ if length(cidxn)>0
 
 else
 
- error('no threshold found')
+ disp('no threshold found')
+ vlats=[];
+ vlons=[];
+ verts=[];
+ return
 
 end
 

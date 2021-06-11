@@ -2,16 +2,19 @@
 clf
 clear
 
-%largescale=true;
-largescale=false;
+largescale=true;
+%largescale=false;
 
-bathymetry=true;
-%bathymetry=false;
+%bathymetry=true;
+bathymetry=false;
 
 zoomedareas=true;
 %zoomedareas=false;
 
-gridchoice=7;
+%coast=false;
+coast=true;
+
+gridchoice=8;
 
 fileg{1}.name='WC12r01';
 fileg{1}.outname='WC12';
@@ -41,6 +44,9 @@ fileg{7}.name='SOwISC12to60E2r4';
 fileg{7}.outname='SOwISC12to60E2r4';
 fileg{7}.title='Southern Ocean w/Ice Shelves 12-60km E2 r4';
 
+fileg{8}.name='icosahedron7';
+fileg{8}.outname='icosahedron7';
+fileg{8}.title='icosahedron7 tides mesh';
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -527,6 +533,10 @@ elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to60E2r4')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/SOwISC12to60E2r4/grid'];
  gridfile='initial_state.nc';
  shiplocs=[1 2 3 4 6];
+elseif strcmp(char(fileg{gridchoice}.name),'icosahedron7')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/icosahedron_7/grid'];
+ gridfile='initial_state.nc';
+ shiplocs=[1 2 3 4 6];
 end
 
 gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];
@@ -563,13 +573,15 @@ nccell.latCell=nccell.latitude;
 nccell.lonCell=nccell.longitude;
 
 % read in coast or else generate coast and write it out
-coastname=[char(fileg{gridchoice}.outname),'_Coast.nc'];
-x=dir(coastname);
-if isempty(x)
- nccoast=ridgepack_e3smcoastm(ncvert);
- ridgepack_write(nccoast,coastname)
-else
- nccoast=ridgepack_clone(coastname);
+if coast
+ coastname=[char(fileg{gridchoice}.outname),'_Coast.nc'];
+ x=dir(coastname);
+ if isempty(x)
+  nccoast=ridgepack_e3smcoastm(ncvert);
+  ridgepack_write(nccoast,coastname)
+ else
+  nccoast=ridgepack_clone(coastname);
+ end
 end
 
 % create 20m isobath
@@ -577,7 +589,7 @@ if bathymetry
  bathname=[char(fileg{gridchoice}.outname),'_20mIsobath.nc'];
  x=dir(bathname);
  if isempty(x)
-  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',20);
+  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',100);
   ridgepack_write(ncisobath20,bathname)
  else
   ncisobath20=ridgepack_clone(bathname);
@@ -654,7 +666,9 @@ for setting=plotchoice
    end
 
    % plot coast
-   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   if coast
+    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   end
 
    if sector{setting}.annotation==1 
     for shipi=shiplocs
@@ -670,7 +684,9 @@ for setting=plotchoice
 
    ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
   
-   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   if coast
+    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   end
 
    if zoomedareas;
 
@@ -715,10 +731,12 @@ for setting=plotchoice
   end
 
   % add in coastline
-  ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+  if coast
+   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-  % add in high resolution coastline
-  h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
+   % add in high resolution coastline
+   h=ridgepack_e3smsatcoast(nccoasthr,centlat,centlon,horizon,[0 0.8 0])
+  end
 
   ridgepack_multiplot(1,2,1,2)
 
@@ -754,14 +772,20 @@ for setting=plotchoice
                                  [0.9290 0.6940 0.1250]);
 
    % add coast
-   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
-   ridgepack_multilegend([h hb],...
-        {'E3SM-HR V1 coastline','20 m isobath'},'South')
+   if coast
+    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+    ridgepack_multilegend([h hb],...
+         {'E3SM-HR V1 coastline','20 m isobath'},'South')
+   end
+
   else
 
    ridgepack_satview(centlat,centlon,horizon)
    ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
-   ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+   if coast
+    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+   end
 
    if zoom{setting}.annotation==1 
     for shipi=[1 2 3 4 6]

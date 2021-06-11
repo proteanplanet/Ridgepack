@@ -34,6 +34,7 @@ workloc='/Users/afroberts/work';
 cd(['/Users/afroberts/data/MODEL/E3SM/',run,'/grid'])
 ncgrid=ridgepack_clone('mpassi.rst.0002-01-01_00000.nc',...
                         {'latCell','lonCell','areaCell'});
+totalarea=sum(ncgrid.areaCell.data(:));
 
 % diagnostics
 if isempty(run);
@@ -47,9 +48,6 @@ basedir=['/Users/afroberts/data/MODEL/E3SM/',run,'/PI'];
 
 % set model file name nomenclature
 filetype1=[tag,'.mpassi.hist.am.timeSeriesStatsMonthly.'];
-
-% set mass fields to be extracted 
-fieldm{1}='';
 
 % set energy fields to be extracted 
 fielde{1}='timeMonthly_avg_absorbedShortwaveFluxInitialArea';

@@ -7,8 +7,7 @@ run='20210427';
 % full name of simulation abbreviation
 tag='20210427.v2rc1a.CPcheck3.ne30pg2_EC30to60E2r2.chrysalis';
 
-% hemisphere if hemisphere is set to zero, it is for the old AM, otherwise 
-% 1 = global, 2=NH, 3=SH
+% hemis: 1 = global, 2=NH, 3=SH
 hemis=1;
 
 % minimum year of flux calculation
@@ -36,19 +35,66 @@ basedir=['/Users/afroberts/data/MODEL/E3SM/',run,'/flux'];
 % set model file name nomenclature
 filetype1=[tag,'.mpassi.hist.am.conservationCheck.'];
 
-% main fields to be plotted as listed below (up to maxfields)
-maxfields=2
+% set mass fields
+massgroup{1}.name='NetMass';
+massgroup{1}.mpassi={'netMassFlux'};
+massgroup{1}.cpl={'mass'};
 
 % set energy fields to be extracted 
-fielde{1}='netEnergyFlux';
-fielde{2}='netMassFlux';
-%fielde{2}='massConsRainfallRate';
-%fielde{2}='massConsSnowfallRate';
-%fielde{2}='massConsFreshWater';
-%fielde{3}='netSaltFlux';
-%fielde{4}='relativeEnergyError';
-%fielde{5}='relativeMassError';
-%fielde{6}='relativeSaltError';
+heatgroup{1}.name='NetHeat';
+heatgroup{1}.mpassi={'netEnergyFlux'};
+heatgroup{1}.cpl={'heat'};
+
+heatgroup{2}.name='FrazilHeat';
+heatgroup{2}.mpassi={'energyConsFreezingPotential'};
+heatgroup{2}.cpl={'hfreeze'};
+
+heatgroup{3}.name='OceanHeatFlux';
+heatgroup{3}.mpassi={'energyConsOceanHeatFlux'};
+heatgroup{3}.cpl={'hmelt'};
+
+heatgroup{4}.name='SensibleHeatFlux';
+heatgroup{4}.mpassi={'energyConsSensibleHeatFlux'};
+heatgroup{4}.cpl={'hsen'};
+
+heatgroup{5}.name='';
+heatgroup{5}.mpassi={''};
+heatgroup{5}.cpl={''};
+
+heatgroup{6}.name='';
+heatgroup{6}.mpassi={''};
+heatgroup{6}.cpl={''};
+
+heatgroup{7}.name='';
+heatgroup{7}.mpassi={''};
+heatgroup{7}.cpl={''};
+
+heatgroup{8}.name='';
+heatgroup{8}.mpassi={''};
+heatgroup{8}.cpl={''};
+
+
+%fielde{1}='energyConsAbsorbedShortwaveFlux';
+%fielde{1}='energyConsLatentHeat';
+%fielde{1}='energyConsOceanShortwaveFlux';
+%fielde{1}='energyConsSurfaceHeatFlux';
+%fielde{1}='energyConsLongwaveUp';
+%fielde{1}='energyConsLongwaveDown';
+%fielde{1}='energyConsSnowfallHeat';
+
+%elseif strcmp(char(fielde{1}),'energyConsAbsorbedShortwaveFlux')
+% heatname={'hnetsw'};
+%elseif strcmp(char(fielde{1}),'energyConsLatentHeat')
+% heatname={'hlatfus','hlatvap'};
+
+%heatname='heat';
+%heatname='hfreeze';
+%heatname='hlatfus';
+%heatname='hlwup';
+%heatname='hlwdn';
+%heatname='hnetsw';
+%heatname='hlatvap';
+%heatname='hsen';
 
 % extract mesh lat, long, and cell area from the mpassi restart file
 cd(['/Users/afroberts/data/MODEL/E3SM/',run,'/grid'])
@@ -80,21 +126,6 @@ startyear=max(str2num(nc.xtime.data(1,1:4)),str2num(datestr(mintime,'YYYY')));
 nc=ridgepack_clone(xdir(end).name);
 endyear=min(str2num(nc.xtime.data(1,1:4)),str2num(datestr(maxtime,'YYYY')));
 
-% month length
-timestepr=86400/(30*60);
-monthlength(1:14)=NaN;
-monthlength([1 2 4 6 8 9 11 13 14])=31*timestepr;
-monthlength([3])=28*timestepr;
-monthlength([5 7 10 12])=30*timestepr;
-
-% mpas globe area
-mpasarea=4*pi*(6371229.^2);
-
-% sum up the fields
-for fi=1:length(fielde)
- sumfield.(char(fielde{fi}))=0;
-end
-
 % grab MPAS-SI data one month at a time to construct a timeseries of integrated quantities
 k=0;
 for year=startyear:endyear
@@ -112,16 +143,18 @@ for year=startyear:endyear
   nce.time=nctempe.time;
   nce.time.calendar='Gregorian';
   nce.time.units='days since 0001-01-01';
-  for fi=1:length(fielde)
-   nce.(char(fielde{fi}))=nctempe.(char(fielde{fi}));
-   nce.(char(fielde{fi})).data=NaN.*ones([1 (endyear-startyear+1)*12]);
-   nce.(char(fielde{fi})).dimension={'time'};
-   if fi<=maxfields
-    nce.([char(fielde{fi}),'_cpl'])=nce.(char(fielde{fi}));
-    nce.([char(fielde{fi}),'_cpl']).long_name=...
-         [nctempe.(char(fielde{fi})).long_name,' cpl value'];
-   end
-  end
+
+  nce.(char(massgroup{1}.name))=nctempe.(char(massgroup{1}.mpassi{1}));
+  nce.(char(massgroup{1}.name)).data=NaN.*ones([1 (endyear-startyear+1)*12]);
+  nce.(char(massgroup{1}.name)).dimension={'time'};
+  nce.([char(massgroup{1}.name),'_cpl'])=nce.(char(massgroup{1}.name));
+  nce.([char(massgroup{1}.name),'_cpl']).long_name=['coupler ',char(massgroup{1}.name)];
+
+  nce.(char(heatgroup{1}.name))=nctempe.(char(heatgroup{1}.mpassi{1}));
+  nce.(char(heatgroup{1}.name)).data=NaN.*ones([1 (endyear-startyear+1)*12]);
+  nce.(char(heatgroup{1}.name)).dimension={'time'};
+  nce.([char(heatgroup{1}.name),'_cpl'])=nce.(char(heatgroup{1}.name));
+  nce.([char(heatgroup{1}.name),'_cpl']).long_name=['coupler ',char(heatgroup{1}.name)];
 
  end
 
@@ -131,15 +164,10 @@ for year=startyear:endyear
  end
 
  % accumulate timeseries for subsequent months and years at time step k
- for fi=1:length(fielde)
-  datrange=[(year-startyear)*12+1:(year-startyear)*12+maxlength];
-  if hemis==0
-   nce.(char(fielde{fi})).data(datrange)=nctempe.(char(fielde{fi})).data(:)'./...
-                                                        (mpasarea.*monthlength(1:12));
-  else
-   nce.(char(fielde{fi})).data(datrange)=nctempe.(char(fielde{fi})).data(hemis,:);
-  end
- end
+ datrange=[(year-startyear)*12+1:(year-startyear)*12+maxlength];
+
+ nce.(char(massgroup{1}.name)).data(datrange)=nctempe.(char(massgroup{1}.mpassi{1})).data(hemis,:);
+ nce.(char(heatgroup{1}.name)).data(datrange)=nctempe.(char(heatgroup{1}.mpassi{1})).data(hemis,:);
 
  k=k+1
 
@@ -147,10 +175,10 @@ end
 
 % shift MPAS-SI output by one month to match CPL logs, and set up CPL netcdf field
 nce.time.data=nce.time.data(2:end);
-for fi=1:length(fielde)
- nce.(char(fielde{fi})).data=nce.(char(fielde{fi})).data(2:end);
- nce.([char(fielde{fi}),'_cpl']).data=NaN*ones(size(nce.(char(fielde{fi})).data));
-end
+nce.(char(massgroup{1}.name)).data=nce.(char(massgroup{1}.name)).data(2:end);
+nce.([char(massgroup{1}.name),'_cpl']).data=NaN*ones(size(nce.(char(massgroup{1}.name)).data));
+nce.(char(heatgroup{1}.name)).data=nce.(char(heatgroup{1}.name)).data(2:end);
+nce.([char(heatgroup{1}.name),'_cpl']).data=NaN*ones(size(nce.(char(heatgroup{1}.name)).data));
 
 clear nctempe
 
@@ -163,8 +191,15 @@ if cpllogs
  [seaiceareaNh,seaiceareaSh]=ridgepack_E3SM_sea_ice_cpl_area_check(filename);
 
  % get heat flux
- filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_heat.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
+ seaiceheatNh=0;
+ seaiceheatSh=0;
+ for ij=1:length(heatname)
+  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_',char(heatname{ij}),'.txt'];
+  [Nh,Sh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
+  seaiceheatNh=seaiceheatNh+Nh;
+  seaiceheatSh=seaiceheatSh+Sh;
+ end
+
  if hemis<=1
   nce.([char(fielde{1}),'_cpl']).data=[seaiceheatNh(1:length(nce.time.data))+...
                                        seaiceheatSh(1:length(nce.time.data))];
@@ -174,10 +209,7 @@ if cpllogs
   nce.([char(fielde{1}),'_cpl']).data=[seaiceheatSh(1:length(nce.time.data))];
  end
 
- filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_mass.txt'];
- %filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_rain.txt'];
- %filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_snow.txt'];
- %filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_melt.txt'];
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/monthly_',massname,'.txt'];
  [seaicemassNh,seaicemassSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
  if hemis<=1
   nce.([char(fielde{2}),'_cpl']).data=[seaicemassNh(1:length(nce.time.data))+...
@@ -217,7 +249,7 @@ nce=ridgepack_struct(nce);
 col=colormap(lines(4)); 
 
 % plot first frame of mass flux
-ridgepack_multiplot(3,1,1,1,'a'); 
+ridgepack_multiplot(3,1,1,1,['a ',char(fielde{2})]); 
 
 plot(nce.time.data,nce.([char(fielde{2})]).data,'Color',col(1,:))
 plot(nce.time.data,nce.([char(fielde{2}),'_cpl']).data,'--','Color',col(4,:))
@@ -231,10 +263,10 @@ grid on
 ridgepack_clearax('x',1)
 
 % plot second frame of energy flux
-ridgepack_multiplot(3,1,2,1,'b');
+ridgepack_multiplot(3,1,2,1,['b ',char(fielde{1})]);
 
-plot(nce.time.data,nce.netEnergyFlux.data,'Color',col(1,:))
-plot(nce.time.data,nce.netEnergyFlux_cpl.data,'--','Color',col(4,:))
+plot(nce.time.data,nce.([char(fielde{1})]).data,'Color',col(1,:))
+plot(nce.time.data,nce.([char(fielde{1}),'_cpl']).data,'--','Color',col(4,:))
 ylabel('Heat (W m$^{-2}$)')
 xlim([nce.time.data(1) nce.time.data(end)])
 datetick('x','YY','keeplimits')
@@ -247,7 +279,7 @@ ridgepack_multiplot(3,1,3,1,'c');
 
 % plot delta mass on left axis
 yyaxis left
-deltamass=nce.([char(fielde{2})]).data./nce.([char(fielde{2}),'_cpl']).data;
+deltamass=nce.([char(fielde{2})]).data-nce.([char(fielde{2}),'_cpl']).data;
 h1=plot(nce.time.data,deltamass)
 ylabel('$\Delta$Mass (kg m$^{-2}$ s$^{-1}$)')
 hold on
@@ -256,7 +288,7 @@ ylim([yl(1)-diff(yl)*0.15 yl(2)])
 
 % plot delta heat on right axis
 yyaxis right
-deltaheat=nce.netEnergyFlux.data./nce.netEnergyFlux_cpl.data;
+deltaheat=nce.([char(fielde{1})]).data-nce.([char(fielde{1}),'_cpl']).data;
 h2=plot(nce.time.data,deltaheat)
 ylabel('$\Delta$Heat (W m$^{-2}$)')
 xlim([nce.time.data(1) nce.time.data(end)])
@@ -283,13 +315,14 @@ legend([h1 h2],{legmass,legheat},'Orientation','horizontal','Location','South','
 legend('boxoff')
 
 % align all the plot frames and give it a title
-ridgepack_multialign(gcf,['E3SM Sea Ice Mass Conservation Check - ',hemisphere],9)
+ridgepack_multialign(gcf,['E3SM Sea Ice Conservation Check - ',hemisphere,],9)
 
 % output graphics and netcdf file of fluxes from both model and coupler
 cd(workloc)
 ridgepack_fprint('png',[run,'_',hemtag,'_',num2str(startyear,'%4.4i'),'_',...
-                                num2str(endyear,'%4.4i'),'.png'],1,1)
+                                num2str(endyear,'%4.4i'),'_',char(fielde{1}),'_',char(fielde{2}),'.png'],1,1)
 
 ridgepack_write(nce,[run,'_',hemtag,'_',num2str(startyear,'%4.4i'),'_',...
-                     num2str(endyear,'%4.4i'),'_conservation_check'])
+                     num2str(endyear,'%4.4i'),'_',char(fielde{1}),'_',char(fielde{2}),'_conservation_check'])
+
 

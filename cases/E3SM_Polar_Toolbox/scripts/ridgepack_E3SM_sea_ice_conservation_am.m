@@ -2,34 +2,38 @@ clear
 close all
 
 % short name of simulation
-%run='20210508';
-run='20210427';
+run='20210609';
 
 % full name of simulation abbreviation
-tag='20210427.v2rc1a.CPcheck5.ne30pg2_EC30to60E2r2.chrysalis';
+tag='20210609.v2rc2c.ConservationAM.ne30pg2_EC30to60E2r2.chrysalis'
 
 % hemis: 1 = global, 2=NH, 3=SH
 hemis=1;
 
 % set mass fields
 masstype='NetMass';
+%masstype='Frazil';
+%masstype='Melt';
+%masstype='Rain';
+%masstype='Snow';
+%masstype='Evap';
 
 % set heat fields
-%heattype='NetHeat';
+heattype='NetHeat';
 %heattype='Frazil';
 %heattype='Sensible';
 %heattype='OceanHeat';
 %heattype='LongwaveUp';
 %heattype='LongwaveDown';
 %heattype='NetSW';
-heattype='Latent';
+%heattype='Latent';
 %heattype='SnowHeat';
 
 % minimum year of flux calculation
 mintime=datenum(0001,1,1);
 
 % maxumum year of flux calculation
-maxtime=datenum(0003,1,1);
+maxtime=datenum(0004,1,1);
 
 % set line width in plots
 lw=0.5; 
@@ -54,7 +58,7 @@ filetype1=[tag,'.mpassi.hist.am.conservationCheck.'];
 
 % extract mesh lat, long, and cell area from the mpassi restart file
 cd(['/Users/afroberts/data/MODEL/E3SM/',run,'/grid'])
-ncgrid=ridgepack_clone('mpassi.rst.0006-01-01_00000.nc',...
+ncgrid=ridgepack_clone('mpassi.rst.0002-01-01_00000.nc',...
                         {'latCell','lonCell','areaCell'});
 
 % hemisphere tags and title
@@ -82,79 +86,105 @@ startyear=max(str2num(nc.xtime.data(1,1:4)),str2num(datestr(mintime,'YYYY')));
 nc=ridgepack_clone(xdir(end).name);
 endyear=min(str2num(nc.xtime.data(1,1:4)),str2num(datestr(maxtime,'YYYY')));
 
+% start accumulating at first timestep, first building timeseries structure
+massmpassi=NaN.*ones([1 ((endyear-startyear+1)*12)]);
+masscpl=NaN.*ones([1 ((endyear-startyear+1)*12)]);
+heatmpassi=NaN.*ones([1 ((endyear-startyear+1)*12)]);
+heatcpl=NaN.*ones([1 ((endyear-startyear+1)*12)]);
+
 % grab MPAS-SI data one month at a time to construct a timeseries of integrated quantities
 k=0;
 for year=startyear:endyear
 
  % grab data for conservation check
  nctempe=ridgepack_clone([filetype1,num2str(year,'%4.4i')]);
+ nctempe2=ridgepack_clone([filetype1,num2str(year+1,'%4.4i')]);
 
  % check length
  maxlength=length(nctempe.time.data);
 
  % create time vector for the given year
- for i=1:12
-  time([(year-startyear)*12+i])=datenum(year-1,i,1);
- end
-
- % start accumulating at first timestep, first building timeseries structure
- if year==startyear
-
-  massmpassi=NaN.*ones([1 (endyear-startyear+1)*12]);
-
-  masscpl=NaN.*ones([1 (endyear-startyear+1)*12]);
-
-  heatmpassi=NaN.*ones([1 (endyear-startyear+1)*12]);
-
-  heatcpl=NaN.*ones([1 (endyear-startyear+1)*12]);
-
+ mk=0;
+ for i=((year-startyear)*12)+1:(year-startyear+1)*12
+  mk=mk+1;
+  time(i)=datenum(year-1,mk,1);
  end
 
  % accumulate timeseries for subsequent months and years at time step k
- datrange=[(year-startyear)*12+1:(year-startyear)*12+maxlength];
+ datrange=[(year-startyear)*12+1:(year-startyear+1)*12];
+
+ if year==startyear
+  sindex=1
+ else
+  sindex=2
+ end
 
  if strcmp(masstype,'NetMass')
 
-  massmpassi(datrange)=nctempe.netMassFlux.data(hemis,:);
+  size(nctempe.netMassFlux.data(hemis,:))
+
+  massmpassi(datrange)=[nctempe.netMassFlux.data(hemis,sindex:end) nctempe2.netMassFlux.data(hemis,1)];
+
+ elseif strcmp(masstype,'Frazil')
+
+  massmpassi(datrange)=[nctempe.massConsFrazilWater.data(hemis,sindex:end) nctempe2.massConsFrazilWater.data(hemis,1)];
+
+ elseif strcmp(masstype,'Melt')
+
+  massmpassi(datrange)=[nctempe.massConsFreshWater.data(hemis,sindex:end) nctempe2.massConsFreshWater.data(hemis,1)];
+
+ elseif strcmp(masstype,'Rain')
+
+  massmpassi(datrange)=[nctempe.massConsRainfallRate.data(hemis,sindex:end) nctempe2.massConsRainfallRate.data(hemis,1)];
+
+ elseif strcmp(masstype,'Snow')
+
+  massmpassi(datrange)=[nctempe.massConsSnowfallRate.data(hemis,sindex:end) nctempe2.massConsSnowfallRate.data(hemis,1)];
+
+ elseif strcmp(masstype,'Evap')
+
+  massmpassi(datrange)=[nctempe.massConsEvaporation.data(hemis,sindex:end) nctempe2.massConsEvaporation.data(hemis,1)];
 
  end
 
  if strcmp(heattype,'NetHeat')
 
-  heatmpassi(datrange)=nctempe.netEnergyFlux.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.netEnergyFlux.data(hemis,sindex:end) nctempe2.netEnergyFlux.data(hemis,1)];
 
  elseif strcmp(heattype,'Frazil')
 
-  heatmpassi(datrange)=nctempe.energyConsFreezingPotential.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsFreezingPotential.data(hemis,sindex:end) nctempe2.energyConsFreezingPotential.data(hemis,1)];
 
  elseif strcmp(heattype,'Sensible')
 
-  heatmpassi(datrange)=nctempe.energyConsSensibleHeatFlux.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsSensibleHeatFlux.data(hemis,sindex:end) nctempe2.energyConsSensibleHeatFlux.data(hemis,1)];
 
  elseif strcmp(heattype,'OceanHeat')
 
-  heatmpassi(datrange)=nctempe.energyConsOceanHeatFlux.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsOceanHeatFlux.data(hemis,sindex:end) nctempe2.energyConsOceanHeatFlux.data(hemis,1)];
 
  elseif strcmp(heattype,'LongwaveUp')
 
-  heatmpassi(datrange)=nctempe.energyConsLongwaveUp.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsLongwaveUp.data(hemis,sindex:end) nctempe2.energyConsLongwaveUp.data(hemis,1)];
 
  elseif strcmp(heattype,'LongwaveDown')
 
-  heatmpassi(datrange)=nctempe.energyConsLongwaveDown.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsLongwaveDown.data(hemis,sindex:end) nctempe2.energyConsLongwaveDown.data(hemis,1)];
 
  elseif strcmp(heattype,'NetSW')
 
-  heatmpassi(datrange)=nctempe.energyConsAbsorbedShortwaveFlux.data(hemis,:)+...
-                       nctempe.energyConsOceanShortwaveFlux.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsAbsorbedShortwaveFlux.data(hemis,sindex:end)+...
+                        nctempe.energyConsOceanShortwaveFlux.data(hemis,sindex:end) ...
+                        nctempe2.energyConsAbsorbedShortwaveFlux.data(hemis,1)+...
+                        nctempe2.energyConsOceanShortwaveFlux.data(hemis,1)];
 
  elseif strcmp(heattype,'Latent')
 
-  heatmpassi(datrange)=nctempe.energyConsLatentHeat2.data(hemis,:)
+  heatmpassi(datrange)=[nctempe.energyConsLatentHeat.data(hemis,sindex:end) nctempe2.energyConsLatentHeat.data(hemis,1)]
 
  elseif strcmp(heattype,'SnowHeat')
 
-  heatmpassi(datrange)=nctempe.energyConsSnowfallHeat.data(hemis,:);
+  heatmpassi(datrange)=[nctempe.energyConsSnowfallHeat.data(hemis,sindex:end) nctempe2.energyConsSnowfallHeat.data(hemis,1)];
 
  end
 
@@ -163,10 +193,10 @@ for year=startyear:endyear
 end
 
 % shift MPAS-SI output by one month to match CPL logs, and set up CPL netcdf field
-time=time(2:end);
-massmpassi=massmpassi(2:end);
+%time=time(sindex:end);
+%massmpassi=massmpassi(sindex:end);
 masscpl=NaN*ones(size(massmpassi));
-heatmpassi=heatmpassi(2:end);
+%heatmpassi=heatmpassi(sindex:end);
 heatcpl=NaN*ones(size(heatmpassi));
 
 %clear nctempe
@@ -174,8 +204,21 @@ heatcpl=NaN*ones(size(heatmpassi));
 % get mass  flux
 if strcmp(masstype,'NetMass')
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/mass.txt'];
- [seaicemassNh,seaicemassSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
+elseif strcmp(masstype,'Frazil')
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/wfreeze.txt'];
+elseif strcmp(masstype,'Melt')
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/wmelt.txt'];
+elseif strcmp(masstype,'Rain')
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/wrain.txt'];
+elseif strcmp(masstype,'Snow')
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/wsnow.txt'];
+elseif strcmp(masstype,'Evap')
+ filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/wevap.txt'];
+else
+ error(['Cannot find ',masstype])
 end
+
+[seaicemassNh,seaicemassSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
 
 if hemis<=1
   masscpl=[seaicemassNh(1:length(time))+seaicemassSh(1:length(time))]*1.E-6;
@@ -187,51 +230,28 @@ end
 
 % get mass  flux
 if strcmp(heattype,'NetHeat')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/heat.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'Frazil')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hfreeze.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'Sensible')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hsen.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'OceanHeat')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hmelt.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'LongwaveUp')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hlwup.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'LongwaveDown')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hlwdn.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'NetSW')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hnetsw.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'Latent')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hlatvap.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
 elseif strcmp(heattype,'SnowHeat')
-
  filename = ['/Users/afroberts/data/MODEL/E3SM/',run,'/flux/hlatfus.txt'];
- [seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
-
+else
+ error(['Cannot find ',heattype])
 end
+
+[seaiceheatNh,seaiceheatSh]=ridgepack_E3SM_sea_ice_cpl_heat_check(filename);
 
 if hemis<=1
   heatcpl=[seaiceheatNh(1:length(time))+seaiceheatSh(1:length(time))];
@@ -276,21 +296,25 @@ ridgepack_multiplot(3,1,3,1,'c');
 % plot delta mass on left axis
 yyaxis left
 deltamass=massmpassi-masscpl;
+%deltamass=massmpassi./masscpl;
 h1=plot(time,deltamass);
 ylabel('$\Delta$Mass (kg m$^{-2}$ s$^{-1}$)')
 hold on
 yl=ylim;
+%ylim([0.95 1.05])
 ylim([yl(1)-diff(yl)*0.15 yl(2)])
 
 % plot delta heat on right axis
 yyaxis right
 deltaheat=heatmpassi-heatcpl;
+%deltaheat=heatmpassi./heatcpl;
 h2=plot(time,deltaheat);
 ylabel('$\Delta$Heat (W m$^{-2}$)')
 xlim([time(1) time(end)])
 datetick('x','YY','keeplimits')
 xlabel('Model Year')
 yl=ylim;
+%ylim([0.95 1.05])
 ylim([yl(1)-diff(yl)*0.15 yl(2)])
 grid on
 

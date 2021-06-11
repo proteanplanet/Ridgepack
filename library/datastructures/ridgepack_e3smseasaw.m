@@ -49,6 +49,10 @@ end
 % Generate a coastline
 cidx=[1:length(ncvert.nCells.data)]'; %coast
 [clats,clons,cverts]=ridgepack_e3smperimeter(ncvert,cidx);
+if all(isnan(clats))
+ cidx=find(ncvert.bottomDepth.data==min(ncvert.bottomDepth.data)); %coast
+ [clats,clons,cverts]=ridgepack_e3smperimeter(ncvert,cidx);
+end
 
 % If requested, also generate a threshold
 if ~isempty(ncc)
@@ -59,8 +63,7 @@ if ~isempty(ncc)
 
  [tlats,tlons,tverts]=ridgepack_e3smperimeter(ncvert,cidx,infill);
 
- [xlats,xlons,xverts]=...
-                 ridgepack_e3smcontour(tlats,tlons,tverts,cverts);
+ [xlats,xlons,xverts]=ridgepack_e3smcontour(tlats,tlons,tverts,cverts);
 
  if isempty(xverts)
   error(['There is no contour for threshold ',num2str(threshold)])
