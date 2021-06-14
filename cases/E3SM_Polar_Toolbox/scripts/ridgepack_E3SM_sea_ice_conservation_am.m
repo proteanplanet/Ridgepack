@@ -5,7 +5,7 @@ close all
 run='20210609';
 
 % full name of simulation abbreviation
-tag='20210609.v2rc2c.ConservationAM.ne30pg2_EC30to60E2r2.chrysalis'
+tag='20210609.v2rc2c.ConservationAM2.ne30pg2_EC30to60E2r2.chrysalis'
 
 % hemis: 1 = global, 2=NH, 3=SH
 hemis=1;
