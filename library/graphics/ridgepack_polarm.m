@@ -119,7 +119,7 @@ seaicerasm=0;
 antarctic=0;
 
 % edge, grid and label color
-gridcolor=0.6*[1 1 1] ; 
+gridcolor=0.4*[1 1 1] ; 
 
 if nargin == 0
  disp('Default Arctic stereographic map');
