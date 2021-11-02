@@ -1,4 +1,4 @@
-+1%function E3SM_sea_ice_extent_volume(runcell,leg,minthick,mintime,maxtime,pub,pubdir)
+%function E3SM_sea_ice_extent_volume(runcell,leg,minthick,mintime,maxtime,pub,pubdir)
 
 clear
 close all

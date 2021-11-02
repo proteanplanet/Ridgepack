@@ -2,10 +2,12 @@ clear
 close all
 
 % short name of simulation
-run='20210609';
+%run='20210609';
+run='20210617';
 
 % full name of simulation abbreviation
-tag='20210609.v2rc2c.ConservationAM2.ne30pg2_EC30to60E2r2.chrysalis'
+%tag='20210609.v2rc2c.ConservationAM2.ne30pg2_EC30to60E2r2.chrysalis'
+tag='20210617.CRYO1850.ne30pg2_ECwISC30to60E2r1.DIBbugfix.chrysalis';
 
 % hemis: 1 = global, 2=NH, 3=SH
 hemis=1;
@@ -33,7 +35,7 @@ heattype='NetHeat';
 mintime=datenum(0001,1,1);
 
 % maxumum year of flux calculation
-maxtime=datenum(0004,1,1);
+maxtime=datenum(0002,1,1);
 
 % set line width in plots
 lw=0.5; 

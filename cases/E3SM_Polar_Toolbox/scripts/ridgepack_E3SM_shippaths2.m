@@ -6,7 +6,7 @@ clear
 %leg=false;
 leg=true;
 
-tag='draft';
+tag='draft2';
 
 gridchoice=2;
 
@@ -25,6 +25,18 @@ sector{1}.centlon=-100; % degrees east
 sector{1}.horizon=39; % degrees of satellite horizon (0-90)
 sector{1}.altitude=1; % Mean Earth radius multiple
 sector{1}.annotation=1; % add Arctic Shipping
+
+nsr061=[1603 2166 3012];
+nsr061string={'Sannikov$\rightarrow$','Vilkitsky$\rightarrow$','Kara$\rightarrow$'}
+nsr061angle=[125 95 95]
+
+nsr062=[1603 2166 3012 870];
+nsr062string={'Sannikov$\rightarrow$','Vilkitsky$\rightarrow$','Kara$\rightarrow$','Long$\rightarrow$'}
+nsr062angle=[125 95 95 145]
+
+nsr063=[2166 3012];
+nsr063string={'Vilkitsky$\rightarrow$','Kara$\rightarrow$'}
+nsr063angle=[95 95]
 
 % plot location
 %plotloc='/Users/afroberts/work';
@@ -82,7 +94,7 @@ coastname=[char(fileg{1}.outname),'_Coast'];
 x=dir(coastname);
 if isempty(x)
  nccoast=ridgepack_e3smcoastm(ncvert);
- ridgepack_write(nccoast,coastname)
+ ridgepack_write(nccoast,coastname);
 else
  nccoast=ridgepack_clone(coastname);
 end
@@ -91,39 +103,39 @@ setting=1;
 
 notation='abc';
 
-maxsets=2;
-minsets=2
+maxsets=3;
+minsets=1;
 
 for sets=minsets:maxsets
 
 if sets==1
- centlat=75;   % degrees north
- centlon=-90   % degrees east
+ centlat=90;   % degrees north
+ centlon=-80;   % degrees east
  horizon=35;
 % centlat=65;   % degrees north
 % centlon=-45   % degrees east
 % horizon=30;
 elseif sets==2
  centlat=90;   % degrees north
- centlon=-90;   % degrees east
+ centlon=-80;   % degrees east
  horizon=35;
 % centlat=65;   % degrees north
 % centlon=-45;   % degrees east
 % horizon=30;
 else
  centlat=90;   % degrees north
- centlon=-90;   % degrees east
+ centlon=-80;   % degrees east
  horizon=35;
 end
 altitude=sector{setting}.altitude; % Mean Earth radius multiple
 
 if maxsets>minsets
- ridgepack_multiplot(1,maxsets-minsets+1,1,sets-minsets+1,notation(sets-minsets+1))
+ ridgepack_multiplot(1,maxsets-minsets+1,1,sets-minsets+1,notation(sets-minsets+1));
 else
- ridgepack_multiplot(1,maxsets-minsets+1,1,sets-minsets+1)
+ ridgepack_multiplot(1,maxsets-minsets+1,1,sets-minsets+1);
 end
 
-ridgepack_satview(centlat,centlon,horizon)
+ridgepack_satview(centlat,centlon,horizon);
 
 % reverse colorbar
 %cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10];
@@ -148,24 +160,26 @@ colormap(cmap)
 %   ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
 %   clear colbarcont
 
-ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon,0.85*[1 1 1],0.1)
+ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon,0.85*[1 1 1],0.1);
 
 if sets==1
-    ships=[1 2 3 4];
-    mainroute=4;
-    cols=colormap(lines(length(ships))); 
-    titletext='Western Routes';
-elseif sets==2
-    %ships=[5 6 11 12 13 14 15 16];
-    ships=[5 6 11 12 13 14 15 16 17];
-    mainroute=6;
-    cols=colormap(lines(length(ships))); 
-    titletext='Eastern Routes';
-elseif sets==3
-    ships=[7 8 9 10 17 18 19];
+    ships=[5 12 13 14 17 18];
+    complement=[6 11 15 16];
     mainroute=[];
     cols=colormap(lines(length(ships))); 
-    titletext='Transbasin Routes';
+    titletext='Wrangel Island Routes';
+elseif sets==2
+    ships=[6 11 15 16];
+    complement=[5 12 13 14];
+    mainroute=[];
+    cols=colormap(lines(length(ships))); 
+    titletext='Proliv Longa Routes';
+elseif sets==3
+    ships=[20];
+    complement=[];
+    mainroute=[];
+    cols=colormap(lines(length(ships))); 
+    titletext='Optimal Kara Sea Route';
 end
 
 shiploc='/Users/afroberts/data/SHIPPING';
@@ -178,7 +192,7 @@ for shipi=1:length(ships)
      shipl(shipi)=length(ncship.latitude.data);
 end
 
-[shipz,Iorder]=sort(shipl);
+[shipz,Iorder]=sort(shipl,'descend');
 
 % plot all ship tracks
 k=0;
@@ -186,13 +200,63 @@ for shipi=Iorder
      k=k+1;
      ncship=ridgepack_clone('InteRFACE_Shiptracks',...
                {['track',num2str(ships(shipi),'%2.2i'),'_longitude'],...
-                ['track',num2str(ships(shipi),'%2.2i'),'_latitude']});
+                ['track',num2str(ships(shipi),'%2.2i'),'_latitude'],...
+                ['track',num2str(ships(shipi),'%2.2i'),'_distance']});
      [x,y,z,phi,theta]=...
       ridgepack_satfwd(ncship.latitude.data,ncship.longitude.data,...
                        centlat,centlon,horizon,1.001*altitude);
      hship(k)=plot3(x,y,z,':','Color',cols(k,:));
-     shipleg{k}=[num2str(length(ncship.latitude.data)),' NM'];
+     if shipi<=length(complement)
+      shipleg{k}=['Track ',num2str(ships(shipi),'%2.2i'),': ',...
+                 num2str(length(ncship.latitude.data)),' NM [',...
+                 num2str(complement(shipi),'%2.2i'),']'];
+     else
+      shipleg{k}=['Track ',num2str(ships(shipi),'%2.2i'),': ',...
+                 num2str(length(ncship.latitude.data)),' NM'];
+     end
 end
+
+
+% add annotations
+shiptrack=6;
+ncship=ridgepack_clone('InteRFACE_Shiptracks',...
+               {['track',num2str(shiptrack,'%2.2i'),'_longitude'],...
+                ['track',num2str(shiptrack,'%2.2i'),'_latitude'],...
+                ['track',num2str(shiptrack,'%2.2i'),'_distance']});
+
+[x,y,z,phi,theta]=ridgepack_satfwd(ncship.latitude.data,ncship.longitude.data,...
+                       centlat,centlon,horizon,1.001*altitude);
+if sets==1
+ nsr06=nsr061;
+ nsr06string=nsr061string;
+ nsr06angle=nsr061angle;
+elseif sets==2
+ nsr06=nsr062;
+ nsr06string=nsr062string;
+ nsr06angle=nsr062angle;
+elseif sets==3
+ nsr06=nsr063;
+ nsr06string=nsr063string;
+ nsr06angle=nsr063angle;
+end
+
+for nsk=1:length(nsr06)
+       text(x(nsr06(nsk)),y(nsr06(nsk)),1.05*z(nsr06(nsk)),...
+          char(nsr06string{nsk}),...
+          'FontSize',5,...
+          'Margin',1,...
+          'Color',0.25*[1 1 1],...
+          'Rotation',nsr06angle(nsk)+180,...
+          'HorizontalAlignment','right',...
+          'VerticalAlignment','middle');
+       disti=ncship.(['track',num2str(shiptrack,'%2.2i'),'_distance']).data(nsr06(nsk))
+       disti*1.852
+end
+
+% mark in sabetta
+[x,y,z,phi,theta]=ridgepack_satfwd(71.2733,72.0725,...
+                       centlat,centlon,horizon,1.001*altitude);
+plot3(x,y,z,'b.')
 
 % plot most likely ship track
 if ~isempty(mainroute)

@@ -1,6 +1,5 @@
 function [row,col,lat,lon,rowmat,colmat]=...
-           ridgepack_neargrid(nc,lat,lon,switchd,disthreshold,...
-                              lastrow,lastcol)
+           ridgepack_neargrid(nc,lat,lon,switchd,lastrow,lastcol)
 
 % ridgepack_neargrid - Finds the nearest grid point to a latitude and longitude position
 %
@@ -71,7 +70,7 @@ end
 
 % create grid if needed
 if size(latmat,1)==1 | size(latmat,2)==1
- [latgrat,lonrat] = meshgrat(latmat,lonmat);
+ [latgrat,longrat] = meshgrat(latmat,lonmat);
  lonmat=longrat;
  latmat=latgrat;
 end

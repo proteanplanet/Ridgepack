@@ -784,7 +784,7 @@ elseif newnw
 
  clear lat lon
 
- % add in further variant of track 9 to go through Frame Strait
+ % add in further variant of track 9 to go through Fram Strait
  kmlStructC=kml2struct('ConnectorC.kml');
 
  shiptrack{18}.lat=[shiptrack{9}.lat(1:1050)  ...
@@ -797,7 +797,7 @@ elseif newnw
 
  clear lat lon
 
- % add in further variant of track 10 to go through Frame Strait
+ % add in further variant of track 10 to go through Fram Strait
  kmlStructD=kml2struct('ConnectorD.kml');
 
  shiptrack{19}.lat=[shiptrack{10}.lat(1:1350)  ...
@@ -810,11 +810,34 @@ elseif newnw
 
  clear lat lon
 
+ % add in northern sea route passage
+
+ % extract position on track 17 and 6
+ idx = find(abs(shiptrack{17}.lon(:)-152.6)==min(abs(shiptrack{17}.lon(:)-152.6)));
+ lat17=shiptrack{17}.lat(idx);
+ lon17=shiptrack{17}.lon(idx);
+ lat6=track{6}.lat(2130);
+ lon6=track{6}.lon(2130);
+
+ % generate great circle route between the two points
+ [dist,angl,phi,tracklat,tracklon,tracklen]=...
+          ridgepack_greatcircle(lat17,lon17,lat6,lon6);
+
+ % now join route 17 with route 6
+ shiptrack{20}.lat=[shiptrack{17}.lat(1:idx) ...
+                    tracklat ...
+                    track{6}.lat(2130:end)];
+ shiptrack{20}.lon=[shiptrack{17}.lon(1:idx) ...
+                    tracklon ...
+                    track{6}.lon(2130:end)];
+ shiptrack{20}.name='Northern Sea Route: Low Risk Via Kara Gate';
+
+ clear lat lon
 
  % plot up the tracks and seperate by 1nm
  ridgepack_polarm('shipping') 
 
- xdf=[8:19];
+ xdf=[8:20];
  %xdf=10;
  
  for i=xdf
