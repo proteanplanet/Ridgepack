@@ -91,8 +91,8 @@ setting=1;
 
 notation='abc';
 
-maxsets=2;
-minsets=2
+maxsets=3;
+minsets=1
 
 for sets=minsets:maxsets
 
@@ -157,8 +157,8 @@ if sets==1
     titletext='Western Routes';
 elseif sets==2
     %ships=[5 6 11 12 13 14 15 16];
-    ships=[5 6 11 12 13 14 15 16 17];
-    mainroute=6;
+    ships=[5 6 11 12 13 14 15 16 17 20];
+    mainroute=20;
     cols=colormap(lines(length(ships))); 
     titletext='Eastern Routes';
 elseif sets==3
@@ -190,7 +190,11 @@ for shipi=Iorder
      [x,y,z,phi,theta]=...
       ridgepack_satfwd(ncship.latitude.data,ncship.longitude.data,...
                        centlat,centlon,horizon,1.001*altitude);
-     hship(k)=plot3(x,y,z,':','Color',cols(k,:));
+     if ships(shipi)==mainroute
+      hship(k)=plot3(x,y,z,'r-');
+     else
+      hship(k)=plot3(x,y,z,':','Color',cols(k,:));
+     end
      shipleg{k}=[num2str(length(ncship.latitude.data)),' NM'];
 end
 
