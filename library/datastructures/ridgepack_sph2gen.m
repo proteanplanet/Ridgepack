@@ -158,10 +158,13 @@ elseif length(nc.longitude.dimension)>1 & ~any(strcmp('longitude',nc.longitude.d
   nc.x=nc.(xname);
   nc.y=nc.(yname);
  end
-elseif length(nc.longitude.dimension)>1 || ~strcmp('longitude',nc.longitude.dimension)
+% part of conditional commented out due to incorrect error message in some circumstance
+elseif length(nc.longitude.dimension)>1 % || ~strcmp('longitude',nc.longitude.dimension)
+ length(nc.longitude.dimension)
  disp(['The longitude dimension is: ',char(nc.longitude.dimension)]);
  error(['Longitude is already 2D: ',char(nc.longitude.dimension)]);
-elseif length(nc.latitude.dimension)>1 || ~strcmp('latitude',nc.latitude.dimension)
+% part of conditional commented out due to incorrect error message in some circumstance
+elseif length(nc.latitude.dimension)>1 % || ~strcmp('latitude',nc.latitude.dimension)
  disp(['The latitude dimension is:',char(nc.latitude.dimension)]);
  error(['Latitude is already 2D: ',char(nc.latitude.dimension)]);
 elseif isfield(nc,'x') | isfield(nc,'y')
