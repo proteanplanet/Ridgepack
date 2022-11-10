@@ -137,6 +137,8 @@ if isempty(r)
  % assign default extents
  if ncols==1
   extentx=rx-2*minedge-2*mingap;
+ elseif ncols==2
+  extentx=rx/2-2*minedge-2*mingap;
  else
   extentx=(rx-(2*minedge)-(mingap*(maxrc-1)))/maxrc;
  end
