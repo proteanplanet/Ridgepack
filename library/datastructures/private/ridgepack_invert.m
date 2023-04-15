@@ -14,7 +14,7 @@ function [nc_type]=ridgepack_invert(mclass)
 % 
 % nc_type - text string of the netcdf type: 
 %           NC_INT, NC_BYTE, NC_CHAR, NC_SHORT, NC_FLOAT or ...
-% 	    NC_DOUBLE (respectively)
+% 	    NC_DOUBLE, NC_UBYTE (respectively)
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
@@ -28,6 +28,8 @@ if strcmp(mclass,'int32')
         nc_type='NC_INT';
 elseif strcmp(mclass,'int8')
         nc_type='NC_BYTE';
+elseif strcmp(mclass,'uint8')
+        nc_type='NC_UBYTE';
 elseif strcmp(mclass,'char')
         nc_type='NC_CHAR';
 elseif strcmp(mclass,'int16')
