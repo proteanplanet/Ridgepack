@@ -226,8 +226,8 @@ function [ncr,nc]=ridgepack_reduce(nc,dimnames,bounds,varmean)
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 
-global debug;
-%debug=true;
+%global debug;
+debug=true;
 
 if debug; disp(['Entering ',mfilename,'...']); end
 
@@ -799,7 +799,7 @@ end
 
 % check that any variables exist
 if exist('ncr')==0
- error('All variables will be removed using this dimension specifications') 
+ error('All variables will be removed using this dimension specification') 
 end
 
 % now reduce coordinate variables

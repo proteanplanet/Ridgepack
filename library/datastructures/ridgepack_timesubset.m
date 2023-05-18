@@ -252,12 +252,23 @@ if recreatemean
   end
  end
 
+ clear nc
+
  % extract mean, standard deviation and sample size
  disp(['Reading ',fileout])
- nc=ridgepack_reduce(ridgepack_clone(fileout),{'time'},{},true);
+ nc=ridgepack_clone(fileout);
+ if isempty(setdiff(nc.(ncvar).dimension,{'time'}))
+  nc.(ncvar).dimension={'time','d1'}
+  nc.d1.data=1;
+  nc.d1.type='NC_INT';
+  nc.d1.dimension={'d1'}
+ end
+
+ nc=ridgepack_reduce(nc,{'time'},{},true);
  nc.attributes.comment=['Seasonal mean dataset only; ',...
                         ' Months: ',num2str(months,' %2.2i'),...
                         ', Years: ',num2str(ys),'-',num2str(ye)];
+ disp(nc.attributes.comment)
  ridgepack_write(nc,finalfile);
 
 else
