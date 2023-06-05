@@ -300,7 +300,8 @@ for m = 1:numbervariables
    varid=netcdf.inqVarID(ncid,name);
 
    % get the time string variable id
-   if ~isempty(findstr(name,'time')) & timestamp & ~strcmpi(name,'time_bounds');
+   if ~isempty(findstr(name,'time')) & timestamp & ~strcmpi(name,'time_bounds') & ...
+      isempty(findstr(name,'timeDaily')) & isempty(findstr(name,'timeMonthly'));
     tcharvarid=netcdf.inqVarID(ncid,[name,'_string']);
    end
 

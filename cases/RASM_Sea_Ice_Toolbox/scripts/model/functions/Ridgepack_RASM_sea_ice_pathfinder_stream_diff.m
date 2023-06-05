@@ -1,5 +1,5 @@
 function Ridgepack_RASM_sea_ice_pathfinder_stream_diff(rasmcases,quicknames,...
-                                   startyear,endyear,format,pub,pubdir,monthset)
+                               startyear,endyear,format,pub,pubdir,monthset)
 
 delete(gcf);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
