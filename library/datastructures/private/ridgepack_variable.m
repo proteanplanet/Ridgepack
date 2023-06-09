@@ -394,10 +394,10 @@ for m = 1:numbervariables
  % Write data for variables with a dimension
  if isempty(nc.(name).dimension);
 
-   if length(nc.(name).data)==1
+   if isfield(nc.(name),'data') & length(nc.(name).data)==1
     netcdf.putVar(ncid,varid,nc.(name).data);
     disp([name,' is dimensionless']) 
-   else
+   elseif isfield(nc.(name),'data')
     error('Cannot write netcdf file without dimensions for data with length > 1')
    end
 
