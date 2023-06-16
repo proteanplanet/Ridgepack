@@ -1,4 +1,4 @@
-function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
+function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend,gen)
 
 % ridgepack_timesubset - Generate seasonal subsets of data based on consecutive months
 %
@@ -22,8 +22,8 @@ function [nc]=ridgepack_timesubset(ncfile,ncvar,months,yearstart,yearend)
 %             months to be extracted.
 % yearstart - first year of timeseries to be analyzed.
 % yearend   - last year of timeseries to be analyzed.
-%
-% 
+% gen       - logical telling whether to allow script to outomate or force generation 
+%             of the means. If set to true, a new generation will take place every time.
 %
 % OUTPUT:
 %
@@ -87,6 +87,11 @@ elseif min(months)<1 | max(months)>12
  error('months can only be from 1 to 12')
 elseif ~isnumeric(yearstart) | ~isnumeric(yearend)
  error('yearstart and yearend must be numbers')
+end
+
+% switch on auto-generation if generation is not requested
+if nargin<6
+ gen=false;
 end
 
 % Check the variable exists in the netcdf file
@@ -184,7 +189,7 @@ sampvar=[ncvar,'_samp'];
 equivvar=[ncvar,'_equiv'];
 
 % extract mean, standard deviation and sample size
-if ~isempty(xdir)
+if ~isempty(xdir) & ~gen
  disp(['Reading ',finalfile])
  try
   nccheck=ridgepack_clone(finalfile);
@@ -202,15 +207,15 @@ else
  recreatemean=true;
 end
 
-if recreatemean
+if recreatemean 
 
  % check whether abridged seasonal timeseries already exists
  xdir=dir([fileout,'.nc']);
 
  % extract data if necessary and write to netcdf file
- if isempty(index);
+ if isempty(index) & ~gen 
   error(['Unable to extract these months from ',ncfile]);
- elseif ~isempty(xdir)
+ elseif ~isempty(xdir) & ~gen
   % check times are correct in the file
   disp([char(xdir.name),' already exists.'])
   nctimes=ridgepack_clone(fileout,{'time'});

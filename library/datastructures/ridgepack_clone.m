@@ -1591,7 +1591,8 @@ elseif isfield(nc.attributes,'conventions') & strcmp(nc.attributes.conventions,'
 	nc=ridgepack_popoutput(nc);
 
 % CICE History file
-elseif isfield(nc.attributes,'source') & ~isempty(strfind(char(nc.attributes.source),'CICE'))
+elseif isfield(nc.attributes,'source') & ~isempty(strfind(char(nc.attributes.source),'CICE '))
+
 	nc=ridgepack_ciceoutput(nc);
 
 % CPL couput output
