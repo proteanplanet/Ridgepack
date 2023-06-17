@@ -23,14 +23,14 @@ nruns=1;
 
 %daynames={'v2.NARRM.historical_0101.mpassi.hist.am.timeSeriesStatsDaily.'};
 %daynames={'v2.NARRM.historical_0301.mpassi.hist.am.timeSeriesStatsDaily.'};
-daynames={'v2.LR.historical_0251.mpassi.hist.am.timeSeriesStatsDaily.'};
+daynames={'v2.LR.historical_0201.mpassi.hist.am.timeSeriesStatsDaily.'};
 
 %outnames={'v2.NARRM.historical_0101.mpassi.daily'};
-outnames={'v2.LR.historical_0251.mpassi.daily'};
+outnames={'v2.LR.historical_0201.mpassi.daily'};
 
 %locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0101/data/ice/hist'};
 %locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0301/data/ice/hist'};
-locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.historical_0251/data/ice/hist'};
+locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.historical_0201/data/ice/hist'};
 
 gridnames={'mpaso.rst.0002-01-01_00000'};
 

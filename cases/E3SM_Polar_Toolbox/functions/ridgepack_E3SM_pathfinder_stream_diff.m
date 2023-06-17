@@ -51,13 +51,9 @@ end
 
 alphatag=['abcdefghijklmnopqrstuvwxyz'];
 
-k=0;
-
 % proceed in this order so that differences are taken from observations in each column
 for cols=1:length(monthsets)
  for rows=1:length(nruns)
-
-  k=k+1;
 
   monthnum=['months'];
   for months=monthsets{cols};
