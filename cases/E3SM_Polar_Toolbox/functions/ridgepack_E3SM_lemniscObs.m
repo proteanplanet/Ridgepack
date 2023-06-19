@@ -5,6 +5,9 @@ close all
 %generate=true;
 generate=false;
 
+generateobs=true;
+%generateobs=false;
+
 %plotfullellipse=true;
 plotfullellipse=false;
 
@@ -16,8 +19,8 @@ grid=true;
 %plottimeseries=true;
 plottimeseries=false;
 
-%itqrange=false;
 itqrange=true;
+%itqrange=false;
 
 %label=true;
 label=false;
@@ -25,26 +28,37 @@ label=false;
 %plotcross=true;
 plotcross=false;
 
-titletab='Sea Ice E3SM V2 PI Control';
-filetabe='test';
+titletab='Sea Ice E3SM Industrial';
+filetabe='industrial';
 
 cases=[1 2];
-ccols=lines(length(cases));
-casename={'v2.LR.piControl','v2.NARRM.piControl'};
+%cases=[1];
 
-yearst=1;
-yearen=500;
+casename={'v2.LR.historical_0101','v2.NARRM.historical_0101'};
+legnames={'LR 0101','NARRM 0101'};
+
+ccols=lines(length(cases));
+ccols(99,1:3)=0*[1 1 1]; % observational extent color
+legnames{99}='NOAA CDR'; % observational
+
+yearst=1980;
+yearen=2014;
 
 vars={'totalIceExtent','totalIceVolume','totalSnowVolume'};
 fact=[10^6 10^3 10^2];
 
+maxcols=2;
+
 lquantile=0.25;
 uquantile=0.75;
 
-maxcols=3;
 
 % data acquisition
 if generate 
+
+ if length(cases)>length(casename)
+  error('Requested cases greater than number of casenames')
+ end
 
  timevars=vars;
  timevars{end+1}='xtime';
@@ -62,7 +76,7 @@ if generate
               num2str(yearx,'%4.4i'),'.*.nc']);
  
    if length(files)<12
-    error(['Missing files for year ',num2str(yearx,'%4.4i')])
+    error(['Missing files for year ',num2str(yearx,'%4.4i'),' case ',char(casename{i})])
    end
 
    for j=1:length(files)
@@ -251,8 +265,99 @@ if generate
 
 end
 
-%return
+if generateobs
 
+  clear nc extentannualmean extentannualmedian 
+  clear extentannualstd extentannualequiv 
+  clear extentlowerquantile extentupperquantile
+
+  k=1;
+
+  cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+
+  ncobs=ridgepack_clone('G02202_v4_merged_global_r00_1979_2022');
+
+  years=str2num(datestr(ncobs.time.data,'YYYY'));
+
+  idx=find(years>=yearst & years<=yearen);
+
+  k=1
+  ncobs.time.data=ncobs.time.data(idx);
+  ncobs.extent.data=ncobs.extent.data(:,idx)/fact(k);
+  ncobs=rmfield(ncobs,{'attributes'})
+  ncobs.attributes.title=['G02202_v4 extent lemnisc statistics years ',...
+                       num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')];
+  for k=1:365
+   space=[k:365:365*floor(length(ncobs.time.data)./365)];
+   annualtimeaverage(k)=ncobs.time.data(k);
+   for j=1:3
+
+    extentannualmean(j,k)=mean(ncobs.extent.data(j,space));
+    extentannualmedian(j,k)=median(ncobs.extent.data(j,space));
+    extentannualstd(j,k)=std(ncobs.extent.data(j,space));
+    extentannualequiv(j,k)=ridgepack_equiv(ncobs.extent.data(j,space));
+    extentlowerquantile(j,k)=quantile(ncobs.extent.data(j,space),lquantile);
+    extentupperquantile(j,k)=quantile(ncobs.extent.data(j,space),uquantile);
+
+   end
+  end
+
+  ncobs.attributes.dataset='NOAA/NSIDC G02202 V4 Sea Ice Climate Data Record from SMMR, SSM/I, SSMI/S'
+  ncobs.attributes.regions='nRegions: 1=global, 2=Northern Hem, 3=Southern Hem';
+
+  ncobs.dayofyear.data=[1:365];
+  ncobs.dayofyear.long_name='day of year';
+  ncobs.dayofyear.dimension={'dayofyear'};
+  ncobs.dayofyear.units='day of year';
+  ncobs.dayofyear.type='NC_INT';
+
+  ncobs.nsamp.data=length(space).*ones(365,1);
+  ncobs.nsamp.long_name='Sample Size';
+  ncobs.nsamp.dimension={'dayofyear'};
+  ncobs.nsamp.type='NC_INT';
+
+  ncobs.extentdaymean.data=extentannualmean;
+  ncobs.extentdaymean.long_name=['NOAA/NSIDC G02202 V4 CDR sea ice extent mean'];
+  ncobs.extentdaymean.dimension={'nRegion','dayofyear'};
+  ncobs.extentdaymean.units='km^2';
+
+  ncobs.extentdaymedian.data=extentannualmedian;
+  ncobs.extentdaymedian.long_name=['NOAA/NSIDC G02202 V4 CDR sea ice extent median'];
+  ncobs.extentdaymedian.dimension={'nRegion','dayofyear'};
+  ncobs.extentdaymedian.units='km^2';
+
+  ncobs.extentdaystd.data=extentannualstd;
+  ncobs.extentdaystd.long_name=['NOAA/NSIDC G02202 V4 CDR sea ice extent standard deviation'];
+  ncobs.extentdaystd.dimension={'nRegion','dayofyear'};
+  ncobs.extentdaystd.units='km^2';
+
+  ncobs.extentdayequiv.data=extentannualequiv;
+  ncobs.extentdayequiv.long_name=['NOAA/NSIDC G02202 V4 CDR sea ice extent equivalent sample size'];
+  ncobs.extentdayequiv.dimension={'nRegion','dayofyear'};
+  ncobs.extentdayequiv.units='km^2';
+
+  ncobs.extentlowerquantile.data=extentlowerquantile;
+  ncobs.extentlowerquantile.long_name=[num2str(lquantile),' quantile of ice extent'];
+  ncobs.extentlowerquantile.dimension={'nRegion','dayofyear'};
+  ncobs.extentlowerquantile.units='km^2';
+
+  ncobs.extentupperquantile.data=extentupperquantile;
+  ncobs.extentupperquantile.long_name=[num2str(uquantile),' quantile of ice extent'];
+  ncobs.extentupperquantile.dimension={'nRegion','dayofyear'};
+  ncobs.extentupperquantile.units='km^2';
+
+  ncobs=ridgepack_struct(ncobs);
+
+  outfile=['G02202_v4_merged.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+
+  ncobs=ridgepack_struct(ncobs);
+
+  ridgepack_write(ncobs,outfile);
+
+end
+
+%return
 
 for kcols=1:maxcols
 
@@ -337,13 +442,27 @@ for kcols=1:maxcols
 
  end
 
- % plot data from each case
- for i=cases
+ % add observed extent as case 0
+ if kcols==1
+  casechoice=[99 cases];
+ else
+  casechoice=cases;
+ end
 
-  cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
-  infile=[char(casename{i}),'.lemnisc.',...
-          num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-  nc=ridgepack_clone(infile);
+ % plot data from each case
+ for i=casechoice
+
+  if i==99 % observed extent
+   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
+   infile=[char(casename{i}),'.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
 
   if i==cases(1)
    if kcols==1
@@ -359,7 +478,7 @@ for kcols=1:maxcols
     std1=nc.snowdaystd.data(1,:);
     equiv1=nc.snowdayequiv.data(1,:);
    end
-  else
+  elseif i<99 % not compared with observations
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
@@ -386,7 +505,11 @@ for kcols=1:maxcols
    lowerquantile=nc.extentlowerquantile.data;
    daymedian=nc.extentdaymedian.data;
    daymean=nc.extentdaymean.data;
-   totalseries=nc.totalIceExtent.data;
+   if i==99
+    totalseries=nc.extent.data;
+   else
+    totalseries=nc.totalIceExtent.data;
+   end
   elseif kcols==2
    upperquantile=nc.volumeupperquantile.data;
    lowerquantile=nc.volumelowerquantile.data;
@@ -553,12 +676,19 @@ for kcols=1:maxcols
 
  end
 
- for i=cases
+ for i=casechoice
 
-  cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
-  infile=[char(casename{i}),'.lemnisc.',...
-          num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-  nc=ridgepack_clone(infile);
+  if i==99 % observed extent
+   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
+   infile=[char(casename{i}),'.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
 
   % grab daily mean  
   if kcols==1
@@ -584,7 +714,7 @@ for kcols=1:maxcols
     std1=nc.snowdaystd.data(1,:);
     equiv1=nc.snowdayequiv.data(1,:);
    end
-  else
+  elseif i<99
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
@@ -607,12 +737,12 @@ for kcols=1:maxcols
   end
 
   % plot mean that is statistically significant
-  if i==cases(1)
-   plot(daymean(2,:),daymean(3,:),'Color',ccols(i,:));
-  else
+  if i==cases(1) | i==99
+   h(i)=plot(daymean(2,:),daymean(3,:),'Color',ccols(i,:));
+  elseif i<99
    plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(i,:));
+   h(i)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(i,:));
    plotmean=daymean;
    plotmean(:,hcrit==1)=NaN;
    plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(i,:));
@@ -716,11 +846,10 @@ for kcols=1:maxcols
  xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
+  legend(h([99 cases]),legnames{[99 cases]},'location','southwest');
+  legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
-
- %  legend([hp],{'V2 PI Control Reference'});
- %  legend('boxoff');
 
 end
 

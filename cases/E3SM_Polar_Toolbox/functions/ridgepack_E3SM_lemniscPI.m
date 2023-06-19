@@ -608,11 +608,11 @@ for kcols=1:maxcols
 
   % plot mean that is statistically significant
   if i==cases(1)
-   plot(daymean(2,:),daymean(3,:),'Color',ccols(i,:));
+   h(i)=plot(daymean(2,:),daymean(3,:),'Color',ccols(i,:));
   else
    plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(i,:));
+   h(i)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(i,:));
    plotmean=daymean;
    plotmean(:,hcrit==1)=NaN;
    plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(i,:));
@@ -716,19 +716,19 @@ for kcols=1:maxcols
  xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
+  legend([h(1) h(2)],{'Standard Model','NARRM'},'location','southwest')
+  legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
 
- %  legend([hp],{'V2 PI Control Reference'});
- %  legend('boxoff');
-
 end
+
 
 ridgepack_multialign(gcf,'',12)
 
 cd('/Users/afroberts/work')
 
-ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',...
+ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.PI.',...
                  num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe,'.png'],1,2);
 
 
