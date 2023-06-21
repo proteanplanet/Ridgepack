@@ -2,8 +2,8 @@
 clear
 close all
 
-generate=true;
-%generate=false;
+%generate=true;
+generate=false;
 
 %generateobs=true;
 generateobs=false;
@@ -30,45 +30,38 @@ plotcross=false;
 
 titletab='Sea Ice E3SM Industrial';
 
-filetabe='industrial2';
+filetabe='industrial3';
 
-numcols=3;
+ensemblenames={'LR','NARRM'};
+legnames={'LR 5-member','NARRM 5-member'};
 
-cases=[1 2 3 4 5];
+ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 
-casecols=[2 2 2 2 2];
+casenames={'v2.LR.historical_0101',...
+           'v2.LR.historical_0151',...
+           'v2.LR.historical_0201',...
+           'v2.LR.historical_0251',...
+           'v2.LR.historical_0301',...
+           'v2.NARRM.historical_0101',...
+           'v2.NARRM.historical_0151',...
+           'v2.NARRM.historical_0201',...
+           'v2.NARRM.historical_0251',...
+           'v2.NARRM.historical_0301'};
 
-ensemble=[1 1 1 1 1];
+nlemniscs=length(ensemblenames)+1;
 
-casename={'v2.NARRM.historical_0101',...
-          'v2.NARRM.historical_0151',...
-          'v2.NARRM.historical_0201',...
-          'v2.NARRM.historical_0251',...
-          'v2.NARRM.historical_0301'};
+ccols=lines(nlemniscs);
 
-legnames={'NARRM 0101',...
-          'NARRM 0151',...
-          'NARRM 0201',...
-          'NARRM 0251',...
-          'NARRM 0301'};
-
-%filetabe='industrial2';
-%cases=[1 2];
-%casename={'v2.LR.historical_0101','v2.NARRM.historical_0101'};
-%legnames={'LR 0101','NARRM 0101'};
-
-basecols=lines(numcols)
-ccols=lines(length(cases));
-ccols(99,1:3)=[0 0.5 0]; % observational extent color
-legnames{99}='NOAA CDR'; % observational
+legnames{nlemniscs}='NOAA CDR'; % observational
 
 yearst=1980;
+%yearen=1985;
 yearen=2014;
 
 vars={'totalIceExtent','totalIceVolume','totalSnowVolume'};
 fact=[10^6 10^3 10^2];
 
-maxcols=2;
+maxcols=3;
 
 lquantile=0.25;
 uquantile=0.75;
@@ -77,55 +70,63 @@ uquantile=0.75;
 % data acquisition
 if generate 
 
- if length(cases)>length(casename)
-  error('Requested cases greater than number of casenames')
- end
-
  timevars=vars;
  timevars{end+1}='xtime';
 
- % create processed files for each case
- for i=cases
+ % assemble ensemble statistics
+ for l=1:length(ensemblenames)
+
+  if length(ensemblecases)>length(casenames)
+   error('Requested cases greater than number of casenames')
+  end
 
   k=1;
 
-  cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/hist']);
+  % create processed files for each case
+  for i=ensemblecases{l}
 
-  for yearx=yearst:1:yearen
-
-   files=dir([char(casename{i}),'.mpassi.hist.am.regionalStatistics.',...
-              num2str(yearx,'%4.4i'),'.*.nc']);
+   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist']);
  
-   if length(files)<12
-    error(['Missing files for year ',num2str(yearx,'%4.4i'),' case ',char(casename{i})])
-   end
+   for yearx=yearst:1:yearen
 
-   for j=1:length(files)
-    if k==1
-     nc=ridgepack_clone(files(j).name,timevars);
-     nc=rmfield(nc,'time');
-     nc.time.data=datenum(nc.xtime.data,'yyyy-mm-dd_HH:MM:SS')';
-     nc.time.dimension={'time'};
-     for k=1:length(vars)
-      nc.(char(vars{k})).data=nc.(char(vars{k})).data./fact(k);
-      nc.(char(vars{k})).dimension={'nRegion','time'};
-     end
-     nc=rmfield(nc,{'xtime','StrLen','attributes','nRegions'})
-     nc.attributes.title=[char(casename{i}),' lemnisc statistics years ',...
-                         num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')];
-     clear nctime
-    else
-     ncadd=ridgepack_clone(files(j).name,timevars);
-     nc.time.data=[nc.time.data datenum(ncadd.xtime.data,'yyyy-mm-dd_HH:MM:SS')'];
-     for k=1:length(vars)
-      nc.(char(vars{k})).data=[nc.(char(vars{k})).data ncadd.(char(vars{k})).data./fact(k)];
-     end
-     clear ncadd 
+    files=dir([char(casenames{i}),'.mpassi.hist.am.regionalStatistics.',...
+               num2str(yearx,'%4.4i'),'.*.nc']);
+ 
+    if length(files)<12
+     error(['Missing files for year ',num2str(yearx,'%4.4i'),' case ',char(casenames{i})])
     end
-    k=k+1;
+
+    for j=1:length(files)
+     if k==1
+      nc=ridgepack_clone(files(j).name,timevars);
+      nc=rmfield(nc,'time');
+      nc.time.data=datenum(nc.xtime.data,'yyyy-mm-dd_HH:MM:SS')';
+      nc.time.dimension={'time'};
+      for k=1:length(vars)
+       nc.(char(vars{k})).data=nc.(char(vars{k})).data./fact(k);
+       nc.(char(vars{k})).dimension={'nRegion','time'};
+      end
+      nc=rmfield(nc,{'xtime','StrLen','attributes','nRegions'})
+      nc.attributes.title=[char(ensemblenames{l}),' lemnisc ensemble statistics years ',...
+                           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')];
+      nc.attributes.cases=[''];
+      clear nctime
+     else
+      ncadd=ridgepack_clone(files(j).name,timevars);
+      nc.time.data=[nc.time.data datenum(ncadd.xtime.data,'yyyy-mm-dd_HH:MM:SS')'];
+      for k=1:length(vars)
+       nc.(char(vars{k})).data=[nc.(char(vars{k})).data ncadd.(char(vars{k})).data./fact(k)];
+      end
+      clear ncadd 
+     end
+     k=k+1;
+    end
+
    end
 
-  end
+   nc.attributes.cases=[nc.attributes.cases,char(casenames{i}),' '];
+
+  end % cases in ensemble loop
 
   for k=1:365
    space=[k:365:365*floor(length(nc.time.data)./365)];
@@ -156,7 +157,7 @@ if generate
    end
   end
 
-  nc.attributes.casename=char(casename{i});
+  nc.attributes.ensemblename=char(ensemblenames{l});
   nc.attributes.regions='nRegions: 1=global, 2=Northern Hem, 3=Southern Hem';
 
   nc.dayofyear.data=[1:365];
@@ -176,22 +177,22 @@ if generate
   nc.nsamp.type='NC_INT';
 
   nc.extentdaymean.data=extentannualmean;
-  nc.extentdaymean.long_name=[char(casename{i}),'sea ice extent mean'];
+  nc.extentdaymean.long_name=[char(ensemblenames{l}),'sea ice extent mean'];
   nc.extentdaymean.dimension={'nRegion','dayofyear'};
   nc.extentdaymean.units='km^2';
 
   nc.extentdaymedian.data=extentannualmedian;
-  nc.extentdaymedian.long_name=[char(casename{i}),'sea ice extent median'];
+  nc.extentdaymedian.long_name=[char(ensemblenames{l}),'sea ice extent median'];
   nc.extentdaymedian.dimension={'nRegion','dayofyear'};
   nc.extentdaymedian.units='km^2';
 
   nc.extentdaystd.data=extentannualstd;
-  nc.extentdaystd.long_name=[char(casename{i}),'sea ice extent standard deviation'];
+  nc.extentdaystd.long_name=[char(ensemblenames{l}),'sea ice extent standard deviation'];
   nc.extentdaystd.dimension={'nRegion','dayofyear'};
   nc.extentdaystd.units='km^2';
 
   nc.extentdayequiv.data=extentannualequiv;
-  nc.extentdayequiv.long_name=[char(casename{i}),'sea ice extent equivalent sample size'];
+  nc.extentdayequiv.long_name=[char(ensemblenames{l}),'sea ice extent equivalent sample size'];
   nc.extentdayequiv.dimension={'nRegion','dayofyear'};
   nc.extentdayequiv.units='km^2';
 
@@ -208,22 +209,22 @@ if generate
   % ---
 
   nc.volumedaymean.data=volumeannualmean;
-  nc.volumedaymean.long_name=[char(casename{i}),'sea ice volume mean'];
+  nc.volumedaymean.long_name=[char(ensemblenames{l}),'sea ice volume mean'];
   nc.volumedaymean.dimension={'nRegion','dayofyear'};
   nc.volumedaymean.units='km^3';
 
   nc.volumedaymedian.data=volumeannualmedian;
-  nc.volumedaymedian.long_name=[char(casename{i}),'sea ice volume median'];
+  nc.volumedaymedian.long_name=[char(ensemblenames{l}),'sea ice volume median'];
   nc.volumedaymedian.dimension={'nRegion','dayofyear'};
   nc.volumedaymedian.units='km^3';
 
   nc.volumedaystd.data=volumeannualstd;
-  nc.volumedaystd.long_name=[char(casename{i}),'sea ice volume standard deviation'];
+  nc.volumedaystd.long_name=[char(ensemblenames{l}),'sea ice volume standard deviation'];
   nc.volumedaystd.dimension={'nRegion','dayofyear'};
-  nc.volumedaystd.units='km^3';
+  nc.volumedaystd.units='km^3'
 
   nc.volumedayequiv.data=volumeannualequiv;
-  nc.volumedayequiv.long_name=[char(casename{i}),'sea ice volume equivalent sample size'];
+  nc.volumedayequiv.long_name=[char(ensemblenames{l}),'sea ice volume equivalent sample size'];
   nc.volumedayequiv.dimension={'nRegion','dayofyear'};
   nc.volumedayequiv.units='km^3';
 
@@ -240,22 +241,22 @@ if generate
   % ---
 
   nc.snowdaymean.data=snowannualmean;
-  nc.snowdaymean.long_name=[char(casename{i}),'sea ice snow volume mean'];
+  nc.snowdaymean.long_name=[char(ensemblenames{l}),'sea ice snow volume mean'];
   nc.snowdaymean.dimension={'nRegion','dayofyear'};
   nc.snowdaymean.units='km^3';
 
   nc.snowdaymedian.data=snowannualmedian;
-  nc.snowdaymedian.long_name=[char(casename{i}),'sea ice snow volume median'];
+  nc.snowdaymedian.long_name=[char(ensemblenames{l}),'sea ice snow volume median'];
   nc.snowdaymedian.dimension={'nRegion','dayofyear'};
   nc.snowdaymedian.units='km^3';
 
   nc.snowdaystd.data=snowannualstd;
-  nc.snowdaystd.long_name=[char(casename{i}),'sea ice snow volume standard deviation'];
+  nc.snowdaystd.long_name=[char(ensemblenames{l}),'sea ice snow volume standard deviation'];
   nc.snowdaystd.dimension={'nRegion','dayofyear'};
   nc.snowdaystd.units='km^3';
 
   nc.snowdayequiv.data=snowannualequiv;
-  nc.snowdayequiv.long_name=[char(casename{i}),'sea ice snow volume equivalent sample size'];
+  nc.snowdayequiv.long_name=[char(ensemblenames{l}),'sea ice snow volume equivalent sample size'];
   nc.snowdayequiv.dimension={'nRegion','dayofyear'};
   nc.snowdayequiv.units='km^3';
 
@@ -271,16 +272,14 @@ if generate
 
   nc=ridgepack_struct(nc);
 
-  cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
+  cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
 
-  outfile=[char(casename{i}),'.lemnisc.',...
+  outfile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
 
   nc=ridgepack_struct(nc);
 
   ridgepack_write(nc,outfile);
-
-%  clear nc
 
  end
 
@@ -288,7 +287,8 @@ end
 
 if generateobs
 
-  clear nc extentannualmean extentannualmedian 
+  clear nc 
+  clear extentannualmean extentannualmedian 
   clear extentannualstd extentannualequiv 
   clear extentlowerquantile extentupperquantile
 
@@ -463,29 +463,28 @@ for kcols=1:maxcols
 
  end
 
- % add observed extent as case 0
+ % plot data from each case
  if kcols==1
-  casechoice=[99 cases];
+  nlemn=nlemniscs;
  else
-  casechoice=cases;
+  nlemn=nlemniscs-1;
  end
 
- % plot data from each case
- for i=casechoice
+ for l=1:nlemn
 
-  if i==99 % observed extent
+  if l==nlemniscs % observed extent
    cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
-   infile=[char(casename{i}),'.lemnisc.',...
+   cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
   end
 
-  if i==cases(1)
+  if l==1
    if kcols==1
     mu1=nc.extentdaymean.data(1,:);
     std1=nc.extentdaystd.data(1,:);
@@ -499,7 +498,7 @@ for kcols=1:maxcols
     std1=nc.snowdaystd.data(1,:);
     equiv1=nc.snowdayequiv.data(1,:);
    end
-  elseif i<99 % not compared with observations
+  elseif l<nlemniscs % not compared with observations
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
@@ -526,7 +525,7 @@ for kcols=1:maxcols
    lowerquantile=nc.extentlowerquantile.data;
    daymedian=nc.extentdaymedian.data;
    daymean=nc.extentdaymean.data;
-   if i==99
+   if l==nlemniscs
     totalseries=nc.extent.data;
    else
     totalseries=nc.totalIceExtent.data;
@@ -697,16 +696,16 @@ for kcols=1:maxcols
 
  end
 
- for i=casechoice
+ for l=1:nlemn
 
-  if i==99 % observed extent
+  if l==nlemniscs % observed extent
    cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casename{i}),'/data/ice/processed']);
-   infile=[char(casename{i}),'.lemnisc.',...
+   cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
   end
@@ -721,7 +720,7 @@ for kcols=1:maxcols
   end
 
   % grab t-test information
-  if i==cases(1)
+  if l==1
    if kcols==1
     mu1=nc.extentdaymean.data(1,:);
     std1=nc.extentdaystd.data(1,:);
@@ -735,7 +734,7 @@ for kcols=1:maxcols
     std1=nc.snowdaystd.data(1,:);
     equiv1=nc.snowdayequiv.data(1,:);
    end
-  elseif i<99
+  elseif l<nlemniscs
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
@@ -758,17 +757,17 @@ for kcols=1:maxcols
   end
 
   % plot mean that is statistically significant
-  if i==99
-   h(i)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(i,:));
-  elseif i==cases(1) 
-   h(i)=plot(daymean(2,:),daymean(3,:),'Color',ccols(i,:));
-  elseif i<99
+  if l==nlemniscs
+   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+  elseif l==1 
+   h(l)=plot(daymean(2,:),daymean(3,:),'Color',ccols(l,:));
+  elseif l<nlemniscs
    plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
-   h(i)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(i,:));
+   h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
    plotmean=daymean;
    plotmean(:,hcrit==1)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(i,:));
+   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
   end
 
   if label
@@ -784,7 +783,7 @@ for kcols=1:maxcols
   end
 
   idx=datenum(0000,3,21);
-  ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(i,:));
+  ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
   if label
 
@@ -801,7 +800,7 @@ for kcols=1:maxcols
 
   idx=datenum(0000,6,21);
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(i,:));
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
  
   if label
 
@@ -817,7 +816,7 @@ for kcols=1:maxcols
   end
  
   idx=datenum(0000,9,21);
-  plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(i,:));
+  plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
   if label
 
@@ -834,7 +833,7 @@ for kcols=1:maxcols
  
   idx=datenum(0000,12,21);
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(i,:));
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
 
   if label
 
@@ -862,7 +861,7 @@ for kcols=1:maxcols
           daymean(3,end) ...
           daymean(3,end)+z.*sin(theta+150*pi/180)];
 
-  plot(xarrow,yarrow,'Color',ccols(i,:))
+  plot(xarrow,yarrow,'Color',ccols(l,:))
 
  end
 
@@ -870,8 +869,9 @@ for kcols=1:maxcols
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
   legendnames=legnames;
-  legendnames{99}=[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),' ',char(legnames{99})];
-  legend(h([99 cases]),legendnames{[99 cases]},'location','southwest');
+  legendnames{nlemniscs}=[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),' ',...
+                          char(legnames{nlemniscs})];
+  legend(h([1:nlemniscs]),legendnames,'location','southwest');
   legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
