@@ -54,7 +54,9 @@ ccols=lines(nlemniscs);
 
 legnames{nlemniscs}='NOAA CDR'; % observational
 
-yearst=1980;
+%yearst=1980;
+yearst=2000;
+%yearen=1999;
 %yearen=1985;
 yearen=2014;
 
@@ -514,7 +516,7 @@ for kcols=1:maxcols
    end
    t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
    df = (equiv1+equiv2-2);
-   tcrit=tinv(0.995,df); % change 0.995 99%, 0.975 95%
+   tcrit=tinv(0.995,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
    hcrit=ones(size(t));
    hcrit(isnan(t))=0;
    hcrit(-tcrit<t & t<tcrit)=0;
@@ -763,11 +765,11 @@ for kcols=1:maxcols
    h(l)=plot(daymean(2,:),daymean(3,:),'Color',ccols(l,:));
   elseif l<nlemniscs
    plotmean=daymean;
+   %plotmean(:,hcrit==1)=NaN;
+   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
+   %plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
    h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
-   plotmean=daymean;
-   plotmean(:,hcrit==1)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
   end
 
   if label
