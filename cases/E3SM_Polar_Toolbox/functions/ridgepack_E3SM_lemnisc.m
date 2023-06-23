@@ -25,37 +25,37 @@ itqrange=true;
 %label=true;
 label=false;
 
-yearlabel=true;
-%yearlabel=false;
+%yearlabel=true;
+yearlabel=false;
 
 %plotcross=true;
 plotcross=false;
 
-plotequinoxtrend=true;
-%plotequinoxtrend=false;
+%plotequinoxtrend=true;
+plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%observations=true;
+observations=false;
 
 titletab='Sea Ice E3SM Industrial';
 
-%filetabe='control';
-filetabe='industrial3';
+filetabe='control';
+%filetabe='industrial3';
 
 ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
-legnames={'LR 5-member','NARRM 5-member'};
-%legnames={'LR PI Control','NARRM PI Control'};
+%legnames={'LR 5-member','NARRM 5-member'};
+legnames={'LR PI Control','NARRM PI Control'};
 
-ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
+%ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
-%ensemblecases={[11],[12]};
+ensemblecases={[11],[12]};
 
 %yearrange={[1980 1999],[2000 2014]};
-yearrange={[1980 2014]};
-%yearrange={[1 500]};
+%yearrange={[1980 2014]};
+yearrange={[1 500]};
 
-maxcols=2;
+maxcols=3;
 
 casenames={'v2.LR.historical_0101',...
            'v2.LR.historical_0151',...
