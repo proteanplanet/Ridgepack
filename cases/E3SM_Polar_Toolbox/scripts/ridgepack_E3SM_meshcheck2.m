@@ -2,16 +2,16 @@
 clf
 clear
 
-%largescale=true;
-largescale=false;
+largescale=true;
+%largescale=false;
 
-bathymetry=true;
-%bathymetry=false;
+%bathymetry=true;
+bathymetry=false;
 
-zoomedareas=true;
-%zoomedareas=false;
+%zoomedareas=true;
+zoomedareas=false;
 
-gridchoice=2;
+gridchoice=6;
 
 fileg{1}.name='WC14L64';
 fileg{1}.outname='WC14L64';
@@ -32,6 +32,10 @@ fileg{4}.title='EC wISC 30-60km E1 r02';
 fileg{5}.name='EC30to60E2r2';
 fileg{5}.outname='EC30to60E2r2';
 fileg{5}.title='EC 30-60km E2 r2';
+
+fileg{6}.name='oQU480';
+fileg{6}.outname='oQU480';
+fileg{6}.title='MPAS-SI oQU480 Column Test Grid';
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -478,7 +482,7 @@ zoom{50}.polar=0;
 
 if largescale
  plotchoice=[1:length(sector)];
- plotchoice=[7];
+ %plotchoice=[7];
 else
  plotchoice=[1:length(zoom)];
  %plotchoice=[37];
@@ -487,7 +491,7 @@ else
 end
 
 % plot location
-plotloc='/Users/afroberts/Colloquia/2020_AGU/Mesh';
+plotloc='/Users/afroberts/work';
 
 % grid location
 if strcmp(char(fileg{gridchoice}.name),'DECK')
@@ -511,6 +515,10 @@ elseif strcmp(char(fileg{gridchoice}.name),'EC30to60E2r2')
  gridloc=['/Users/afroberts/data/MODEL/E3SM/PIControlSI/grid'];
  gridfile='mpaso.rst.0002-01-01_00000.nc';
  shiplocs=[1 2 3 4 6];
+elseif strcmp(char(fileg{gridchoice}.name),'oQU480')
+ gridloc=['/Users/afroberts/work'];
+ gridfile='mpassi.rst.0001-04-01_00000.nc';
+ shiplocs=[];
 end
 
 gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];
@@ -518,17 +526,29 @@ gridfilehr='E3SM_hr_grid.nc';
 
 % obtain grid information
 cd(gridloc)
-ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
-                                'verticesOnCell','indexToCellID',...
-                                'nEdgesOnCell','edgesOnCell',...
-                                'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex','refBottomDepth'});
-
-nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
-                                'verticesOnCell','indexToCellID',...
-                                'nEdgesOnCell','edgesOnCell',...
-                                'cellsOnEdge','cellsOnVertex',...
-                                'edgesOnVertex','refBottomDepth'});
+if bathymetry
+ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
+                                 'verticesOnCell','indexToCellID',...
+                                 'nEdgesOnCell','edgesOnCell',...
+                                 'cellsOnEdge','cellsOnVertex',...
+                                 'edgesOnVertex','refBottomDepth'});
+ nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
+                                 'verticesOnCell','indexToCellID',...
+                                 'nEdgesOnCell','edgesOnCell',...
+                                 'cellsOnEdge','cellsOnVertex',...
+                                 'edgesOnVertex','refBottomDepth'});
+else
+ ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
+                                 'verticesOnCell','indexToCellID',...
+                                 'nEdgesOnCell','edgesOnCell',...
+                                 'cellsOnEdge','cellsOnVertex',...
+                                 'edgesOnVertex'});
+ nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
+                                 'verticesOnCell','indexToCellID',...
+                                 'nEdgesOnCell','edgesOnCell',...
+                                 'cellsOnEdge','cellsOnVertex',...
+                                 'edgesOnVertex'});
+end
 
 ncedge=ridgepack_clone(gridfile,{'latEdge','lonEdge'});
 
@@ -570,10 +590,9 @@ if bathymetry
   ncisobath20=ridgepack_clone(bathname);
   ncisobath50=ridgepack_clone(greename);
  end
+ % invert bathymetry
+ ncvert.refBottomDepth.data=-ncvert.refBottomDepth.data;
 end
-
-% invert bathymetry
-ncvert.refBottomDepth.data=-ncvert.refBottomDepth.data;
 
 % load high-resolution coast
 cd(gridlochr)
@@ -705,10 +724,12 @@ for setting=plotchoice
     end
    end
 
-   legend([hship],...
-        {'Ship Routes'},...
-         'Location','SouthOutside','Orientation','Horizontal')
-   legend('boxoff')
+   if ~isempty(shiplocs)
+    legend([hship],...
+         {'Ship Routes'},...
+          'Location','SouthOutside','Orientation','Horizontal')
+    legend('boxoff')
+   end
 
 
   %title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])

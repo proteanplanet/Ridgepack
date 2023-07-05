@@ -38,6 +38,9 @@ end
 % height of grid superimposed on plot
 gridheight=1.01; 
 
+% grid color
+gridcolor=[0 0.301 0.435];
+
 % reduce the data use to the plotting area to speed things up
 % and find plotting edge limit of cells
 maxth=deg2rad(horizon);
@@ -84,7 +87,7 @@ if length(cells)>0
                                        centlat,centlon,2*horizon,1);
 
  % draw grid
- plot3(dx,dy,dz,'b','LineWidth',0.2)
+ plot3(dx,dy,dz,'Color',gridcolor,'LineWidth',0.2)
  hold on
 
 end
