@@ -150,12 +150,6 @@ if isfield(nc1,'turn')
 	[th,z]=cart2pol(u,v);
 	[u,v]=pol2cart(th+deg2rad(nc1.turn.data),z);
 
-        % OLD CODE TO ACCOUNT FOR SOUTHERN HEMISPHERE (PROBABLY WRONG!)
-	%if median(nc1.turn.data)<0
-	%	[th,z]=cart2pol(-u,-v);
-	%	[u,v]=pol2cart(-th-deg2rad(nc1.turn.data),z);
-	%end
-
 end
 
 % set up mesh for shading the data

@@ -44,36 +44,19 @@ R=6371.228; % Radius of the Earth (km)
 for i=1:length(s)
 for j=1:length(r); 
 
- if SGN>0
-
-  lambda(i,j)=atan2((r(i)-r0),(s(j)-s0));
-  if abs(sin(lambda(i,j)))<eps 
+ lambda(i,j)=atan2((r(i)-r0),(s(j)-s0));
+ if abs(sin(lambda(i,j)))<eps 
    phi(i,j)=(pi/2)-2*asin(C*(s(j)-s0)/(2*R*cos(lambda(i,j))));
-  else
-   phi(i,j)=(pi/2)-2*asin(C*(r(i)-r0)/(2*R*sin(lambda(i,j))));
-  end
-  h(i,j)=cos(pi/4-phi(i,j)/2);
-  k(i,j)=sec(pi/4-phi(i,j)/2);
-
- elseif SGN<0
-
-  lambda(i,j)=atan2((r(i)-r0),(s0-s(j)));
-  if abs(sin(lambda(i,j)))<eps 
-   phi(i,j)=(pi/2)-2*acos(C*(s(j)-s0)/(2*R*cos(lambda(i,j))));
-  else
-   phi(i,j)=(pi/2)-2*acos(C*(r(i)-r0)/(2*R*sin(lambda(i,j))));
-  end
-  h(i,j)=sin(pi/4-phi(i,j)/2);
-  k(i,j)=csc(pi/4-phi(i,j)/2);
-
  else
-  
-  error('SGN cannot be zero')
-
+   phi(i,j)=(pi/2)-2*asin(C*(r(i)-r0)/(2*R*sin(lambda(i,j))));
  end
+ h(i,j)=cos(pi/4-phi(i,j)/2);
+ k(i,j)=sec(pi/4-phi(i,j)/2);
+
+ lambda(i,j)=SGN*lambda(i,j)+pi/2;
 
  lon(i,j)=wrapTo180(lambda(i,j)*180/pi);
- lat(i,j)=wrapTo180(phi(i,j)*180/pi);
+ lat(i,j)=wrapTo180(SGN*phi(i,j)*180/pi);
 
 end; 
 end;

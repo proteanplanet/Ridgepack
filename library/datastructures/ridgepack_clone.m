@@ -273,7 +273,7 @@ elseif ~(strcmp(nearestdate,'year') | ...
 end
 
 % assign netCDF constant values to their names in a cell array
-constnames={'NC_BYTE','NC_CHAR','NC_SHORT','NC_INT','NC_FLOAT','NC_DOUBLE'};
+constnames={'NC_BYTE','NC_CHAR','NC_SHORT','NC_INT','NC_FLOAT','NC_DOUBLE','NC_UBYTE'};
 constvalues=zeros([length(constnames) 1]);
 for cnam=1:length(constnames)
  constvalues(cnam)=netcdf.getConstant(char(constnames{cnam}));
@@ -1591,7 +1591,8 @@ elseif isfield(nc.attributes,'conventions') & strcmp(nc.attributes.conventions,'
 	nc=ridgepack_popoutput(nc);
 
 % CICE History file
-elseif isfield(nc.attributes,'source') & ~isempty(strfind(char(nc.attributes.source),'CICE'))
+elseif isfield(nc.attributes,'source') & ~isempty(strfind(char(nc.attributes.source),'CICE '))
+
 	nc=ridgepack_ciceoutput(nc);
 
 % CPL couput output

@@ -85,7 +85,7 @@ for m = 1:numbervariables
     elseif strcmpi(class(nc.(name).data),'int8')
      nc.(name).type='NC_BYTE';
     elseif strcmpi(class(nc.(name).data),'uint8')
-     nc.(name).type='NC_BYTE';
+     nc.(name).type='NC_UBYTE';
     elseif strcmpi(class(nc.(name).data),'single')
      nc.(name).type='NC_FLOAT';
     end

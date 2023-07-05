@@ -69,7 +69,7 @@ function ridgepack_variable(ncid,nc,rec,recp,recl)
 % nc.nameN.dimension     - cell array with each dimension of 'name'
 % nc.nameN.data          - array of values to be written
 % nc.nameN.fillvalue     - value assigned to fillvalue and missing_value data 
-% nc.nameN.type          - NC_BYTE, NC_CHAR, NC_SHORT, NC_INT, NC_FLOAT or NC_DOUBLE
+% nc.nameN.type          - NC_BYTE, NC_UBYTE, NC_CHAR, NC_SHORT, NC_INT, NC_FLOAT or NC_DOUBLE
 %
 % These are the main fields, but other descriptive fields are also allowed, 
 % and these are provided in the documentation for ridgepack_struct ('help ridgepack_struct').
@@ -300,7 +300,8 @@ for m = 1:numbervariables
    varid=netcdf.inqVarID(ncid,name);
 
    % get the time string variable id
-   if ~isempty(findstr(name,'time')) & timestamp & ~strcmpi(name,'time_bounds');
+   if ~isempty(findstr(name,'time')) & timestamp & ~strcmpi(name,'time_bounds') & ...
+      isempty(findstr(name,'timeDaily')) & isempty(findstr(name,'timeMonthly'));
     tcharvarid=netcdf.inqVarID(ncid,[name,'_string']);
    end
 
@@ -393,10 +394,10 @@ for m = 1:numbervariables
  % Write data for variables with a dimension
  if isempty(nc.(name).dimension);
 
-   if length(nc.(name).data)==1
+   if isfield(nc.(name),'data') & length(nc.(name).data)==1
     netcdf.putVar(ncid,varid,nc.(name).data);
     disp([name,' is dimensionless']) 
-   else
+   elseif isfield(nc.(name),'data')
     error('Cannot write netcdf file without dimensions for data with length > 1')
    end
 
@@ -610,7 +611,9 @@ for m = 1:numbervariables
       netcdf.putAtt(ncid,varid,'_fillvalue',fillval);
       netcdf.endDef(ncid);
       output_data(isnan(nc.(name).data))=fillval;
-    elseif strcmp(nc.(name).type,'NC_INT') | strcmp(nc.(name).type,'NC_BYTE')
+    elseif strcmp(nc.(name).type,'NC_INT') | ...
+           strcmp(nc.(name).type,'NC_BYTE') | ...
+           strcmp(nc.(name).type,'NC_UBYTE')
       netcdf.reDef(ncid);
       if ~novalrange; netcdf.putAtt(ncid,varid,'valid_range',valrange); end
       netcdf.endDef(ncid);
