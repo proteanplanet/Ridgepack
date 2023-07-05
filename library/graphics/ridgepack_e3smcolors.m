@@ -253,6 +253,7 @@ for j=1:length(cont)
  else
   idx=find(nc.(var).data>=cont(j) & nc.(var).data<cont(j+1));
  end
+
  idxn=intersect(idx,mask);
 
  [zindex,truecolor]=ridgepack_colorindex(nc.(var).data(idxn),cont,ref);

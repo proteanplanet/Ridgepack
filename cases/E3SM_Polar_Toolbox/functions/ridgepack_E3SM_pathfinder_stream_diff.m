@@ -24,9 +24,13 @@ equiv=false;
 
 density=7;
 
-%nruns=[1 2 3 4 5];
+%filetag='NARRM.';
+filetag='LR.';
+
+nruns=[1 2 3 4 5 6];
+nruns=[1 7 8 9 10 11];
 %nruns=[1 2 4];
-nruns=[1 2];
+%nruns=[1 2];
 %nruns=[4];
 
 filenames={'Pathfinder',...
@@ -41,7 +45,7 @@ filenames={'Pathfinder',...
            'v2.LR.historical_0251.mpassi.daily',...
            'v2.LR.historical_0301.mpassi.daily'};
 
-locations={'/Users/afroberts/data/data/SATELLITE/processed',...
+locations={'/Users/afroberts/data/data/SATELLITE/processed/pathfinder_v4',...
            '/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0101/data/ice/processed',...
            '/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0151/data/ice/processed',...
            '/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0201/data/ice/processed',...
@@ -192,6 +196,9 @@ for cols=1:length(monthsets)
   else
    [th,z]=cart2pol(nc.u.data,nc.v.data);
    if strcmp(filenames{nruns(rows)},'v2.NARRM.historical_0101.mpassi.daily') | ...
+      strcmp(filenames{nruns(rows)},'v2.NARRM.historical_0151.mpassi.daily') | ...
+      strcmp(filenames{nruns(rows)},'v2.NARRM.historical_0201.mpassi.daily') | ...
+      strcmp(filenames{nruns(rows)},'v2.NARRM.historical_0251.mpassi.daily') | ...
       strcmp(filenames{nruns(rows)},'v2.NARRM.historical_0301.mpassi.daily') 
     [ui,vi]=pol2cart(th+deg2rad(nc.turn.data),z);
    else
@@ -293,13 +300,13 @@ ridgepack_multialign(gcf)
 cd('/Users/afroberts/work')
 
 if difference
- outfileregrid=['NARRM.',hemisphere,'.stream.',yeartag,'.diff.png'];
+ outfileregrid=[filetag,hemisphere,'.stream.',yeartag,'.diff.png'];
 elseif stddev
- outfileregrid=['NARRM.',hemisphere,'.stream.',yeartag,'.std.png'];
+ outfileregrid=[filetag,hemisphere,'.stream.',yeartag,'.std.png'];
 elseif equiv
- outfileregrid=['NARRM.',hemisphere,'.stream.',yeartag,'.equiv.png'];
+ outfileregrid=[filetag,hemisphere,'.stream.',yeartag,'.equiv.png'];
 else
- outfileregrid=['NARRM.',hemisphere,'.stream.',yeartag,'.mean.png'];
+ outfileregrid=[filetag,hemisphere,'.stream.',yeartag,'.mean.png'];
 end
 
 ridgepack_fprint('png',outfileregrid,1,2);

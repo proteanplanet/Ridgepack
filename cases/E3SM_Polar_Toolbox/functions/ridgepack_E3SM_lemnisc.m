@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-%label=true;
-label=false;
+label=true;
+%label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -31,31 +31,31 @@ yearlabel=false;
 %plotcross=true;
 plotcross=false;
 
-%plotequinoxtrend=true;
-plotequinoxtrend=false;
+plotequinoxtrend=true;
+%plotequinoxtrend=false;
 
-%observations=true;
-observations=false;
+observations=true;
+%observations=false;
 
 titletab='Sea Ice E3SM Industrial';
 
-filetabe='control';
-%filetabe='industrial3';
+%filetabe='control';
+filetabe='industrial3';
 
 ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
-%legnames={'LR 5-member','NARRM 5-member'};
-legnames={'LR PI Control','NARRM PI Control'};
+legnames={'LR 5-member','NARRM 5-member'};
+%legnames={'LR PI Control','NARRM PI Control'};
 
-%ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
+ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
-ensemblecases={[11],[12]};
+%ensemblecases={[11],[12]};
 
 %yearrange={[1980 1999],[2000 2014]};
-%yearrange={[1980 2014]};
-yearrange={[1 500]};
+yearrange={[1980 2014]};
+%yearrange={[1 500]};
 
-maxcols=3;
+maxcols=2;
 
 casenames={'v2.LR.historical_0101',...
            'v2.LR.historical_0151',...
@@ -1004,7 +1004,7 @@ for kcols=1:maxcols
 
   end
 
-  if label
+  if label & l==1 & kcols==2
 
     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
 
@@ -1030,7 +1030,7 @@ for kcols=1:maxcols
   idx=datenum(0000,3,21);
   ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
-  if label
+  if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1047,7 +1047,7 @@ for kcols=1:maxcols
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
  
-  if label
+  if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1063,7 +1063,7 @@ for kcols=1:maxcols
   idx=datenum(0000,9,21);
   plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
-  if label
+  if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1080,7 +1080,7 @@ for kcols=1:maxcols
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
 
-  if label
+  if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
