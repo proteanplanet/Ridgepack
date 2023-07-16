@@ -9,13 +9,13 @@ endyear=2014;
 %monthsets={[1 2 3]};
 %monthsets={[1 2 3],[4 5 6]};
 %monthsets={[1 2 3],[4 5 6],[7 8 9],[10 11 12]};
-monthsets={[1 2 3],[7 8 9]};
+monthsets={[7 8 9]};
 
-%hemisphere='nh';
-hemisphere='sh';
+hemisphere='nh';
+%hemisphere='sh';
 
-difference=true;
-%difference=false;
+%difference=true;
+difference=false;
 
 %stddev=true;
 stddev=false;
@@ -26,9 +26,13 @@ equiv=false;
 bathymetry=true;
 %bathymetry=false;
 
-density=7;
+if bathymetry
+ density=8;
+else
+ density=7;
+end
 
-filetag='NARRM.LR.PUBS.';
+filetag='NARRM.LR.PUB_BATH.';
 
 ensembles={[1],[2 3 4 5 6],[7 8 9 10 11]};
 %ensembles={[1],[7 8 9 10 11]};
@@ -60,12 +64,12 @@ locations={'/Users/afroberts/data/data/SATELLITE/processed/pathfinder_v4',...
 
 ensemblebathymetry={1,1,2}
 
-modelgridfiles={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.piControl/grid',...
-                '/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.piControl/grid'}
+modelbathfiles={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.piControl/grid/mpaso.rst.0002-01-01_00000',...
+                '/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.piControl/grid/mpaso.rst.0002-01-01_00000'}
 
 cdrlocation='/Users/afroberts/data/data/SATELLITE/processed/G02202_v4'
 
-rnametags={'Pathfinder','NARRM Ensemble','LR Ensemble'};
+rnametags={'Pathfinder','NARRM Ensemble','SR Ensemble'};
 
 mons={'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
 
@@ -86,6 +90,54 @@ for cols=1:length(monthsets)
    monthnum=[monthnum,'_',num2str(months,'%2.2i')];
   end
   yeartag=['years_',num2str(startyear,'%4.4i'),'_',num2str(endyear,'%4.4i')];
+
+  if bathymetry
+
+   bathfile=char(modelbathfiles{ensemblebathymetry{rows}});
+
+   ncvert=ridgepack_clone(bathfile,{'latVertex','lonVertex',...
+                                'verticesOnCell','indexToCellID',...
+                                'nEdgesOnCell','edgesOnCell',...
+                                'cellsOnEdge','cellsOnVertex',...
+                                'edgesOnVertex','bottomDepth'});
+
+   nccell=ridgepack_clone(bathfile,{'latCell','lonCell',...
+                                'verticesOnCell','indexToCellID',...
+                                'nEdgesOnCell','edgesOnCell',...
+                                'cellsOnEdge','cellsOnVertex',...
+                                'edgesOnVertex','bottomDepth'});
+
+   ncedge=ridgepack_clone(bathfile,{'latEdge','lonEdge'});
+ 
+   ncvert.latCell=nccell.latitude;
+   ncvert.lonCell=nccell.longitude;
+   ncvert.latEdge=ncedge.latitude;
+   ncvert.lonEdge=ncedge.longitude;
+   ncvert.latVertex=ncvert.latitude;
+   ncvert.lonVertex=ncvert.longitude;
+
+   nccell.latVertex=ncvert.latitude;
+   nccell.lonVertex=ncvert.longitude;
+   nccell.latEdge=ncedge.latitude;
+   nccell.lonEdge=ncedge.longitude;
+   nccell.latCell=nccell.latitude;
+   nccell.lonCell=nccell.longitude;
+
+   % invert bathymetry
+   ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
+
+   % read in coast or else generate coast and write it out
+   nccoast=ridgepack_e3smcoastm(ncvert);
+
+   % create mask
+   if strcmp(hemisphere,'nh')
+    maskbath=find(nccell.latCell.data>30);
+   elseif strcmp(hemisphere,'sh')
+    maskbath=find(nccell.latCell.data<-30);
+   end
+
+
+  end
 
   % get mean data
   for ei=1:length(ensembles{rows})
@@ -137,20 +189,30 @@ for cols=1:length(monthsets)
   nc.umean.data=nc.umean.data./length(ensembles{rows});
   nc.vmean.data=nc.vmean.data./length(ensembles{rows});
   nc.smean.data=nc.smean.data./length(ensembles{rows});
+
   if modeldata
     nc.cmean.data=nc.cmean.data./length(ensembles{rows});
   end
 
   % set multiplot
-  ridgepack_multiplot(length(ensembles),length(monthsets),rows,cols,...
+  if bathymetry
+   ridgepack_multiplot(length(monthsets),length(ensembles),cols,rows,alphatag(rows));
+  else
+   ridgepack_multiplot(length(ensembles),length(monthsets),rows,cols,...
                        alphatag((rows-1)*length(monthsets)+cols));
+  end
 
   % generate underlying map
   if hem==1
-   if rows==1 & cols==1 
-    ridgepack_polarm('seaice','grid','label','noland')
+   if bathymetry
+    maptype='centralarctic2';
    else
-    ridgepack_polarm('seaice','grid','noland')
+    maptype='seaice';
+   end
+   if rows==1 & cols==1 
+    ridgepack_polarm(maptype,'grid','label','noland')
+   else
+    ridgepack_polarm(maptype,'grid','noland')
    end
   elseif hem==-1
    if rows==1 & cols==1 
@@ -219,11 +281,17 @@ for cols=1:length(monthsets)
    colfield='smean';
   end
 
-  if rows==1 & cols==length(monthsets)
+  if bathymetry 
+    contb=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10];
+    if rows<length(ensembles)
+     ridgepack_e3smcolors(ncvert,'bottomDepth',ncvert,maskbath,contb,'linear',0,'none')
+    else
+     ridgepack_e3smcolors(ncvert,'bottomDepth',ncvert,maskbath,contb,'linear',0,'horizontal')
+     ridgepack_multicb(gca)
+    end
+  elseif rows==1 & cols==length(monthsets)
    if difference
     ridgepack_pcolorm(nco,obsfield,{},{},obsconts,'linear',0,'vertical','parula')
-   elseif bathymetry
-    ridgepack_pcolorm(ncbath,bathfield,{},{},spconts,'linear',0,'vertical')
    else
     ridgepack_pcolorm(nc,colfield,{},{},spconts,'linear',0,'vertical')
    end
@@ -237,15 +305,15 @@ for cols=1:length(monthsets)
     end
    elseif difference
     ridgepack_pcolorm(ncdiff,colfield,{},{},spconts,'linear',0,'none')
-   elseif bathymetry
-    ridgepack_pcolorm(ncbath,bathfield,{},{},spconts,'linear',0,'none')
    else
     ridgepack_pcolorm(nc,colfield,{},{},spconts,'linear',0,'none')
    end
   end
 
   % plot mask
-  ridgepack_maskm(nc.latitude.data,nc.longitude.data,nc.mask.data)  
+  if ~bathymetry
+   ridgepack_maskm(nc.latitude.data,nc.longitude.data,nc.mask.data)  
+  end
 
   % turn vectors from lat-lon to x-y grid if they are in geo coordinates
   if strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder')
@@ -273,7 +341,11 @@ for cols=1:length(monthsets)
     [lat,lon]=ridgepack_xytogeodetic(xy(:,1),xy(:,2),hem);
     if hem==1; lon=lon-45; end
     [c,d]=mfwdtran(gcm,lat,lon,gca,'surface');
-    plot(c,d,'Color',0*[1 1 1],'LineWidth',0.5)
+    if bathymetry
+     plot(c,d,'Color','m','LineWidth',0.5)
+    else
+     plot(c,d,'Color',0*[1 1 1],'LineWidth',0.5)
+    end
     latitude=[latitude NaN lat'];
     longitude=[longitude NaN lon'];
    end
@@ -288,14 +360,18 @@ for cols=1:length(monthsets)
     [lat,lon]=ridgepack_xytogeodetic(xy(:,1),xy(:,2),hem);
     if hem==1; lon=lon-45; end
     [c,d]=mfwdtran(gcm,lat,lon,gca,'surface');
-    plot(c,d,'Color',0*[1 1 1],'LineWidth',0.5)
+    if bathymetry
+     plot(c,d,'Color','m','LineWidth',0.5)
+    else
+     plot(c,d,'Color',0*[1 1 1],'LineWidth',0.5)
+    end
     latitudev=[latitudev NaN lat'];
     longitudev=[longitudev NaN lon'];
    end
   end
 
   % add extent to the plot
-  if ~strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder')
+  if ~strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder') & ~bathymetry
 
    for ei=1:length(ensembles{rows})
     concmask=zeros(size(nc.conc.data));
@@ -329,51 +405,57 @@ for cols=1:length(monthsets)
   end
 
   % add mean speed to plot
-  if strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder') 
-   meanspeed=mean(nc.smean.data(~isnan(nc.smean.data(:))));
-   infomean=['$|\bar{u}|$=',num2str(meanspeed,'%3.3f')];
-  else
-   meanspeed=mean(ncdiff.diff.data(~isnan(ncdiff.diff.data(:))));
-   if meanspeed>0
-    infomean=['$\Delta|\bar{u}|$=+',num2str(meanspeed,'%3.3f')];
-   elseif meanspeed<0
-    infomean=['$\Delta|\bar{u}|$=-',num2str(meanspeed,'%3.3f')];
+  if ~bathymetry
+   if strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder') 
+    meanspeed=mean(nc.smean.data(~isnan(nc.smean.data(:))));
+    infomean=['$|\bar{u}|$=',num2str(meanspeed,'%3.3f')];
    else
-    infomean=['$\Delta|\bar{u}|$=0'];
+    meanspeed=mean(ncdiff.diff.data(~isnan(ncdiff.diff.data(:))));
+    if meanspeed>0
+     infomean=['$\Delta|\bar{u}|$=+',num2str(meanspeed,'%3.3f')];
+    elseif meanspeed<0
+     infomean=['$\Delta|\bar{u}|$=-',num2str(meanspeed,'%3.3f')];
+    else
+     infomean=['$\Delta|\bar{u}|$=0'];
+    end
    end
-  end
-  if strcmp(hemisphere,'nh')
-   if strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder')
-    latmean=40;
-    lonmean=-10;
-   else
-    latmean=52;
-    lonmean=85;
+   if strcmp(hemisphere,'nh')
+    if strcmp(char(filenames{ensembles{rows}(1)}),'Pathfinder')
+     latmean=40;
+     lonmean=-10;
+    else
+     latmean=52;
+     lonmean=85;
+    end
+   elseif strcmp(hemisphere,'sh')
+    latmean=-48;
+    lonmean=130;
    end
-  elseif strcmp(hemisphere,'sh')
-   latmean=-48;
-   lonmean=130;
-  end
-  if rows==1 & cols==1
-  else
-  end
-  textm(latmean,lonmean,infomean,'Color',[0 0 0.75],...
+   textm(latmean,lonmean,infomean,'Color',[0 0 0.75],...
         'Interpreter','latex','Fontsize',7,'HorizontalAlignment','right')
+  end
 
   % fill in titles
-  if rows==1
-   if length(monthsets{cols})==1
-    title(mons(monthsets{cols}))
-   else
-    idx=monthsets{cols};
-    title([char(mons(idx(1))),' - ',char(mons(idx(end)))])
+  if bathymetry
+   title(char(rnametags{rows}))
+   if rows==1
+    idx=monthsets{rows};
+    ylabel([char(mons(idx(1))),' - ',char(mons(idx(end)))])
    end
   else
-   title('')
-  end
- 
-  if cols==1
-   ylabel(char(rnametags{rows}))
+   if rows==1
+    if length(monthsets{cols})==1
+     title(mons(monthsets{cols}))
+    else
+     idx=monthsets{cols};
+     title([char(mons(idx(1))),' - ',char(mons(idx(end)))])
+    end
+   else
+    title('')
+   end
+   if cols==1
+    ylabel(char(rnametags{rows}))
+   end
   end
 
  end
