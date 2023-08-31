@@ -1,17 +1,17 @@
 
-clf
+close all
 clear
 
 largescale=true;
 %largescale=false;
 
-%bathymetry=true;
-bathymetry=false;
+bathymetry=true;
+%bathymetry=false;
 
 %zoomedareas=true;
 zoomedareas=false;
 
-gridchoice=6;
+gridchoice=7;
 
 fileg{1}.name='WC14L64';
 fileg{1}.outname='WC14L64';
@@ -36,6 +36,10 @@ fileg{5}.title='EC 30-60km E2 r2';
 fileg{6}.name='oQU480';
 fileg{6}.outname='oQU480';
 fileg{6}.title='MPAS-SI oQU480 Column Test Grid';
+
+fileg{7}.name='ECwISC30to60E3r1';
+fileg{7}.outname='ECwISC30to60E3r1';
+fileg{7}.title='MPAS E3SM V3 Standard Resolution Mesh';
 
 sector{1}.centlat=90; % degrees north
 sector{1}.centlon=0; % degrees east
@@ -519,6 +523,10 @@ elseif strcmp(char(fileg{gridchoice}.name),'oQU480')
  gridloc=['/Users/afroberts/work'];
  gridfile='mpassi.rst.0001-04-01_00000.nc';
  shiplocs=[];
+elseif strcmp(char(fileg{gridchoice}.name),'ECwISC30to60E3r1')
+ gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/ecwisc30to60e3r1'];
+ gridfile='mpaso.rst.0003-01-01_00000.nc';
+ shiplocs=[1 2 3 4 6];
 end
 
 gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];
@@ -531,12 +539,12 @@ if bathymetry
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
                                  'cellsOnEdge','cellsOnVertex',...
-                                 'edgesOnVertex','refBottomDepth'});
+                                 'edgesOnVertex','bottomDepth'});
  nccell=ridgepack_clone(gridfile,{'latCell','lonCell',...
                                  'verticesOnCell','indexToCellID',...
                                  'nEdgesOnCell','edgesOnCell',...
                                  'cellsOnEdge','cellsOnVertex',...
-                                 'edgesOnVertex','refBottomDepth'});
+                                 'edgesOnVertex','bottomDepth'});
 else
  ncvert=ridgepack_clone(gridfile,{'latVertex','lonVertex',...
                                  'verticesOnCell','indexToCellID',...
@@ -578,20 +586,20 @@ end
 
 % create 20m isobath
 if bathymetry
- bathname=[char(fileg{gridchoice}.outname),'_20mIsobath.nc'];
+ bathname=[char(fileg{gridchoice}.outname),'_30mIsobath.nc'];
  greename=[char(fileg{gridchoice}.outname),'_50mIsobath.nc'];
  x=dir(greename);
  if isempty(x) 
-  ncisobath20=ridgepack_e3smseasaw(ncvert,ncvert,'refBottomDepth',20);
-  ridgepack_write(ncisobath20,bathname)
-  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'refBottomDepth',50);
+  ncisobath30=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',30);
+  ridgepack_write(ncisobath30,bathname)
+  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',50);
   ridgepack_write(ncisobath50,bathname)
  else
-  ncisobath20=ridgepack_clone(bathname);
+  ncisobath30=ridgepack_clone(bathname);
   ncisobath50=ridgepack_clone(greename);
  end
  % invert bathymetry
- ncvert.refBottomDepth.data=-ncvert.refBottomDepth.data;
+ ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
 end
 
 % load high-resolution coast
@@ -630,7 +638,7 @@ cd(plotloc)
 
 for setting=plotchoice
 
- clf
+ close all 
 
  if largescale
 
@@ -652,7 +660,7 @@ for setting=plotchoice
    colbarcont{length(cont)}='\uparrow';
 
    % render colors
-   ridgepack_e3smsatcol(ncvert,'refBottomDepth',ncvert,cont,0,...
+   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
                         centlat,centlon,horizon,altitude,...
                         true,false,'linear','bluered');
 
@@ -666,28 +674,15 @@ for setting=plotchoice
    clear colbarcont
 
    % add 20m and 50m isobath
-   if bathymetry
-    hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
-                                 [0.9290 0.6940 0.1250]);
-    hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
-                                 [0 0.70 0]);
-   end
+   hb=ridgepack_e3smsatthreshold(ncisobath30,centlat,centlon,horizon,...
+                                 [0.4940 0.1840 0.5560]);
+   hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+                                 [0.4660 0.6740 0.1880]);
 
    % plot coast
    ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-   if sector{setting}.annotation==1 
-    for shipi=shiplocs
-     [x,y,z,phi,theta]=...
-      ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
-                      eval(['ncship',num2str(shipi),'.longitude.data']),...
-                       centlat,centlon,horizon,1.001*altitude);
-     hship=plot3(x,y,z,'r:');
-    end
-   end
-
-   legend([hb hg hship],...
-        {'Landfast Ice','Benthic Green Zone','Shipping'},...
+   legend([hb hg],{'30m isobath','50m isobath'},...
          'Location','SouthOutside','Orientation','Horizontal')
    legend('boxoff')
 
@@ -711,29 +706,30 @@ for setting=plotchoice
     end
 
    end
- 
-  end
 
-  if sector{setting}.annotation==1
+   if sector{setting}.annotation==1
+
     for shipi=shiplocs
      [x,y,z,phi,theta]=...
       ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
                       eval(['ncship',num2str(shipi),'.longitude.data']),...
                        centlat,centlon,horizon,1.001*altitude);
-     hship=plot3(x,y,z,'c');
+     hship=plot3(x,y,z,'Color','#FF8800');
     end
+
+    if ~isempty(shiplocs)
+     legend([hship],...
+          {'Ship Routes'},...
+           'Location','SouthOutside','Orientation','Horizontal')
+     legend('boxoff')
+    end
+
    end
 
-   if ~isempty(shiplocs)
-    legend([hship],...
-         {'Ship Routes'},...
-          'Location','SouthOutside','Orientation','Horizontal')
-    legend('boxoff')
-   end
-
+  end
 
   %title(['Sector ',num2str(setting),' ',char(fileg{gridchoice}.title)])
-  title([char(fileg{gridchoice}.title)])
+  title([char(fileg{gridchoice}.title)],'FontWeight','normal')
 
   if bathymetry
    ridgepack_fprint('png',[fileg{gridchoice}.outname,...
@@ -754,9 +750,9 @@ for setting=plotchoice
   ridgepack_satview(centlat,centlon,horizon)
   ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
 
-  % add 20m isobath
+  % add isobaths
   if bathymetry
-   hk=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+   hk=ridgepack_e3smsatthreshold(ncisobath30,centlat,centlon,horizon,...
                                  [0 0 1]);
    hk=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
                                  [0 0 1]);
@@ -785,7 +781,7 @@ for setting=plotchoice
    cmap=colormap;
 
    % render colors
-   ridgepack_e3smsatcol(ncvert,'refBottomDepth',ncvert,cont,0,...
+   ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
                         centlat,centlon,horizon,altitude,...
                         true,false,'linear','bluered');
 
@@ -799,7 +795,7 @@ for setting=plotchoice
    clear cmap colbarcont
 
    % add 20m isobath
-   hb=ridgepack_e3smsatthreshold(ncisobath20,centlat,centlon,horizon,...
+   hb=ridgepack_e3smsatthreshold(ncisobath30,centlat,centlon,horizon,...
                                  [0.9290 0.6940 0.1250]);
 
    hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
@@ -831,8 +827,7 @@ for setting=plotchoice
 
   end
 
-  ridgepack_multialign(gcf,...
-             [num2str(setting),': ',...
+  ridgepack_multialign(gcf,[num2str(setting),': ',...
               zoom{setting}.name,' ',char(fileg{gridchoice}.title)]);
 
   if bathymetry

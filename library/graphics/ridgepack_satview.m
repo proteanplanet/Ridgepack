@@ -147,11 +147,14 @@ if gridon>0
     if max(rad2deg(thl))<horizon
 
      if lats>0
-       ending='$^{\circ}$N';
+       %ending='$^{\circ}$N';
+       ending='^{\circ}N';
      elseif lats<0
-       ending='$^{\circ}$S';
+       %ending='$^{\circ}$S';
+       ending='^{\circ}S';
      else
-       ending='$^{\circ}$';
+       %ending='$^{\circ}$';
+       ending='^{\circ}';
      end
 
      % get coordinates of meredian label near frame edge
@@ -261,11 +264,11 @@ if gridon>0
 
      % add grid label
      if lon==180 | lon==0
-       ending='$^{\circ}$E';
+       ending='^{\circ}E';
      elseif lon<0
-       ending='$^{\circ}$W';
+       ending='^{\circ}W';
      elseif lon>0
-       ending='$^{\circ}$E';
+       ending='^{\circ}E';
      end
 
      if insep
