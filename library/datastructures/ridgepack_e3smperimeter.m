@@ -169,8 +169,6 @@ for i=1:length(cvflag1)
  end
 end
 
-cidxn
-
 % only pass through threshold cells
 disp('Calculating the threshold line')
 if length(cidxn)>0

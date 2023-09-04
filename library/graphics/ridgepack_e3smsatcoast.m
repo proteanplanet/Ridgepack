@@ -44,8 +44,7 @@ end
                                    centlat,centlon,...
                                    horizon,altitude);
 
-h=plot3(x,y,z,'Color',color,...
-      'LineWidth',0.5-sin(deg2rad(horizon))*0.4);
+h=plot3(x,y,z,'Color',color,'LineWidth',0.5-sin(deg2rad(horizon))*0.4);
 
 % find lines that cross the horizon
 k=0;
