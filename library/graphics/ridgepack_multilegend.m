@@ -89,13 +89,13 @@ end
 
 % font size
 if length(legendtext)>5
- fonts=5;
-elseif length(legendtext)>4
  fonts=6;
-elseif length(legendtext)>3
- fonts=7;
-else
+elseif length(legendtext)>4
  fonts=8;
+elseif length(legendtext)>3
+ fonts=9;
+else
+ fonts=10;
 end
 
 
