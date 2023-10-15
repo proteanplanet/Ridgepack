@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-label=true;
-%label=false;
+%label=true;
+label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -31,44 +31,68 @@ yearlabel=false;
 %plotcross=true;
 plotcross=false;
 
-plotequinoxtrend=true;
-%plotequinoxtrend=false;
+%plotequinoxtrend=true;
+plotequinoxtrend=false;
 
 observations=true;
 %observations=false;
 
-titletab='Sea Ice E3SM Industrial';
+titletab='Sea Ice E3SM Preindustrial';
 
 %filetabe='control';
-filetabe='industrial3';
+%filetabe='industrial3';
+filetabe='PI';
 
-ensemblenames={'LR','NARRM'};
+ensemblenames={'v3alpha03-trigrid','PSLV'};
+%ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
-legnames={'LR 5-member','NARRM 5-member'};
-%legnames={'LR PI Control','NARRM PI Control'};
 
-ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
+%legnames={'LR 5-member','NARRM 5-member'};
+%legnames={'LR PI Control','NARRM PI Control'};
+legnames={'v3alpha04-Trigrid','PSLV'};
+
+%ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
+ensemblecases={[1],[2]};
 
 %yearrange={[1980 1999],[2000 2014]};
-yearrange={[1980 2014]};
-%yearrange={[1 500]};
+%yearrange={[1980 2014]};
+yearrange={[1 13]};
 
-maxcols=2;
+yearsto=1980;
+yeareno=2014;
 
-casenames={'v2.LR.historical_0101',...
-           'v2.LR.historical_0151',...
-           'v2.LR.historical_0201',...
-           'v2.LR.historical_0251',...
-           'v2.LR.historical_0301',...
-           'v2.NARRM.historical_0101',...
-           'v2.NARRM.historical_0151',...
-           'v2.NARRM.historical_0201',...
-           'v2.NARRM.historical_0251',...
-           'v2.NARRM.historical_0301',...
-           'v2.LR.piControl',...
-           'v2.NARRM.piControl'};
+maxcols=3;
+
+% case names
+casenames={'20230924.v3alpha04_trigrid.piControl.chrysalis',...
+           '20231014.v3alpha04_trigrid_pslv.piControl.chrysalis'};
+
+% case directories where the regional sea ice data is held
+dirnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
+          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+
+% directories where the processed lemnisc data is or will be written
+eprnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
+          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+
+%casenames={'v2.LR.historical_0101',...
+%           'v2.LR.historical_0151',...
+%           'v2.LR.historical_0201',...
+%           'v2.LR.historical_0251',...
+%           'v2.LR.historical_0301',...
+%           'v2.NARRM.historical_0101',...
+%           'v2.NARRM.historical_0151',...
+%           'v2.NARRM.historical_0201',...
+%           'v2.NARRM.historical_0251',...
+%           'v2.NARRM.historical_0301',...
+%           'v2.LR.piControl',...
+%           'v2.NARRM.piControl'};
+%for j=1:length(casenames)
+% dirnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist'];
+% eprnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/processed'];
+%end
 
 if observations
  nlemniscs=length(ensemblenames)+1;
@@ -81,7 +105,6 @@ ccols=lines(nlemniscs);
 
 vars={'totalIceExtent','totalIceVolume','totalSnowVolume','averageAlbedo','totalKineticEnergy'};
 fact=[10^6 10^3 10^2 1 10^12];
-
 
 lquantile=0.25;
 uquantile=0.75;
@@ -114,7 +137,7 @@ if generate
   % create processed files for each case
   for i=ensemblecases{l}
 
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist']);
+   cd(char(dirnames{i}));
  
    for yearx=yearst:1:yearen
 
@@ -373,7 +396,7 @@ if generate
 
   nc=ridgepack_struct(nc);
 
-  cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+  cd(char(eprnames{l}));
 
   outfile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
@@ -402,20 +425,20 @@ if generateobs & observations
 
   k=1;
 
-  cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+  cd(['~/data/SATELLITE/processed/G02202_v4']);
 
   ncobs=ridgepack_clone('G02202_v4_merged_global_r00_1979_2022');
 
   years=str2num(datestr(ncobs.time.data,'YYYY'));
 
-  idx=find(years>=yearst & years<=yearen);
+  idx=find(years>=yearsto & years<=yeareno);
 
   k=1
   ncobs.time.data=ncobs.time.data(idx);
   ncobs.extent.data=ncobs.extent.data(:,idx)/fact(k);
   ncobs=rmfield(ncobs,{'attributes'})
   ncobs.attributes.title=['G02202_v4 extent lemnisc statistics years ',...
-                       num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')];
+                       num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i')];
   for k=1:365
    space=[k:365:365*floor(length(ncobs.time.data)./365)];
    annualtimeaverage(k)=ncobs.time.data(k);
@@ -478,7 +501,7 @@ if generateobs & observations
   ncobs=ridgepack_struct(ncobs);
 
   outfile=['G02202_v4_merged.lemnisc.',...
-           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+           num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
 
   ncobs=ridgepack_struct(ncobs);
 
@@ -503,8 +526,8 @@ for kcols=1:maxcols
   ylab2=['Southern Hemisphere'];
   %xlims=[0 20];
   %ylims=[0 20];
-  xlims=[4 22];
-  ylims=[0 20];
+  xlims=[4 20];
+  ylims=[0 21];
   xyticks=5;
   globalconts=30;
   globlab=['Global Extent'];
@@ -514,8 +537,8 @@ for kcols=1:maxcols
   xlab2=['Northern Hemisphere'];
   %xlims=[0 40];
   %ylims=[0 25];
-  xlims=[5 49];
-  ylims=[0 23];
+  xlims=[5 40];
+  ylims=[0 30];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
@@ -523,8 +546,8 @@ for kcols=1:maxcols
  elseif kcols==3
   titl2=['Snow Volume \times{10^2} km^3'];
   xlab2=['Northern Hemisphere'];
-  xlims=[0 35];
-  ylims=[0 50];
+  xlims=[0 33];
+  ylims=[0 65];
   xyticks=10;
   globalconts=50;
   globlab=['Global Snow Volume'];
@@ -594,12 +617,12 @@ for kcols=1:maxcols
  for l=1:nlemn
 
   if l==nlemniscs & observations % observed extent
-   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   cd(['~/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
-             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+             num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   cd(char(eprnames{l}));
    infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
@@ -635,7 +658,7 @@ for kcols=1:maxcols
    end
    t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
    df = (equiv1+equiv2-2);
-   tcrit=tinv(0.995,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
+   tcrit=tinv(0.975,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
    hcrit=ones(size(t));
    hcrit(isnan(t))=0;
    hcrit(-tcrit<t & t<tcrit)=0;
@@ -829,12 +852,12 @@ for kcols=1:maxcols
  for l=1:nlemn
 
   if l==nlemniscs & observations % observed extent
-   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   cd(['~/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   cd(char(eprnames{l}));
    infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
@@ -933,7 +956,7 @@ for kcols=1:maxcols
   elseif l<nlemniscs | ~observations
    plotmean=daymean;
    %plotmean(:,hcrit==1)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(l,:));
+   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
    %plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
    h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
@@ -1117,7 +1140,7 @@ for kcols=1:maxcols
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
   legendnames=legnames;
   if observations & ~yearlabel
-   legendnames{nlemniscs}=[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),' ',...
+   legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
                            char(legnames{nlemniscs})];
   end
   legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);

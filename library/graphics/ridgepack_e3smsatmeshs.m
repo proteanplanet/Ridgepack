@@ -17,7 +17,7 @@ function [cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
 % centlat  - The central latitude of the plot
 % centlon  - The central longitude of the plot
 % horizon  - The reach of the plot, expressed as a polar angle from the
-%            central latitude and longitude.
+%            central latitude and longitude (degrees)
 % altitude - Altitude of the points to be plotted on the sphere
 % ncmask   - Cell indices of cells to be plotted [optional]
 % var      - variable in ncmask used for masking [optional]
@@ -124,8 +124,10 @@ axis tight
 axis off
 
 % add lighting from infinite sources directly overhead
-light('Position',[0 0 10000],'Style','local')
-material dull
+if horizon>30
+ light('Position',[0 0 10000],'Style','local')
+ material dull
+end
 
 if nargout<1
  clear cells
