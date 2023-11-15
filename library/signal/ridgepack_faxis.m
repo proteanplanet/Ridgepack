@@ -23,7 +23,6 @@ function [faxis,fs,df]=ridgepack_faxis(ts)
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)
 % Naval Postgraduate School, Department of Oceanography
-%
 
 % get length of fft
 N=length(ts.data);

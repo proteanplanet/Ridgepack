@@ -2,8 +2,8 @@
 clear
 close all
 
-%generate=true;
-generate=false;
+generate=true;
+%generate=false;
 
 %generateobs=true;
 generateobs=false;
@@ -43,13 +43,13 @@ titletab='Sea Ice E3SM Preindustrial';
 %filetabe='industrial3';
 filetabe='PI';
 
-ensemblenames={'v3alpha03-trigrid','PSLV'};
+ensemblenames={'PSLV','Icedge'};
 %ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
 %legnames={'LR PI Control','NARRM PI Control'};
-legnames={'v3alpha04-Trigrid','PSLV'};
+legnames={'PSLV','Icedge'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
@@ -58,7 +58,7 @@ ensemblecases={[1],[2]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
-yearrange={[1 13]};
+yearrange={[51 100]};
 
 yearsto=1980;
 yeareno=2014;
@@ -66,16 +66,16 @@ yeareno=2014;
 maxcols=3;
 
 % case names
-casenames={'20230924.v3alpha04_trigrid.piControl.chrysalis',...
-           '20231014.v3alpha04_trigrid_pslv.piControl.chrysalis'};
+casenames={'20231014.v3alpha04_trigrid_pslv.piControl.chrysalis',...
+           '20231025.v3alpha04_trigrid_vslim.piControl.chrysalis'};
 
 % case directories where the regional sea ice data is held
-dirnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
-          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+dirnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
+          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
 
 % directories where the processed lemnisc data is or will be written
-eprnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
-          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
+          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
 
 %casenames={'v2.LR.historical_0101',...
 %           'v2.LR.historical_0151',...
@@ -854,7 +854,7 @@ for kcols=1:maxcols
   if l==nlemniscs & observations % observed extent
    cd(['~/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
-             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+             num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
    cd(char(eprnames{l}));
