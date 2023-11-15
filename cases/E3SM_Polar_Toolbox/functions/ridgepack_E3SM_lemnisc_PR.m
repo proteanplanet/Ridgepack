@@ -5,11 +5,8 @@ close all
 %generate=true;
 generate=false;
 
-generateobs=true;
-%generateobs=false;
-
-%plotlemnisc=true;
-plotlemnisc=false;
+%generateobs=true;
+generateobs=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
@@ -25,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-label=true;
-%label=false;
+%label=true;
+label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -34,38 +31,40 @@ yearlabel=false;
 %plotcross=true;
 plotcross=false;
 
-plotequinoxtrend=true;
-%plotequinoxtrend=false;
+%plotequinoxtrend=true;
+plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%observations=true;
+observations=false;
 
 titletab='Sea Ice E3SM Industrial';
 
 %filetabe='control';
-%filetabe='v3';
-filetabe='observations_only';
+filetabe='v3';
 
 %ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
-ensemblenames={'LR','v3alpha02'};
+%ensemblenames={'LR','v3alpha02'};
 %ensemblenames={'v3alpha02'};
+ensemblenames={'master','hfdefault'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
 %legnames={'LR PI Control','NARRM PI Control'};
-legnames={'v2 5-member 1980-2014','v3alpha02 1980-2014'};
+%legnames={'v2 5-member 1980-2014','v3alpha02 1980-2014'};
 %legnames={'v3alpha02 1980-2014'};
+legnames={'master','hfdefault'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1 2 3 4 5],[13]};
+%ensemblecases={[1 2 3 4 5],[13]};
 %ensemblecases={[13]};
+ensemblecases={[14],[15]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
-yearrange={[1979 2022]};
 %yearrange={[1 500]};
+yearrange={[0020 0050]};
 
 maxcols=2;
 
@@ -81,7 +80,10 @@ casenames={'v2.LR.historical_0101',...
            'v2.NARRM.historical_0301',...
            'v2.LR.piControl',...
            'v2.NARRM.piControl',...
-           '20230704.v3alpha02.historical_0101.chrysalis'};
+           '20230704.v3alpha02.historical_0101.chrysalis',...
+           'B12.junebaseline.master.E3SM-Project.chrysalis',...
+           'B12.junebaseline.hfdefault.E3SM-Project.chrysalis'...
+           };
 
 if observations
  nlemniscs=length(ensemblenames)+1;
@@ -127,7 +129,7 @@ if generate
   % create processed files for each case
   for i=ensemblecases{l}
 
-   if i==13
+   if i>=13
     cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(casenames{i}),'/archive/ice/hist']);
    else
     cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist']);
@@ -390,7 +392,7 @@ if generate
 
   nc=ridgepack_struct(nc);
 
-  if i==13
+  if i>=13
    cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
   else
    cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
@@ -509,670 +511,672 @@ if generateobs & observations
 
 end
 
-if plotlemnisc
+%return
 
- filenamemodifier=[filetabe,'.'];
- 
- for kcols=1:maxcols
- 
-  ridgepack_multiplot(1,maxcols,1,kcols,als(kcols))
- 
-  % set plot type
-  if kcols==1
-   titl2=['Sea Ice Extent \times{10^6} km^2'];
-   xlab2=['Northern Hemisphere'];
-   ylab2=['Southern Hemisphere'];
-   xlims=[0 22];
-   ylims=[0 20];
-   xyticks=5;
-   globalconts=30;
-   globlab=['Global Extent'];
-   filenamemodifier=[filenamemodifier,'extent.'];
-  elseif kcols==2
-   titl2=['Sea Ice Volume \times{10^3} km^3'];
-   xlab2=['Northern Hemisphere'];
-   xlims=[0 49];
-   ylims=[0 23];
-   xyticks=5;
-   globalconts=45;
-   globlab=['Global Volume'];
-   filenamemodifier=[filenamemodifier,'volume.'];
-  elseif kcols==3
-   titl2=['Snow Volume \times{10^2} km^3'];
-   xlab2=['Northern Hemisphere'];
-   xlims=[0 35];
-   ylims=[0 50];
-   xyticks=10;
-   globalconts=50;
-   globlab=['Global Snow Volume'];
-   filenamemodifier=[filenamemodifier,'snow.'];
-  end
-   
-  % create background axis
-  axis square
-  xlim(xlims)
-  ylim(ylims)
-  set(gca,'XTick',[0:xyticks:max([xlims ylims])],'YTick',[0:xyticks:max([xlims ylims])])
-  ar=diff(xlims)./diff(ylims);
- 
-  % underlay global grid
-  if grid
- 
-   graytype=0.7;
-   x=0:max(xlims);
-   y=0:max(ylims);
-   [xx,yy]=meshgrid(x,y);
-   z=xx+yy;
-   conts=[0:xyticks:xlims(end)+ylims(end)];
-   [C,h]=contour(xx,yy,z,conts,'Color',graytype*[1 1 1]);
-   hold on
- 
-   for i=2:length(conts)-1
- 
-    theta=atan(1./ar);
-    xpos=xlims(1)+(conts(i)-xlims(1))./(tan(theta)+1);
-    ypos=xlims(1)+(conts(i)-xlims(1))-xpos;
- 
-    if xpos>xlims(1) & ypos>ylims(1) & xpos<xlims(end) & ypos<ylims(end)
-     if conts(i)==globalconts
-      text(xpos,ypos,globlab,...
-          'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
-          'FontSize',8,'HorizontalAlignment','center',...
-          'VerticalAlignment','bottom',...
-          'Interpreter','Tex',...
-          'Margin',1,'Color',graytype*[1 1 1]);
-     else
-      text(xpos,ypos,num2str(conts(i)),...
-          'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
-          'FontSize',8,'HorizontalAlignment','center',...
-          'VerticalAlignment','bottom',...
-          'Interpreter','Tex',...
-          'Margin',1,'Color',graytype*[1 1 1]);
-     end
-    end
- 
-   end
- 
-  end
- 
-  % plot data for given year ranges
-  for yi=1:length(yearrange)
- 
-  yearst=yearrange{yi}(1);
-  yearen=yearrange{yi}(2);
- 
-  % plot data from each lemnisc
-  if kcols==1 
-   nlemn=nlemniscs;
-  elseif observations
-   nlemn=nlemniscs-1;
-  end
- 
-  for l=1:nlemn
- 
-   if l==nlemniscs & observations % observed extent
-    cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
-    obsfile=['G02202_v4_merged.lemnisc.',...
-              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-    nc=ridgepack_clone(obsfile);
-   else
-    if strcmp(char(ensemblenames{l}),'v3alpha02')
-     cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
-    else
-     cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
-    end
-    infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
-            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-    nc=ridgepack_clone(infile);
-   end
- 
-   if l==1
-    if kcols==1
-     mu1=nc.extentdaymean.data(1,:);
-     std1=nc.extentdaystd.data(1,:);
-     equiv1=nc.extentdayequiv.data(1,:);
-    elseif kcols==2
-     mu1=nc.volumedaymean.data(1,:); 
-     std1=nc.volumedaystd.data(1,:);
-     equiv1=nc.volumedayequiv.data(1,:);
-    elseif kcols==3
-     mu1=nc.snowdaymean.data(1,:);
-     std1=nc.snowdaystd.data(1,:);
-     equiv1=nc.snowdayequiv.data(1,:);
-    end
-   elseif l<nlemniscs % not compared with observations
-    if kcols==1
-     mu2=nc.extentdaymean.data(1,:);
-     std2=nc.extentdaystd.data(1,:);
-     equiv2=nc.extentdayequiv.data(1,:);
-    elseif kcols==2
-     mu2=nc.volumedaymean.data(1,:); 
-     std2=nc.volumedaystd.data(1,:);
-     equiv2=nc.volumedayequiv.data(1,:);
-    elseif kcols==3
-     mu2=nc.snowdaymean.data(1,:);
-     std2=nc.snowdaystd.data(1,:);
-     equiv2=nc.snowdayequiv.data(1,:);
-    end
-    t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
-    df = (equiv1+equiv2-2);
-    tcrit=tinv(0.995,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
-    hcrit=ones(size(t));
-    hcrit(isnan(t))=0;
-    hcrit(-tcrit<t & t<tcrit)=0;
-   end
- 
-   if kcols==1
-    upperquantile=nc.extentupperquantile.data;
-    lowerquantile=nc.extentlowerquantile.data;
-    daymedian=nc.extentdaymedian.data;
-    daymean=nc.extentdaymean.data;
-    if l==nlemniscs & observations
-     totalseries=nc.extent.data;
-    else
-     totalseries=nc.totalIceExtent.data;
-    end
-   elseif kcols==2
-    upperquantile=nc.volumeupperquantile.data;
-    lowerquantile=nc.volumelowerquantile.data;
-    daymedian=nc.volumedaymedian.data;
-    daymean=nc.volumedaymean.data;
-    totalseries=nc.totalIceVolume.data;
-   elseif kcols==3
-    upperquantile=nc.snowupperquantile.data;
-    lowerquantile=nc.snowlowerquantile.data;
-    daymedian=nc.snowdaymedian.data;
-    daymean=nc.snowdaymean.data;
-    totalseries=nc.totalSnowVolume.data;
-   end
- 
-   if itqrange
- 
-    ocol=0.90*[1 1 1];
-    alpha=0.1;
- 
-    for k=1:1:365
- 
-     theta=[0:10:90]*pi/180;
- 
-     ae=abs(upperquantile(2,k)-daymedian(2,k));
-     be=abs(upperquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     xs=[daymedian(2,k) ...
-         xe+daymedian(2,k) ...
-         daymedian(2,k)];
-     ys=[daymedian(3,k) ...
-         ye+daymedian(3,k) ...
-         daymedian(3,k)];
-     patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
- 
-     theta=[90:10:180]*pi/180;
- 
-     ae=abs(lowerquantile(2,k)-daymedian(2,k));
-     be=abs(upperquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     ys=[daymedian(3,k) ...
-         ye+daymedian(3,k) ...
-         daymedian(3,k)];
-     xs=[daymedian(2,k) ...
-         xe+daymedian(2,k) ...
-         daymedian(2,k)];
-     patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
- 
-     theta=[180:10:270]*pi/180;
- 
-     ae=abs(lowerquantile(2,k)-daymedian(2,k));
-     be=abs(lowerquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     xs=[daymedian(2,k) ...
-         xe+daymedian(2,k) ...
-         daymedian(2,k)];
-     ys=[daymedian(3,k) ...
-         ye+daymedian(3,k) ...
-         daymedian(3,k)];
-     patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
- 
-     theta=[270:10:360]*pi/180;
- 
-     ae=abs(upperquantile(2,k)-daymedian(2,k));
-     be=abs(lowerquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     xs=[daymedian(2,k) ...
-         xe+daymedian(2,k) ...
-         daymedian(2,k)];
-     ys=[daymedian(3,k) ...
-         ye+daymedian(3,k) ...
-         daymedian(3,k)];
-     patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
- 
-    end
- 
-   end
- 
-   if plottimeseries
- 
-    plot(totalseries(2,:),totalseries(3,:),'Color',0.9*[1 1 1]);
- 
-    if plotcross
- 
-     ocol=[0.8500 0.3250 0.0980]
- 
-     k=datenum(0000,5,21);
- 
-     space=[k:365:365*floor(length(nc.time.data)./365)];
- 
-     plot(totalseries(2,space),totalseries(3,space),'.',...
-         'Color',0.5*[1 1 1]);
- 
-     plot([lowerquantile(2,k) upperquantile(2,k)],...
-          [daymedian(3,k) daymedian(3,k)],...
-         'Color',ocol,'LineWidth',1);
- 
-     plot([daymedian(2,k) daymedian(2,k)],...
-          [lowerquantile(3,k) upperquantile(3,k)],...
-          'Color',ocol,'LineWidth',1);
- 
-    end
- 
-   end
- 
-   if plotfullellipse
- 
-     theta=[0:10:90]*pi/180;
- 
-     ae=abs(upperquantile(2,k)-daymedian(2,k));
-     be=abs(upperquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
-  
-     plot(xe+daymedian(2,k),ye+daymedian(3,k),...
-           'Color',ocol,'LineWidth',1)
- 
-     theta=[90:10:180]*pi/180;
-  
-     ae=abs(lowerquantile(2,k)-daymedian(2,k));
-     be=abs(upperquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     plot(xe+daymedian(2,k),ye+daymedian(3,k),...
-          'Color',ocol,'LineWidth',1)
- 
-     theta=[180:10:270]*pi/180;
- 
-     ae=abs(lowerquantile(2,k)-daymedian(2,k));
-     be=abs(lowerquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
- 
-     plot(xe+daymedian(2,k),ye+daymedian(3,k),...
-           'Color',ocol,'LineWidth',1)
- 
-     theta=[270:10:360]*pi/180;
- 
-     ae=abs(upperquantile(2,k)-daymedian(2,k));
-     be=abs(lowerquantile(3,k)-daymedian(3,k));
- 
-     xe=ae*cos(theta);
-     ye=be*sin(theta);
-  
-     plot(xe+daymedian(2,k),ye+daymedian(3,k),...
-          'Color',ocol,'LineWidth',1)
- 
-   end
- 
-  end
- 
-  end % years
- 
- 
-  % plot data for given year ranges
-  for yi=1:length(yearrange)
- 
-  yearst=yearrange{yi}(1);
-  yearen=yearrange{yi}(2);
- 
-  for l=1:nlemn
- 
-   if l==nlemniscs & observations % observed extent
-    cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
-    obsfile=['G02202_v4_merged.lemnisc.',...
-              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-    nc=ridgepack_clone(obsfile);
-   else
-    if strcmp(char(ensemblenames{l}),'v3alpha02')
-     cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
-    else
-     cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
-    end
-    infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
-            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-    nc=ridgepack_clone(infile);
-   end
- 
-   % grab daily mean  
-   if kcols==1
-    daymean=nc.extentdaymean.data;
-   elseif kcols==2
-    daymean=nc.volumedaymean.data;
-   elseif kcols==3
-    daymean=nc.snowdaymean.data;
-   end
- 
-   if kcols==1
-    upperquantile=nc.extentupperquantile.data;
-    lowerquantile=nc.extentlowerquantile.data;
-    daymedian=nc.extentdaymedian.data;
-    daymean=nc.extentdaymean.data;
-    if l==nlemniscs & observations
-     totalseries=nc.extent.data;
-    else
-     totalseries=nc.totalIceExtent.data;
-    end
-   elseif kcols==2
-    upperquantile=nc.volumeupperquantile.data;
-    lowerquantile=nc.volumelowerquantile.data;
-    daymedian=nc.volumedaymedian.data;
-    daymean=nc.volumedaymean.data;
-    totalseries=nc.totalIceVolume.data;
-   elseif kcols==3
-    upperquantile=nc.snowupperquantile.data;
-    lowerquantile=nc.snowlowerquantile.data;
-    daymedian=nc.snowdaymedian.data;
-    daymean=nc.snowdaymean.data;
-    totalseries=nc.totalSnowVolume.data;
-   end
- 
- 
-   % grab t-test information
-   if l==1
-    if kcols==1
-     mu1=nc.extentdaymean.data(1,:);
-     std1=nc.extentdaystd.data(1,:);
-     equiv1=nc.extentdayequiv.data(1,:);
-     if l==nlemniscs & observations
-      totalseries=nc.extent.data;
-     else
-      totalseries=nc.totalIceExtent.data;
-     end
-    elseif kcols==2
-     mu1=nc.volumedaymean.data(1,:);
-     std1=nc.volumedaystd.data(1,:);
-     equiv1=nc.volumedayequiv.data(1,:);
-     totalseries=nc.totalIceVolume.data;
-    elseif kcols==3
-     mu1=nc.snowdaymean.data(1,:);
-     std1=nc.snowdaystd.data(1,:);
-     equiv1=nc.snowdayequiv.data(1,:);
-     totalseries=nc.totalSnowVolume.data;
-    end
-   elseif l<nlemniscs | ~observations
-    if kcols==1
-     mu2=nc.extentdaymean.data(1,:);
-     std2=nc.extentdaystd.data(1,:);
-     equiv2=nc.extentdayequiv.data(1,:);
-     if l==nlemniscs & observations
-      totalseries=nc.extent.data;
-     else
-      totalseries=nc.totalIceExtent.data;
-     end
-    elseif kcols==2
-     mu2=nc.volumedaymean.data(1,:);
-     std2=nc.volumedaystd.data(1,:);
-     equiv2=nc.volumedayequiv.data(1,:);
-     totalseries=nc.totalIceVolume.data;
-    elseif kcols==3
-     mu2=nc.snowdaymean.data(1,:);
-     std2=nc.snowdaystd.data(1,:);
-     equiv2=nc.snowdayequiv.data(1,:);
-     totalseries=nc.totalSnowVolume.data;
-    end
-    t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
-    df = (equiv1+equiv2-2);
-    tcrit=tinv(0.995,df); % change 0.995 99%, 0.975 95%
-    hcrit=ones(size(t));
-    hcrit(isnan(t))=0;
-    hcrit(-tcrit<t & t<tcrit)=0;
-   end
- 
-   % plot mean that is statistically significant
-   if l==nlemniscs & observations
-    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-   elseif l==1 
-    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-   elseif l<nlemniscs | ~observations
-    plotmean=daymean;
-    %plotmean(:,hcrit==1)=NaN;
-    plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(l,:));
-    %plotmean=daymean;
-    plotmean(:,hcrit==0)=NaN;
-    h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
-   end
- 
-   if plotequinoxtrend
- 
-    dayste=str2num(datestr(nc.time.data,'dd'));
-    monthste=str2num(datestr(nc.time.data,'mm'));
-    yearste=str2num(datestr(nc.time.data,'yyyy'));
- 
-    yearseries=min(yearste):1:max(yearste);
- 
-    % equinox (March and September, equ=3 and 9)
-    for equ=[3 9]
-     for yse=1:length(yearseries)
-      idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
-      xseries(yse)=mean(totalseries(2,idxs));
-      yseries(yse)=mean(totalseries(3,idxs));
-      ztime(yse)=nc.time.data(idxs(1));
-     end
- 
-     % information
-     disp('---------------------------')
-     if equ==3
-      disp(['March Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-     elseif equ==9
-      disp(['September Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-     end
-     disp(titl2)
-     disp(['    NH ',num2str(yearseries(1)),': ',num2str(xseries(1))])     
-     disp(['    SH ',num2str(yearseries(1)),': ',num2str(yseries(1))])     
-     disp(['Global ',num2str(yearseries(1)),': ',num2str(xseries(1)+yseries(1))])     
-     disp(['    NH ',num2str(yearseries(end)),': ',num2str(xseries(end))])     
-     disp(['    SH ',num2str(yearseries(end)),': ',num2str(yseries(end))])     
-     disp(['Global ',num2str(yearseries(end)),': ',num2str(xseries(end)+yseries(end))])     
-     disp(['    NH Delta: ',num2str(diff(xseries([1 end])))])     
-     disp(['    SH Delta: ',num2str(diff(yseries([1 end])))])     
-     disp(['Global Delta: ',num2str(diff(xseries([1 end]))+diff(yseries([1 end])))])     
-     disp('---------------------------')
- 
-     p2x=polyfit(ztime,xseries,1);
-     f2x=polyval(p2x,ztime);
-     decadetrend2x=10*100*(f2x(end)-f2x(1))/(length(ztime).*f2x(1));
- 
-     p2y=polyfit(ztime,yseries,1);
-     f2y=polyval(p2y,ztime);
-     decadetrend2y=10*100*(f2y(end)-f2y(1))/(length(ztime).*f2x(1));
- 
-     plot(f2x,f2y,':','Color',ccols(l,:),'linewidth',0.4)
-     plot(f2x([1 end]),f2y([1 end]),'.','Color',ccols(l,:),'linewidth',0.4)
- 
-     theta=atan(ar*diff(f2y([1 end]))./diff(f2x([1 end])));
- 
-     text(f2x(end),f2y(end),[num2str(decadetrend2x,'%+3.1f')],...
-          'Rotation',theta*180/pi,...
-          'FontSize',5,'HorizontalAlignment','Left',...
-          'VerticalAlignment','bottom',...
-          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-     text(f2x(end),f2y(end),[num2str(decadetrend2y,'%+3.1f')],...
-          'Rotation',theta*180/pi,...
-          'FontSize',5,'HorizontalAlignment','Left',...
-          'VerticalAlignment','top',...
-          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-    end
- 
-   end
- 
-   if label & l==1 & kcols==2
- 
-     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
- 
-     text(daymean(2,1),daymean(3,1),'January',...
-         'Rotation',theta*180/pi,...
-         'FontSize',6,'HorizontalAlignment','left',...
-         'VerticalAlignment','bottom',...
-         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-   elseif yearlabel & l==1 
- 
-     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
- 
-     text(daymean(2,1),daymean(3,1),[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')],...
-         'Rotation',theta*180/pi,...
-         'FontSize',6,'HorizontalAlignment','left',...
-         'VerticalAlignment','bottom',...
-         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
- 
-   end
- 
-   idx=datenum(0000,3,21);
-   ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
- 
-   if label & l==1 & kcols==2
- 
-     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                   diff(daymean(2,[idx-2 idx+2])));
- 
-     text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
-         'Rotation',theta*180/pi,...
-         'FontSize',6,'HorizontalAlignment','center',...
-         'VerticalAlignment','top',...
-         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-   end
- 
-   idx=datenum(0000,6,21);
-   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
-  
-   if label & l==1 & kcols==2
- 
-     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                   diff(daymean(2,[idx-2 idx+2])));
- 
-     text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
-         'Rotation',theta*180/pi,...
-         'FontSize',5,'HorizontalAlignment','center',...
-         'VerticalAlignment','top',...
-         'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
- 
-   end
-  
-   idx=datenum(0000,9,21);
-   plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
- 
-   if label & l==1 & kcols==2
- 
-     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                   diff(daymean(2,[idx-2 idx+2])));
- 
-     text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
-         'Rotation',theta*180/pi,...
-         'FontSize',6,'HorizontalAlignment','center',...
-         'VerticalAlignment','top',...
-         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-   end
-  
-   idx=datenum(0000,12,21);
-   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
- 
-   if label & l==1 & kcols==2
- 
-     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                   diff(daymean(2,[idx-2 idx+2])));
- 
-     text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
-         'Rotation',theta*180/pi,...
-         'FontSize',5,'HorizontalAlignment','center',...
-         'VerticalAlignment','top',...
-         'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
- 
-   end
-  
-   % plot arrow
-   theta=atan(ar*diff(daymean(3,[end end-2]))./...
-                 diff(daymean(2,[end end-2])));
-   z=sqrt(diff(daymean(3,[end end-2])).^2+...
-          diff(daymean(2,[end end-2])).^2);
- 
-   xarrow=[daymean(2,end)+z.*cos(theta-150*pi/180) ...
-           daymean(2,end) ...
-           daymean(2,end)+z.*cos(theta+150*pi/180)];
-   yarrow=[daymean(3,end)+z.*sin(theta-150*pi/180) ...
-           daymean(3,end) ...
-           daymean(3,end)+z.*sin(theta+150*pi/180)];
- 
-   plot(xarrow,yarrow,'Color',ccols(l,:))
- 
-  end
- 
-  end % years
- 
-  xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
-  if kcols==1
-   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
-   legendnames=legnames;
-   if observations & ~yearlabel
-    legendnames{nlemniscs}=[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),' ',...
-                            char(legnames{nlemniscs})];
-   end
-   legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
-   legend('boxoff');
-  end
-  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
- 
+filenamemodifier=[filetabe,'.'];
+
+for kcols=1:maxcols
+
+ ridgepack_multiplot(1,maxcols,1,kcols,als(kcols))
+
+ % set plot type
+ if kcols==1
+  titl2=['Sea Ice Extent \times{10^6} km^2'];
+  xlab2=['Northern Hemisphere'];
+  ylab2=['Southern Hemisphere'];
+  xlims=[0 22];
+  ylims=[3 23];
+  xyticks=5;
+  globalconts=30;
+  globlab=['Global Extent'];
+  filenamemodifier=[filenamemodifier,'extent.'];
+ elseif kcols==2
+  titl2=['Sea Ice Volume \times{10^3} km^3'];
+  xlab2=['Northern Hemisphere'];
+  xlims=[0 49];
+  ylims=[3 28];
+  xyticks=5;
+  globalconts=45;
+  globlab=['Global Volume'];
+  filenamemodifier=[filenamemodifier,'volume.'];
+ elseif kcols==3
+  titl2=['Snow Volume \times{10^2} km^3'];
+  xlab2=['Northern Hemisphere'];
+  xlims=[0 35];
+  ylims=[0 50];
+  xyticks=10;
+  globalconts=50;
+  globlab=['Global Snow Volume'];
+  filenamemodifier=[filenamemodifier,'snow.'];
  end
- 
- ridgepack_multialign(gcf,'',12)
- 
- cd('/Users/afroberts/work')
- 
- yeartag=[];
+  
+ % create background axis
+ axis square
+ xlim(xlims)
+ ylim(ylims)
+ set(gca,'XTick',[0:xyticks:max([xlims ylims])],'YTick',[0:xyticks:max([xlims ylims])])
+ ar=diff(xlims)./diff(ylims);
+
+ % underlay global grid
+ if grid
+
+  graytype=0.7;
+  x=0:max(xlims);
+  y=0:max(ylims);
+  [xx,yy]=meshgrid(x,y);
+  z=xx+yy;
+  conts=[0:xyticks:xlims(end)+ylims(end)];
+  [C,h]=contour(xx,yy,z,conts,'Color',graytype*[1 1 1]);
+  hold on
+
+  for i=2:length(conts)-1
+
+   theta=atan(1./ar);
+   xpos=xlims(1)+(conts(i)-xlims(1))./(tan(theta)+1);
+   ypos=xlims(1)+(conts(i)-xlims(1))-xpos;
+
+   if xpos>xlims(1) & ypos>ylims(1) & xpos<xlims(end) & ypos<ylims(end)
+    if conts(i)==globalconts
+     text(xpos,ypos,globlab,...
+         'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
+         'FontSize',8,'HorizontalAlignment','center',...
+         'VerticalAlignment','bottom',...
+         'Interpreter','Tex',...
+         'Margin',1,'Color',graytype*[1 1 1]);
+    else
+     text(xpos,ypos,num2str(conts(i)),...
+         'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
+         'FontSize',8,'HorizontalAlignment','center',...
+         'VerticalAlignment','bottom',...
+         'Interpreter','Tex',...
+         'Margin',1,'Color',graytype*[1 1 1]);
+    end
+   end
+
+  end
+
+ end
+
+ % plot data for given year ranges
  for yi=1:length(yearrange)
-  yearst=yearrange{yi}(1);
-  yearen=yearrange{yi}(2);
-  yeartag=[yeartag,num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.'];
+
+ yearst=yearrange{yi}(1);
+ yearen=yearrange{yi}(2);
+
+ % plot data from each lemnisc
+ if kcols==1 
+  nlemn=nlemniscs;
+ elseif observations
+  nlemn=nlemniscs-1;
  end
+
+ for l=1:nlemn
+
+  if l==nlemniscs & observations % observed extent
+   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   if strcmp(char(ensemblenames{l}),'v3alpha02') | ...
+      strcmp(char(ensemblenames{l}),'master') | ...
+      strcmp(char(ensemblenames{l}),'hfdefault')
+    cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
+   else
+    cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   end
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
+
+  if l==1
+   if kcols==1
+    mu1=nc.extentdaymean.data(1,:);
+    std1=nc.extentdaystd.data(1,:);
+    equiv1=nc.extentdayequiv.data(1,:);
+   elseif kcols==2
+    mu1=nc.volumedaymean.data(1,:); 
+    std1=nc.volumedaystd.data(1,:);
+    equiv1=nc.volumedayequiv.data(1,:);
+   elseif kcols==3
+    mu1=nc.snowdaymean.data(1,:);
+    std1=nc.snowdaystd.data(1,:);
+    equiv1=nc.snowdayequiv.data(1,:);
+   end
+  elseif l<nlemniscs % not compared with observations
+   if kcols==1
+    mu2=nc.extentdaymean.data(1,:);
+    std2=nc.extentdaystd.data(1,:);
+    equiv2=nc.extentdayequiv.data(1,:);
+   elseif kcols==2
+    mu2=nc.volumedaymean.data(1,:); 
+    std2=nc.volumedaystd.data(1,:);
+    equiv2=nc.volumedayequiv.data(1,:);
+   elseif kcols==3
+    mu2=nc.snowdaymean.data(1,:);
+    std2=nc.snowdaystd.data(1,:);
+    equiv2=nc.snowdayequiv.data(1,:);
+   end
+   t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
+   df = (equiv1+equiv2-2);
+   tcrit=tinv(0.975,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
+   hcrit=ones(size(t));
+   hcrit(isnan(t))=0;
+   hcrit(-tcrit<t & t<tcrit)=0;
+  end
+
+  if kcols==1
+   upperquantile=nc.extentupperquantile.data;
+   lowerquantile=nc.extentlowerquantile.data;
+   daymedian=nc.extentdaymedian.data;
+   daymean=nc.extentdaymean.data;
+   if l==nlemniscs & observations
+    totalseries=nc.extent.data;
+   else
+    totalseries=nc.totalIceExtent.data;
+   end
+  elseif kcols==2
+   upperquantile=nc.volumeupperquantile.data;
+   lowerquantile=nc.volumelowerquantile.data;
+   daymedian=nc.volumedaymedian.data;
+   daymean=nc.volumedaymean.data;
+   totalseries=nc.totalIceVolume.data;
+  elseif kcols==3
+   upperquantile=nc.snowupperquantile.data;
+   lowerquantile=nc.snowlowerquantile.data;
+   daymedian=nc.snowdaymedian.data;
+   daymean=nc.snowdaymean.data;
+   totalseries=nc.totalSnowVolume.data;
+  end
+
+  if itqrange
+
+   ocol=0.90*[1 1 1];
+   alpha=0.1;
+
+   for k=1:1:365
+
+    theta=[0:10:90]*pi/180;
+
+    ae=abs(upperquantile(2,k)-daymedian(2,k));
+    be=abs(upperquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    xs=[daymedian(2,k) ...
+        xe+daymedian(2,k) ...
+        daymedian(2,k)];
+    ys=[daymedian(3,k) ...
+        ye+daymedian(3,k) ...
+        daymedian(3,k)];
+    patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
+
+    theta=[90:10:180]*pi/180;
+
+    ae=abs(lowerquantile(2,k)-daymedian(2,k));
+    be=abs(upperquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    ys=[daymedian(3,k) ...
+        ye+daymedian(3,k) ...
+        daymedian(3,k)];
+    xs=[daymedian(2,k) ...
+        xe+daymedian(2,k) ...
+        daymedian(2,k)];
+    patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
+
+    theta=[180:10:270]*pi/180;
+
+    ae=abs(lowerquantile(2,k)-daymedian(2,k));
+    be=abs(lowerquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    xs=[daymedian(2,k) ...
+        xe+daymedian(2,k) ...
+        daymedian(2,k)];
+    ys=[daymedian(3,k) ...
+        ye+daymedian(3,k) ...
+        daymedian(3,k)];
+    patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
+
+    theta=[270:10:360]*pi/180;
+
+    ae=abs(upperquantile(2,k)-daymedian(2,k));
+    be=abs(lowerquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    xs=[daymedian(2,k) ...
+        xe+daymedian(2,k) ...
+        daymedian(2,k)];
+    ys=[daymedian(3,k) ...
+        ye+daymedian(3,k) ...
+        daymedian(3,k)];
+    patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
+
+   end
+
+  end
+
+  if plottimeseries
+
+   plot(totalseries(2,:),totalseries(3,:),'Color',0.9*[1 1 1]);
+
+   if plotcross
+
+    ocol=[0.8500 0.3250 0.0980]
+
+    k=datenum(0000,5,21);
+
+    space=[k:365:365*floor(length(nc.time.data)./365)];
+
+    plot(totalseries(2,space),totalseries(3,space),'.',...
+        'Color',0.5*[1 1 1]);
+
+    plot([lowerquantile(2,k) upperquantile(2,k)],...
+         [daymedian(3,k) daymedian(3,k)],...
+        'Color',ocol,'LineWidth',1);
+
+    plot([daymedian(2,k) daymedian(2,k)],...
+         [lowerquantile(3,k) upperquantile(3,k)],...
+         'Color',ocol,'LineWidth',1);
+
+   end
+
+  end
+
+  if plotfullellipse
+
+    theta=[0:10:90]*pi/180;
+
+    ae=abs(upperquantile(2,k)-daymedian(2,k));
+    be=abs(upperquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
  
- ensembletag=[];
- for ei=1:length(ensemblenames)
-  ensembletag=[ensembletag,char(ensemblenames{ei}),'.'];
+    plot(xe+daymedian(2,k),ye+daymedian(3,k),...
+          'Color',ocol,'LineWidth',1)
+
+    theta=[90:10:180]*pi/180;
+ 
+    ae=abs(lowerquantile(2,k)-daymedian(2,k));
+    be=abs(upperquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    plot(xe+daymedian(2,k),ye+daymedian(3,k),...
+         'Color',ocol,'LineWidth',1)
+
+    theta=[180:10:270]*pi/180;
+
+    ae=abs(lowerquantile(2,k)-daymedian(2,k));
+    be=abs(lowerquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+
+    plot(xe+daymedian(2,k),ye+daymedian(3,k),...
+          'Color',ocol,'LineWidth',1)
+
+    theta=[270:10:360]*pi/180;
+
+    ae=abs(upperquantile(2,k)-daymedian(2,k));
+    be=abs(lowerquantile(3,k)-daymedian(3,k));
+
+    xe=ae*cos(theta);
+    ye=be*sin(theta);
+ 
+    plot(xe+daymedian(2,k),ye+daymedian(3,k),...
+         'Color',ocol,'LineWidth',1)
+
+  end
+
  end
+
+ end % years
+
+
+ % plot data for given year ranges
+ for yi=1:length(yearrange)
+
+ yearst=yearrange{yi}(1);
+ yearen=yearrange{yi}(2);
+
+ for l=1:nlemn
+
+  if l==nlemniscs & observations % observed extent
+   cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   if strcmp(char(ensemblenames{l}),'v3alpha02') | ...
+      strcmp(char(ensemblenames{l}),'master') | ...
+      strcmp(char(ensemblenames{l}),'hfdefault')
+    cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
+   else
+    cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
+   end
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
+
+  % grab daily mean  
+  if kcols==1
+   daymean=nc.extentdaymean.data;
+  elseif kcols==2
+   daymean=nc.volumedaymean.data;
+  elseif kcols==3
+   daymean=nc.snowdaymean.data;
+  end
+
+  if kcols==1
+   upperquantile=nc.extentupperquantile.data;
+   lowerquantile=nc.extentlowerquantile.data;
+   daymedian=nc.extentdaymedian.data;
+   daymean=nc.extentdaymean.data;
+   if l==nlemniscs & observations
+    totalseries=nc.extent.data;
+   else
+    totalseries=nc.totalIceExtent.data;
+   end
+  elseif kcols==2
+   upperquantile=nc.volumeupperquantile.data;
+   lowerquantile=nc.volumelowerquantile.data;
+   daymedian=nc.volumedaymedian.data;
+   daymean=nc.volumedaymean.data;
+   totalseries=nc.totalIceVolume.data;
+  elseif kcols==3
+   upperquantile=nc.snowupperquantile.data;
+   lowerquantile=nc.snowlowerquantile.data;
+   daymedian=nc.snowdaymedian.data;
+   daymean=nc.snowdaymean.data;
+   totalseries=nc.totalSnowVolume.data;
+  end
+
+
+  % grab t-test information
+  if l==1
+   if kcols==1
+    mu1=nc.extentdaymean.data(1,:);
+    std1=nc.extentdaystd.data(1,:);
+    equiv1=nc.extentdayequiv.data(1,:);
+    if l==nlemniscs & observations
+     totalseries=nc.extent.data;
+    else
+     totalseries=nc.totalIceExtent.data;
+    end
+   elseif kcols==2
+    mu1=nc.volumedaymean.data(1,:);
+    std1=nc.volumedaystd.data(1,:);
+    equiv1=nc.volumedayequiv.data(1,:);
+    totalseries=nc.totalIceVolume.data;
+   elseif kcols==3
+    mu1=nc.snowdaymean.data(1,:);
+    std1=nc.snowdaystd.data(1,:);
+    equiv1=nc.snowdayequiv.data(1,:);
+    totalseries=nc.totalSnowVolume.data;
+   end
+  elseif l<nlemniscs | ~observations
+   if kcols==1
+    mu2=nc.extentdaymean.data(1,:);
+    std2=nc.extentdaystd.data(1,:);
+    equiv2=nc.extentdayequiv.data(1,:);
+    if l==nlemniscs & observations
+     totalseries=nc.extent.data;
+    else
+     totalseries=nc.totalIceExtent.data;
+    end
+   elseif kcols==2
+    mu2=nc.volumedaymean.data(1,:);
+    std2=nc.volumedaystd.data(1,:);
+    equiv2=nc.volumedayequiv.data(1,:);
+    totalseries=nc.totalIceVolume.data;
+   elseif kcols==3
+    mu2=nc.snowdaymean.data(1,:);
+    std2=nc.snowdaystd.data(1,:);
+    equiv2=nc.snowdayequiv.data(1,:);
+    totalseries=nc.totalSnowVolume.data;
+   end
+   t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
+   df = (equiv1+equiv2-2);
+   tcrit=tinv(0.975,df); % change 0.995 99%, 0.975 95%
+   hcrit=ones(size(t));
+   hcrit(isnan(t))=0;
+   hcrit(-tcrit<t & t<tcrit)=0;
+  end
+
+  % plot mean that is statistically significant
+  if l==nlemniscs & observations
+   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+  elseif l==1 
+   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+  elseif l<nlemniscs | ~observations
+   plotmean=daymean;
+   %plotmean(:,hcrit==1)=NaN;
+   plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(l,:));
+   %plotmean=daymean;
+   plotmean(:,hcrit==0)=NaN;
+   h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
+  end
+
+  if plotequinoxtrend
+
+   dayste=str2num(datestr(nc.time.data,'dd'));
+   monthste=str2num(datestr(nc.time.data,'mm'));
+   yearste=str2num(datestr(nc.time.data,'yyyy'));
+
+   yearseries=min(yearste):1:max(yearste);
+
+   % equinox (March and September, equ=3 and 9)
+   for equ=[3 9]
+    for yse=1:length(yearseries)
+     idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
+     xseries(yse)=mean(totalseries(2,idxs));
+     yseries(yse)=mean(totalseries(3,idxs));
+     ztime(yse)=nc.time.data(idxs(1));
+    end
+
+    % information
+    disp('---------------------------')
+    if equ==3
+     disp(['March Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
+    elseif equ==9
+     disp(['September Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
+    end
+    disp(titl2)
+    disp(['    NH ',num2str(yearseries(1)),': ',num2str(xseries(1))])     
+    disp(['    SH ',num2str(yearseries(1)),': ',num2str(yseries(1))])     
+    disp(['Global ',num2str(yearseries(1)),': ',num2str(xseries(1)+yseries(1))])     
+    disp(['    NH ',num2str(yearseries(end)),': ',num2str(xseries(end))])     
+    disp(['    SH ',num2str(yearseries(end)),': ',num2str(yseries(end))])     
+    disp(['Global ',num2str(yearseries(end)),': ',num2str(xseries(end)+yseries(end))])     
+    disp(['    NH Delta: ',num2str(diff(xseries([1 end])))])     
+    disp(['    SH Delta: ',num2str(diff(yseries([1 end])))])     
+    disp(['Global Delta: ',num2str(diff(xseries([1 end]))+diff(yseries([1 end])))])     
+    disp('---------------------------')
+
+    p2x=polyfit(ztime,xseries,1);
+    f2x=polyval(p2x,ztime);
+    decadetrend2x=10*100*(f2x(end)-f2x(1))/(length(ztime).*f2x(1));
+
+    p2y=polyfit(ztime,yseries,1);
+    f2y=polyval(p2y,ztime);
+    decadetrend2y=10*100*(f2y(end)-f2y(1))/(length(ztime).*f2x(1));
+
+    plot(f2x,f2y,':','Color',ccols(l,:),'linewidth',0.4)
+    plot(f2x([1 end]),f2y([1 end]),'.','Color',ccols(l,:),'linewidth',0.4)
+
+    theta=atan(ar*diff(f2y([1 end]))./diff(f2x([1 end])));
+
+    text(f2x(end),f2y(end),[num2str(decadetrend2x,'%+3.1f')],...
+         'Rotation',theta*180/pi,...
+         'FontSize',5,'HorizontalAlignment','Left',...
+         'VerticalAlignment','bottom',...
+         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+    text(f2x(end),f2y(end),[num2str(decadetrend2y,'%+3.1f')],...
+         'Rotation',theta*180/pi,...
+         'FontSize',5,'HorizontalAlignment','Left',...
+         'VerticalAlignment','top',...
+         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+   end
+
+  end
+
+  if label & l==1 & kcols==2
+
+    theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
+
+    text(daymean(2,1),daymean(3,1),'January',...
+        'Rotation',theta*180/pi,...
+        'FontSize',6,'HorizontalAlignment','left',...
+        'VerticalAlignment','bottom',...
+        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+  elseif yearlabel & l==1 
+
+    theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
+
+    text(daymean(2,1),daymean(3,1),[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')],...
+        'Rotation',theta*180/pi,...
+        'FontSize',6,'HorizontalAlignment','left',...
+        'VerticalAlignment','bottom',...
+        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+
+  end
+
+  idx=datenum(0000,3,21);
+  ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
+
+  if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',6,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+  end
+
+  idx=datenum(0000,6,21);
+  ha=plot(daymean(2,idx),daymean(3,idx),'o',...
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
  
- filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
+  if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',5,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
+
+  end
  
- ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,ensembletag,filenamemodifier,'png'],1,2);
+  idx=datenum(0000,9,21);
+  plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
+
+  if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',6,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+  end
+ 
+  idx=datenum(0000,12,21);
+  ha=plot(daymean(2,idx),daymean(3,idx),'o',...
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
+
+  if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',5,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
+
+  end
+ 
+  % plot arrow
+  theta=atan(ar*diff(daymean(3,[end end-2]))./...
+                diff(daymean(2,[end end-2])));
+  z=sqrt(diff(daymean(3,[end end-2])).^2+...
+         diff(daymean(2,[end end-2])).^2);
+
+  xarrow=[daymean(2,end)+z.*cos(theta-150*pi/180) ...
+          daymean(2,end) ...
+          daymean(2,end)+z.*cos(theta+150*pi/180)];
+  yarrow=[daymean(3,end)+z.*sin(theta-150*pi/180) ...
+          daymean(3,end) ...
+          daymean(3,end)+z.*sin(theta+150*pi/180)];
+
+  plot(xarrow,yarrow,'Color',ccols(l,:))
+
+ end
+
+ end % years
+
+ xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
+ if kcols==1
+  ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
+  legendnames=legnames;
+  if observations & ~yearlabel
+   legendnames{nlemniscs}=[num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),' ',...
+                           char(legnames{nlemniscs})];
+  end
+  legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+  legend('boxoff');
+ end
+ title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
 
 end
+
+ridgepack_multialign(gcf,'',12)
+
+cd('/Users/afroberts/work')
+
+yeartag=[];
+for yi=1:length(yearrange)
+ yearst=yearrange{yi}(1);
+ yearen=yearrange{yi}(2);
+ yeartag=[yeartag,num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.'];
+end
+
+ensembletag=[];
+for ei=1:length(ensemblenames)
+ ensembletag=[ensembletag,char(ensemblenames{ei}),'.'];
+end
+
+filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
+
+ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,ensembletag,filenamemodifier,'png'],1,2);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
