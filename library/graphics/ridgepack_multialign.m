@@ -80,7 +80,7 @@ if ishandle(hf)
    
    ha=gca;
    set(hf,'CurrentAxes',r.titlehandle)
-   title(titletext)
+   title(titletext,'FontWeight','normal')
    titleaxpos=get(r.titlehandle,'Position');
    titleextent=get(r.titlehandle,'TightInset');
 

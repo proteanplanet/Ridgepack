@@ -1,8 +1,11 @@
 function ridgepack_e3smsatcol(nc,var,ncvert,cont,ref,...
                               centlat,centlon,horizon,altitude,...
-                              lighting,reversed,logscale,colors)
+                              lighting,reversed,logscale,colors,whitespace)
 
 
+if nargin<14
+ whitespace=true;
+end
 
 % define colormap
 [cmap]=ridgepack_colormap(cont,ref,colors,logscale,reversed);
@@ -103,20 +106,22 @@ for j=1:length(cont)
 end
 
 % crop by overlaying a white ring
-N = 100;
-thetavec = linspace(deg2rad(horizon),maxth,N);
-phivec = linspace(0,2*pi,N);
-[th, ph] = meshgrid(thetavec,phivec);
-R = ones(size(th)); % should be your R(theta,phi) surface in general
-cx = R.*sin(th).*cos(ph);
-cy = R.*sin(th).*sin(ph);
-cz = 1.09*R.*cos(th);
-c1 = ones(size(cx));
-clear cc
-cc(:,:,1)=c1;
-cc(:,:,2)=c1;
-cc(:,:,3)=c1;
-surf(cx,cy,cz,cc,'EdgeColor','none');
+if whitespace
+ N = 100;
+ thetavec = linspace(deg2rad(horizon),maxth,N);
+ phivec = linspace(0,2*pi,N);
+ [th, ph] = meshgrid(thetavec,phivec);
+ R = ones(size(th)); % should be your R(theta,phi) surface in general
+ cx = R.*sin(th).*cos(ph);
+ cy = R.*sin(th).*sin(ph);
+ cz = 1.09*R.*cos(th);
+ c1 = ones(size(cx));
+ clear cc
+ cc(:,:,1)=c1;
+ cc(:,:,2)=c1;
+ cc(:,:,3)=c1;
+ surf(cx,cy,cz,cc,'EdgeColor','none');
+end
 
 % add black frame
 ph=deg2rad([0:0.001:361]);

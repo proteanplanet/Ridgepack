@@ -25,8 +25,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-label=true;
-%label=false;
+%label=true;
+label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -34,54 +34,68 @@ yearlabel=false;
 %plotcross=true;
 plotcross=false;
 
-plotequinoxtrend=true;
-%plotequinoxtrend=false;
+%plotequinoxtrend=true;
+plotequinoxtrend=false;
 
 observations=true;
 %observations=false;
 
-titletab='Sea Ice E3SM Industrial';
+titletab='Sea Ice E3SM Preindustrial';
 
 %filetabe='control';
-%filetabe='v3';
-filetabe='observations_only';
+%filetabe='industrial3';
+filetabe='PI';
 
+ensemblenames={'v3alpha03-trigrid','PSLV'};
 %ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
-ensemblenames={'LR','v3alpha02'};
-%ensemblenames={'v3alpha02'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
 %legnames={'LR PI Control','NARRM PI Control'};
-legnames={'v2 5-member 1980-2014','v3alpha02 1980-2014'};
-%legnames={'v3alpha02 1980-2014'};
+legnames={'v3alpha04-Trigrid','PSLV'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1 2 3 4 5],[13]};
-%ensemblecases={[13]};
+ensemblecases={[1],[2]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
-yearrange={[1979 2022]};
-%yearrange={[1 500]};
+yearrange={[1 13]};
 
-maxcols=2;
+yearsto=1980;
+yeareno=2014;
 
-casenames={'v2.LR.historical_0101',...
-           'v2.LR.historical_0151',...
-           'v2.LR.historical_0201',...
-           'v2.LR.historical_0251',...
-           'v2.LR.historical_0301',...
-           'v2.NARRM.historical_0101',...
-           'v2.NARRM.historical_0151',...
-           'v2.NARRM.historical_0201',...
-           'v2.NARRM.historical_0251',...
-           'v2.NARRM.historical_0301',...
-           'v2.LR.piControl',...
-           'v2.NARRM.piControl',...
-           '20230704.v3alpha02.historical_0101.chrysalis'};
+maxcols=3;
+
+% case names
+casenames={'20230924.v3alpha04_trigrid.piControl.chrysalis',...
+           '20231014.v3alpha04_trigrid_pslv.piControl.chrysalis'};
+
+% case directories where the regional sea ice data is held
+dirnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
+          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+
+% directories where the processed lemnisc data is or will be written
+eprnames={'/Users/afroberts/data/MODEL/E3SM/v3alpha04_trigrid',...
+          '/Users/afroberts/data/MODEL/E3SM/pslv'};
+
+%casenames={'v2.LR.historical_0101',...
+%           'v2.LR.historical_0151',...
+%           'v2.LR.historical_0201',...
+%           'v2.LR.historical_0251',...
+%           'v2.LR.historical_0301',...
+%           'v2.NARRM.historical_0101',...
+%           'v2.NARRM.historical_0151',...
+%           'v2.NARRM.historical_0201',...
+%           'v2.NARRM.historical_0251',...
+%           'v2.NARRM.historical_0301',...
+%           'v2.LR.piControl',...
+%           'v2.NARRM.piControl'};
+%for j=1:length(casenames)
+% dirnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist'];
+% eprnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/processed'];
+%end
 
 if observations
  nlemniscs=length(ensemblenames)+1;
@@ -94,7 +108,6 @@ ccols=lines(nlemniscs);
 
 vars={'totalIceExtent','totalIceVolume','totalSnowVolume','averageAlbedo','totalKineticEnergy'};
 fact=[10^6 10^3 10^2 1 10^12];
-
 
 lquantile=0.25;
 uquantile=0.75;
@@ -127,11 +140,7 @@ if generate
   % create processed files for each case
   for i=ensemblecases{l}
 
-   if i==13
-    cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(casenames{i}),'/archive/ice/hist']);
-   else
-    cd(['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist']);
-   end 
+   cd(char(dirnames{i}));
  
    for yearx=yearst:1:yearen
 
@@ -390,11 +399,7 @@ if generate
 
   nc=ridgepack_struct(nc);
 
-  if i==13
-   cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
-  else
-   cd(['/Users/afroberts/data/MODEL/E3SM/v2/v2.',char(ensemblenames{l}),'/processed']);
-  end
+  cd(char(eprnames{l}));
 
   outfile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
@@ -423,20 +428,20 @@ if generateobs & observations
 
   k=1;
 
-  cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
+  cd(['~/data/SATELLITE/processed/G02202_v4']);
 
   ncobs=ridgepack_clone('G02202_v4_merged_global_r00_1979_2022');
 
   years=str2num(datestr(ncobs.time.data,'YYYY'));
 
-  idx=find(years>=yearst & years<=yearen);
+  idx=find(years>=yearsto & years<=yeareno);
 
   k=1
   ncobs.time.data=ncobs.time.data(idx);
   ncobs.extent.data=ncobs.extent.data(:,idx)/fact(k);
   ncobs=rmfield(ncobs,{'attributes'})
   ncobs.attributes.title=['G02202_v4 extent lemnisc statistics years ',...
-                       num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i')];
+                       num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i')];
   for k=1:365
    space=[k:365:365*floor(length(ncobs.time.data)./365)];
    annualtimeaverage(k)=ncobs.time.data(k);
@@ -499,7 +504,7 @@ if generateobs & observations
   ncobs=ridgepack_struct(ncobs);
 
   outfile=['G02202_v4_merged.lemnisc.',...
-           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+           num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
 
   ncobs=ridgepack_struct(ncobs);
 
@@ -509,7 +514,158 @@ if generateobs & observations
 
 end
 
-if plotlemnisc
+%return
+
+filenamemodifier=[filetabe,'.'];
+
+for kcols=1:maxcols
+
+ ridgepack_multiplot(1,maxcols,1,kcols,als(kcols))
+
+ % set plot type
+ if kcols==1
+  titl2=['Sea Ice Extent \times{10^6} km^2'];
+  xlab2=['Northern Hemisphere'];
+  ylab2=['Southern Hemisphere'];
+  %xlims=[0 20];
+  %ylims=[0 20];
+  xlims=[4 20];
+  ylims=[0 21];
+  xyticks=5;
+  globalconts=30;
+  globlab=['Global Extent'];
+  filenamemodifier=[filenamemodifier,'extent.'];
+ elseif kcols==2
+  titl2=['Sea Ice Volume \times{10^3} km^3'];
+  xlab2=['Northern Hemisphere'];
+  %xlims=[0 40];
+  %ylims=[0 25];
+  xlims=[5 40];
+  ylims=[0 30];
+  xyticks=5;
+  globalconts=45;
+  globlab=['Global Volume'];
+  filenamemodifier=[filenamemodifier,'volume.'];
+ elseif kcols==3
+  titl2=['Snow Volume \times{10^2} km^3'];
+  xlab2=['Northern Hemisphere'];
+  xlims=[0 33];
+  ylims=[0 65];
+  xyticks=10;
+  globalconts=50;
+  globlab=['Global Snow Volume'];
+  filenamemodifier=[filenamemodifier,'snow.'];
+ end
+  
+ % create background axis
+ axis square
+ xlim(xlims)
+ ylim(ylims)
+ set(gca,'XTick',[0:xyticks:max([xlims ylims])],'YTick',[0:xyticks:max([xlims ylims])])
+ ar=diff(xlims)./diff(ylims);
+
+ % underlay global grid
+ if grid
+
+  graytype=0.7;
+  x=0:max(xlims);
+  y=0:max(ylims);
+  [xx,yy]=meshgrid(x,y);
+  z=xx+yy;
+  conts=[0:xyticks:xlims(end)+ylims(end)];
+  [C,h]=contour(xx,yy,z,conts,'Color',graytype*[1 1 1]);
+  hold on
+
+  for i=2:length(conts)-1
+
+   theta=atan(1./ar);
+   xpos=xlims(1)+(conts(i)-xlims(1))./(tan(theta)+1);
+   ypos=xlims(1)+(conts(i)-xlims(1))-xpos;
+
+   if xpos>xlims(1) & ypos>ylims(1) & xpos<xlims(end) & ypos<ylims(end)
+    if conts(i)==globalconts
+     text(xpos,ypos,globlab,...
+         'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
+         'FontSize',8,'HorizontalAlignment','center',...
+         'VerticalAlignment','bottom',...
+         'Interpreter','Tex',...
+         'Margin',1,'Color',graytype*[1 1 1]);
+    else
+     text(xpos,ypos,num2str(conts(i)),...
+         'Rotation',-180*atan(tan(pi*45./180)*ar)/pi,...
+         'FontSize',8,'HorizontalAlignment','center',...
+         'VerticalAlignment','bottom',...
+         'Interpreter','Tex',...
+         'Margin',1,'Color',graytype*[1 1 1]);
+    end
+   end
+
+  end
+
+ end
+
+ % plot data for given year ranges
+ for yi=1:length(yearrange)
+
+ yearst=yearrange{yi}(1);
+ yearen=yearrange{yi}(2);
+
+ % plot data from each lemnisc
+ if kcols==1 
+  nlemn=nlemniscs;
+ elseif observations
+  nlemn=nlemniscs-1;
+ end
+
+ for l=1:nlemn
+
+  if l==nlemniscs & observations % observed extent
+   cd(['~/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   cd(char(eprnames{l}));
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
+
+  if l==1
+   if kcols==1
+    mu1=nc.extentdaymean.data(1,:);
+    std1=nc.extentdaystd.data(1,:);
+    equiv1=nc.extentdayequiv.data(1,:);
+   elseif kcols==2
+    mu1=nc.volumedaymean.data(1,:); 
+    std1=nc.volumedaystd.data(1,:);
+    equiv1=nc.volumedayequiv.data(1,:);
+   elseif kcols==3
+    mu1=nc.snowdaymean.data(1,:);
+    std1=nc.snowdaystd.data(1,:);
+    equiv1=nc.snowdayequiv.data(1,:);
+   end
+  elseif l<nlemniscs % not compared with observations
+   if kcols==1
+    mu2=nc.extentdaymean.data(1,:);
+    std2=nc.extentdaystd.data(1,:);
+    equiv2=nc.extentdayequiv.data(1,:);
+   elseif kcols==2
+    mu2=nc.volumedaymean.data(1,:); 
+    std2=nc.volumedaystd.data(1,:);
+    equiv2=nc.volumedayequiv.data(1,:);
+   elseif kcols==3
+    mu2=nc.snowdaymean.data(1,:);
+    std2=nc.snowdaystd.data(1,:);
+    equiv2=nc.snowdayequiv.data(1,:);
+   end
+   t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
+   df = (equiv1+equiv2-2);
+   tcrit=tinv(0.975,df); % change 0.9995 99.9%, 0.995 99%, 0.975 95%
+   hcrit=ones(size(t));
+   hcrit(isnan(t))=0;
+   hcrit(-tcrit<t & t<tcrit)=0;
+  end
 
  filenamemodifier=[filetabe,'.'];
  
@@ -837,23 +993,48 @@ if plotlemnisc
    end
  
   end
- 
-  end % years
- 
- 
-  % plot data for given year ranges
-  for yi=1:length(yearrange)
- 
-  yearst=yearrange{yi}(1);
-  yearen=yearrange{yi}(2);
- 
-  for l=1:nlemn
- 
-   if l==nlemniscs & observations % observed extent
-    cd(['/Volumes/CICESatArray/data/SATELLITE/processed/G02202_v4']);
-    obsfile=['G02202_v4_merged.lemnisc.',...
-              num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
-    nc=ridgepack_clone(obsfile);
+
+ end
+
+ end % years
+
+
+ % plot data for given year ranges
+ for yi=1:length(yearrange)
+
+ yearst=yearrange{yi}(1);
+ yearen=yearrange{yi}(2);
+
+ for l=1:nlemn
+
+  if l==nlemniscs & observations % observed extent
+   cd(['~/data/SATELLITE/processed/G02202_v4']);
+   obsfile=['G02202_v4_merged.lemnisc.',...
+             num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(obsfile);
+  else
+   cd(char(eprnames{l}));
+   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+           num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
+   nc=ridgepack_clone(infile);
+  end
+
+  % grab daily mean  
+  if kcols==1
+   daymean=nc.extentdaymean.data;
+  elseif kcols==2
+   daymean=nc.volumedaymean.data;
+  elseif kcols==3
+   daymean=nc.snowdaymean.data;
+  end
+
+  if kcols==1
+   upperquantile=nc.extentupperquantile.data;
+   lowerquantile=nc.extentlowerquantile.data;
+   daymedian=nc.extentdaymedian.data;
+   daymean=nc.extentdaymean.data;
+   if l==nlemniscs & observations
+    totalseries=nc.extent.data;
    else
     if strcmp(char(ensemblenames{l}),'v3alpha02')
      cd(['/Users/afroberts/data/MODEL/E3SM/E3SMv3_dev/',char(ensemblenames{l}),'/processed']);
@@ -949,82 +1130,43 @@ if plotlemnisc
     hcrit(isnan(t))=0;
     hcrit(-tcrit<t & t<tcrit)=0;
    end
- 
-   % plot mean that is statistically significant
-   if l==nlemniscs & observations
-    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-   elseif l==1 
-    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-   elseif l<nlemniscs | ~observations
-    plotmean=daymean;
-    %plotmean(:,hcrit==1)=NaN;
-    plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(l,:));
-    %plotmean=daymean;
-    plotmean(:,hcrit==0)=NaN;
-    h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
-   end
- 
-   if plotequinoxtrend
- 
-    dayste=str2num(datestr(nc.time.data,'dd'));
-    monthste=str2num(datestr(nc.time.data,'mm'));
-    yearste=str2num(datestr(nc.time.data,'yyyy'));
- 
-    yearseries=min(yearste):1:max(yearste);
- 
-    % equinox (March and September, equ=3 and 9)
-    for equ=[3 9]
-     for yse=1:length(yearseries)
-      idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
-      xseries(yse)=mean(totalseries(2,idxs));
-      yseries(yse)=mean(totalseries(3,idxs));
-      ztime(yse)=nc.time.data(idxs(1));
-     end
- 
-     % information
-     disp('---------------------------')
-     if equ==3
-      disp(['March Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-     elseif equ==9
-      disp(['September Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-     end
-     disp(titl2)
-     disp(['    NH ',num2str(yearseries(1)),': ',num2str(xseries(1))])     
-     disp(['    SH ',num2str(yearseries(1)),': ',num2str(yseries(1))])     
-     disp(['Global ',num2str(yearseries(1)),': ',num2str(xseries(1)+yseries(1))])     
-     disp(['    NH ',num2str(yearseries(end)),': ',num2str(xseries(end))])     
-     disp(['    SH ',num2str(yearseries(end)),': ',num2str(yseries(end))])     
-     disp(['Global ',num2str(yearseries(end)),': ',num2str(xseries(end)+yseries(end))])     
-     disp(['    NH Delta: ',num2str(diff(xseries([1 end])))])     
-     disp(['    SH Delta: ',num2str(diff(yseries([1 end])))])     
-     disp(['Global Delta: ',num2str(diff(xseries([1 end]))+diff(yseries([1 end])))])     
-     disp('---------------------------')
- 
-     p2x=polyfit(ztime,xseries,1);
-     f2x=polyval(p2x,ztime);
-     decadetrend2x=10*100*(f2x(end)-f2x(1))/(length(ztime).*f2x(1));
- 
-     p2y=polyfit(ztime,yseries,1);
-     f2y=polyval(p2y,ztime);
-     decadetrend2y=10*100*(f2y(end)-f2y(1))/(length(ztime).*f2x(1));
- 
-     plot(f2x,f2y,':','Color',ccols(l,:),'linewidth',0.4)
-     plot(f2x([1 end]),f2y([1 end]),'.','Color',ccols(l,:),'linewidth',0.4)
- 
-     theta=atan(ar*diff(f2y([1 end]))./diff(f2x([1 end])));
- 
-     text(f2x(end),f2y(end),[num2str(decadetrend2x,'%+3.1f')],...
-          'Rotation',theta*180/pi,...
-          'FontSize',5,'HorizontalAlignment','Left',...
-          'VerticalAlignment','bottom',...
-          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
-     text(f2x(end),f2y(end),[num2str(decadetrend2y,'%+3.1f')],...
-          'Rotation',theta*180/pi,...
-          'FontSize',5,'HorizontalAlignment','Left',...
-          'VerticalAlignment','top',...
-          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
- 
+   t = (mu1-mu2)./sqrt(((std1.^2)./equiv1) + ((std2.^2)./equiv2));
+   df = (equiv1+equiv2-2);
+   tcrit=tinv(0.995,df); % change 0.995 99%, 0.975 95%
+   hcrit=ones(size(t));
+   hcrit(isnan(t))=0;
+   hcrit(-tcrit<t & t<tcrit)=0;
+  end
+
+  % plot mean that is statistically significant
+  if l==nlemniscs & observations
+   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+  elseif l==1 
+   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+  elseif l<nlemniscs | ~observations
+   plotmean=daymean;
+   %plotmean(:,hcrit==1)=NaN;
+   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
+   %plotmean=daymean;
+   plotmean(:,hcrit==0)=NaN;
+   h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
+  end
+
+  if plotequinoxtrend
+
+   dayste=str2num(datestr(nc.time.data,'dd'));
+   monthste=str2num(datestr(nc.time.data,'mm'));
+   yearste=str2num(datestr(nc.time.data,'yyyy'));
+
+   yearseries=min(yearste):1:max(yearste);
+
+   % equinox (March and September, equ=3 and 9)
+   for equ=[3 9]
+    for yse=1:length(yearseries)
+     idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
+     xseries(yse)=mean(totalseries(2,idxs));
+     yseries(yse)=mean(totalseries(3,idxs));
+     ztime(yse)=nc.time.data(idxs(1));
     end
  
    end
@@ -1151,16 +1293,19 @@ if plotlemnisc
   title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
  
  end
- 
- ridgepack_multialign(gcf,'',12)
- 
- cd('/Users/afroberts/work')
- 
- yeartag=[];
- for yi=1:length(yearrange)
-  yearst=yearrange{yi}(1);
-  yearen=yearrange{yi}(2);
-  yeartag=[yeartag,num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.'];
+
+ end % years
+
+ xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
+ if kcols==1
+  ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
+  legendnames=legnames;
+  if observations & ~yearlabel
+   legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
+                           char(legnames{nlemniscs})];
+  end
+  legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+  legend('boxoff');
  end
  
  ensembletag=[];

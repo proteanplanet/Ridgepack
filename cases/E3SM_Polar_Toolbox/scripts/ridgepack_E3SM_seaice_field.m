@@ -97,7 +97,6 @@ for si=1:2
   ncm.timeMonthly_avg_iceAreaCell.data=...
               ncm.timeMonthly_avg_iceAreaCell.data/count;
 
-
   alphak=alphak+1;
   ridgepack_multiplot(2,maxensemble,si,hi,char(alpha(alphak)));
   ridgepack_polarm('centralarctic2','grid','label','noland')

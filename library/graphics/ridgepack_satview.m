@@ -147,11 +147,14 @@ if gridon>0
     if max(rad2deg(thl))<horizon
 
      if lats>0
-       ending='$^{\circ}$N';
+       %ending='$^{\circ}$N';
+       ending='^{\circ}N';
      elseif lats<0
-       ending='$^{\circ}$S';
+       %ending='$^{\circ}$S';
+       ending='^{\circ}S';
      else
-       ending='$^{\circ}$';
+       %ending='$^{\circ}$';
+       ending='^{\circ}';
      end
 
      % get coordinates of meredian label near frame edge
@@ -261,11 +264,11 @@ if gridon>0
 
      % add grid label
      if lon==180 | lon==0
-       ending='$^{\circ}$E';
+       ending='^{\circ}E';
      elseif lon<0
-       ending='$^{\circ}$W';
+       ending='^{\circ}W';
      elseif lon>0
-       ending='$^{\circ}$E';
+       ending='^{\circ}E';
      end
 
      if insep
@@ -340,12 +343,16 @@ plot3(x,y,z,'k-')
 hold on
 
 % plot scale in km in lower right
+% 1 nautical mile is 1 minute of longitude at the equator
+% horizon is given in degrees, hence horizon*60 is the 
+% 1.852 is the number of km in a nautical mile
+% Hence the diameter of a satellite view is 2*horizon*60*1.852
 if ~insep
  xrange=range(x);
- diamkm=horizon*60*1.852;
+ diamkm=2*horizon*60*1.852;
  mnxs=max(x)/2;
- mxxs=29*max(x)/30;
- mnys=29*min(y)/30;
+ mxxs=max(x);
+ mnys=min(y);
  mxys=mnys;
  maxscale=mxxs-mnxs;
  scalelen=(diamkm*maxscale)/(xrange);
@@ -357,7 +364,7 @@ if ~insep
  yscale=[0.99*mnys 1.01*mnys NaN mnys mxys NaN 0.99*mnys 1.01*mnys];
  plot3(xscale,yscale,gridheight*ones(size(xscale)),'Color',scalecolor)
  text((nmnxs+nmxxs)/2,mnys,gridheight,...
-      [num2str(newscale),'~km'],...
+      [num2str(newscale),' km'],...
       'HorizontalAlignment','center',...
       'VerticalAlignment','bottom',...
       'FontSize',scalefontsize,...
