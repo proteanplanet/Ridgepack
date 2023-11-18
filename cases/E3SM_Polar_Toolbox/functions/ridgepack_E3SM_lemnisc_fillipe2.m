@@ -2,8 +2,8 @@
 clear
 close all
 
-generate=true;
-%generate=false;
+%generate=true;
+generate=false;
 
 %generateobs=true;
 generateobs=false;
@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-%label=true;
-label=false;
+label=true;
+%label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -37,62 +37,65 @@ plotequinoxtrend=false;
 observations=true;
 %observations=false;
 
-titletab='Sea Ice E3SM Preindustrial';
+titletab='CORE-forced';
 
 %filetabe='control';
 %filetabe='industrial3';
-filetabe='PI';
+filetabe='CORE-forced';
 
-ensemblenames={'PSLV','Icedge'};
+%ensemblenames={'PSLV','Icedge'};
 %ensemblenames={'LR','NARRM'};
 %ensemblenames={'LR'};
+%ensemblenames={'EC60to30E2r2',...
+%               'WC14to60E2r3',...
+%               'SOwISC12to60E2r4',...
+%               'RRS18to6v3'};
+
+%ensemblenames={'EC60to30E2r2',...
+%               'WC14to60E2r3',...
+%               'SOwISC12to60E2r4'};
+
+ensemblenames={'EC60to30E2r2'}
 
 %legnames={'LR 5-member','NARRM 5-member'};
 %legnames={'LR PI Control','NARRM PI Control'};
-legnames={'PSLV','Icedge'};
+legnames={'EC60to30E2r2',...
+          'WC14to60E2r3',...
+          'SOwISC12to60E2r4',...
+          'RRS18to6v3'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1],[2]};
+%ensemblecases={[1],[2],[3],[4]};
+ensemblecases={[1],[2],[3]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
-yearrange={[51 100]};
+yearrange={[81 120]};
 
-yearsto=1980;
-yeareno=2014;
+yearsto=1979;
+yeareno=2022;
 
 maxcols=3;
 
 % case names
-casenames={'20231014.v3alpha04_trigrid_pslv.piControl.chrysalis',...
-           '20231025.v3alpha04_trigrid_vslim.piControl.chrysalis'};
+casenames={'20210421_sim7_CORE_60to30E2r2',...
+           '20210421_sim1_CORE_WC14to60E2r3',...
+           '20210421_sim1_CORE_SOwISC12to60E2r4',...
+           '20210421_sim7_CORE_18to6v3'}
 
 % case directories where the regional sea ice data is held
-dirnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
-          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
+dirnames={'/Users/afroberts/data/MODEL/E3SM/20210421_sim7_CORE_60to30E2r2/data/ice/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim1_CORE_WC14to60E2r3/data/ice/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim1_CORE_SOwISC12to60E2r4/data/ice/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim7_CORE_18to6v3/data/ice/hist'}
 
 % directories where the processed lemnisc data is or will be written
-eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
-          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
-
-%casenames={'v2.LR.historical_0101',...
-%           'v2.LR.historical_0151',...
-%           'v2.LR.historical_0201',...
-%           'v2.LR.historical_0251',...
-%           'v2.LR.historical_0301',...
-%           'v2.NARRM.historical_0101',...
-%           'v2.NARRM.historical_0151',...
-%           'v2.NARRM.historical_0201',...
-%           'v2.NARRM.historical_0251',...
-%           'v2.NARRM.historical_0301',...
-%           'v2.LR.piControl',...
-%           'v2.NARRM.piControl'};
-%for j=1:length(casenames)
-% dirnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist'];
-% eprnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/processed'];
-%end
+eprnames={'/Users/afroberts/data/MODEL/E3SM/20210421_sim7_CORE_60to30E2r2',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim1_CORE_WC14to60E2r3',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim1_CORE_SOwISC12to60E2r4',...
+          '/Users/afroberts/data/MODEL/E3SM/20210421_sim7_CORE_18to6v3'}
 
 if observations
  nlemniscs=length(ensemblenames)+1;
@@ -425,7 +428,7 @@ if generateobs & observations
 
   k=1;
 
-  cd(['~/data/SATELLITE/processed/G02202_v4']);
+  cd(['~/data/data/SATELLITE/processed/G02202_v4']);
 
   ncobs=ridgepack_clone('G02202_v4_merged_global_r00_1979_2022');
 
@@ -526,8 +529,8 @@ for kcols=1:maxcols
   ylab2=['Southern Hemisphere'];
   %xlims=[0 20];
   %ylims=[0 20];
-  xlims=[4 20];
-  ylims=[0 21];
+  xlims=[4 18];
+  ylims=[0 23];
   xyticks=5;
   globalconts=30;
   globlab=['Global Extent'];
@@ -537,8 +540,8 @@ for kcols=1:maxcols
   xlab2=['Northern Hemisphere'];
   %xlims=[0 40];
   %ylims=[0 25];
-  xlims=[5 40];
-  ylims=[0 30];
+  xlims=[5 35];
+  ylims=[0 20];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
@@ -546,8 +549,8 @@ for kcols=1:maxcols
  elseif kcols==3
   titl2=['Snow Volume \times{10^2} km^3'];
   xlab2=['Northern Hemisphere'];
-  xlims=[0 33];
-  ylims=[0 65];
+  xlims=[0 34];
+  ylims=[0 50];
   xyticks=10;
   globalconts=50;
   globlab=['Global Snow Volume'];
@@ -617,7 +620,7 @@ for kcols=1:maxcols
  for l=1:nlemn
 
   if l==nlemniscs & observations % observed extent
-   cd(['~/data/SATELLITE/processed/G02202_v4']);
+   cd(['~/data/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
              num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
@@ -852,7 +855,7 @@ for kcols=1:maxcols
  for l=1:nlemn
 
   if l==nlemniscs & observations % observed extent
-   cd(['~/data/SATELLITE/processed/G02202_v4']);
+   cd(['~/data/data/SATELLITE/processed/G02202_v4']);
    obsfile=['G02202_v4_merged.lemnisc.',...
              num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
@@ -1094,7 +1097,7 @@ for kcols=1:maxcols
     text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
         'Rotation',theta*180/pi,...
         'FontSize',6,'HorizontalAlignment','center',...
-        'VerticalAlignment','top',...
+        'VerticalAlignment','bottom',...
         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
   end
