@@ -5,7 +5,7 @@ clear
 zoomedareas=true;
 %zoomedareas=false;
 
-grids=[7 10];
+grids=[8 12];
 %grids=[7 9];
 %grids=[7 8];
 %grids=[7];
@@ -15,7 +15,7 @@ grids=[7 10];
 maintitle='';
 
 largescales={true,false};
-bathymetrys={true,false};
+bathymetrys={true};
 
 %largescales={false};
 %largescales={true};
@@ -58,7 +58,7 @@ for bk=1:length(bathymetrys)
   
  fileg{8}.name='IcoswISC30E3r2';
  fileg{8}.outname='IcoswISC30E3r2';
- fileg{8}.title='MPAS E3SM V3 30km Icosahedron Mesh V2';
+ fileg{8}.title='MPAS E3SM V3 30km Equal Area Mesh r2';
   
  fileg{9}.name='SOwISC12to60E3r1';
  fileg{9}.outname='SOwISC12to60E3r1';
@@ -67,6 +67,14 @@ for bk=1:length(bathymetrys)
  fileg{10}.name='RRSwISC6to18E3r1';
  fileg{10}.outname='RRSwISC6to18E3r1';
  fileg{10}.title='MPAS E3SM V3 High Resolution';
+  
+ fileg{11}.name='IcoswISC30E3r6';
+ fileg{11}.outname='IcoswISC30E3r6';
+ fileg{11}.title='MPAS E3SM V3 30km Smoothed Equal Area Mesh r6';
+  
+ fileg{12}.name='IcoswISC30E3r5';
+ fileg{12}.outname='IcoswISC30E3r5';
+ fileg{12}.title='MPAS E3SM V3 30km Equal Area Mesh r5';
   
  sector{1}.centlat=90; % degrees north
  sector{1}.centlon=0; % degrees east
@@ -585,6 +593,16 @@ for bk=1:length(bathymetrys)
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r1'];
     gridfile='mpaso.RRSwISC6to18E3r1.20230902.nc';
     shiplocs=[1 2 3 4 6];
+   elseif strcmp(char(fileg{gridchoice}.name),'IcoswISC30E3r6')
+    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r6'];
+    gridfile='initial_state.nc';
+    shiplocs=[1 2 3 4 6];
+   elseif strcmp(char(fileg{gridchoice}.name),'IcoswISC30E3r5')
+    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r5'];
+    gridfile='mpaso.IcoswISC30E3r5.20231120.nc';
+    shiplocs=[1 2 3 4 6];
+   else
+    error('Unable to find mesh')
    end
   
    gridlochr=['/Users/afroberts/data/MODEL/E3SM/highres/grid'];

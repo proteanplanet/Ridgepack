@@ -93,15 +93,20 @@ else
  SGN=-1;
 end
 
-if (nargin>5 &xsize==304 & ysize==448 & strcmp(ns,'north'))
+if (nargin>5 & xsize==304 & ysize==448 & strcmp(ns,'north'))
  lonrotation=-45; % SSM/I northern 25km
  xdist=3850;
  ydist=5350;
-elseif (nargin>5 &xsize==608 & ysize==896 & strcmp(ns,'north'))
+ disp(['lonrotation is ',num2str(lonrotation)])
+elseif (nargin>5 & xsize==608 & ysize==896 & strcmp(ns,'north'))
  lonrotation=-45; % SSM/I northern 12.5km
  xdist=3850;
  ydist=5350;
-elseif (nargin>5 &xsize==316 & ysize==332 & strcmp(ns,'south'))
+elseif (nargin>5 & strcmp(ns,'north'))
+ lonrotation=-45;
+ xdist=deltx*maxdistx/2; % x distance of bottom left from South Pole
+ ydist=deltx*maxdisty/2; % y distance of bottom left from South Pole
+elseif (nargin>5 & xsize==316 & ysize==332 & strcmp(ns,'south'))
  lonrotation=0; % SSM/I southern 25km
  xdist=3950;
  ydist=3950;

@@ -1,6 +1,6 @@
 function [STS]=ridgepack_e3smstream(ncu,varu,ncv,varv,ncc,varc,...
-                              ncvert,hemisphere,density,...
-                              cont,ref)
+                                    ncvert,hemisphere,density,...
+                                    cont,ref)
 
 % ridgepack_e3smstream - Plots sea ice streamlines on a map
 %
@@ -64,6 +64,7 @@ maskv=unique(sort(maskv(~isnan(maskv(:)))));
                                ncvert.lonCell.data(maskc)*180/pi,...
                                hemisphere);
 Xi=Xc; Yi=Yc;
+
 
 U=ncu.(varu).data(maskv);
 V=ncv.(varv).data(maskv);
