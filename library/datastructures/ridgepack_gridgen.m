@@ -97,6 +97,14 @@ elseif mode==11
 elseif mode==12
  nc=ridgepack_grid_gaussian(nc,10);
  if out; nc.attributes.title='1/10th Degree Spherical Grid'; end
+elseif mode==13
+ nc=ridgepack_grid_ssmi(nc,'north',0,12.5,1300,1300);
+ if out; nc.attributes.title='Large Polar Stereographic Southern Grid'; end
+ nc=ridgepack_cellarea(nc,3);
+elseif mode==14
+ nc=ridgepack_grid_ssmi(nc,'south',0,12.5,1300,1300);
+ if out; nc.attributes.title='Large Polar Stereographic Southern Grid'; end
+ nc=ridgepack_cellarea(nc,3);
 else
  error('No grid available for that mode number');
 end
