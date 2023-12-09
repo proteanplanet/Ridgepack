@@ -5,22 +5,25 @@ close all
 %generate=true;
 generate=false;
 
-generateobs=true;
-%generateobs=false;
+%generateobs=true;
+generateobs=false;
+
+% plotmean=true;
+plotmean=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
 
 als='abcdefghijklmnopqrstuvwxyz';
 
-%grid=false;
-grid=true;
+grid=false;
+%grid=true;
 
-%plottimeseries=true;
-plottimeseries=false;
+plottimeseries=true;
+%plottimeseries=false;
 
-itqrange=true;
-%itqrange=false;
+%itqrange=true;
+itqrange=false;
 
 %label=true;
 label=false;
@@ -34,8 +37,8 @@ plotcross=false;
 %plotequinoxtrend=true;
 plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%observations=true;
+observations=false;
 
 titletab='Sea Ice E3SM Preindustrial';
 
@@ -44,17 +47,21 @@ filetabe='control';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
-ensemblenames={'LR','NARRM'};
-%ensemblenames={'LR'};
+%ensemblenames={'LR','NARRM'};
+%ensemblenames={'NARRM'};
+ensemblenames={'LR'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
-legnames={'LR PI Control','NARRM PI Control'};
+%legnames={'LR PI Control','NARRM PI Control'};
+%legnames={'NARRM PI Control'};
+legnames={'LR PI Control'}
 %legnames={'PSLV','Icedge'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1],[2]};
+%ensemblecases={[1],[2]};
+ensemblecases={[1]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
@@ -64,7 +71,7 @@ yearrange={[0001 0500]};
 yearsto=1980;
 yeareno=2014;
 
-maxcols=3;
+maxcols=2;
 
 % case names
 %casenames={'20231014.v3alpha04_trigrid_pslv.piControl.chrysalis',...
@@ -78,8 +85,10 @@ maxcols=3;
 %eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
 %          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
 
-casenames={'v2.LR.piControl',...
-           'v2.NARRM.piControl'};
+casenames={'v2.NARRM.piControl'};
+
+%casenames={'v2.LR.piControl',...
+%           'v2.NARRM.piControl'};
 
 %casenames={'v2.LR.historical_0101',...
 %           'v2.LR.historical_0151',...
@@ -528,7 +537,18 @@ end
 
 %return
 
-filenamemodifier=[filetabe,'.'];
+framerateindays=365;
+lengthtimeseries=365*500;
+%lengthtimeseries=365*(diff(yearrange)+1);
+
+frameidx=0;
+
+for iframe=1:framerateindays:lengthtimeseries-framerateindays
+
+frameidx=frameidx+1;
+
+filenamemodifier=[filetabe,'.',num2str(framerateindays),'.',...
+                  num2str(iframe,'%6.6i'),'.',num2str(frameidx,'%6.6i'),'.'];
 
 for kcols=1:maxcols
 
@@ -541,7 +561,7 @@ for kcols=1:maxcols
   ylab2=['Southern Hemisphere'];
   %xlims=[0 20];
   %ylims=[0 20];
-  xlims=[4 20];
+  xlims=[4 22];
   ylims=[0 21];
   xyticks=5;
   globalconts=30;
@@ -553,7 +573,7 @@ for kcols=1:maxcols
   %xlims=[0 40];
   %ylims=[0 25];
   xlims=[5 40];
-  ylims=[0 30];
+  ylims=[0 25];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
@@ -780,7 +800,10 @@ for kcols=1:maxcols
 
   if plottimeseries
 
-   plot(totalseries(2,:),totalseries(3,:),'Color',0.9*[1 1 1]);
+   %plot(totalseries(2,:),totalseries(3,:),'Color',0.9*[1 1 1]);
+
+   plot(totalseries(2,1:iframe),totalseries(3,1:iframe),'Color',0.9*[1 1 1]);
+   plot(totalseries(2,iframe:iframe+365),totalseries(3,iframe:iframe+365),'Color','b');
 
    if plotcross
 
@@ -964,85 +987,86 @@ for kcols=1:maxcols
   end
 
   % plot mean that is statistically significant
-  if l==nlemniscs & observations
-   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-  elseif l==1 
-   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-  elseif l<nlemniscs | ~observations
-   plotmean=daymean;
-   %plotmean(:,hcrit==1)=NaN;
-   plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
-   %plotmean=daymean;
-   plotmean(:,hcrit==0)=NaN;
-   h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
-  end
+  if plotmean
+   if l==nlemniscs & observations
+    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+   elseif l==1 
+    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+   elseif l<nlemniscs | ~observations
+    plotmean=daymean;
+    %plotmean(:,hcrit==1)=NaN;
+    plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
+    %plotmean=daymean;
+    plotmean(:,hcrit==0)=NaN;
+    h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
+   end
 
-  if plotequinoxtrend
+   if plotequinoxtrend
 
-   dayste=str2num(datestr(nc.time.data,'dd'));
-   monthste=str2num(datestr(nc.time.data,'mm'));
-   yearste=str2num(datestr(nc.time.data,'yyyy'));
+    dayste=str2num(datestr(nc.time.data,'dd'));
+    monthste=str2num(datestr(nc.time.data,'mm'));
+    yearste=str2num(datestr(nc.time.data,'yyyy'));
 
-   yearseries=min(yearste):1:max(yearste);
+    yearseries=min(yearste):1:max(yearste);
 
-   % equinox (March and September, equ=3 and 9)
-   for equ=[3 9]
-    for yse=1:length(yearseries)
-     idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
-     xseries(yse)=mean(totalseries(2,idxs));
-     yseries(yse)=mean(totalseries(3,idxs));
-     ztime(yse)=nc.time.data(idxs(1));
-    end
+    % equinox (March and September, equ=3 and 9)
+    for equ=[3 9]
+     for yse=1:length(yearseries)
+      idxs=find(dayste==21 & monthste==equ & yearste==yearseries(yse));
+      xseries(yse)=mean(totalseries(2,idxs));
+      yseries(yse)=mean(totalseries(3,idxs));
+      ztime(yse)=nc.time.data(idxs(1));
+     end
 
-    % information
-    disp('---------------------------')
-    if equ==3
-     disp(['March Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-    elseif equ==9
-     disp(['September Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
-    end
-    disp(titl2)
-    disp(['    NH ',num2str(yearseries(1)),': ',num2str(xseries(1))])     
-    disp(['    SH ',num2str(yearseries(1)),': ',num2str(yseries(1))])     
-    disp(['Global ',num2str(yearseries(1)),': ',num2str(xseries(1)+yseries(1))])     
-    disp(['    NH ',num2str(yearseries(end)),': ',num2str(xseries(end))])     
-    disp(['    SH ',num2str(yearseries(end)),': ',num2str(yseries(end))])     
-    disp(['Global ',num2str(yearseries(end)),': ',num2str(xseries(end)+yseries(end))])     
-    disp(['    NH Delta: ',num2str(diff(xseries([1 end])))])     
-    disp(['    SH Delta: ',num2str(diff(yseries([1 end])))])     
-    disp(['Global Delta: ',num2str(diff(xseries([1 end]))+diff(yseries([1 end])))])     
-    disp('---------------------------')
+     % information
+     disp('---------------------------')
+     if equ==3
+      disp(['March Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
+     elseif equ==9
+      disp(['September Equinox Ensemble Mean Lemnisc: ',char(legnames(l))])
+     end
+     disp(titl2)
+     disp(['    NH ',num2str(yearseries(1)),': ',num2str(xseries(1))])     
+     disp(['    SH ',num2str(yearseries(1)),': ',num2str(yseries(1))])     
+     disp(['Global ',num2str(yearseries(1)),': ',num2str(xseries(1)+yseries(1))])     
+     disp(['    NH ',num2str(yearseries(end)),': ',num2str(xseries(end))])     
+     disp(['    SH ',num2str(yearseries(end)),': ',num2str(yseries(end))])     
+     disp(['Global ',num2str(yearseries(end)),': ',num2str(xseries(end)+yseries(end))])     
+     disp(['    NH Delta: ',num2str(diff(xseries([1 end])))])     
+     disp(['    SH Delta: ',num2str(diff(yseries([1 end])))])     
+     disp(['Global Delta: ',num2str(diff(xseries([1 end]))+diff(yseries([1 end])))])     
+     disp('---------------------------')
 
-    p2x=polyfit(ztime,xseries,1);
-    f2x=polyval(p2x,ztime);
-    decadetrend2x=10*100*(f2x(end)-f2x(1))/(length(ztime).*f2x(1));
+     p2x=polyfit(ztime,xseries,1);
+     f2x=polyval(p2x,ztime);
+     decadetrend2x=10*100*(f2x(end)-f2x(1))/(length(ztime).*f2x(1));
 
-    p2y=polyfit(ztime,yseries,1);
-    f2y=polyval(p2y,ztime);
-    decadetrend2y=10*100*(f2y(end)-f2y(1))/(length(ztime).*f2x(1));
+     p2y=polyfit(ztime,yseries,1);
+     f2y=polyval(p2y,ztime);
+     decadetrend2y=10*100*(f2y(end)-f2y(1))/(length(ztime).*f2x(1));
+ 
+     plot(f2x,f2y,':','Color',ccols(l,:),'linewidth',0.4)
+     plot(f2x([1 end]),f2y([1 end]),'.','Color',ccols(l,:),'linewidth',0.4)
+ 
+     theta=atan(ar*diff(f2y([1 end]))./diff(f2x([1 end])));
 
-    plot(f2x,f2y,':','Color',ccols(l,:),'linewidth',0.4)
-    plot(f2x([1 end]),f2y([1 end]),'.','Color',ccols(l,:),'linewidth',0.4)
-
-    theta=atan(ar*diff(f2y([1 end]))./diff(f2x([1 end])));
-
-    text(f2x(end),f2y(end),[num2str(decadetrend2x,'%3.1f')],...
+     text(f2x(end),f2y(end),[num2str(decadetrend2x,'%3.1f')],...
          'Rotation',theta*180/pi,...
          'FontSize',5,'HorizontalAlignment','Left',...
          'VerticalAlignment','bottom',...
          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
-    text(f2x(end),f2y(end),[num2str(decadetrend2y,'%3.1f')],...
+     text(f2x(end),f2y(end),[num2str(decadetrend2y,'%3.1f')],...
          'Rotation',theta*180/pi,...
          'FontSize',5,'HorizontalAlignment','Left',...
          'VerticalAlignment','top',...
          'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
+    end
+
    end
 
-  end
-
-  if label & l==1 & kcols==2
+   if label & l==1 & kcols==2
 
     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
 
@@ -1052,7 +1076,7 @@ for kcols=1:maxcols
         'VerticalAlignment','bottom',...
         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
-  elseif yearlabel & l==1 
+   elseif yearlabel & l==1 
 
     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
 
@@ -1063,45 +1087,12 @@ for kcols=1:maxcols
         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
 
-  end
+   end
 
-  idx=datenum(0000,3,21);
-  ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
+   idx=datenum(0000,3,21);
+   ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
-  if label & l==1 & kcols==2
-
-    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                  diff(daymean(2,[idx-2 idx+2])));
-
-    text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
-        'Rotation',theta*180/pi,...
-        'FontSize',6,'HorizontalAlignment','center',...
-        'VerticalAlignment','top',...
-        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
-
-  end
-
-  idx=datenum(0000,6,21);
-  ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
- 
-  if label & l==1 & kcols==2
-
-    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
-                  diff(daymean(2,[idx-2 idx+2])));
-
-    text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
-        'Rotation',theta*180/pi,...
-        'FontSize',5,'HorizontalAlignment','center',...
-        'VerticalAlignment','top',...
-        'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
-
-  end
- 
-  idx=datenum(0000,9,21);
-  plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
-
-  if label & l==1 & kcols==2
+   if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1112,13 +1103,13 @@ for kcols=1:maxcols
         'VerticalAlignment','top',...
         'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
 
-  end
- 
-  idx=datenum(0000,12,21);
-  ha=plot(daymean(2,idx),daymean(3,idx),'o',...
-           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
+   end
 
-  if label & l==1 & kcols==2
+   idx=datenum(0000,6,21);
+   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
+ 
+   if label & l==1 & kcols==2
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1129,22 +1120,57 @@ for kcols=1:maxcols
         'VerticalAlignment','top',...
         'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
 
-  end
+   end
  
-  % plot arrow
-  theta=atan(ar*diff(daymean(3,[end end-2]))./...
+   idx=datenum(0000,9,21);
+   plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
+
+   if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Equinox'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',6,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',1,'Color',ccols(l,:),'Interpreter','Tex');
+
+   end
+ 
+   idx=datenum(0000,12,21);
+   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
+           'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
+
+   if label & l==1 & kcols==2
+
+    theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
+                  diff(daymean(2,[idx-2 idx+2])));
+
+    text(daymean(2,idx),daymean(3,idx),{'Solstice'},...
+        'Rotation',theta*180/pi,...
+        'FontSize',5,'HorizontalAlignment','center',...
+        'VerticalAlignment','top',...
+        'Margin',3,'Color',ccols(l,:),'Interpreter','Tex');
+
+   end
+ 
+   % plot arrow
+   theta=atan(ar*diff(daymean(3,[end end-2]))./...
                 diff(daymean(2,[end end-2])));
-  z=sqrt(diff(daymean(3,[end end-2])).^2+...
+   z=sqrt(diff(daymean(3,[end end-2])).^2+...
          diff(daymean(2,[end end-2])).^2);
 
-  xarrow=[daymean(2,end)+z.*cos(theta-150*pi/180) ...
-          daymean(2,end) ...
-          daymean(2,end)+z.*cos(theta+150*pi/180)];
-  yarrow=[daymean(3,end)+z.*sin(theta-150*pi/180) ...
-          daymean(3,end) ...
-          daymean(3,end)+z.*sin(theta+150*pi/180)];
+   xarrow=[daymean(2,end)+z.*cos(theta-150*pi/180) ...
+           daymean(2,end) ...
+           daymean(2,end)+z.*cos(theta+150*pi/180)];
+   yarrow=[daymean(3,end)+z.*sin(theta-150*pi/180) ...
+           daymean(3,end) ...
+           daymean(3,end)+z.*sin(theta+150*pi/180)];
 
-  plot(xarrow,yarrow,'Color',ccols(l,:))
+   plot(xarrow,yarrow,'Color',ccols(l,:))
+
+  end
 
  end
 
@@ -1154,18 +1180,20 @@ for kcols=1:maxcols
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
   legendnames=legnames;
-  if observations & ~yearlabel
-   legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
-                           char(legnames{nlemniscs})];
+  if plotmean
+   if observations & ~yearlabel
+    legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
+                            char(legnames{nlemniscs})];
+   end
+   legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+   legend('boxoff');
   end
-  legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
-  legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
 
 end
 
-ridgepack_multialign(gcf,'',12)
+ridgepack_multialign(gcf,['Year = ',num2str(floor((iframe+365)./365),'%3.3i')],12)
 
 cd('/Users/afroberts/work')
 
@@ -1184,6 +1212,10 @@ end
 filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
 
 ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,ensembletag,filenamemodifier,'png'],1,2);
+
+clf
+
+end % iframe
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

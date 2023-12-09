@@ -5,16 +5,16 @@ close all
 %generate=true;
 generate=false;
 
-generateobs=true;
-%generateobs=false;
+%generateobs=true;
+generateobs=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
 
 als='abcdefghijklmnopqrstuvwxyz';
 
-%grid=false;
-grid=true;
+grid=false;
+%grid=true;
 
 %plottimeseries=true;
 plottimeseries=false;
@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-%label=true;
-label=false;
+label=true;
+%label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -34,37 +34,43 @@ plotcross=false;
 %plotequinoxtrend=true;
 plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%plotobservations=true;
+plotobservations=false;
 
-titletab='Sea Ice E3SM Preindustrial';
+titletab='Years 1980-2014';
+%titletab='Freetest';
+%titletab='';
 
-filetabe='control';
-%filetabe='industrial3';
+%filetabe='control';
+filetabe='industrial';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
-ensemblenames={'LR','NARRM'};
-%ensemblenames={'LR'};
+%ensemblenames={'LR','NARRM'};
+ensemblenames={'LR'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
-legnames={'LR PI Control','NARRM PI Control'};
+legnames={'LR 5-member'};
+%legnames={'E3SM V2 LR','E3SM V2 NARRM'};
+%legnames={'E3SM V2 PI Mean'};
 %legnames={'PSLV','Icedge'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
-%ensemblecases={[1 2 3 4 5]};
+ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1],[2]};
+%ensemblecases={[1],[2]};
+%ensemblecases={[1]};
 
 %yearrange={[1980 1999],[2000 2014]};
-%yearrange={[1980 2014]};
-yearrange={[0001 0500]};
+yearrange={[1980 2014]};
+%yearrange={[0001 0500]};
+%yearrange={[0001 0010]};
 %yearrange={[51 100]};
 
 yearsto=1980;
 yeareno=2014;
 
-maxcols=3;
+maxcols=2;
 
 % case names
 %casenames={'20231014.v3alpha04_trigrid_pslv.piControl.chrysalis',...
@@ -74,12 +80,17 @@ maxcols=3;
 %dirnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
 %          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
 
-% directories where the processed lemnisc data is or will be written
-%eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
-%          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
 
-casenames={'v2.LR.piControl',...
-           'v2.NARRM.piControl'};
+%casenames={'v2.LR.piControl',...
+%           'v2.NARRM.piControl'};
+
+%casenames={'v2.LR.piControl'};
+
+casenames={'v2.LR.historical_0101',...
+           'v2.LR.historical_0151',...
+           'v2.LR.historical_0201',...
+           'v2.LR.historical_0251',...
+           'v2.LR.historical_0301'}
 
 %casenames={'v2.LR.historical_0101',...
 %           'v2.LR.historical_0151',...
@@ -109,7 +120,7 @@ for i=1:length(casenames)
               char(ensemblenames{caseensembleindex(i)}),'/processed'];
 end
 
-if observations
+if plotobservations
  nlemniscs=length(ensemblenames)+1;
  legnames{nlemniscs}='NOAA CDR'; % observational
 else
@@ -118,8 +129,13 @@ end
 
 ccols=lines(nlemniscs);
 
-vars={'totalIceExtent','totalIceVolume','totalSnowVolume','averageAlbedo','totalKineticEnergy'};
-fact=[10^6 10^3 10^2 1 10^12];
+% density
+rhow= 1026;
+rhoi= 917;
+rhos= 330; % (kg/m^3)
+
+vars={'totalIceArea','totalIceExtent','totalIceVolume','totalSnowVolume','averageAlbedo','totalKineticEnergy'};
+fact=[1 10^6 10^3 10^2 1 10^12];
 
 lquantile=0.25;
 uquantile=0.75;
@@ -221,6 +237,18 @@ if generate
     snowlowerquantile(j,k)=quantile(nc.totalSnowVolume.data(j,space),lquantile);
     snowupperquantile(j,k)=quantile(nc.totalSnowVolume.data(j,space),uquantile);
 
+    freeboard(j,space)=100000*fact(3).*nc.totalIceVolume.data(j,space)*(rhow-rhoi)./...
+                              (nc.totalIceArea.data(j,space).*rhow) + ...
+                       100000*fact(4).*nc.totalSnowVolume.data(j,space)*(rhow-rhos)./...
+                              (nc.totalIceArea.data(j,space).*rhow);
+
+    freeboardannualmean(j,k)=mean(freeboard(j,space));
+    freeboardannualmedian(j,k)=median(freeboard(j,space));
+    freeboardannualstd(j,k)=std(freeboard(j,space));
+    freeboardannualequiv(j,k)=ridgepack_equiv(freeboard(j,space));
+    freeboardlowerquantile(j,k)=quantile(freeboard(j,space),lquantile);
+    freeboardupperquantile(j,k)=quantile(freeboard(j,space),uquantile);
+
     kineticannualmean(j,k)=mean(nc.totalKineticEnergy.data(j,space));
     kineticannualmedian(j,k)=median(nc.totalKineticEnergy.data(j,space));
     kineticannualstd(j,k)=std(nc.totalKineticEnergy.data(j,space));
@@ -234,6 +262,8 @@ if generate
     albedoannualequiv(j,k)=ridgepack_equiv(nc.averageAlbedo.data(j,space));
     albedolowerquantile(j,k)=quantile(nc.averageAlbedo.data(j,space),lquantile);
     albedoupperquantile(j,k)=quantile(nc.averageAlbedo.data(j,space),uquantile);
+
+    
 
    end
   end
@@ -353,6 +383,38 @@ if generate
 
   % ---
 
+  nc.freeboarddaymean.data=freeboardannualmean;
+  nc.freeboarddaymean.long_name=[char(ensemblenames{l}),'sea ice freeboard mean'];
+  nc.freeboarddaymean.dimension={'nRegion','dayofyear'};
+  nc.freeboarddaymean.units='km^3';
+
+  nc.freeboarddaymedian.data=freeboardannualmedian;
+  nc.freeboarddaymedian.long_name=[char(ensemblenames{l}),'sea ice freeboard median'];
+  nc.freeboarddaymedian.dimension={'nRegion','dayofyear'};
+  nc.freeboarddaymedian.units='km^3';
+
+  nc.freeboarddaystd.data=freeboardannualstd;
+  nc.freeboarddaystd.long_name=[char(ensemblenames{l}),'sea ice freeboard standard deviation'];
+  nc.freeboarddaystd.dimension={'nRegion','dayofyear'};
+  nc.freeboarddaystd.units='km^3';
+
+  nc.freeboarddayequiv.data=freeboardannualequiv;
+  nc.freeboarddayequiv.long_name=[char(ensemblenames{l}),'sea ice freeboard equivalent sample size'];
+  nc.freeboarddayequiv.dimension={'nRegion','dayofyear'};
+  nc.freeboarddayequiv.units='km^3';
+
+  nc.freeboardlowerquantile.data=freeboardlowerquantile;
+  nc.freeboardlowerquantile.long_name=[num2str(lquantile),' quantile of ice freeboard'];
+  nc.freeboardlowerquantile.dimension={'nRegion','dayofyear'};
+  nc.freeboardlowerquantile.units='km^3';
+
+  nc.freeboardupperquantile.data=freeboardupperquantile;
+  nc.freeboardupperquantile.long_name=[num2str(uquantile),' quantile of ice freeboard'];
+  nc.freeboardupperquantile.dimension={'nRegion','dayofyear'};
+  nc.freeboardupperquantile.units='km^3';
+
+  % ---
+
   nc.kineticdaymean.data=kineticannualmean;
   nc.kineticdaymean.long_name=[char(ensemblenames{l}),'sea ice kinetic energy mean'];
   nc.kineticdaymean.dimension={'nRegion','dayofyear'};
@@ -413,7 +475,7 @@ if generate
 
   cd(char(eprnames{l}));
 
-  outfile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+  outfile=[char(ensemblenames{l}),'.ensemble.freeboard.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
 
   nc=ridgepack_struct(nc);
@@ -426,7 +488,7 @@ if generate
 
 end
 
-if generateobs & observations
+if generateobs & plotobservations
 
  for yi=1:length(yearrange)
 
@@ -515,7 +577,7 @@ if generateobs & observations
 
   ncobs=ridgepack_struct(ncobs);
 
-  outfile=['G02202_v4_merged.lemnisc.',...
+  outfile=['G02202_v4_merged.freeboard.lemnisc.',...
            num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
 
   ncobs=ridgepack_struct(ncobs);
@@ -528,7 +590,8 @@ end
 
 %return
 
-filenamemodifier=[filetabe,'.'];
+st = dbstack;
+filenamemodifier=[st.name,'_',filetabe,'.'];
 
 for kcols=1:maxcols
 
@@ -541,28 +604,28 @@ for kcols=1:maxcols
   ylab2=['Southern Hemisphere'];
   %xlims=[0 20];
   %ylims=[0 20];
-  xlims=[4 20];
+  xlims=[4 22];
   ylims=[0 21];
   xyticks=5;
   globalconts=30;
   globlab=['Global Extent'];
   filenamemodifier=[filenamemodifier,'extent.'];
  elseif kcols==2
-  titl2=['Sea Ice Volume \times{10^3} km^3'];
+  titl2=['Planetary Freeboard \times{10^{-2}} m'];
   xlab2=['Northern Hemisphere'];
   %xlims=[0 40];
   %ylims=[0 25];
-  xlims=[5 40];
-  ylims=[0 30];
+  xlims=[18 49];
+  ylims=[8 37];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
-  filenamemodifier=[filenamemodifier,'volume.'];
+  filenamemodifier=[filenamemodifier,'freeboard.'];
  elseif kcols==3
   titl2=['Snow Volume \times{10^2} km^3'];
   xlab2=['Northern Hemisphere'];
   xlims=[0 33];
-  ylims=[0 65];
+  ylims=[0 50];
   xyticks=10;
   globalconts=50;
   globlab=['Global Snow Volume'];
@@ -625,20 +688,20 @@ for kcols=1:maxcols
  % plot data from each lemnisc
  if kcols==1 
   nlemn=nlemniscs;
- elseif observations
+ elseif plotobservations
   nlemn=nlemniscs-1;
  end
 
  for l=1:nlemn
 
-  if l==nlemniscs & observations % observed extent
+  if l==nlemniscs & plotobservations % observed extent
    cd(['~/data/data/SATELLITE/processed/G02202_v4']);
-   obsfile=['G02202_v4_merged.lemnisc.',...
+   obsfile=['G02202_v4_merged.freeboard.lemnisc.',...
              num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
    cd(char(eprnames{l}));
-   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+   infile=[char(ensemblenames{l}),'.ensemble.freeboard.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
   end
@@ -649,23 +712,23 @@ for kcols=1:maxcols
     std1=nc.extentdaystd.data(1,:);
     equiv1=nc.extentdayequiv.data(1,:);
    elseif kcols==2
-    mu1=nc.volumedaymean.data(1,:); 
-    std1=nc.volumedaystd.data(1,:);
-    equiv1=nc.volumedayequiv.data(1,:);
+    mu1=nc.freeboarddaymean.data(1,:); 
+    std1=nc.freeboarddaystd.data(1,:);
+    equiv1=nc.freeboarddayequiv.data(1,:);
    elseif kcols==3
     mu1=nc.snowdaymean.data(1,:);
     std1=nc.snowdaystd.data(1,:);
     equiv1=nc.snowdayequiv.data(1,:);
    end
-  elseif l<nlemniscs % not compared with observations
+  elseif l<nlemniscs % not compared with plotobservations
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
     equiv2=nc.extentdayequiv.data(1,:);
    elseif kcols==2
-    mu2=nc.volumedaymean.data(1,:); 
-    std2=nc.volumedaystd.data(1,:);
-    equiv2=nc.volumedayequiv.data(1,:);
+    mu2=nc.freeboarddaymean.data(1,:); 
+    std2=nc.freeboarddaystd.data(1,:);
+    equiv2=nc.freeboarddayequiv.data(1,:);
    elseif kcols==3
     mu2=nc.snowdaymean.data(1,:);
     std2=nc.snowdaystd.data(1,:);
@@ -684,17 +747,17 @@ for kcols=1:maxcols
    lowerquantile=nc.extentlowerquantile.data;
    daymedian=nc.extentdaymedian.data;
    daymean=nc.extentdaymean.data;
-   if l==nlemniscs & observations
+   if l==nlemniscs & plotobservations
     totalseries=nc.extent.data;
    else
     totalseries=nc.totalIceExtent.data;
    end
   elseif kcols==2
-   upperquantile=nc.volumeupperquantile.data;
-   lowerquantile=nc.volumelowerquantile.data;
-   daymedian=nc.volumedaymedian.data;
-   daymean=nc.volumedaymean.data;
-   totalseries=nc.totalIceVolume.data;
+   upperquantile=nc.freeboardupperquantile.data;
+   lowerquantile=nc.freeboardlowerquantile.data;
+   daymedian=nc.freeboarddaymedian.data;
+   daymean=nc.freeboarddaymean.data;
+   totalseries=zeros(size(nc.totalIceExtent.data));
   elseif kcols==3
    upperquantile=nc.snowupperquantile.data;
    lowerquantile=nc.snowlowerquantile.data;
@@ -772,7 +835,7 @@ for kcols=1:maxcols
     ys=[daymedian(3,k) ...
         ye+daymedian(3,k) ...
         daymedian(3,k)];
-    patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha)
+    hitq=patch(xs,ys,ocol,'EdgeColor','none','FaceAlpha',alpha);
 
    end
 
@@ -782,26 +845,26 @@ for kcols=1:maxcols
 
    plot(totalseries(2,:),totalseries(3,:),'Color',0.9*[1 1 1]);
 
-   if plotcross
+  end
 
-    ocol=[0.8500 0.3250 0.0980]
+  if plotcross
 
-    k=datenum(0000,5,21);
+   ocol=[0.8500 0.3250 0.0980]
 
-    space=[k:365:365*floor(length(nc.time.data)./365)];
+   k=datenum(0000,5,21);
 
-    plot(totalseries(2,space),totalseries(3,space),'.',...
-        'Color',0.5*[1 1 1]);
+   space=[k:365:365*floor(length(nc.time.data)./365)];
 
-    plot([lowerquantile(2,k) upperquantile(2,k)],...
+   plot(totalseries(2,space),totalseries(3,space),'.',...
+         'Color',0.5*[1 1 1]);
+
+   plot([lowerquantile(2,k) upperquantile(2,k)],...
          [daymedian(3,k) daymedian(3,k)],...
-        'Color',ocol,'LineWidth',1);
-
-    plot([daymedian(2,k) daymedian(2,k)],...
-         [lowerquantile(3,k) upperquantile(3,k)],...
          'Color',ocol,'LineWidth',1);
 
-   end
+   hcross=plot([daymedian(2,k) daymedian(2,k)],...
+         [lowerquantile(3,k) upperquantile(3,k)],...
+         'Color',ocol,'LineWidth',1);
 
   end
 
@@ -866,14 +929,14 @@ for kcols=1:maxcols
 
  for l=1:nlemn
 
-  if l==nlemniscs & observations % observed extent
+  if l==nlemniscs & plotobservations % observed extent
    cd(['~/data/data/SATELLITE/processed/G02202_v4']);
-   obsfile=['G02202_v4_merged.lemnisc.',...
+   obsfile=['G02202_v4_merged.freeboard.lemnisc.',...
              num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(obsfile);
   else
    cd(char(eprnames{l}));
-   infile=[char(ensemblenames{l}),'.ensemble.lemnisc.',...
+   infile=[char(ensemblenames{l}),'.ensemble.freeboard.lemnisc.',...
            num2str(yearst,'%4.4i'),'-',num2str(yearen,'%4.4i'),'.',filetabe];
    nc=ridgepack_clone(infile);
   end
@@ -882,7 +945,7 @@ for kcols=1:maxcols
   if kcols==1
    daymean=nc.extentdaymean.data;
   elseif kcols==2
-   daymean=nc.volumedaymean.data;
+   daymean=nc.freeboarddaymean.data;
   elseif kcols==3
    daymean=nc.snowdaymean.data;
   end
@@ -892,16 +955,16 @@ for kcols=1:maxcols
    lowerquantile=nc.extentlowerquantile.data;
    daymedian=nc.extentdaymedian.data;
    daymean=nc.extentdaymean.data;
-   if l==nlemniscs & observations
+   if l==nlemniscs & plotobservations
     totalseries=nc.extent.data;
    else
     totalseries=nc.totalIceExtent.data;
    end
   elseif kcols==2
-   upperquantile=nc.volumeupperquantile.data;
-   lowerquantile=nc.volumelowerquantile.data;
-   daymedian=nc.volumedaymedian.data;
-   daymean=nc.volumedaymean.data;
+   upperquantile=nc.freeboardupperquantile.data;
+   lowerquantile=nc.freeboardlowerquantile.data;
+   daymedian=nc.freeboarddaymedian.data;
+   daymean=nc.freeboarddaymean.data;
    totalseries=nc.totalIceVolume.data;
   elseif kcols==3
    upperquantile=nc.snowupperquantile.data;
@@ -918,15 +981,15 @@ for kcols=1:maxcols
     mu1=nc.extentdaymean.data(1,:);
     std1=nc.extentdaystd.data(1,:);
     equiv1=nc.extentdayequiv.data(1,:);
-    if l==nlemniscs & observations
+    if l==nlemniscs & plotobservations
      totalseries=nc.extent.data;
     else
      totalseries=nc.totalIceExtent.data;
     end
    elseif kcols==2
-    mu1=nc.volumedaymean.data(1,:);
-    std1=nc.volumedaystd.data(1,:);
-    equiv1=nc.volumedayequiv.data(1,:);
+    mu1=nc.freeboarddaymean.data(1,:);
+    std1=nc.freeboarddaystd.data(1,:);
+    equiv1=nc.freeboarddayequiv.data(1,:);
     totalseries=nc.totalIceVolume.data;
    elseif kcols==3
     mu1=nc.snowdaymean.data(1,:);
@@ -934,20 +997,20 @@ for kcols=1:maxcols
     equiv1=nc.snowdayequiv.data(1,:);
     totalseries=nc.totalSnowVolume.data;
    end
-  elseif l<nlemniscs | ~observations
+  elseif l<nlemniscs | ~plotobservations
    if kcols==1
     mu2=nc.extentdaymean.data(1,:);
     std2=nc.extentdaystd.data(1,:);
     equiv2=nc.extentdayequiv.data(1,:);
-    if l==nlemniscs & observations
+    if l==nlemniscs & plotobservations
      totalseries=nc.extent.data;
     else
      totalseries=nc.totalIceExtent.data;
     end
    elseif kcols==2
-    mu2=nc.volumedaymean.data(1,:);
-    std2=nc.volumedaystd.data(1,:);
-    equiv2=nc.volumedayequiv.data(1,:);
+    mu2=nc.freeboarddaymean.data(1,:);
+    std2=nc.reeboarddaystd.data(1,:);
+    equiv2=nc.freeboarddayequiv.data(1,:);
     totalseries=nc.totalIceVolume.data;
    elseif kcols==3
     mu2=nc.snowdaymean.data(1,:);
@@ -964,11 +1027,11 @@ for kcols=1:maxcols
   end
 
   % plot mean that is statistically significant
-  if l==nlemniscs & observations
+  if l==nlemniscs & plotobservations
    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
   elseif l==1 
    h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
-  elseif l<nlemniscs | ~observations
+  elseif l<nlemniscs | ~plotobservations
    plotmean=daymean;
    %plotmean(:,hcrit==1)=NaN;
    plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
@@ -1046,7 +1109,7 @@ for kcols=1:maxcols
 
     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
 
-    text(daymean(2,1),daymean(3,1),'January',...
+    text(daymean(2,1),daymean(3,1),'Jan',...
         'Rotation',theta*180/pi,...
         'FontSize',6,'HorizontalAlignment','left',...
         'VerticalAlignment','bottom',...
@@ -1154,20 +1217,25 @@ for kcols=1:maxcols
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
   legendnames=legnames;
-  if observations & ~yearlabel
+  if plotobservations & ~yearlabel
    legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
                            char(legnames{nlemniscs})];
   end
-  legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+  if plotcross
+   legendnames{nlemniscs+1}=[num2str(100*lquantile),'th-',num2str(100*uquantile),'th Quantile Range'];
+   legend([h([1:nlemniscs]) hcross],legendnames{1:nlemniscs+1},'location','southwest','FontSize',8);
+  else
+   legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+  end
   legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
 
 end
 
-ridgepack_multialign(gcf,'',12)
+ridgepack_multialign(gcf,titletab,12)
 
-cd('/Users/afroberts/work')
+cd('/Users/afroberts/Science/colloquia/2023/2023_Fall_AGU/Generated_Figures')
 
 yeartag=[];
 for yi=1:length(yearrange)
@@ -1182,6 +1250,8 @@ for ei=1:length(ensemblenames)
 end
 
 filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
+
+pwd
 
 ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,ensembletag,filenamemodifier,'png'],1,2);
 
