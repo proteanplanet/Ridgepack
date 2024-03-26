@@ -10,12 +10,13 @@ zoomedareas=false;
 %grids=[7 8];
 %grids=[7];
 %grids=[8];
-grids=[12];
+%grids=[12];
+grids=[10];
  
 %maintitle='MPAS E3SM V3 Mesh';
 maintitle='';
 
-largescales={true,false};
+largescales={false,true};
 bathymetrys={false,true};
 
 %largescales={false};
@@ -65,9 +66,9 @@ for bk=1:length(bathymetrys)
  fileg{9}.outname='SOwISC12to60E3r1';
  fileg{9}.title='MPAS E3SM V3 SORRM';
   
- fileg{10}.name='RRSwISC6to18E3r1';
- fileg{10}.outname='RRSwISC6to18E3r1';
- fileg{10}.title='MPAS E3SM V3 High Resolution';
+ fileg{10}.name='RRSwISC6to18E3r5';
+ fileg{10}.outname='RRSwISC6to18E3r5';
+ fileg{10}.title='MPAS E3SM V3 High Resolution R5';
   
  fileg{11}.name='IcoswISC30E3r6';
  fileg{11}.outname='IcoswISC30E3r6';
@@ -590,9 +591,9 @@ for bk=1:length(bathymetrys)
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to60E3r1'];
     gridfile='mpaso.SOwISC12to60E3r1.20230901.nc';
     shiplocs=[1 2 3 4 6];
-   elseif strcmp(char(fileg{gridchoice}.name),'RRSwISC6to18E3r1')
-    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r1'];
-    gridfile='mpaso.RRSwISC6to18E3r1.20230902.nc';
+   elseif strcmp(char(fileg{gridchoice}.name),'RRSwISC6to18E3r5')
+    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r5'];
+    gridfile='initial_state.nc';
     shiplocs=[1 2 3 4 6];
    elseif strcmp(char(fileg{gridchoice}.name),'IcoswISC30E3r6')
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r6'];
