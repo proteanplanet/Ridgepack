@@ -12,6 +12,7 @@ function [h]=ridgepack_plotm(latitude,longitude,marker,linestyle,color,markersiz
 % linestyle  - line style string such as ':' or '--', or else 'none' (optional)
 % color      - color string such as 'r' or 'b', or RBG vector (optional)
 % markersize - markersize, in points (optional)
+% linewidth  - width of line plotted
 %
 % Ridgepack Version 1.0
 % Andrew Roberts, Naval Postgraduate School, March 2018 (afrobert@nps.edu)

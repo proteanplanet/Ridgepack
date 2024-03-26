@@ -67,6 +67,8 @@ function [maph]=ridgepack_polarm(varargin)
 %
 % 'antarctic' - Map for Antarctic sea ice zone.
 %
+% 'antarctic2' - Map for Antarctic sea ice zone.
+%
 %
 % OUTPUT:
 %
@@ -116,7 +118,9 @@ centralarctic3=0;
 rasmmask=0;
 seaice=0;
 seaicerasm=0;
+marginalsea1=0;
 antarctic=0;
+antarctic2=0;
 
 % edge, grid and label color
 gridcolor=0.4*[1 1 1] ; 
@@ -148,10 +152,14 @@ else
 	   centralarctic2=1;
    case 'centralarctic3'
 	   centralarctic3=1;
+   case 'marginalsea1'
+	   marginalsea1=1;
    case 'rasmmask'
 	   rasmmask=1;
    case 'antarctic'
 	   antarctic=1;
+   case 'antarctic2'
+	   antarctic2=1;
    case 'lat'
   	   if(i+1>nargin || ischar(varargin{i+1}))
 	    error(['Missing latitude argument for ',varargin{i}])
@@ -209,8 +217,14 @@ elseif centralarctic3
 elseif rasmmask
  equatorextent=60;
  centralmeridian=-58;
+elseif marginalsea1 
+ equatorextent=51;
+ centralmeridian=-114;
 elseif antarctic
  equatorextent=-55;
+ centralmeridian=0;
+elseif antarctic2
+ equatorextent=-63;
  centralmeridian=0;
 end
 
@@ -271,11 +285,16 @@ elseif seaicerasm
  [x2,y] = mfwdtran(equatorextent+10,rightlon);
  [x,y1] = mfwdtran(equatorextent+16,bottomlon);
  [x,y2] = mfwdtran(equatorextent+23,toplon);
+elseif marginalsea1
+ [x1,y] = mfwdtran(equatorextent+30,leftlon);
+ [x2,y] = mfwdtran(equatorextent+20,rightlon);
+ [x,y1] = mfwdtran(equatorextent+35,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+15,toplon);
 elseif shipping
  [x1,y] = mfwdtran(equatorextent+12,leftlon);
  [x2,y] = mfwdtran(equatorextent+10,rightlon);
- [x,y1] = mfwdtran(equatorextent+16,bottomlon);
- [x,y2] = mfwdtran(equatorextent+17,toplon);
+ [x,y1] = mfwdtran(equatorextent+13,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+13,toplon);
 elseif rasm
  [x1,y] = mfwdtran(equatorextent-4.5,leftlon);
  [x2,y] = mfwdtran(equatorextent+10.3,rightlon);
@@ -372,6 +391,9 @@ if(label==1)
  elseif antarctic
   MLabelLocation=[0];
   PLabelMeridian=47;
+ elseif antarctic2
+  MLabelLocation=[0];
+  PLabelMeridian=45;
  else
   MLabelLocation=[-90 90];
   PLabelMeridian=135;

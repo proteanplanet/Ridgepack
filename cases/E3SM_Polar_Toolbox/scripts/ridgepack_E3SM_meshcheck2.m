@@ -2,20 +2,21 @@
 close all
 clear
 
-zoomedareas=true;
-%zoomedareas=false;
+%zoomedareas=true;
+zoomedareas=false;
 
-grids=[8 12];
+%grids=[7 10];
 %grids=[7 9];
 %grids=[7 8];
 %grids=[7];
 %grids=[8];
+grids=[12];
  
 %maintitle='MPAS E3SM V3 Mesh';
 maintitle='';
 
 largescales={true,false};
-bathymetrys={true};
+bathymetrys={false,true};
 
 %largescales={false};
 %largescales={true};
@@ -1043,7 +1044,7 @@ for bk=1:length(bathymetrys)
   
    end % largescale or not
  
-   gridfilename=[gridfilename,'_',fileg{gridchoice}.outname];
+   gridfilename=[gridfilename,'_AGU_',fileg{gridchoice}.outname];
  
   end % gridchoice
  
