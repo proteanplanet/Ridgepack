@@ -71,6 +71,7 @@ if surface>0 & surface<=1
  cc(:,:,2)=c1;
  cc(:,:,3)=c1;
  surf(cx,cy,cz,cc,'EdgeColor','none');
+ %surf(cx,cy,cz,cc,'EdgeColor','none','FaceColor',[0.9290 0.6940 0.1250],'FaceAlpha',0.05);
  hold on
 end
 
