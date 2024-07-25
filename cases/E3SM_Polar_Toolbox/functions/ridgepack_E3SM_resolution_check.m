@@ -55,6 +55,10 @@ elseif strcmp(coastname,'DECK')
  gridloc='/Users/afroberts/data/E3SM/DECK/grid';
  gridfile='oEC60to30v3_60layer.restartFrom_anvil0926.171101.nc';
  titlename='DECK';
+elseif strcmp(coastname,'Icoswisc30e3r5')
+ gridloc='/Users/afroberts/data/MODEL/E3SM/v3/Icoswisc30e3r5';
+ gridfile='mpaso.IcoswISC30E3r5.20231120.nc';
+ titlename='Icoswisc30e3r5';
 else
  error('coastname not recognized')
 end
@@ -75,35 +79,38 @@ nccell=ridgepack_clone(gridfile,{'latCell',...
                                  'lonCell',...
                                  'areaCell'});
 
+ncvert.latVertex=ncvert.latitude;
+ncvert.lonVertex=ncvert.longitude;
+ncvert.latCell=nccell.latitude;
+ncvert.lonCell=nccell.longitude;
+
 nccell.areaCell.data=sqrt(nccell.areaCell.data)/1000;
 
 % plot cell resolution
 ridgepack_multiplot(2,2,1,1,'a')
-ridgepack_satview(centlat,centlon,90,1,0)
-ridgepack_psatcole3sm(nccell,'areaCell',ncvert,cont,ref,...
-                      centlat,centlon,90,1.001*altitude);
+ridgepack_satview(centlat,centlon,90)
+ridgepack_e3smsatcol(nccell,'areaCell',ncvert,cont,ref,...
+                     centlat,centlon,90,1.001*altitude,...
+                     false,false,'linear','bluered',true);
 ridgepack_colorbar(cont,'km','linear','vertical',ref);
 ridgepack_sathorizon(centlat,centlon,90,...
                      centlat,centlon,horizon,[0 0.8 0]);
-ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
-                        centlat,centlon,90);
+ridgepack_e3smsatcoast(ncvert,centlat,centlon,90);
 %title([titlename,' $\sqrt{\textrm(Cell Area)}$'],'FontSize',10)
 title(' ','FontSize',10)
 
 % plot mesh
-ridgepack_multiplot(2,2,1,2,'b')
-ridgepack_satview(centlat,centlon,horizon,1,0);
-ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
-                       horizon,altitude,nccell,'areaCell');
-ridgepack_psatcoaste3sm(ncvert,cgrid,coastname,...
-                        centlat,centlon,horizon);
+ridgepack_multiplot(2,2,1,2)
+ridgepack_satview(centlat,centlon,horizon);
+ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude)
+ridgepack_e3smsatcoast(ncvert,centlat,centlon,horizon);
 %title('Analysis Region','FontSize',10)
 title(' ','FontSize',10)
 
 % get resolution statistics for the grid cells
-ridgepack_multiplot(2,2,2,1,'c')
-[cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
-                       horizon,altitude,nccell,'areaCell');
+ridgepack_multiplot(2,2,2,1)
+[cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
+                               horizon,altitude,nccell,'areaCell');
 
 dc=[];
 for i=1:length(cells)
@@ -112,7 +119,7 @@ for i=1:length(cells)
  dc=[dc; ncvert.dcEdge.data(edgeidx)/1000]; % convert to km
 end
 
-[X,Y]=hist(dc,100); % obtain histogram
+[X,Y]=hist(dc,25); % obtain histogram
 X=X(:)./sum(X(:));
 stairs(Y,X)
 xlim([min(Y) max(Y)])
@@ -128,11 +135,11 @@ else
  lonunits='E';
 end
 title(['Edges on cells within ',num2str(horizon),...
-        '$^{\circ}$'],'FontSize',10)
+        '^{\circ}'],'FontSize',10,'FontWeight','normal')
 
 % get resolution statistics for the grid cells
-ridgepack_multiplot(2,2,2,2,'d')
-[cells]=ridgepack_psatmeshe3sm(ncvert,centlat,centlon,...
+ridgepack_multiplot(2,2,2,2)
+[cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
                                horizon,altitude,nccell,'areaCell');
 
 diffc=NaN*zeros(size(cells));
@@ -149,12 +156,12 @@ for i=1:length(cells)
 
 end
 
-[X,Y]=hist(diffc,50); % obtain histogram
+[X,Y]=hist(diffc,25); % obtain histogram
 X=X(:)./sum(X(:));
 Y=Y(:); % convert to km
 stairs(Y,X)
 xlim([0 max(Y)])
-xlabel('Cell-to-Cell Resolution Change (\%)','FontSize',10)
+xlabel('Cell-to-Cell Resolution Change (%)','FontSize',10)
 if centlat<0
  latunits='S';
 else
@@ -165,19 +172,17 @@ if centlon<0
 else
  lonunits='E';
 end
-title(['Cells within ',num2str(horizon),...
-        '$^{\circ}$ of ',...
-        num2str(abs(centlat)),latunits,' ',...
-        num2str(abs(centlon)),lonunits],'FontSize',10)
+title(['Cells within ',num2str(horizon),'^{\circ} of ',...
+       num2str(abs(centlat)),latunits,' ',num2str(abs(centlon)),lonunits],...
+       'FontSize',10,'FontWeight','normal')
 
-ridgepack_multialign(gcf,titlename)
+ridgepack_multialign(gcf)
 
 cd ~/Work
 plotname=[coastname,'_',num2str(horizon),'_',...
          num2str(abs(centlat)),latunits,'_',...
-         num2str(abs(centlon)),lonunits,'_gridcheck'];
+         num2str(abs(centlon)),lonunits,'_gridcheck.png'];
 
 ridgepack_fprint('png',plotname,1,2)
-ridgepack_fprint('epsc',plotname,1,2)
 
 
