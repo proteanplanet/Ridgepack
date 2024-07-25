@@ -2,11 +2,11 @@
 clear
 close all
 
-%generate=true;
-generate=false;
+generate=true;
+%generate=false;
 
-generateobs=true;
-%generateobs=false;
+%generateobs=true;
+generateobs=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
@@ -37,29 +37,32 @@ plotequinoxtrend=false;
 observations=true;
 %observations=false;
 
-titletab='Sea Ice E3SM Preindustrial';
+titletab='Sea Ice E3SM Industrial';
 
-filetabe='control';
-%filetabe='industrial3';
+%filetabe='control';
+filetabe='industrial';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
-ensemblenames={'LR','NARRM'};
-%ensemblenames={'LR'};
+%ensemblenames={'LR','NARRM'};
+ensemblenames={'LR'};
 
 %legnames={'LR 5-member','NARRM 5-member'};
-legnames={'LR PI Control','NARRM PI Control'};
+%legnames={'LR PI Control','NARRM PI Control'};
+%legnames={'LR PI Control'};
+legnames={'LR Historical 0051'};
 %legnames={'PSLV','Icedge'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 %ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[11],[12]};
-ensemblecases={[1],[2]};
+%ensemblecases={[1],[2]};
+ensemblecases={[1]};
 
 %yearrange={[1980 1999],[2000 2014]};
 %yearrange={[1980 2014]};
-yearrange={[0001 0500]};
-%yearrange={[51 100]};
+%yearrange={[0001 0500]};
+yearrange={[1980 2014]};
 
 yearsto=1980;
 yeareno=2014;
@@ -67,26 +70,29 @@ yeareno=2014;
 maxcols=3;
 
 % case names
-%casenames={'20231014.v3alpha04_trigrid_pslv.piControl.chrysalis',...
+%casenames={'20231514.v3alpha04_trigrid_pslv.piControl.chrysalis',...
 %           '20231025.v3alpha04_trigrid_vslim.piControl.chrysalis'};
+%casenames={'v3.LR.piControl'}
+casenames={'v3.LR.historical_0051'}
 
 % case directories where the regional sea ice data is held
 %dirnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
 %          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
+%dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.control/hist'}
+dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist'}
 
 % directories where the processed lemnisc data is or will be written
 %eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
 %          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
+%eprnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.control/hist'}
+eprnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist'}
 
-casenames={'v2.LR.piControl',...
-           'v2.NARRM.piControl'};
-
-%casenames={'v2.LR.historical_0101',...
+%casenames={'v2.LR.historical_0151',...
 %           'v2.LR.historical_0151',...
 %           'v2.LR.historical_0201',...
 %           'v2.LR.historical_0251',...
 %           'v2.LR.historical_0301',...
-%           'v2.NARRM.historical_0101',...
+%           'v2.NARRM.historical_0151',...
 %           'v2.NARRM.historical_0151',...
 %           'v2.NARRM.historical_0201',...
 %           'v2.NARRM.historical_0251',...
@@ -104,8 +110,8 @@ end
 
 % get case and ensemble locations
 for i=1:length(casenames)
- dirnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/',char(casenames{i}),'/data/ice/hist'];
- eprnames{i}=['/Users/afroberts/data/MODEL/E3SM/v2/v2.',...
+ dirnames{i}=['/Users/afroberts/data/MODEL/E3SM/v3/',char(casenames{i}),'/hist'];
+ eprnames{i}=['/Users/afroberts/data/MODEL/E3SM/v3/v3.',...
               char(ensemblenames{caseensembleindex(i)}),'/processed'];
 end
 
