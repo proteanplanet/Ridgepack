@@ -2,7 +2,6 @@ function ridgepack_e3smsatcol(nc,var,ncvert,cont,ref,...
                               centlat,centlon,horizon,altitude,...
                               lighting,reversed,logscale,colors,whitespace)
 
-
 if nargin<14
  whitespace=true;
 end

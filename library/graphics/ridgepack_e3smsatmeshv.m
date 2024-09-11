@@ -48,19 +48,52 @@ end
 % now draw the grid
 if length(verts)>0
 
+ % plot great circles (slower)
+ greatcircles=false
+ %greatcircles=true
+
  % Mesh triangulation
  SHA=ridgepack_e3smeshv(nccell,verts);
 
- % Find values within twice the horizon since we've already weeded
- % out cells that only fall within the horizon so as to plot entire 
- % cells, not just the vertices within the horizon.
- [dx,dy,dz,phi,theta]=ridgepack_satfwd([SHA.Latitude],...
-                                       [SHA.Longitude],...
-                                       centlat,centlon,2*horizon,1);
+ if greatcircles
 
- % draw grid
- plot3(dx,dy,dz,'Color',[0.7 0.2 0],'LineWidth',0.2)
- hold on
+  % split into 1NM great circle segments
+  for i=2:length(SHA.Latitude)
+
+   if SHA.Latitude(i-1)~=SHA.Latitude(i) & SHA.Longitude(i-1)~=SHA.Longitude(i) 
+
+    % find points on great circle of mesh
+    [dist,angl,phi,tracklat,tracklon,tracklen]=...
+          ridgepack_greatcircle(SHA.Latitude(i-1),SHA.Longitude(i-1),...
+                                SHA.Latitude(i),SHA.Longitude(i));
+
+    % Find values within twice the horizon since we've already weeded
+    % out cells that only fall within the horizon so as to plot entire 
+    % cells, not just the vertices within the horizon.
+    [dx,dy,dz,phi,theta]=ridgepack_satfwd([tracklat],[tracklon],...
+                                          centlat,centlon,2*horizon,1);
+
+    % draw grid
+    plot3(dx,dy,dz,'Color',[0.7 0.2 0],'LineWidth',0.2)
+    hold on
+
+   end
+
+  end
+
+ else
+
+  % Find values within twice the horizon since we've already weeded
+  % out cells that only fall within the horizon so as to plot entire 
+  % cells, not just the vertices within the horizon.
+  [dx,dy,dz,phi,theta]=ridgepack_satfwd([SHA.Latitude],...
+                                        [SHA.Longitude],...
+                                        centlat,centlon,2*horizon,1);
+
+  plot3(dx,dy,dz,'Color',[0.7 0.2 0],'LineWidth',0.2)
+  hold on
+
+ end
 
 end
 
