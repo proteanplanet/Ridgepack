@@ -6,11 +6,12 @@ zoomedareas=true;
 %zoomedareas=false;
 
 %grids=[7 10];
-%grids=[7 9];
+grids=[9 12];
+%grids=[9];
 %grids=[7 8];
 %grids=[7];
 %grids=[6];
-grids=[12];
+%grids=[12];
 %grids=[5];
 %grids=[13];
 %grids=[10];
@@ -23,9 +24,10 @@ maintitle='';
 
 %largescales={true,false};
 %bathymetrys={false,true};
+%bathymetrys={true};
 
-%largescales={false};
-largescales={true};
+largescales={false};
+%largescales={true};
 bathymetrys={true};
 %bathymetrys={false};
 
@@ -35,8 +37,8 @@ bottomcheck=false;
 %rossbymetric=true;
 rossbymetric=false;
 
-resolutionmetric=true;
-%resolutionmetric=false;
+%resolutionmetric=true;
+resolutionmetric=false;
 
 %distortion=true;
 distortion=false;
@@ -44,7 +46,11 @@ distortion=false;
 overlaymesh=false;
 %overlaymesh=true;
 
-crashpointlatlon=[-53.6098 -58.2274];
+%crashpointlatlon=[-53.6098 -58.2274];
+crashpointlatlon=[];
+
+%checkshelf=true;
+checkshelf=false;
 
 for lk=1:length(largescales)
 for bk=1:length(bathymetrys)
@@ -84,9 +90,9 @@ for bk=1:length(bathymetrys)
  fileg{8}.outname='IcoswISC30E3r2';
  fileg{8}.title='MPAS E3SM V3 30km Equal Area Mesh r2';
   
- fileg{9}.name='SOwISC12to60E3r2';
- fileg{9}.outname='SOwISC12to60E3r2';
- fileg{9}.title='MPAS E3SM V3 SORRM R2';
+ fileg{9}.name='SOwISC12to60E3r3';
+ fileg{9}.outname='SOwISC12to60E3r3';
+ fileg{9}.title='MPAS E3SM V3 SORRM R3';
   
  fileg{10}.name='RRSwISC6to18E3r5';
  fileg{10}.outname='RRSwISC6to18E3r5';
@@ -611,26 +617,26 @@ for bk=1:length(bathymetrys)
  zoom{56}.centlon=-100; % degrees east
  zoom{56}.horizon=30; % degrees of satellite horizon (0-90)
  zoom{56}.altitude=1; % Mean Earth radius multiple
- zoom{55}.name='Central Arctic';
+ zoom{56}.name='Central Arctic';
  zoom{56}.annotation=1; % add Arctic Shipping
  zoom{55}.polar=0; 
   
 
  % latest
  if largescale
-  %plotchoice=[1:length(sector)];
+  plotchoice=[1:length(sector)];
   %plotchoice=[5];
   %plotchoice=[7];
-  plotchoice=[8 9];
+  %plotchoice=[8 9];
   %plotchoice=[6];
  else
-  %plotchoice=[1:length(zoom)];
+  plotchoice=[1:length(zoom)];
   %plotchoice=[36];
   %plotchoice=[32];
   %plotchoice=[30];
   %plotchoice=[52];
   %plotchoice=[53];
-  plotchoice=[56];
+  %plotchoice=[56];
   %plotchoice=[55];
   %plotchoice=[31 32 33 34 35 36 45 46 47];
   %plotchoice=[1 3 4 5 7 37 38];
@@ -690,9 +696,9 @@ for bk=1:length(bathymetrys)
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r2'];
     gridfile='mpaso.IcoswISC30E3r2.20230901.nc';
     shiplocs=[1 2 3 4 6];
-   elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to60E3r2')
-    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to30E3r2'];
-    gridfile='mpaso.rst.0003-01-01_00000.nc';
+   elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to60E3r3')
+    gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to30E3r3'];
+    gridfile='mpaso.SOwISC12to30E3r3.20240829.nc';
     shiplocs=[1 2 3 4 6];
    elseif strcmp(char(fileg{gridchoice}.name),'RRSwISC6to18E3r5')
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r5'];
@@ -816,7 +822,7 @@ for bk=1:length(bathymetrys)
      iceshelf=[char(fileg{gridchoice}.outname),'_iceshelf.nc'];
      x=dir(iceshelf);
      if isempty(x) 
-      nciceshelf=ridgepack_e3smseasaw(ncvert,ncvert,'landIceFraction',0);
+      nciceshelf=ridgepack_e3smseasaw(ncvert,ncvert,'landIceFraction',0.5);
       ridgepack_write(nciceshelf,iceshelf);
      else
       nciceshelf=ridgepack_clone(iceshelf);
@@ -1089,11 +1095,21 @@ for bk=1:length(bathymetrys)
             'Location','SouthOutside','Orientation','Horizontal')
        legend('boxoff')
       elseif gridx==gridl & setting==6
-       ridgepack_multilegend([hs ht hg hd],...
+       if length(grids)==1
+        ridgepack_multilegend([hs ht hg hd],...
+                  {'Ice Shelf Edge',['minimum depth'],'50m','500m isobaths'},'South')
+       else
+        ridgepack_multilegend([hs ht hg hd],...
                   {'Ice Shelf Edge',[mdepthc,' minimum'],'50m','500m isobaths'},'South')
+       end
       elseif gridx==gridl
-       ridgepack_multilegend([ht hg hd],...
+       if length(grids)==1
+        ridgepack_multilegend([ht hg hd],...
                   {mdepthc,'50m','500m isobaths'},'South')
+       else
+        ridgepack_multilegend([ht hg hd],...
+                  {'minimum depth','50m','500m isobaths'},'South')
+       end
       end
      else
       if gridl==1
@@ -1101,10 +1117,30 @@ for bk=1:length(bathymetrys)
             'Location','SouthOutside','Orientation','Horizontal')
        legend('boxoff')
       elseif gridx==gridl
-       ridgepack_multilegend([ht hg hd],...
+       if length(grids)==1
+        ridgepack_multilegend([ht hg hd],...
                   {mdepthc,'50m','500m isobaths'},'South')
+       else
+        ridgepack_multilegend([ht hg hd],...
+                  {'minimum depth','50m','500m isobaths'},'South')
+       end
       end
      end
+
+     % add minimum depth
+     if length(grids)>1
+      xlims=xlim;
+      ylims=ylim;
+      text((xlims(2)-diff(xlims)/2)+cosd(45)*diff(xlims)/2,...
+           (ylims(2)-diff(ylims)/2)-sind(45)*diff(ylims)/2,...
+           [mdepthc,' min'],...
+           'Color',[0.8500 0.3250 0.0980],...
+           'FontSize',6,...
+           'Rotation',45,...
+           'VerticalAlignment','top',...
+           'HorizontalAlignment','center')
+     end
+
   
     else
   
@@ -1223,7 +1259,7 @@ for bk=1:length(bathymetrys)
                           centlat,centlon,horizon,altitude,...
                           true,false,'linear','bluered',false);
 
-     if any(ncvert.landIceDraft.data==0 & ncvert.landIceFraction.data>0)
+     if any(ncvert.landIceDraft.data==0 & ncvert.landIceFraction.data>0) & checkshelf
       [x,y,z,phi,theta]=...
       ridgepack_satfwd(ncvert.latCell.data(xidx)*180/pi,...
                        ncvert.lonCell.data(xidx)*180/pi,...
@@ -1305,10 +1341,34 @@ for bk=1:length(bathymetrys)
   
      % add coast
      ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
+
+     % add legend
      if zoom{setting}.annotation==2 & iceshelfplot
-      ridgepack_multilegend([hs ht hg hd],{hsleg,mdepthc,'50m','500m isobaths'},'South')
+      if length(grids)==1
+       ridgepack_multilegend([hs ht hg hd],{hsleg,mdepthc,'50m','500m isobaths'},'South')
+      else
+       ridgepack_multilegend([hs ht hg hd],{hsleg,'minimum depth','50m','500m isobaths'},'South')
+      end
      else
-      ridgepack_multilegend([ht hg hd],{mdepthc,'50m','500m isobaths'},'South')
+      if length(grids)==1
+       ridgepack_multilegend([ht hg hd],{mdepthc,'50m','500m isobaths'},'South')
+      else
+       ridgepack_multilegend([ht hg hd],{'minimum depth','50m','500m isobaths'},'South')
+      end
+     end
+
+     % add minimum depth
+     if length(grids)>1
+      xlims=xlim;
+      ylims=ylim;
+      text((xlims(2)-diff(xlims)/2)+cosd(45)*diff(xlims)/2,...
+           (ylims(2)-diff(ylims)/2)+sind(45)*diff(ylims)/2,...
+           [mdepthc,' min'],...
+           'Color',[0.8500 0.3250 0.0980],...
+           'FontSize',6,...
+           'Rotation',-45,...
+           'VerticalAlignment','bottom',...
+           'HorizontalAlignment','center')
      end
 
      % plot crash point
@@ -1365,6 +1425,7 @@ for bk=1:length(bathymetrys)
 
      % plot ice shelf edge
      if zoom{setting}.annotation==1 
+
       for shipi=[1 2 3 4 6]
        [x,y,z,phi,theta]=...
         ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
@@ -1372,14 +1433,20 @@ for bk=1:length(bathymetrys)
                          centlat,centlon,horizon,1.001*altitude);
        hship=plot3(x,y,z,'-','Color','k');
       end
-      ridgepack_multilegend([hs hship],{hsleg,...
+      if zoom{setting}.annotation==2 & iceshelfplot
+       ridgepack_multilegend([hs hship],{hsleg,...
                             'Arctic Coast Shipping Channels'},'South') 
+      else
+       ridgepack_multilegend([hship],{...
+                            'Arctic Coast Shipping Channels'},'South') 
+      end
+
      elseif zoom{setting}.annotation==2 & iceshelfplot
+
       hx=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0 0 1]);
       hxleg='Ice Shelf Edge';
-      ridgepack_multilegend([hs hx],{hsleg,hxleg},'South')
-     elseif ~overlaymesh
-      ridgepack_multilegend(hs,{hsleg},'South')
+      ridgepack_multilegend([hx],{hxleg},'South')
+
      end
   
     end % bathymetry
@@ -1390,7 +1457,11 @@ for bk=1:length(bathymetrys)
   
    end % largescale or not
  
-   gridfilename=[gridfilename,'_AGU_',fileg{gridchoice}.outname];
+   if checkshelf
+    gridfilename=[gridfilename,'_ShelfCheck_',fileg{gridchoice}.outname];
+   else
+    gridfilename=[gridfilename,'_',fileg{gridchoice}.outname];
+   end
  
   end % gridchoice
  
