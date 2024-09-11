@@ -2,8 +2,8 @@
 clear
 close all
 
-generate=true;
-%generate=false;
+%generate=true;
+generate=false;
 
 %generateobs=true;
 generateobs=false;
@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-%label=true;
-label=false;
+label=true;
+%label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -41,64 +41,68 @@ titletab='Sea Ice E3SM Industrial';
 
 %filetabe='control';
 filetabe='industrial';
+%filetabe='pi_industrial';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
 %ensemblenames={'LR','NARRM'};
 ensemblenames={'LR'};
+%ensemblenames={'Control','PI'};
 
-%legnames={'LR 5-member','NARRM 5-member'};
 %legnames={'LR PI Control','NARRM PI Control'};
 %legnames={'LR PI Control'};
-legnames={'LR Historical 0051'};
-%legnames={'PSLV','Icedge'};
+legnames={'E3SM'};
+%legnames={'LR PI Control','LR V3 Historical'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
-%ensemblecases={[1 2 3 4 5]};
-%ensemblecases={[11],[12]};
-%ensemblecases={[1],[2]};
-ensemblecases={[1]};
+ensemblecases={[1 2 3 4 5]};
+%ensemblecases={[1],[2 3 4 5 6]};
 
-%yearrange={[1980 1999],[2000 2014]};
-%yearrange={[1980 2014]};
-%yearrange={[0001 0500]};
-yearrange={[1980 2014]};
+%yearrange={[1980 2020]};
+%yearrange={[1980 2000]};
+yearrange={[1850 2020]};
+%yearrange={[0001 0500],[1980 2020]};
+%yearrange={[1980 2000],[2000 2020]};
+
+%yearsto=1980;
+%yeareno=2000;
+
+%yearsto=2000;
+%yeareno=2020;
 
 yearsto=1980;
-yeareno=2014;
+yeareno=2020;
 
+%maxcols=3;
 maxcols=3;
 
 % case names
-%casenames={'20231514.v3alpha04_trigrid_pslv.piControl.chrysalis',...
-%           '20231025.v3alpha04_trigrid_vslim.piControl.chrysalis'};
-%casenames={'v3.LR.piControl'}
-casenames={'v3.LR.historical_0051'}
+%casenames={'v3.LR.picontrol',...
+%           'v3.LR.historical_0051',...
+%           'v3.LR.historical_0101',...
+%           'v3.LR.historical_0151',...
+%           'v3.LR.historical_0201',...
+%           'v3.LR.historical_0251'}
+
+casenames={'v3.LR.historical_0051',...
+           'v3.LR.historical_0101',...
+           'v3.LR.historical_0151',...
+           'v3.LR.historical_0201',...
+           'v3.LR.historical_0251'}
 
 % case directories where the regional sea ice data is held
-%dirnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
-%          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
-%dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.control/hist'}
-dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist'}
+%dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.control/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0101/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0151/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0201/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0251/hist'}
 
-% directories where the processed lemnisc data is or will be written
-%eprnames={'/Users/afroberts/data/MODEL/E3SM/pslv',...
-%          '/Users/afroberts/data/MODEL/E3SM/Icedge'};
-%eprnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.control/hist'}
-eprnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist'}
-
-%casenames={'v2.LR.historical_0151',...
-%           'v2.LR.historical_0151',...
-%           'v2.LR.historical_0201',...
-%           'v2.LR.historical_0251',...
-%           'v2.LR.historical_0301',...
-%           'v2.NARRM.historical_0151',...
-%           'v2.NARRM.historical_0151',...
-%           'v2.NARRM.historical_0201',...
-%           'v2.NARRM.historical_0251',...
-%           'v2.NARRM.historical_0301',...
-%           'v2.LR.piControl',...
-%           'v2.NARRM.piControl'};
+dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0101/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0151/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0201/hist',...
+          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0251/hist'}
 
 % find ensemble index of case
 caseensembleindex=zeros([1 length(casenames)]);
@@ -545,9 +549,7 @@ for kcols=1:maxcols
   titl2=['Sea Ice Extent \times{10^6} km^2'];
   xlab2=['Northern Hemisphere'];
   ylab2=['Southern Hemisphere'];
-  %xlims=[0 20];
-  %ylims=[0 20];
-  xlims=[4 20];
+  xlims=[0 18];
   ylims=[0 21];
   xyticks=5;
   globalconts=30;
@@ -556,10 +558,8 @@ for kcols=1:maxcols
  elseif kcols==2
   titl2=['Sea Ice Volume \times{10^3} km^3'];
   xlab2=['Northern Hemisphere'];
-  %xlims=[0 40];
-  %ylims=[0 25];
-  xlims=[5 40];
-  ylims=[0 30];
+  xlims=[0 32];
+  ylims=[0 24];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
@@ -567,8 +567,8 @@ for kcols=1:maxcols
  elseif kcols==3
   titl2=['Snow Volume \times{10^2} km^3'];
   xlab2=['Northern Hemisphere'];
-  xlims=[0 33];
-  ylims=[0 65];
+  xlims=[0 30];
+  ylims=[0 54];
   xyticks=10;
   globalconts=50;
   globlab=['Global Snow Volume'];
@@ -863,6 +863,7 @@ for kcols=1:maxcols
 
  end % years
 
+ lln=0;
 
  % plot data for given year ranges
  for yi=1:length(yearrange)
@@ -971,17 +972,31 @@ for kcols=1:maxcols
 
   % plot mean that is statistically significant
   if l==nlemniscs & observations
-   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+   lln=lln+1;
+   h(lln)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
   elseif l==1 
-   h(l)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+   if yi==1
+    lln=lln+1;
+    h(lln)=plot(daymean(2,:),daymean(3,:),'-','Color',ccols(l,:));
+   else
+    lln=lln+1;
+    h(lln)=plot(daymean(2,:),daymean(3,:),'--','Color',ccols(l,:));
+   end
   elseif l<nlemniscs | ~observations
    plotmean=daymean;
    %plotmean(:,hcrit==1)=NaN;
    plot(plotmean(2,:),plotmean(3,:),':','Color',ccols(l,:));
    %plotmean=daymean;
    plotmean(:,hcrit==0)=NaN;
-   h(l)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
+   if yi==1
+    lln=lln+1;
+    h(lln)=plot(plotmean(2,:),plotmean(3,:),'-','Color',ccols(l,:));
+   else
+    lln=lln+1;
+    h(lln)=plot(plotmean(2,:),plotmean(3,:),'--','Color',ccols(l,:));
+   end
   end
+
 
   if plotequinoxtrend
 
@@ -1048,7 +1063,7 @@ for kcols=1:maxcols
 
   end
 
-  if label & l==1 & kcols==2
+  if label & l==1 & kcols==2 & yi==1
 
     theta=atan(ar.*diff(daymean(3,[2 3]))./diff(daymean(2,[2 3])));
 
@@ -1074,7 +1089,7 @@ for kcols=1:maxcols
   idx=datenum(0000,3,21);
   ha=plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
-  if label & l==1 & kcols==2
+  if label & l==1 & kcols==2 & yi==1
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1091,7 +1106,7 @@ for kcols=1:maxcols
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
  
-  if label & l==1 & kcols==2
+  if label & l==1 & kcols==2 & yi==1
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1107,7 +1122,7 @@ for kcols=1:maxcols
   idx=datenum(0000,9,21);
   plot(daymean(2,idx),daymean(3,idx),'.','Color',ccols(l,:));
 
-  if label & l==1 & kcols==2
+  if label & l==1 & kcols==2 & yi==1
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1124,7 +1139,7 @@ for kcols=1:maxcols
   ha=plot(daymean(2,idx),daymean(3,idx),'o',...
            'MarkerFaceColor','w','MarkerSize',2,'Color',ccols(l,:));
 
-  if label & l==1 & kcols==2
+  if label & l==1 & kcols==2 & yi==1
 
     theta=atan(ar*diff(daymean(3,[idx-2 idx+2]))./...
                   diff(daymean(2,[idx-2 idx+2])));
@@ -1159,12 +1174,21 @@ for kcols=1:maxcols
  xlabel(xlab2,'Interpreter','Tex','Fontsize',10)
  if kcols==1
   ylabel(ylab2,'Interpreter','Tex','Fontsize',10)
-  legendnames=legnames;
-  if observations & ~yearlabel
-   legendnames{nlemniscs}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
-                           char(legnames{nlemniscs})];
+  if yi>1
+   years=yearrange{1};
+   legendnames{1}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
+   years=yearrange{2};
+   legendnames{2}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
+  else
+   legendnames=legnames;
+   years=yearrange{1};
+   legendnames{1}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
   end
-  legend(h([1:nlemniscs]),legendnames{1:nlemniscs},'location','southwest','FontSize',8);
+  if observations & ~yearlabel
+   legendnames{length(legendnames)+1}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
+                           char(legnames{end})];
+  end
+  legend(h([1 3:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
   legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
