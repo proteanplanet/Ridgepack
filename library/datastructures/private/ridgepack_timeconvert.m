@@ -100,6 +100,11 @@ if any(strcmpi(CFcalendar,{'standard','gregorian','proleptic_gregorian','noleap'
         if strcmp(basestring(end-1:end),' 0') & ...
            (length(basestring)<=12 & length(basestring)>=11) 
          basestring=basestring(1:end-2);
+ 
+        % Case of "days since 0-1-1"
+        elseif strcmp(basestring(1:end),'0-1-1') 
+         basestring='0000-01-01';
+
         end
 
 	% extract correction from UTC suffix

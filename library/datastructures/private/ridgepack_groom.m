@@ -57,6 +57,13 @@ end
 % check that a long name has been provided, and clean it up for using in
 % plotting by removing inadvertent TeX descriptors
 if isfield(nc.(name),'long_name') ; 
+
+        % correct entry if a string rather than a character variable
+        if length(nc.(name).long_name)>1 & isa(nc.(name).long_name,'string')
+         nc.(name).long_name=char(nc.(name).long_name(1));
+         disp('Changing long_name to character variable')
+        end
+
 	if not(isstrprop(nc.(name).long_name, 'alphanum'));
 	 disp(['long_name is not alphanumeric for ',name,':',nc.(name).long_name]);
 	 nc.(name).long_name=name;
