@@ -5,8 +5,8 @@ close all
 %generate=true;
 generate=false;
 
-generateobs=true;
-%generateobs=false;
+%generateobs=true;
+generateobs=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
@@ -559,8 +559,8 @@ for kcols=1:maxcols
  elseif kcols==2
   titl2=['Sea Ice Volume \times{10^3} km^3'];
   xlab2=['Northern Hemisphere'];
-  xlims=[0 32];
-  ylims=[0 24];
+  xlims=[0 34];
+  ylims=[0 24.5];
   xyticks=5;
   globalconts=45;
   globlab=['Global Volume'];
@@ -1186,6 +1186,10 @@ for kcols=1:maxcols
    legendnames{1}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
    years=yearrange{2};
    legendnames{2}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
+   if yi>2
+    years=yearrange{3};
+    legendnames{3}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
+   end
   else
    legendnames=legnames;
    years=yearrange{1};
@@ -1195,7 +1199,13 @@ for kcols=1:maxcols
    legendnames{length(legendnames)+1}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
                            char(legnames{end})];
   end
-  legend(h([1 3:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
+  h
+  legendnames
+  if yi>2
+   legend(h([1 3 5:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
+  else
+   legend(h([1 3:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
+  end
   legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')

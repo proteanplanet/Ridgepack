@@ -5,8 +5,8 @@ close all
 %generate=true;
 generate=false;
 
-generateobs=true;
-%generateobs=false;
+%generateobs=true;
+generateobs=false;
 
 %plotfullellipse=true;
 plotfullellipse=false;
@@ -22,8 +22,8 @@ plottimeseries=false;
 itqrange=true;
 %itqrange=false;
 
-label=true;
-%label=false;
+%label=true;
+label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -34,36 +34,42 @@ plotcross=false;
 %plotequinoxtrend=true;
 plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%observations=true;
+observations=false;
 
 titletab='Sea Ice E3SM Industrial';
 
-filetabe='control';
+%filetabe='control';
 %filetabe='industrial';
+filetabe='industrialX';
 %filetabe='pi_industrial';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
 %ensemblenames={'LR','NARRM'};
-ensemblenames={'LR'};
+%ensemblenames={'LR'};
+ensemblenames={'LR1','LR2','LR3','LR4','LR5'};
 %ensemblenames={'Control','PI'};
 
 %legnames={'LR PI Control','NARRM PI Control'};
 %legnames={'LR PI Control'};
-legnames={'E3SM'};
+%legnames={'E3SM'};
+legnames={'ensemble'};
 %legnames={'LR PI Control','LR V3 Historical'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
-ensemblecases={[1 2 3 4 5]};
+%ensemblecases={[1 2 3 4 5]};
+ensemblecases={[1],[2],[3],[4],[5]};
+%ensemblecases={[1],[2]};
 %ensemblecases={[1],[2 3 4 5 6]};
 
+yearrange={[2000 2020]};
 %yearrange={[1980 2020]};
 %yearrange={[1980 2000]};
 %yearrange={[1850 2020]};
 %yearrange={[0001 0500],[1980 2020]};
 %yearrange={[1980 2000],[2000 2020]};
-yearrange={[1850 1980],[1980 2000],[2000 2020]};
+%yearrange={[1850 1980],[1980 2000],[2000 2020]};
 
 %yearsto=1980;
 %yeareno=2020;
@@ -85,6 +91,9 @@ maxcols=3;
 %           'v3.LR.historical_0201',...
 %           'v3.LR.historical_0251'}
 
+%casenames={'v3.LR.historical_0051',...
+%           'v3.LR.historical_0101'}
+
 casenames={'v3.LR.historical_0051',...
            'v3.LR.historical_0101',...
            'v3.LR.historical_0151',...
@@ -98,6 +107,9 @@ casenames={'v3.LR.historical_0051',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0151/hist',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0201/hist',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0251/hist'}
+
+%dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist',...
+%          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0101/hist'}
 
 dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist',...
           '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0101/hist',...
@@ -1226,7 +1238,7 @@ end
 
 filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
 
-ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,obsyeartag,ensembletag,filenamemodifier,'png'],1,2);
+ridgepack_fprint('png',['E3SM_sea_ice_lemniscX.',yeartag,obsyeartag,ensembletag,filenamemodifier,'png'],1,2);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

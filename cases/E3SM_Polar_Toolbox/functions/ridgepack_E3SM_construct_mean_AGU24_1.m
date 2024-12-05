@@ -2,14 +2,22 @@
 clear
 clf
 
-startyear=1980;
-endyear=2000;
+%startyear=1980;
+%endyear=2000;
+
+startyear=2000;
+endyear=2020;
+
+%ensemblemember='0051';
+ensemblemember='0101';
+
 %monthsets={[1 2 3]};
 %monthsets={[4 5 6]};
 %monthsets={[7 8 9]};
 %monthsets={[10 11 12]};
-monthsets={[1 2 3],[4 5 6],[7 8 9],[10 11 12]};
+%monthsets={[1 2 3],[4 5 6],[7 8 9],[10 11 12]};
 %monthsets={[4 5 6],[7 8 9],[10 11 12]};
+monthsets={[1 2 3],[7 8 9]};
 
 % generate timeseries before creating means
 generate=true;
@@ -21,25 +29,25 @@ reducenative=false;
 
 nruns=1;
 
-daynames={'v2.NARRM.historical_0051.mpassi.hist.am.timeSeriesStatsDaily.'};
-%daynames={'v2.LR.historical_0301.mpassi.hist.am.timeSeriesStatsDaily.'};
+daynames={['v3.LR.historical_',...
+           ensemblemember,'.mpassi.hist.am.timeSeriesStatsDaily.']};
 
-outnames={'v2.NARRM.historical_0051.mpassi.daily'};
-%outnames={'v2.LR.historical_0301.mpassi.daily'};
+outnames={['v3.LR.historical_',...
+           ensemblemember,'.mpassi.daily']};
 
-locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.historical_0051/data/ice/hist'};
-%locations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.historical_0301/data/ice/hist'};
+locations={['/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_',...
+            ensemblemember,'/hist']};
 
-gridnames={'mpaso.rst.0002-01-01_00000'};
+gridnames={'E3SM_IcoswISC30E3r5.nc'};
 
-gridlocations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.NARRM.piControl/grid'};
-%gridlocations={'/Users/afroberts/data/MODEL/E3SM/v2/v2.LR.piControl/grid'};
+gridlocations={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.spinup/grid'};
 
 cdrnorthmask='cdr_25km_north_area_mask_sectors.nc';
 cdrsouthmask='cdr_25km_south_area_mask_sectors.nc';
 cdrlocation='/Users/afroberts/data/data/SATELLITE/processed/G02202_v4';
 
-outlocation='/Users/afroberts/work';
+outlocations={['/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_',...
+             ensemblemember,'/processed']};
 
 mons={'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
 
@@ -188,8 +196,13 @@ for nrun=1:nruns
                                      nc.timeDaily_avg_vVelocityGeo.data.^2);
 
      nc=ridgepack_struct(nc);
-
-     cd(outlocation)
+     
+     % setup output location
+     xout=dir(char(outlocations{nrun}));
+     if isempty(xout)
+      mkdir(char(outlocations{nrun}))
+     end
+     cd(char(outlocations{nrun}))
 
      if k==1
       ridgepack_write(nc,outfile)
@@ -340,7 +353,7 @@ for nrun=1:nruns
 
   % next create means with additional statistics from timeseries
 
-  cd(outlocation)
+  cd(char(outlocations{nrun}))
   
 
   % non-gridded means for native mesh (keep switched off if running out of memory)
