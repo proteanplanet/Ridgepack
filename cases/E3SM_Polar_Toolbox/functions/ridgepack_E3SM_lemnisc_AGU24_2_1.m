@@ -16,14 +16,14 @@ als='abcdefghijklmnopqrstuvwxyz';
 %grid=false;
 grid=true;
 
-%plottimeseries=true;
-plottimeseries=false;
+plottimeseries=true;
+%plottimeseries=false;
 
-itqrange=true;
-%itqrange=false;
+%itqrange=true;
+itqrange=false;
 
-label=true;
-%label=false;
+%label=true;
+label=false;
 
 %yearlabel=true;
 yearlabel=false;
@@ -31,39 +31,45 @@ yearlabel=false;
 %plotcross=true;
 plotcross=false;
 
-%plotequinoxtrend=true;
-plotequinoxtrend=false;
+plotequinoxtrend=true;
+%plotequinoxtrend=false;
 
-observations=true;
-%observations=false;
+%observations=true;
+observations=false;
 
 titletab='Sea Ice E3SM Industrial';
 
-filetabe='control';
+%filetabe='control';
+filetabe='extremes';
 %filetabe='industrial';
 %filetabe='pi_industrial';
 %filetabe='PI';
 
 %ensemblenames={'PSLV','Icedge'};
 %ensemblenames={'LR','NARRM'};
+%ensemblenames={'LR','LR','LR','LR','LR'};
 ensemblenames={'LR'};
 %ensemblenames={'Control','PI'};
 
 %legnames={'LR PI Control','NARRM PI Control'};
 %legnames={'LR PI Control'};
-legnames={'E3SM'};
+legnames={'Ensemble Mean'};
 %legnames={'LR PI Control','LR V3 Historical'};
 
 %ensemblecases={[1 2 3 4 5],[6 7 8 9 10]};
 ensemblecases={[1 2 3 4 5]};
 %ensemblecases={[1],[2 3 4 5 6]};
+%ensemblecases={1,2,3,4,5};
+%ensemblecases={1};
 
 %yearrange={[1980 2020]};
 %yearrange={[1980 2000]};
 %yearrange={[1850 2020]};
 %yearrange={[0001 0500],[1980 2020]};
 %yearrange={[1980 2000],[2000 2020]};
-yearrange={[1850 1980],[1980 2000],[2000 2020]};
+%yearrange={[1850 1980],[1980 2000],[2000 2020]};
+yearrange={[2020 2024]};
+%yearrange={[2000 2020]};
 
 %yearsto=1980;
 %yeareno=2020;
@@ -85,6 +91,8 @@ maxcols=3;
 %           'v3.LR.historical_0201',...
 %           'v3.LR.historical_0251'}
 
+%casenames={'v3.LR.historical_0251'}
+
 casenames={'v3.LR.historical_0051',...
            'v3.LR.historical_0101',...
            'v3.LR.historical_0151',...
@@ -98,6 +106,8 @@ casenames={'v3.LR.historical_0051',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0151/hist',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0201/hist',...
 %          '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0251/hist'}
+
+%dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0251/hist'}
 
 dirnames={'/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0051/hist',...
           '/Users/afroberts/data/MODEL/E3SM/v3/v3.LR.historical_0101/hist',...
@@ -565,7 +575,7 @@ for kcols=1:maxcols
   globalconts=45;
   globlab=['Global Volume'];
   filenamemodifier=[filenamemodifier,'volume.'];
- elseif kcols==3 
+ elseif kcols==3
   titl2=['Snow Volume \times{10^2} km^3'];
   xlab2=['Northern Hemisphere'];
   xlims=[0 30];
@@ -582,6 +592,12 @@ for kcols=1:maxcols
  ylim(ylims)
  set(gca,'XTick',[0:xyticks:max([xlims ylims])],'YTick',[0:xyticks:max([xlims ylims])])
  ar=diff(xlims)./diff(ylims);
+
+ % plot total sea ice loss for the Arctic
+ if kcols==1
+  set(gca,'XTick',[0 1 xyticks:xyticks:max([xlims ylims])],'YTick',[0:xyticks:max([xlims ylims])])
+  plot([1 1],ylims,'k:')    
+ end
 
  % underlay global grid
  if grid
@@ -793,7 +809,7 @@ for kcols=1:maxcols
 
     ocol=[0.8500 0.3250 0.0980]
 
-    k=datenum(0000,5,21);
+    k=datenum(0000,9,21);
 
     space=[k:365:365*floor(length(nc.time.data)./365)];
 
@@ -1186,10 +1202,6 @@ for kcols=1:maxcols
    legendnames{1}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
    years=yearrange{2};
    legendnames{2}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
-   if yi>2
-    years=yearrange{3};
-    legendnames{3}=[num2str(years(1)),'-',num2str(years(2)),' ',char(legnames{1})];
-   end
   else
    legendnames=legnames;
    years=yearrange{1};
@@ -1199,13 +1211,7 @@ for kcols=1:maxcols
    legendnames{length(legendnames)+1}=[num2str(yearsto,'%4.4i'),'-',num2str(yeareno,'%4.4i'),' ',...
                            char(legnames{end})];
   end
-  h
-  legendnames
-  if yi>2
-   legend(h([1 3 5:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
-  else
-   legend(h([1 3:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
-  end
+  legend(h([1 3:end]),legendnames{1:length(legendnames)},'location','southwest','FontSize',8);
   legend('boxoff');
  end
  title(titl2,'Interpreter','Tex','Fontsize',10,'FontWeight','normal')
@@ -1236,7 +1242,7 @@ end
 
 filenamemodifier=[filenamemodifier,num2str(maxcols),'.'];
 
-ridgepack_fprint('png',['E3SM_sea_ice_lemnisc.',yeartag,obsyeartag,ensembletag,filenamemodifier,'png'],1,2);
+ridgepack_fprint('png',['E3SM_sea_ice_lemniscX2_trend.',yeartag,obsyeartag,ensembletag,filenamemodifier,'png'],1,2);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%

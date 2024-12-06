@@ -2,22 +2,22 @@
 clear
 clf
 
-%startyear=1980;
-%endyear=2000;
+startyear=1980;
+endyear=2000;
 
-startyear=2000;
-endyear=2020;
+%startyear=2000;
+%endyear=2020;
 
-%ensemblemember='0051';
-ensemblemember='0101';
+ensemblemember='0051';
+%ensemblemember='0101';
 
 %monthsets={[1 2 3]};
 %monthsets={[4 5 6]};
 %monthsets={[7 8 9]};
 %monthsets={[10 11 12]};
 %monthsets={[1 2 3],[4 5 6],[7 8 9],[10 11 12]};
-%monthsets={[4 5 6],[7 8 9],[10 11 12]};
-monthsets={[1 2 3],[7 8 9]};
+monthsets={[4 5 6],[10 11 12]};
+%monthsets={[1 2 3],[7 8 9]};
 
 % generate timeseries before creating means
 generate=true;
