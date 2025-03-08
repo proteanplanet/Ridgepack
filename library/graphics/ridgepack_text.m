@@ -141,6 +141,7 @@ if strcmp(get(gca,'YScale'),'log')
 else
  yrough=y;
 end
+
 xsmooth=[xrough(1):(xrough(end)-xrough(1))/1000:xrough(end)];
 ysmooth=pchip(xrough,yrough,xsmooth);
 if strcmp(get(gca,'XScale'),'log')

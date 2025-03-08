@@ -6,7 +6,7 @@ zoomedareas=true;
 %zoomedareas=false;
 
 %grids=[7 10];
-grids=[9 12];
+%grids=[9 12];
 %grids=[9];
 %grids=[7 8];
 %grids=[7];
@@ -14,7 +14,7 @@ grids=[9 12];
 %grids=[12];
 %grids=[5];
 %grids=[13];
-%grids=[10];
+grids=[12];
 %grids=[4];
 %grids=[14];
 %grids=[15];
@@ -23,12 +23,12 @@ grids=[9 12];
 maintitle='';
 
 %largescales={true,false};
-%bathymetrys={false,true};
+bathymetrys={false,true};
 %bathymetrys={true};
 
-largescales={false};
-%largescales={true};
-bathymetrys={true};
+%largescales={false};
+largescales={true};
+%bathymetrys={true};
 %bathymetrys={false};
 
 %bottomcheck=true;
@@ -43,8 +43,8 @@ resolutionmetric=false;
 %distortion=true;
 distortion=false;
 
-overlaymesh=false;
 %overlaymesh=true;
+overlaymesh=false;
 
 %crashpointlatlon=[-53.6098 -58.2274];
 crashpointlatlon=[];
@@ -90,8 +90,8 @@ for bk=1:length(bathymetrys)
  fileg{8}.outname='IcoswISC30E3r2';
  fileg{8}.title='MPAS E3SM V3 30km Equal Area Mesh r2';
   
- fileg{9}.name='SOwISC12to60E3r3';
- fileg{9}.outname='SOwISC12to60E3r3';
+ fileg{9}.name='SOwISC12to30E3r3';
+ fileg{9}.outname='SOwISC12to30E3r3';
  fileg{9}.title='MPAS E3SM V3 SORRM R3';
   
  fileg{10}.name='RRSwISC6to18E3r5';
@@ -172,6 +172,13 @@ for bk=1:length(bathymetrys)
  sector{9}.altitude=1; % Mean Earth radius multiple
  sector{9}.annotation=1; % add Arctic Shipping
   
+ sector{10}.centlat=-60; % degrees north
+ sector{10}.centlon=135; % degrees east
+ sector{10}.horizon=60; % degrees of satellite horizon (0-90)
+ sector{10}.altitude=1; % Mean Earth radius multiple
+ sector{10}.annotation=1; % add Arctic Shipping
+  
+ zoom{1}.centlat=75;
  zoom{1}.centlat=75;
  zoom{1}.centlat=75;
  zoom{1}.centlon=-94;
@@ -246,7 +253,7 @@ for bk=1:length(bathymetrys)
  zoom{9}.polar=1; 
   
  zoom{10}.centlat=56;
- zoom{10}.centlon=-145;
+ zoom{10}.centlon=-150;
  zoom{10}.horizon=7;
  zoom{10}.altitude=1;
  zoom{10}.name='Gulf of Alaska';
@@ -624,11 +631,12 @@ for bk=1:length(bathymetrys)
 
  % latest
  if largescale
-  plotchoice=[1:length(sector)];
+  %plotchoice=[1:length(sector)];
   %plotchoice=[5];
   %plotchoice=[7];
   %plotchoice=[8 9];
   %plotchoice=[6];
+  plotchoice=[10];
  else
   plotchoice=[1:length(zoom)];
   %plotchoice=[36];
@@ -696,7 +704,7 @@ for bk=1:length(bathymetrys)
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r2'];
     gridfile='mpaso.IcoswISC30E3r2.20230901.nc';
     shiplocs=[1 2 3 4 6];
-   elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to60E3r3')
+   elseif strcmp(char(fileg{gridchoice}.name),'SOwISC12to30E3r3')
     gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to30E3r3'];
     gridfile='mpaso.SOwISC12to30E3r3.20240829.nc';
     shiplocs=[1 2 3 4 6];
