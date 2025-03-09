@@ -1,3 +1,4 @@
+
 close all
 clear
 
@@ -6,37 +7,45 @@ clear
 maintitle='';
 
 % configurations, order left to right, top to bottom
-rows=1;
+rows=2;
+%rows=1;
 cols=2;
 
 % grids to plot
-grids=[4 4];
+grids=[4 4 4 4];
+%grids=[4 4];
 
 % projections 
-projections=[65 65];
+projections=[65 65 67 67];
+%projections=[67 67];
 
 % large scale projection, or not
-largescales={true,true};
+largescales={true,true,true,true};
+%largescales={true,true};
 
 % if large scale include zoomed areas
-zoomedareas={false,false}
+zoomedareas={false,false,true,false}
+%zoomedareas={false,false}
 
 % add bathymetry 
-bathymetrys={false,true};
-%bathymetrys={true,true};
+bathymetrys={false,true,false,true};
+%bathymetrys={false,true};
 
 % use rossby metric
-rossbymetrics={false,false};
+rossbymetrics={false,false,false,false};
+%rossbymetrics={false,false};
 
 % apply resolution shading
-%resolutionmetrics={false,false};
-resolutionmetrics={true,false};
+resolutionmetrics={true,false,true,false};
+%resolutionmetrics={true,false};
 
 % apply mesh distortion shading
-distortions={false,false};
+distortions={false,false,false,false};
+%distortions={false,false};
 
 % overlay mesh 
-overlaymeshs={false,false};
+overlaymeshs={false,false,false,false};
+%overlaymeshs={false,false};
 
 % plot location
 plotloc='/Users/afroberts/work';
@@ -45,15 +54,19 @@ plotloc='/Users/afroberts/work';
 meshtitle=false;
 
 % outfile names
-outfilename='';
-grifilename='';
+outfilename='test';
+grifilename='test';
 
 % set legend flags
-shiplegflag=true;
+%shiplegflag=true;
+shiplegflag=false;
 iceshelflegflag=true;
 bathlegflag=true;
 legendh=[];
 legendcell={};
+
+% labeling
+alphass=['abcd'];
 
 % set up ocean mesh grid file choices
 fileo{1}.name='oQU480';
@@ -560,7 +573,7 @@ zoom{61}.centlon=0; % degrees east
 zoom{61}.horizon=60; % degrees of satellite horizon (0-90)
 zoom{61}.altitude=1; % Mean Earth radius multiple
 zoom{61}.name='Antarctic';
-zoom{61}.annotation=2; % ice shelvesj
+zoom{61}.annotation=2; % ice shelves
 zoom{61}.polar=0; 
 
 zoom{62}.centlat=60; % degrees north
@@ -568,7 +581,7 @@ zoom{62}.centlon=-90; % degrees east
 zoom{62}.horizon=60; % degrees of satellite horizon (0-90)
 zoom{62}.altitude=1; % Mean Earth radius multiple
 zoom{62}.name='Arctic Combination 1';
-zoom{62}.annotation=1; % no annotation
+zoom{62}.annotation=1; % add Arctic Shipping
 zoom{62}.polar=0; 
 
 zoom{63}.centlat=70; % degrees north
@@ -576,7 +589,7 @@ zoom{63}.centlon=-100; % degrees east
 zoom{63}.horizon=50; % degrees of satellite horizon (0-90)
 zoom{63}.altitude=1; % Mean Earth radius multiple
 zoom{63}.name='Arctic Combination 2';
-zoom{63}.annotation=1; % no annotation
+zoom{63}.annotation=1; % add Arctic Shipping
 zoom{63}.polar=0; 
 
 zoom{64}.centlat=90; % degrees north
@@ -592,8 +605,25 @@ zoom{65}.centlon=-100; % degrees east
 zoom{65}.horizon=60; % degrees of satellite horizon (0-90)
 zoom{65}.altitude=1; % Mean Earth radius multiple
 zoom{65}.name='United States Domain';
-zoom{65}.annotation=1; % no annotation
+zoom{65}.annotation=1; % add Arctic Shipping
 zoom{65}.polar=0; 
+
+zoom{66}.centlat=-60; % degrees north
+zoom{66}.centlon=135; % degrees east
+zoom{66}.horizon=60; % degrees of satellite horizon (0-90)
+zoom{66}.altitude=1; % Mean Earth radius multiple
+zoom{66}.name='Antarctic Pan View Including Australia';
+zoom{66}.annotation=2; % ice shelf annotation
+zoom{66}.polar=1; 
+
+zoom{67}.centlat=-86; % degrees north
+zoom{67}.centlon=0; % degrees east
+zoom{67}.horizon=33; % degrees of satellite horizon (0-90)
+zoom{67}.altitude=1; % Mean Earth radius multiple
+zoom{67}.name='Antarctic Pan View Including Atlantic';
+zoom{67}.annotation=2; % ice shelf annotation
+zoom{67}.polar=1; 
+
 
 % load in shipping data
 shiploc='/Users/afroberts/data/SHIPPING';
@@ -629,7 +659,7 @@ for ncol=1:cols
  lk=lk+1;
 
  % multiplot only if multiple grids
- ridgepack_multiplot(rows,cols,nrow,ncol)
+ ridgepack_multiplot(rows,cols,nrow,ncol,alphass(lk))
 
  % grid information
  if strcmp(char(fileo{grids(lk)}.name),'oQU480')
@@ -740,75 +770,71 @@ for ncol=1:cols
  end
 
  % create isobath contours
- if bathymetrys{lk}
+ % minimum isobath
+ mbatname=[char(fileo{grids(lk)}.outname),'_minIsobath.nc'];
+ x=dir(mbatname);
+ minIso=ceil(10*min(ncvert.bottomDepth.data(:)))./10;
+ mdepthc=[num2str(minIso),'m'];
+ if isempty(x) 
+  disp([mdepthc,' minimum isobath...'])
+  ncisobathmin=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',minIso);
+  ridgepack_write(ncisobathmin,mbatname)
+ else
+  ncisobathmin=ridgepack_clone(mbatname);
+ end
 
-    % minimum isobath
-    mbatname=[char(fileo{grids(lk)}.outname),'_minIsobath.nc'];
-    x=dir(mbatname);
-    minIso=ceil(10*min(ncvert.bottomDepth.data(:)))./10;
-    mdepthc=[num2str(minIso),'m'];
-    if isempty(x) 
-     disp([mdepthc,' minimum isobath...'])
-     ncisobathmin=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',minIso);
-     ridgepack_write(ncisobathmin,mbatname)
-    else
-     ncisobathmin=ridgepack_clone(mbatname);
-    end
+ % 50m isobath
+ greename=[char(fileo{grids(lk)}.outname),'_50mIsobath.nc'];
+ x=dir(greename);
+ if isempty(x)                    
+  disp('50m isobath...')
+  ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',50);
+  ridgepack_write(ncisobath50,greename)
+ else                             
+  ncisobath50=ridgepack_clone(greename);
+ end                              
 
-    % 50m isobath
-    greename=[char(fileo{grids(lk)}.outname),'_50mIsobath.nc'];
-    x=dir(greename);
-    if isempty(x)                    
-     disp('50m isobath...')
-     ncisobath50=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',50);
-     ridgepack_write(ncisobath50,greename)
-    else                             
-     ncisobath50=ridgepack_clone(greename);
-    end                              
+ % 500m isobath
+ deepname=[char(fileo{grids(lk)}.outname),'_500mIsobath.nc'];
+ x=dir(deepname);
+ if isempty(x)                    
+  disp('500m isobath...')         
+  ncisobath500=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',500);
+  ridgepack_write(ncisobath500,deepname)
+ else                             
+  ncisobath500=ridgepack_clone(deepname);
+ end                              
 
-    % 500m isobath
-    deepname=[char(fileo{grids(lk)}.outname),'_500mIsobath.nc'];
-    x=dir(deepname);
-    if isempty(x)                    
-     disp('500m isobath...')         
-     ncisobath500=ridgepack_e3smseasaw(ncvert,ncvert,'bottomDepth',500);
-     ridgepack_write(ncisobath500,deepname)
-    else                             
-     ncisobath500=ridgepack_clone(deepname);
-    end                              
+ % calculate selective metrics if desired
+ if rossbymetrics{lk}
+  ncvert.rossby=ncvert.bottomDepth;
+  ncvert.rossby.long_name='Model Resolution to Rossby Radius Ratio';
+  ncvert.rossby.units='';
+  ncvert.rossby.data=abs(sqrt(ncvert.areaCell.data).*ncvert.fCell.data)./...
+                     sqrt(ncvert.bottomDepth.data.*9.80665);
 
-    % calculate selective metrics if desired
-    if rossbymetrics{lk}
-     ncvert.rossby=ncvert.bottomDepth;
-     ncvert.rossby.long_name='Model Resolution to Rossby Radius Ratio';
-     ncvert.rossby.units='';
-     ncvert.rossby.data=abs(sqrt(ncvert.areaCell.data).*ncvert.fCell.data)./...
-                        sqrt(ncvert.bottomDepth.data.*9.80665);
+ elseif resolutionmetrics{lk}
+  ncvert.resolution=ncvert.bottomDepth;
+  ncvert.resolution.long_name='Model Resolution';
+  ncvert.resolution.units='km';
+  ncvert.resolution.data=sqrt(ncvert.areaCell.data)./1000;
 
-    elseif resolutionmetrics{lk}
-     ncvert.resolution=ncvert.bottomDepth;
-     ncvert.resolution.long_name='Model Resolution';
-     ncvert.resolution.units='km';
-     ncvert.resolution.data=sqrt(ncvert.areaCell.data)./1000;
+ elseif distortions{lk}
+  ncvert.distortion=ncvert.bottomDepth;
+  ncvert.distortion.long_name='Mesh Distortion';
+  ncvert.distortion.units='';
 
-    elseif distortions{lk}
-     ncvert.distortion=ncvert.bottomDepth;
-     ncvert.distortion.long_name='Mesh Distortion';
-     ncvert.distortion.units='';
-
-     for iCell=1:length(ncvert.bottomDepth.data)
-      edges=ncvert.edgesOnCell.data(:,iCell);
-      maxedge=max(ncvert.dcEdge.data(edges(edges>0)));
-      minedge=min(ncvert.dcEdge.data(edges(edges>0)));
-      ncvert.distortion.data(iCell)=minedge./maxedge;
-     end
-
-    end
-
-    % invert bathymetry
-    ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
+  for iCell=1:length(ncvert.bottomDepth.data)
+   edges=ncvert.edgesOnCell.data(:,iCell);
+   maxedge=max(ncvert.dcEdge.data(edges(edges>0)));
+   minedge=min(ncvert.dcEdge.data(edges(edges>0)));
+   ncvert.distortion.data(iCell)=minedge./maxedge;
+  end
 
  end
+
+ % invert bathymetry
+ ncvert.bottomDepth.data=-ncvert.bottomDepth.data;
   
  if largescales{lk}
 
@@ -898,16 +924,19 @@ for ncol=1:cols
       ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
                            centlat,centlon,horizon,altitude,...
                            true,false,'linear','bluered');
-  
+
       % make top color grey
       cmap=colormap;
       cmap(end,:)=0.95*[1 1 1];
       colormap(cmap)
   
       % add colormap
-      if ncol==cols & nrow==rows
+      if ncol==cols & nrow==1
        ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
-       clear colbarcont
+       clear cmap colbarcont
+       if rows>1
+        ridgepack_cbshare(gca)
+       end
       end
 
      end
@@ -947,26 +976,16 @@ for ncol=1:cols
            'HorizontalAlignment','center')
      end
 
-     if any(diff(grids))~=0 & bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}='minimum depth';
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
-      bathlegflag=false;
-     elseif bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}=[mdepthc,' minimum'];
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
-      bathlegflag=false;
-     end
-  
-    else
+    else % not bathymetry
   
      % outfilename modifier
      outfilename=[outfilename,'_'];
 
-     ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
+     if zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
+      ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude,ncvert,'iceShelfMask',true);
+     else
+      ridgepack_e3smsatmeshs(ncvert,centlat,centlon,horizon,altitude);
+     end
 
      ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
   
@@ -998,54 +1017,213 @@ for ncol=1:cols
       ncisores27=ridgepack_e3smseasaw(ncvert,ncvert,'resolution',27);
       ncisores28=ridgepack_e3smseasaw(ncvert,ncvert,'resolution',28);
 
-      vcols=lines(3); 
+      vcols(:,1)=[0 0 0.0];
+      vcols(:,2)=[0 0 0.5];
+      vcols(:,3)=[0 0 1.0];
 
       hay=ridgepack_e3smsatthreshold(ncisores25,centlat,centlon,horizon,...
-                                   vcols(:,1),':');
+                                   vcols(:,1),'--');
       hby=ridgepack_e3smsatthreshold(ncisores27,centlat,centlon,horizon,...
-                                   vcols(:,2),':');
+                                   vcols(:,2),'--');
       hby=ridgepack_e3smsatthreshold(ncisores28,centlat,centlon,horizon,...
-                                   vcols(:,3),':');
+                                   vcols(:,3),'--');
+
+
+      % make isolines of resolution
+      for ixl=1:3
+
+       if ixl==1
+        latmark=[max(ncisores25.xlatitude.data) max(ncisores25.xlatitude.data)];
+        reslabel='25';
+        colx=vcols(:,1);
+       elseif ixl==2
+        latmark=[max(ncisores27.xlatitude.data) max(ncisores27.xlatitude.data)];
+        reslabel='27';
+        colx=vcols(:,2);
+       elseif ixl==3
+        latmark=[max(ncisores28.xlatitude.data) max(ncisores28.xlatitude.data)];
+        reslabel='28';
+        colx=vcols(:,3);
+       end
+
+       lonmark=[-2 2];
+      
+       % find local angle of labels
+       [xl,yl,zl,phl,thl]=ridgepack_satfwd(latmark,lonmark,centlat,centlon,horizon,1);
+
+       % find grid label angle & rotate to readable angle
+       rotation=atan2d(diff(yl),diff(xl));
+       if isnan(rotation)
+        rotation=90;
+       end
+
+       if ~isnan(rotation)
+
+        % plot labels inside frame
+        rotation=wrapTo180(rotation);
+        if rotation>91 | rotation<-91
+         rotation=mod(rotation+180,0);
+        end
+
+        gridheight=1.01; % height of grid superimposed on plot
+        text(xl(1),yl(1),2*gridheight*zl(1),reslabel,...
+               'HorizontalAlignment','center',...
+               'VerticalAlignment','bottom',...
+               'FontSize',4,...
+               'Color',colx,...
+               'Rotation',rotation);
+
+        if ixl==1
+         text(xl(1),yl(1),2*gridheight*zl(1),'km',...
+               'HorizontalAlignment','center',...
+               'VerticalAlignment','top',...
+               'FontSize',4,...
+               'Color',colx,...
+               'Rotation',rotation);
+        end
+
+       end
+
+      end
 
      end
   
      if zoom{projections(lk)}.annotation==1
   
       for shipi=shiplocs
+       latship=eval(['ncship',num2str(shipi),'.latitude.data']);
+       lonship=eval(['ncship',num2str(shipi),'.longitude.data']);
        [x,y,z,phi,theta]=...
-        ridgepack_satfwd(eval(['ncship',num2str(shipi),'.latitude.data']),...
-                         eval(['ncship',num2str(shipi),'.longitude.data']),...
-                         centlat,centlon,horizon,1.001*altitude);
-       hship=plot3(x,y,z,'Color','#FF8800');
+        ridgepack_satfwd(latship,lonship,centlat,centlon,horizon,1.001*altitude);
+        hship=plot3(x,y,z,'Color','#FF8800');
+
+       if shipi==4 | shipi==6
+
+        % label text
+        if shipi==4 
+         shiplabel={'Northwest','Passage'};
+        elseif shipi==6
+         shiplabel={'Northern','Sea Route'};
+        end
+
+        % find local angle of labels
+        [xl,yl,zl,phl,thl]=ridgepack_satfwd(latship([end-5 end]),lonship([end-5 end]),...
+                                            centlat,centlon,horizon,1);
+                          
+        % find grid label angle & rotate to readable angle
+        rotation=atan2d(diff(yl),diff(xl));
+        if isnan(rotation)
+         rotation=90;
+        end
+
+        if ~isnan(rotation)
+
+         % plot labels inside frame
+         rotation=wrapTo180(rotation);
+         if rotation>91 | rotation<-91
+          rotation=mod(rotation+180,0);
+         end
+
+         gridheight=1.01; % height of grid superimposed on plot
+         text(xl(1),yl(1),2*gridheight*zl(1),shiplabel,...
+               'HorizontalAlignment','left',...
+               'VerticalAlignment','middle',...
+               'FontSize',4,...
+               'Color',0.99*[1 1 1],...
+               'Rotation',rotation);
+
+        end
+ 
+       end
+
       end
   
       if ~isempty(shiplocs) & shiplegflag
        legendh(end+1)=hship
-       legendcell{end+1}='Arctic Ship Routes';
+       legendcell{end+1}='Arctic coastal routes';
        shiplegflag=false;
       end
 
-     elseif zoom{projections(lk)}.annotation==2
+     elseif zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
 
       % plot ice shelf edge
-      if iceshelfplot
-       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[1 0 0]);
-       if projections(lk)==6 & iceshelflegflag
-        legendh(end+1)=hs;
-        legendcell{end+1}='Ice Shelf Edge';
-        iceshelflegflag=false;
+      hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
+      hsleg='Ice Shelf Edge';
+
+      % render ice shelf cavity thickness
+      cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10];
+      colbarcont{1}='\downarrow';
+      for i=2:length(cont)-1;
+       colbarcont{i}=num2str(-cont(i));
+      end
+      colbarcont{length(cont)}='\uparrow';
+
+      ridgepack_e3smsatcol(ncvert,'cavityThickness',ncvert,cont,0,...
+                           centlat,centlon,horizon,altitude,...
+                           true,false,'linear','bluered',false);
+
+      % make top color grey
+      cmap=colormap;
+      cmap(end,:)=0.95*[1 1 1];
+      colormap(cmap)
+
+      % add colormap
+      if ncol==cols & nrow==1
+       ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
+       clear cmap colbarcont
+       if rows>1
+        ridgepack_cbshare(gca)
        end
       end
 
+      if meshtitle
+       title('Cavity Thickness','FontWeight','normal')
+      end
+
+      % plot ice shelf edge
+      hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[1 0 0]);
+      if zoom{projections(lk)}.annotation==2 & iceshelflegflag
+       legendh(end+1)=hs;
+       legendcell{end+1}='Ice Shelf Edge';
+       iceshelflegflag=false;
+      end
+
+
+      % add min, 50m, and 500m isobath
+      hd=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,...
+                                    [0.9290 0.6940 0.1250]);
+      hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+                                    [0.4660 0.6740 0.1880]);
+      ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
+                                    [0.8500 0.3250 0.0980]);
+
      end
-  
+
+    end  % bathymetry conditional
+
+    % bathymetry legend
+    if bathymetrys{lk} | (zoom{projections(lk)}.annotation==2 & iceshelfplot)
+     if any(diff(grids))~=0 & bathlegflag
+      legendh(end+1:end+3)=[ht hg hd];
+      legendcell{end+1}='minimum depth';
+      legendcell{end+1}='50m';
+      legendcell{end+1}='500m isobaths';
+      bathlegflag=false;
+     elseif bathlegflag
+      legendh(end+1:end+3)=[ht hg hd];
+      legendcell{end+1}=[mdepthc,' minimum'];
+      legendcell{end+1}='50m';
+      legendcell{end+1}='500m isobaths';
+      bathlegflag=false;
+     end
     end
 
+    % label mesh if desired
     if meshtitle
      title([char(fileo{grids(lk)}.outname)],'FontWeight','normal')
     end
 
-   else
+ else % not largescale
  
     % outfilename modifier
     outfilename='_zoom_';
@@ -1074,19 +1252,19 @@ for ncol=1:cols
     % add in coastline
     ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-    if bathymetrys{lk} & zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
+    if zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
 
      % plot ice shelf edge
      hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
      hsleg='Ice Shelf Edge';
 
      % render ice shelf cavity thickness
-     cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:10];
+     cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
      ridgepack_e3smsatcol(ncvert,'cavityThickness',ncvert,cont,0,...
                           centlat,centlon,horizon,altitude,...
                           true,false,'linear','bluered',false);
 
-     if gridx==1
+     if meshtitle
       title('Cavity Thickness','FontWeight','normal')
      end
 
@@ -1100,9 +1278,6 @@ for ncol=1:cols
  
     xlims=xlim;
  
-    text(1.15*xlims(1),0,fileo{grids(lk)}.outname,...
-         'Rotation',90,'HorizontalAlignment','center')
- 
     if bathymetrys{lk}
  
      % outfilename modifier
@@ -1111,13 +1286,12 @@ for ncol=1:cols
      ridgepack_satview(centlat,centlon,horizon,1,1)
   
      % reverse colorbar
-     cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:10];
+     cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
      colbarcont{1}='\downarrow';
      for i=2:length(cont)-1;
       colbarcont{i}=num2str(-cont(i));
      end
      colbarcont{length(cont)}='\uparrow';
-     cmap=colormap;
 
      % render colors
      ridgepack_e3smsatcol(ncvert,'bottomDepth',ncvert,cont,0,...
@@ -1130,10 +1304,10 @@ for ncol=1:cols
      colormap(cmap)
 
      % add colorbar
-     if grids(lk)==grids(1)
+     if ncol==cols & nrow==1
       ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
-      clear cmap colbarcont
-      if gridl>1
+      clear colbarcont
+      if rows>1
        ridgepack_cbshare(gca)
       end
      end
@@ -1194,7 +1368,7 @@ for ncol=1:cols
      ridgepack_e3smsatmeshv(nccell,centlat,centlon,horizon,altitude);
      ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
 
-     if overlaymesh
+     if overlaymeshs{lk}
 
       % add edge points
       %[x,y,z,phi,theta]=...
@@ -1240,7 +1414,7 @@ for ncol=1:cols
 
       if ~isempty(shiplocs) & shiplegflag
        legendh(end+1)=hship
-       legendcell{end+1}='Arctic Ship Routes';
+       legendcell{end+1}='Arctic coastal routes';
        shiplegflag=false;
       end
 
@@ -1256,6 +1430,11 @@ for ncol=1:cols
      end
   
     end % bathymetrys{lk}
+
+    if meshtitle
+     text(1.15*xlims(1),0,fileo{grids(lk)}.outname,...
+         'Rotation',90,'HorizontalAlignment','center')
+    end
 
  end % largescale or not
 

@@ -1,4 +1,4 @@
-function [h,nc]=ridgepack_e3smsatthreshold(ncvert,centlat,centlon,horizon,color,linestyle)
+function [h,nc]=ridgepack_e3smsatthreshold(ncvert,centlat,centlon,horizon,color,linestyle,label)
 
 if nargin<2
  centlat=90;
@@ -32,6 +32,10 @@ if nargin<6
  linestyle='-';
 end
 
+if nargin<7
+ label=[];
+end
+
 % altitude
 altitude=1.0001;
 
@@ -48,7 +52,12 @@ end
                                    centlat,centlon,...
                                    horizon,altitude);
 
-h=plot3(x,y,z,'Color',color,'LineWidth',0.6-sin(deg2rad(horizon))*0.4);
+h=plot3(x,y,z,'Color',color,'LineWidth',0.6-sin(deg2rad(horizon))*0.4,'LineStyle',linestyle);
+
+% plot label if requested
+if ~isempty(label)
+ exit('no current way to plot labels')
+end
 
 % find lines that cross the horizon
 k=0;

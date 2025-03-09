@@ -1,5 +1,5 @@
 function [cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
-                                        horizon,altitude,ncmask,var)
+                                        horizon,altitude,ncmask,var,nolight)
 
 % ridgepack_e3smsatmeshs - plot a tesselated E3SM MPAS mesh on the globe
 %
@@ -33,6 +33,11 @@ function [cells]=ridgepack_e3smsatmeshs(ncvert,centlat,centlon,...
 if nargin<6
  ncmask=ncvert;
  var='nCells';
+end
+
+% apply lighting as default
+if nargin<8
+ nolight=false
 end
 
 % height of grid superimposed on plot
@@ -158,7 +163,7 @@ axis tight
 axis off
 
 % add lighting from infinite sources directly overhead
-if horizon>30
+if horizon>30 & ~nolight
  light('Position',[0 0 10000],'Style','local')
  material dull
 end
