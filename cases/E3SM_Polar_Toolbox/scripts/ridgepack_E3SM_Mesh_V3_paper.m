@@ -957,7 +957,7 @@ for ncol=1:cols
       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[1 0 0]);
       if projections(lk)==6 & iceshelflegflag
        legendh(end+1)=hs;
-       legendcell{end+1}='Ice Shelf Edge';
+       legendcell{end+1}='ice shelf edge';
        iceshelflegflag=false;
       end
      end
@@ -1032,6 +1032,7 @@ for ncol=1:cols
       % make isolines of resolution
       for ixl=1:3
 
+       % arctic labeling
        if ixl==1
         latmark=[max(ncisores25.xlatitude.data) max(ncisores25.xlatitude.data)];
         reslabel='25';
@@ -1082,6 +1083,58 @@ for ncol=1:cols
                'Rotation',rotation);
         end
 
+       end
+
+       % antarctic labeling
+       if ixl>1
+        if ixl==2
+         latmark=[min(ncisores27.xlatitude.data) min(ncisores27.xlatitude.data)];
+         reslabel='27';
+         colx=vcols(:,2);
+        elseif ixl==3
+         latmark=[min(ncisores28.xlatitude.data) min(ncisores28.xlatitude.data)];
+         reslabel='28';
+         colx=vcols(:,3);
+        end
+ 
+        lonmark=[-176 -178];
+ 
+        % find local angle of labels
+        [xl,yl,zl,phl,thl]=ridgepack_satfwd(latmark,lonmark,centlat,centlon,horizon,1);
+ 
+        % find grid label angle & rotate to readable angle
+        rotation=atan2d(diff(yl),diff(xl));
+        if isnan(rotation)
+         rotation=90;
+        end
+
+        if ~isnan(rotation)
+
+         % plot labels inside frame
+         rotation=wrapTo180(rotation);
+         if rotation>91 | rotation<-91
+          rotation=mod(rotation+180,0);
+         end
+ 
+         gridheight=1.01; % height of grid superimposed on plot
+         text(xl(1),yl(1),2*gridheight*zl(1),reslabel,...
+               'HorizontalAlignment','center',...
+               'VerticalAlignment','bottom',...
+               'FontSize',4,...
+               'Color',colx,...
+               'Rotation',rotation);
+
+         if ixl==3
+          text(xl(1),yl(1),2*gridheight*zl(1),'km',...
+               'HorizontalAlignment','center',...
+               'VerticalAlignment','top',...
+               'FontSize',4,...
+               'Color',colx,...
+               'Rotation',rotation);
+         end
+
+        end
+ 
        end
 
       end
@@ -1148,7 +1201,7 @@ for ncol=1:cols
 
       % plot ice shelf edge
       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
-      hsleg='Ice Shelf Edge';
+      hsleg='ice shelf edge';
 
       % render ice shelf cavity thickness
       cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10];
@@ -1184,7 +1237,7 @@ for ncol=1:cols
       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[1 0 0]);
       if zoom{projections(lk)}.annotation==2 & iceshelflegflag
        legendh(end+1)=hs;
-       legendcell{end+1}='Ice Shelf Edge';
+       legendcell{end+1}='ice shelf edge';
        iceshelflegflag=false;
       end
 
@@ -1256,7 +1309,7 @@ for ncol=1:cols
 
      % plot ice shelf edge
      hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
-     hsleg='Ice Shelf Edge';
+     hsleg='ice shelf edge';
 
      % render ice shelf cavity thickness
      cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
@@ -1325,7 +1378,7 @@ for ncol=1:cols
       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
       if iceshelflegflag
        legendh(end+1)=hs;
-       legendcell{end+1}='Ice Shelf Edge';
+       legendcell{end+1}='ice shelf edge';
        iceshelflegflag=false;
       end
      end
@@ -1423,7 +1476,7 @@ for ncol=1:cols
       hx=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0 0 1]);
       if projections(lk)==6 & iceshelflegflag
        legendh(end+1)=hx;
-       legendcell{end+1}='Ice Shelf Edge';
+       legendcell{end+1}='ice shelf edge';
        iceshelflegflag=false;
       end
 
