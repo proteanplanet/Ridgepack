@@ -273,7 +273,8 @@ elseif ~(strcmp(nearestdate,'year') | ...
 end
 
 % assign netCDF constant values to their names in a cell array
-constnames={'NC_BYTE','NC_CHAR','NC_SHORT','NC_INT','NC_FLOAT','NC_DOUBLE','NC_UBYTE'};
+constnames={'NC_BYTE','NC_CHAR','NC_SHORT','NC_INT','NC_FLOAT','NC_DOUBLE','NC_UBYTE',...
+            'NC_USHORT','NC_UINT','NC_INT64','NC_UINT64'};
 constvalues=zeros([length(constnames) 1]);
 for cnam=1:length(constnames)
  constvalues(cnam)=netcdf.getConstant(char(constnames{cnam}));

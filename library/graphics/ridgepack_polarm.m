@@ -50,6 +50,9 @@ function [maph]=ridgepack_polarm(varargin)
 % 'seaice'- Plot most efficient rectangular map for Arctic
 %           sea ice. This option does not work if 'asm' is selected.
 %
+% 'seaicesummer'- Plot most efficient rectangular map for Arctic
+%           sea ice. This option does not work if 'asm' is selected.
+%
 % 'seaicerasm'- Plot most efficient rectangular map for Arctic
 %           sea ice in rasm orientation. Does not work if 'asm' is selected.
 %
@@ -117,6 +120,7 @@ centralarctic2=0;
 centralarctic3=0;
 rasmmask=0;
 seaice=0;
+seaicesummer=0;
 seaicerasm=0;
 marginalsea1=0;
 antarctic=0;
@@ -134,6 +138,8 @@ else
   switch lower(varargin{i})
    case 'seaice'
 	   seaice=1;
+   case 'seaicesummer'
+	   seaicesummer=1;
    case 'seaicerasm'
 	   seaicerasm=1;
    case 'shipping'
@@ -189,6 +195,9 @@ if asm % create preset arctic system map
  centralmeridian=-45;
 elseif seaice % create preset arctic system map
  equatorextent=40;
+ centralmeridian=-45;
+elseif seaicesummer % create preset arctic system map
+ equatorextent=50;
  centralmeridian=-45;
 elseif seaicerasm
  equatorextent=40;
@@ -280,6 +289,11 @@ elseif seaice
  [x2,y] = mfwdtran(equatorextent+17,rightlon);
  [x,y1] = mfwdtran(equatorextent+5,bottomlon);
  [x,y2] = mfwdtran(equatorextent-0,toplon);
+elseif seaicesummer
+ [x1,y] = mfwdtran(equatorextent+16,leftlon);
+ [x2,y] = mfwdtran(equatorextent+17,rightlon);
+ [x,y1] = mfwdtran(equatorextent+7,bottomlon);
+ [x,y2] = mfwdtran(equatorextent+19,toplon);
 elseif seaicerasm
  [x1,y] = mfwdtran(equatorextent-1,leftlon);
  [x2,y] = mfwdtran(equatorextent+10,rightlon);
@@ -529,7 +543,7 @@ if(label==1)
    if extent(1)<x1 | extent(2)<y1
     mlat(i)=mlat(i)+mult*10;
     [x(i),y(i)]=mfwdtran(mlat(i),mlon(i));
-   elseif extent(1)+extent(3)>x2 | extent(2)+extent(4)>y2
+   elseif (extent(1)+extent(3)>x2 | extent(2)+extent(4)>y2) & length(mlat)>=i
     mlat(i)=mlat(i)+mult*10;
     [x(i),y(i)]=mfwdtran(mlat(i),mlon(i));
    end
