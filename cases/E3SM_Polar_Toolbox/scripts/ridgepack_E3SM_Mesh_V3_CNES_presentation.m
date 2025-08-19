@@ -13,45 +13,54 @@ clear
 %if confg==1; maintitle='';
 
 % configurations, order left to right, top to bottom
-rows=2;
+rows=1;
 %rows=1;
-cols=2;
+cols=1;
 
 % grids to plot
-grids=[4 4 4 4];
+%grids=[4 4 4 4];
 %grids=[4 4];
+grids=[4];
 
 % projections 
-projections=[65 65 67 67];
+%projections=[65 65 67 67];
 %projections=[67 67];
+projections=[65];
 
 % large scale projection, or not
-largescales={true,true,true,true};
+%largescales={true,true,true,true};
 %largescales={true,true};
+largescales={true};
 
 % if large scale include zoomed areas
-zoomedareas={false,false,true,false}
+%zoomedareas={false,false,true,false}
 %zoomedareas={false,false}
+zoomedareas={false}
 
 % add bathymetry 
-bathymetrys={false,true,false,true};
+%bathymetrys={false,true,false,true};
 %bathymetrys={false,true};
+bathymetrys={true};
 
 % use rossby metric
-rossbymetrics={false,false,false,false};
+%rossbymetrics={false,false,false,false};
 %rossbymetrics={false,false};
+rossbymetrics={false};
 
 % apply resolution shading
-resolutionmetrics={true,false,true,false};
+%resolutionmetrics={true,false,true,false};
 %resolutionmetrics={true,false};
+resolutionmetrics={false};
 
 % apply mesh distortion shading
-distortions={false,false,false,false};
+%distortions={false,false,false,false};
 %distortions={false,false};
+distortions={false};
 
 % overlay mesh 
-overlaymeshs={false,false,false,false};
+%overlaymeshs={false,false,false,false};
 %overlaymeshs={false,false};
+overlaymeshs={false};
 
 % plot location
 plotloc='/Users/afroberts/work';
@@ -60,8 +69,8 @@ plotloc='/Users/afroberts/work';
 meshtitle=false;
 
 % outfile names
-outfilename='test';
-grifilename='test';
+outfilename='CNES';
+grifilename='CNES';
 
 % set legend flags
 %shiplegflag=true;
@@ -1147,63 +1156,8 @@ for ncol=1:cols
 
      end
   
-     if zoom{projections(lk)}.annotation==1
-  
-      for shipi=shiplocs
-       latship=eval(['ncship',num2str(shipi),'.latitude.data']);
-       lonship=eval(['ncship',num2str(shipi),'.longitude.data']);
-       [x,y,z,phi,theta]=...
-        ridgepack_satfwd(latship,lonship,centlat,centlon,horizon,1.001*altitude);
-        hship=plot3(x,y,z,'Color','#FF8800');
 
-       if shipi==4 | shipi==6
-
-        % label text
-        if shipi==4 
-         shiplabel={'Northwest','Passage'};
-        elseif shipi==6
-         shiplabel={'Northern','Sea Route'};
-        end
-
-        % find local angle of labels
-        [xl,yl,zl,phl,thl]=ridgepack_satfwd(latship([end-5 end]),lonship([end-5 end]),...
-                                            centlat,centlon,horizon,1);
-                          
-        % find grid label angle & rotate to readable angle
-        rotation=atan2d(diff(yl),diff(xl));
-        if isnan(rotation)
-         rotation=90;
-        end
-
-        if ~isnan(rotation)
-
-         % plot labels inside frame
-         rotation=wrapTo180(rotation);
-         if rotation>91 | rotation<-91
-          rotation=mod(rotation+180,0);
-         end
-
-         gridheight=1.01; % height of grid superimposed on plot
-         text(xl(1),yl(1),2*gridheight*zl(1),shiplabel,...
-               'HorizontalAlignment','left',...
-               'VerticalAlignment','middle',...
-               'FontSize',4,...
-               'Color',0.99*[1 1 1],...
-               'Rotation',rotation);
-
-        end
- 
-       end
-
-      end
-  
-      if ~isempty(shiplocs) & shiplegflag
-       legendh(end+1)=hship
-       legendcell{end+1}='Arctic coastal routes';
-       shiplegflag=false;
-      end
-
-     elseif zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
+     if zoom{projections(lk)}.annotation==2 & iceshelfplot % render ice shelf 
 
       % plot ice shelf edge
       hs=ridgepack_e3smsatthreshold(nciceshelf,centlat,centlon,horizon,0.45*[0.9 0 0]);
@@ -1259,6 +1213,73 @@ for ncol=1:cols
      end
 
     end  % bathymetry conditional
+
+    if zoom{projections(lk)}.annotation==1
+  
+      for shipi=shiplocs
+       latship=eval(['ncship',num2str(shipi),'.latitude.data']);
+       lonship=eval(['ncship',num2str(shipi),'.longitude.data']);
+       [x,y,z,phi,theta]=...
+        ridgepack_satfwd(latship,lonship,centlat,centlon,horizon,1.001*altitude);
+        if bathymetrys{lk}
+         hship=plot3(x,y,z,'Color','r');
+        else
+         hship=plot3(x,y,z,'Color','#FF8800');
+        end
+
+       if shipi==4 | shipi==6
+
+        % label text
+        if shipi==4 
+         shiplabel={'Northwest','Passage'};
+        elseif shipi==6
+         shiplabel={'Northern','Sea Route'};
+        end
+
+        % find local angle of labels
+        [xl,yl,zl,phl,thl]=ridgepack_satfwd(latship([end-5 end]),lonship([end-5 end]),...
+                                            centlat,centlon,horizon,1);
+                          
+        % find grid label angle & rotate to readable angle
+        rotation=atan2d(diff(yl),diff(xl));
+        if isnan(rotation)
+         rotation=90;
+        end
+
+        if ~isnan(rotation)
+
+         % plot labels inside frame
+         rotation=wrapTo180(rotation);
+         if rotation>91 | rotation<-91
+          rotation=mod(rotation+180,0);
+         end
+
+         gridheight=1.01; % height of grid superimposed on plot
+         if cols==1 & rows==1
+          shippingfontsize=6
+         else
+          shippingfontsize=4
+         end
+         text(xl(1),yl(1),2*gridheight*zl(1),shiplabel,...
+               'HorizontalAlignment','left',...
+               'VerticalAlignment','middle',...
+               'FontSize',shippingfontsize,...
+               'Color',0.99*[1 1 1],...
+               'Rotation',rotation);
+
+        end
+ 
+       end
+
+      end
+  
+      if ~isempty(shiplocs) & shiplegflag
+       legendh(end+1)=hship
+       legendcell{end+1}='Arctic coastal routes';
+       shiplegflag=false;
+      end
+
+    end % shipping tracks
 
     % bathymetry legend
     if bathymetrys{lk} | (zoom{projections(lk)}.annotation==2 & iceshelfplot)
