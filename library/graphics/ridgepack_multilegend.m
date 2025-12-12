@@ -111,6 +111,8 @@ if isfield(r,'titlehandle') & ishandle(r.titlehandle)
  if strcmpi(location,'North')
   lh=legend(r.titlehandle,objecthandles,legendtext,'FontSize',fonts,...
          'Location','NorthOutside','Orientation','Horizontal');
+  set(lh,'Position',[(1-lh.Position(3))/2 lh.Position(2) ...
+                     lh.Position(3) lh.Position(4)])
  elseif strcmpi(location,'West')
   lh=legend(r.titlehandle,objecthandles,legendtext,'FontSize',fonts,...
          'Location','WestOutside','Orientation','Vertical');
@@ -120,6 +122,9 @@ if isfield(r,'titlehandle') & ishandle(r.titlehandle)
  elseif strcmpi(location,'South')
   lh=legend(r.titlehandle,objecthandles,legendtext,'FontSize',fonts,...
          'Location','SouthOutside','Orientation','Horizontal');
+  % center at bottom
+  set(lh,'Position',[(1-lh.Position(3))/2 lh.Position(2) ...
+                     lh.Position(3) lh.Position(4)])
  else
   error('location error')
  end

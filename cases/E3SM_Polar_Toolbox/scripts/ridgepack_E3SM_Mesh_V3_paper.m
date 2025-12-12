@@ -3,55 +3,125 @@ close all
 clear
 
 % Configs:
-% 1 - E3SM V3 Coupled Paper Marine Mesh
-% 2 - Trial Atmospheric/Land Figure
+% 1 - E3SM V3 Coupled Paper Marine Mesh (original)
+% 2 - E3SM v3 Coupled Paper Northern Hemisphere (revision)
+% 3 - E3SM v3 Coupled Paper Southern Hemisphere (revision)
+% 4 - Trial Atmospheric/Land Figure
 
-%config=1
+config=3;
 
 % title
 %maintitle='MPAS E3SM V3 Mesh';
 %if confg==1; maintitle='';
 
 % configurations, order left to right, top to bottom
-rows=2;
-%rows=1;
-cols=2;
+if config==1
 
-% grids to plot
-grids=[4 4 4 4];
-%grids=[4 4];
+ % number of cols and rows
+ rows=2;
+ cols=2;
 
-% projections 
-projections=[65 65 67 67];
-%projections=[67 67];
+ % grids to plot
+ grids=[4 4 4 4];
 
-% large scale projection, or not
-largescales={true,true,true,true};
-%largescales={true,true};
+ % projections 
+ projections=[65 65 67 67];
 
-% if large scale include zoomed areas
-zoomedareas={false,false,true,false}
-%zoomedareas={false,false}
+ % large scale projection, or not
+ largescales={true,true,true,true};
+ %largescales={true,true};
 
-% add bathymetry 
-bathymetrys={false,true,false,true};
-%bathymetrys={false,true};
+ % if large scale include zoomed areas
+ zoomedareas={false,false,true,false};
+ %zoomedareas={false,false}
 
-% use rossby metric
-rossbymetrics={false,false,false,false};
-%rossbymetrics={false,false};
+ % add bathymetry 
+ bathymetrys={false,true,false,true};
+ %bathymetrys={false,true};
 
-% apply resolution shading
-resolutionmetrics={true,false,true,false};
-%resolutionmetrics={true,false};
+ % use rossby metric
+ rossbymetrics={false,false,false,false};
+ %rossbymetrics={false,false};
 
-% apply mesh distortion shading
-distortions={false,false,false,false};
-%distortions={false,false};
+ % apply resolution shading
+ resolutionmetrics={true,false,true,false};
+ %resolutionmetrics={true,false};
 
-% overlay mesh 
-overlaymeshs={false,false,false,false};
-%overlaymeshs={false,false};
+ % apply mesh distortion shading
+ distortions={false,false,false,false};
+ %distortions={false,false};
+
+ % overlay mesh 
+ overlaymeshs={false,false,false,false};
+ %overlaymeshs={false,false};
+
+elseif config==2
+
+ % number of cols and rows
+ rows=2;
+ cols=1;
+
+ % grids to plot
+ grids=[4 4];
+
+ % projections 
+ projections=[65 65];
+
+ % large scale projection, or not
+ largescales={true,true};
+
+ % if large scale include zoomed areas
+ zoomedareas={false,false};
+
+ % add bathymetry 
+ bathymetrys={false,true};
+
+ % use rossby metric
+ rossbymetrics={false,false};
+
+ % apply resolution shading
+ resolutionmetrics={true,false};
+
+ % apply mesh distortion shading
+ distortions={false,false};
+
+ % overlay mesh 
+ overlaymeshs={false,false};
+
+elseif config==3
+
+ % number of cols and rows
+ rows=2;
+ cols=1;
+
+ % grids to plot
+ grids=[4 4];
+
+ % projections 
+ projections=[67 67];
+
+ % large scale projection, or not
+ largescales={true,true};
+
+ % if large scale include zoomed areas
+ zoomedareas={false,false};
+
+ % add bathymetry 
+ bathymetrys={false,true};
+
+ % use rossby metric
+ rossbymetrics={false,false};
+
+ % apply resolution shading
+ resolutionmetrics={true,false};
+
+ % apply mesh distortion shading
+ distortions={false,false};
+
+ % overlay mesh    
+ overlaymeshs={false,false};
+
+end
 
 % plot location
 plotloc='/Users/afroberts/work';
@@ -60,7 +130,7 @@ plotloc='/Users/afroberts/work';
 meshtitle=false;
 
 % outfile names
-outfilename='test';
+outfilename=['_config',num2str(config)];
 grifilename='test';
 
 % set legend flags
@@ -70,9 +140,10 @@ iceshelflegflag=true;
 bathlegflag=true;
 legendh=[];
 legendcell={};
+drawcb=true;
 
 % labeling
-alphass=['abcd'];
+alphass='abcd';
 
 % set up ocean mesh grid file choices
 fileo{1}.name='oQU480';
@@ -622,9 +693,9 @@ zoom{66}.name='Antarctic Pan View Including Australia';
 zoom{66}.annotation=2; % ice shelf annotation
 zoom{66}.polar=1; 
 
-zoom{67}.centlat=-86; % degrees north
+zoom{67}.centlat=-88; % degrees north
 zoom{67}.centlon=0; % degrees east
-zoom{67}.horizon=33; % degrees of satellite horizon (0-90)
+zoom{67}.horizon=28; % degrees of satellite horizon (0-90)
 zoom{67}.altitude=1; % Mean Earth radius multiple
 zoom{67}.name='Antarctic Pan View Including Atlantic';
 zoom{67}.annotation=2; % ice shelf annotation
@@ -657,7 +728,7 @@ ncship10=ridgepack_clone('InteRFACE_Shiptracks',...
 ncship11=ridgepack_clone('InteRFACE_Shiptracks',...
                {'track11_longitude','track11_latitude'});
 
-lk=0
+lk=0;
 
 for nrow=1:rows
 for ncol=1:cols
@@ -669,19 +740,19 @@ for ncol=1:cols
 
  % grid information
  if strcmp(char(fileo{grids(lk)}.name),'oQU480')
-  gridloc=['/Users/afroberts/work'];
+  gridloc='/Users/afroberts/work';
   gridfile='mpassi.rst.0001-04-01_00000.nc';
   shiplocs=[];
  elseif strcmp(char(fileo{grids(lk)}.name),'SOwISC12to30E3r3')
-  gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to30E3r3'];
+  gridloc='/Users/afroberts/data/MODEL/E3SM/v3/SOwISC12to30E3r3';
   gridfile='mpaso.SOwISC12to30E3r3.20240829.nc';
   shiplocs=[1 2 3 4 6];
  elseif strcmp(char(fileo{grids(lk)}.name),'RRSwISC6to18E3r5')
-  gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r5'];
+  gridloc='/Users/afroberts/data/MODEL/E3SM/v3/RRSwISC6to18E3r5';
   gridfile='initial_state.nc';
   shiplocs=[1 2 3 4 6];
  elseif strcmp(char(fileo{grids(lk)}.name),'IcoswISC30E3r5')
-  gridloc=['/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r5'];
+  gridloc='/Users/afroberts/data/MODEL/E3SM/v3/IcoswISC30E3r5';
   gridfile='mpaso.IcoswISC30E3r5.20231120.nc';
   shiplocs=[1 2 3 4 6];
  else
@@ -919,9 +990,9 @@ for ncol=1:cols
       outfilename=[outfilename,'bathymetry_'];
   
       % reverse colorbar
-      cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
+      cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:-20 0 10]; 
       colbarcont{1}='\downarrow';
-      for i=2:length(cont)-1;
+      for i=2:length(cont)-1
        colbarcont{i}=num2str(-cont(i));
       end
       colbarcont{length(cont)}='\uparrow';
@@ -937,10 +1008,11 @@ for ncol=1:cols
       colormap(cmap)
   
       % add colormap
-      if ncol==cols & nrow==1
+      if ncol==cols & drawcb
        ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
        clear cmap colbarcont
-       if rows>1
+       drawcb=false;
+       if rows>1 & nrow==1
         ridgepack_cbshare(gca)
        end
       end
@@ -950,10 +1022,12 @@ for ncol=1:cols
      % add min, 50m, and 500m isobath
      hd=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,...
                                   [0.9290 0.6940 0.1250]);
-     hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+     if projections(lk)~=67
+      hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
                                   [0.4660 0.6740 0.1880]);
-     ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
+      ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
                                   [0.8500 0.3250 0.0980]);
+     end
   
      % plot coast
      ridgepack_e3smsatcoast(nccoast,centlat,centlon,horizon)
@@ -976,7 +1050,7 @@ for ncol=1:cols
            (ylims(2)-diff(ylims)/2)-sind(45)*diff(ylims)/2,...
            [mdepthc,' min'],...
            'Color',[0.8500 0.3250 0.0980],...
-           'FontSize',6,...
+           'FontSize',5,...
            'Rotation',45,...
            'VerticalAlignment','top',...
            'HorizontalAlignment','center')
@@ -1023,16 +1097,22 @@ for ncol=1:cols
       ncisores27=ridgepack_e3smseasaw(ncvert,ncvert,'resolution',27);
       ncisores28=ridgepack_e3smseasaw(ncvert,ncvert,'resolution',28);
 
-      vcols(:,1)=[0 0 0.0];
-      vcols(:,2)=[0 0 0.5];
-      vcols(:,3)=[0 0 1.0];
+      if config==3
+       vcols(:,1)=[0 0.0 0];
+       vcols(:,2)=[0 0.5 0];
+       vcols(:,3)=[0 0.5 0];
+      else
+       vcols(:,1)=[0.0 0 0];
+       vcols(:,2)=[0.5 0 0];
+       vcols(:,3)=[0.9 0 0];
+      end
 
       hay=ridgepack_e3smsatthreshold(ncisores25,centlat,centlon,horizon,...
-                                   vcols(:,1),'--');
+                                   vcols(:,1),'-');
       hby=ridgepack_e3smsatthreshold(ncisores27,centlat,centlon,horizon,...
-                                   vcols(:,2),'--');
+                                   vcols(:,2),'-');
       hby=ridgepack_e3smsatthreshold(ncisores28,centlat,centlon,horizon,...
-                                   vcols(:,3),'--');
+                                   vcols(:,3),'-');
 
 
       % make isolines of resolution
@@ -1076,7 +1156,7 @@ for ncol=1:cols
         text(xl(1),yl(1),2*gridheight*zl(1),reslabel,...
                'HorizontalAlignment','center',...
                'VerticalAlignment','bottom',...
-               'FontSize',4,...
+               'FontSize',5,...
                'Color',colx,...
                'Rotation',rotation);
 
@@ -1126,7 +1206,7 @@ for ncol=1:cols
          text(xl(1),yl(1),2*gridheight*zl(1),reslabel,...
                'HorizontalAlignment','center',...
                'VerticalAlignment','bottom',...
-               'FontSize',4,...
+               'FontSize',5,...
                'Color',colx,...
                'Rotation',rotation);
 
@@ -1134,7 +1214,7 @@ for ncol=1:cols
           text(xl(1),yl(1),2*gridheight*zl(1),'km',...
                'HorizontalAlignment','center',...
                'VerticalAlignment','top',...
-               'FontSize',4,...
+               'FontSize',5,...
                'Color',colx,...
                'Rotation',rotation);
          end
@@ -1154,7 +1234,8 @@ for ncol=1:cols
        lonship=eval(['ncship',num2str(shipi),'.longitude.data']);
        [x,y,z,phi,theta]=...
         ridgepack_satfwd(latship,lonship,centlat,centlon,horizon,1.001*altitude);
-        hship=plot3(x,y,z,'Color','#FF8800');
+        %hship=plot3(x,y,z,'Color','#FF8800');
+        hship=plot3(x,y,z,'Color',[0 0.5 0.1]);
 
        if shipi==4 | shipi==6
 
@@ -1210,7 +1291,7 @@ for ncol=1:cols
       hsleg='ice shelf edge';
 
       % render ice shelf cavity thickness
-      cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10];
+      cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:-20 0 10]; 
       colbarcont{1}='\downarrow';
       for i=2:length(cont)-1;
        colbarcont{i}=num2str(-cont(i));
@@ -1227,10 +1308,11 @@ for ncol=1:cols
       colormap(cmap)
 
       % add colormap
-      if ncol==cols & nrow==1
+      if ncol==cols & drawcb
        ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
        clear cmap colbarcont
-       if rows>1
+       drawcb=false;
+       if rows>1 & nrow==1
         ridgepack_cbshare(gca)
        end
       end
@@ -1251,10 +1333,12 @@ for ncol=1:cols
       % add min, 50m, and 500m isobath
       hd=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,...
                                     [0.9290 0.6940 0.1250]);
-      hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+      if projections(lk)~=67
+       hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
                                     [0.4660 0.6740 0.1880]);
-      ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
+       ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
                                     [0.8500 0.3250 0.0980]);
+      end
 
      end
 
@@ -1263,16 +1347,26 @@ for ncol=1:cols
     % bathymetry legend
     if bathymetrys{lk} | (zoom{projections(lk)}.annotation==2 & iceshelfplot)
      if any(diff(grids))~=0 & bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}='minimum depth';
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
+      if projections(lk)==67
+       legendh(end+1)=[hd];
+       legendcell{end+1}='500m isobath';
+      else
+       legendh(end+1:end+3)=[ht hg hd];
+       legendcell{end+1}='minimum depth';
+       legendcell{end+1}='50m';
+       legendcell{end+1}='500m isobaths';
+      end
       bathlegflag=false;
      elseif bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}=[mdepthc,' minimum'];
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
+      if projections(lk)==67
+       legendh(end+1)=[hd];
+       legendcell{end+1}='500m isobath';
+      else
+       legendh(end+1:end+3)=[ht hg hd];
+       legendcell{end+1}=[mdepthc,' minimum'];
+       legendcell{end+1}='50m';
+       legendcell{end+1}='500m isobaths';
+      end
       bathlegflag=false;
      end
     end
@@ -1302,9 +1396,14 @@ for ncol=1:cols
   
     % add isobaths
     if bathymetrys{lk}
-     hk=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,[0.9290 0.6940 0.1250]);
-     hk=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,[0.4660 0.6740 0.1880]);
-     hk=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,[0.8500 0.3250 0.0980]);
+     hk=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,...
+        [0.9290 0.6940 0.1250]);
+     if projections(lk)~=67
+      hk=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+        [0.4660 0.6740 0.1880]);
+      hk=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
+        [0.8500 0.3250 0.0980]);
+     end
      set(hk,'LineWidth',0.5)
     end
   
@@ -1318,7 +1417,7 @@ for ncol=1:cols
      hsleg='ice shelf edge';
 
      % render ice shelf cavity thickness
-     cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
+     cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:-20 0 10]; 
      ridgepack_e3smsatcol(ncvert,'cavityThickness',ncvert,cont,0,...
                           centlat,centlon,horizon,altitude,...
                           true,false,'linear','bluered',false);
@@ -1345,7 +1444,7 @@ for ncol=1:cols
      ridgepack_satview(centlat,centlon,horizon,1,1)
   
      % reverse colorbar
-     cont=[-5000:500:-1500 -1000:250:-250 -100 -50:10:10]; 
+     cont=[-5000:1000:-2000 -1500 -1000:250:-250 -100 -50:10:-20 0 10]; 
      colbarcont{1}='\downarrow';
      for i=2:length(cont)-1;
       colbarcont{i}=num2str(-cont(i));
@@ -1363,10 +1462,11 @@ for ncol=1:cols
      colormap(cmap)
 
      % add colorbar
-     if ncol==cols & nrow==1
+     if ncol==cols & drawcb
       ridgepack_colorbar(cont,'m','linear','vertical',0,colbarcont)
       clear colbarcont
-      if rows>1
+      drawcb=false;
+      if rows>1 & nrow==1
        ridgepack_cbshare(gca)
       end
      end
@@ -1374,10 +1474,12 @@ for ncol=1:cols
      % add min, 50m and 500m isobath
      hd=ridgepack_e3smsatthreshold(ncisobath500,centlat,centlon,horizon,...
                                    [0.9290 0.6940 0.1250]);
-     hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
+     if projections(lk)~=67
+      hg=ridgepack_e3smsatthreshold(ncisobath50,centlat,centlon,horizon,...
                                    [0.4660 0.6740 0.1880]);
-     ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
+      ht=ridgepack_e3smsatthreshold(ncisobathmin,centlat,centlon,horizon,...
                                    [0.8500 0.3250 0.0980]);
+     end
 
      % plot ice shelf edge
      if zoom{projections(lk)}.annotation==2 & iceshelfplot
@@ -1394,16 +1496,26 @@ for ncol=1:cols
 
      % add legend
      if any(diff(grids))~=0 & bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}='minimum depth';
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
+      if projections(lk)==67
+       legendh(end+1)=[hd];
+       legendcell{end+1}='500m isobath';
+      else
+       legendh(end+1:end+3)=[ht hg hd];
+       legendcell{end+1}='minimum depth';
+       legendcell{end+1}='50m';
+       legendcell{end+1}='500m isobaths';
+      end
       bathlegflag=false;
      elseif bathlegflag
-      legendh(end+1:end+3)=[ht hg hd];
-      legendcell{end+1}=[mdepthc,' minimum'];
-      legendcell{end+1}='50m';
-      legendcell{end+1}='500m isobaths';
+      if projections(lk)==67
+       legendh(end+1)=[hd];
+       legendcell{end+1}='500m isobath';
+      else
+       legendh(end+1:end+3)=[ht hg hd];
+       legendcell{end+1}='minimum depth';
+       legendcell{end+1}='50m';
+       legendcell{end+1}='500m isobaths';
+      end
       bathlegflag=false;
      end
 
@@ -1415,7 +1527,7 @@ for ncol=1:cols
            (ylims(2)-diff(ylims)/2)+sind(45)*diff(ylims)/2,...
            [mdepthc,' min'],...
            'Color',[0.8500 0.3250 0.0980],...
-           'FontSize',6,...
+           'FontSize',5,...
            'Rotation',-45,...
            'VerticalAlignment','bottom',...
            'HorizontalAlignment','center')
@@ -1472,7 +1584,7 @@ for ncol=1:cols
       end
 
       if ~isempty(shiplocs) & shiplegflag
-       legendh(end+1)=hship
+       legendh(end+1)=hship;
        legendcell{end+1}='Arctic coastal routes';
        shiplegflag=false;
       end
@@ -1508,7 +1620,10 @@ end
 
 % multlegend
 if lk>1
- ridgepack_multilegend(legendh,legendcell,'South')
+ lh=ridgepack_multilegend(legendh,legendcell,'South')
+ set(lh,'FontSize',7)
+ set(lh,'Position',[(1-lh.Position(3))/2 lh.Position(2) ...
+                     lh.Position(3) lh.Position(4)])
 else
  legend(legendh,legendcell,'Location','SouthOutside','Orientation','Horizontal')
  legend('boxoff')
