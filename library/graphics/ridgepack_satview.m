@@ -348,7 +348,7 @@ hold on
 % horizon is given in degrees, hence horizon*60 is the 
 % 1.852 is the number of km in a nautical mile
 % Hence the diameter of a satellite view is 2*horizon*60*1.852
-if ~insep
+if gridon>0 & ~insep
  xrange=range(x);
  diamkm=2*horizon*60*1.852;
  mnxs=max(x)/2;
